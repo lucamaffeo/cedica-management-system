@@ -1,7 +1,9 @@
 ## Calculadora con un case y funciones, input de signos y operandos
-from src import *
+from .src.resta import resta
+from .src.suma import suma
 
 def main():
+    result = None
     print("Calculadora")
     print("Ingrese el primer número")
     num1 = float(input())
@@ -9,18 +11,23 @@ def main():
     num2 = float(input())
     print("Ingrese el signo de la operación")
     signo = input()
-    match signo:
-        case "+":
-            pass
-            #suma(num1, num2)
-        case "-":
-            pass
-            #resta(num1, num2)
-        case "*":
-            pass
-            #multiplicacion(num1, num2)
-        case "/":
-            pass
-            #division(num1, num2)
-        case _:
-            print("Operación no válida")
+    try:
+        match signo:
+            case "+":
+                pass
+                result = suma(num1, num2)
+            case "-":
+                pass
+                result = resta(num1, num2)
+            case "*":
+                pass
+                #result = multiplicacion(num1, num2)
+            case "/":
+                pass
+                #result = division(num1, num2)
+            case _:
+                raise ValueError("Operación no válida")
+    except ValueError as e:
+        print(e)
+    else:
+        print("El resultado es", result)
