@@ -1,5 +1,5 @@
 ## Calculadora con un case y funciones, input de signos y operandos
-from src import *
+from .src.resta import resta
 
 def main():
     result = None;
@@ -17,7 +17,7 @@ def main():
                 #result = suma(num1, num2)
             case "-":
                 pass
-                #result = resta(num1, num2)
+                result = resta(num1, num2)
             case "*":
                 pass
                 #result = multiplicacion(num1, num2)
