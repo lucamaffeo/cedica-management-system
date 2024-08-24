@@ -1,6 +1,7 @@
 ## Calculadora con un case y funciones, input de signos y operandos
 from .src.resta import resta
 from .src.suma import suma
+from .src.division import division
 
 def main():
     result = None
@@ -24,7 +25,7 @@ def main():
                 #result = multiplicacion(num1, num2)
             case "/":
                 pass
-                #result = division(num1, num2)
+                result = division(num1, num2)
             case _:
                 raise ValueError("Operación no válida")
     except ValueError as e:
