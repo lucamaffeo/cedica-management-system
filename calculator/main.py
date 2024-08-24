@@ -1,7 +1,8 @@
 ## Calculadora con un case y funciones, input de signos y operandos
-from .src.resta import resta
-from .src.suma import suma
-from .src.division import division
+from src.resta import resta
+from src.suma import suma
+from src.division import division
+from src.multiplicacion import multiplicacion
 
 def main():
     result = None
@@ -22,7 +23,7 @@ def main():
                 result = resta(num1, num2)
             case "*":
                 pass
-                #result = multiplicacion(num1, num2)
+                result = multiplicacion(num1, num2)
             case "/":
                 pass
                 result = division(num1, num2)
@@ -32,3 +33,6 @@ def main():
         print(e)
     else:
         print("El resultado es", result)
+    
+if __name__ == "__main__":
+    main()  
