@@ -9,18 +9,7 @@
 </head>
 
 <body>
-    <div id="navbar">
-        {% block navbar %}
-        <nav>
-            <ul class="top-menu">
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('about') }}">About</a></li>
-                <!-- Agr mas links -->
-            </ul>
-        </nav>
-        {% endblock %}
-    </div>
-
+    <div>{% block navbar %}{% endblock %}</div>
     <div id="container">
         {% block content %}
         {% endblock %}
