@@ -9,6 +9,10 @@ def create_app(env="development",static_folder="../../static"):
     def home():
         return render_template("home.html")
     
+    @app.route("/about")
+    def about():
+        return render_template("about.html")
+
     app.register_error_handler(404, error.error_not_found)
         
     return app
