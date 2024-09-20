@@ -16,9 +16,9 @@ def create_app(env="development",static_folder="../../static"):
     def home():
         return render_template("home.html")
 
-    @app.route("/sobre-mi")
+    @app.route("/about")
     def about():
-        return render_template("home.html")
+        return render_template("about.html")
 
     app.register_blueprint(issues_bp)
 
