@@ -16,20 +16,6 @@ def create_app(env="development",static_folder="../../static"):
     def home():
         return render_template("home.html")
 
-    @app.route("/about")
-    def about():
-        return render_template("about.html")
-
-    app.register_blueprint(issues_bp)
-
     app.register_error_handler(404, error.error_not_found)
-
-    @app.cli.command(name="reset-db")
-    def reset_db():
-        database.reset()
-
-    @app.cli.command(name="seeds-db")
-    def seeds_db():
-        seeds.run()
 
     return app
