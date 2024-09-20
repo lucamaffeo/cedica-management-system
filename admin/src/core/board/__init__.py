@@ -13,3 +13,8 @@ def create_issue(**kwargs):
 
     return issue
 
+def assign_user(issue, user):
+    issue.user = user
+    db.session.commit()
+
+    return issue
