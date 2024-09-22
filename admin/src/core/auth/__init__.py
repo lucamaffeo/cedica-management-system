@@ -13,3 +13,8 @@ def create_user(**kwargs):
 
     return issue
 
+def find_user_by_email_and_password(email, password):
+    user = User.query.filter_by(email=email, password=password).first()
+
+    return user
+
