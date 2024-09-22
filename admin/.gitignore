@@ -53,3 +53,4 @@ logs/
 flake.nix
 flake.lock
 .envrc
+.direnv/
