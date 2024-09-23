@@ -1,3 +1,4 @@
+from admin.src.core.board import issue
 from src.core import board
 from src.core import auth
 def run():
