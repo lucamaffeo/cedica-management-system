@@ -1,3 +1,4 @@
+from src.core.board.role import Role
 from src.core.database import db
 from src.core.auth.user import User
 
@@ -15,20 +16,24 @@ def create_user(**kwargs):
 
     return user
 
-def find_user_by_email_and_password(email, password):
-    user = User.query.filter_by(email=email, password=password).first()
+def list_roles():
+    roles = Role.query.all()
+    return roles
 
-    return user
+def create_role(**kwargs):
+    role = Role(**kwargs)
+    db.session.add(role)
+    db.session.commit()
 
-
-def find_user_by_email_and_pass(email, password):
-    return User.query.filter(User.email == email, User.password == password).first()
-
+    return role
 
 def find_user_by_email(email):
     return User.query.filter(User.email == email).first()
 
-# SQLi
-def find_user_by_email_and_pass_sqli(email, password):
-    sql = text("SELECT * from users WHERE email = '"+email+"' AND password = '"+password+"'")
-    return db.engine.execute(sql).first()
+
+#def find_user_by_activo():
+ #   return User.query.filter(User.activo == True).all()
+
+
+def find_user_by_role(role_id):
+    return User.query.filter(User.role_id == role_id).all()
