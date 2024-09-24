@@ -1,3 +1,4 @@
+from src.core.board.permission import Permission
 from src.core.board.role import Role
 from src.core.database import db
 from src.core.auth.user import User
@@ -27,12 +28,20 @@ def create_role(**kwargs):
 
     return role
 
+def create_permission(**kwargs):
+    permission = Permission(**kwargs)
+    db.session.add(permission)
+    db.session.commit()
+
+    return permission
+
+
 def find_user_by_email(email):
     return User.query.filter(User.email == email).first()
 
 
-#def find_user_by_activo():
- #   return User.query.filter(User.activo == True).all()
+def find_user_by_activo():
+   return User.query.filter(User.activo == True).all()
 
 
 def find_user_by_role(role_id):
