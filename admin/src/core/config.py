@@ -1,9 +1,11 @@
+from os import environ
+
 class Config(object):
     TESTING = False
     SECRET_KEY = "my_precious"
 
 class ProductionConfig(Config):
-    pass
+    SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL")
 
 class DevelopmentConfig(Config):
     DB_USER = "postgres"
