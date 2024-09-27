@@ -38,20 +38,4 @@ def logout():
     session.clear()
     flash("La sesión se cerró correctamente.", "info")
 
-    return redirect(url_for("auth.login"))
-
-# SQLi
-@bp.post("/authenticate_sqli")
-def authenticate_sqli():
-    params = request.form
-
-    user = auth.find_user_by_email_and_pass_sqli(params['email'], params['password'])
-
-    if not user:
-        flash("Usuario o clave incorrecto.")
-        return redirect(url_for('auth.login'))
-
-    session['user'] = user.email
-    flash("La sesión se inició correctamente.")
-
-    return redirect(url_for('home'))
+    return redirect(url_for("home"))

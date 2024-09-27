@@ -14,16 +14,12 @@ def run():
     update = auth.create_permission(name="update")
     create = auth.create_permission(name="create")
     destroy = auth.create_permission(name="destroy")
-    
+
     #ROLE_PERMISSIONS
 
 
     #USUARIOS
+    admin = auth.create_user(email="admin@admin.com", password="admin", role_id=1, alias="admin")
     luca = auth.create_user(email="luca@mail.com", password="123456", role_id=1, alias="Luca")
-    
+
     print("Seed ejecutado correctamente")
-    
-
-    
-
-    

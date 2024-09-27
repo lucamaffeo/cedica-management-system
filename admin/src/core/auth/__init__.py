@@ -43,7 +43,7 @@ def find_user_by_email(email):
     return User.query.filter(User.email == email).first()
 
 
-def find_user_by_activo():
+def find_user_by_active():
    return User.query.filter(User.activo == True).all()
 
 
