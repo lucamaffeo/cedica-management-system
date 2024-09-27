@@ -1,4 +1,5 @@
 from src.core import auth
+from src.core import board
 def run():
 
     #ROLES
@@ -21,6 +22,9 @@ def run():
     #USUARIOS
     luca = auth.create_user(email="luca@mail.com", password="123456", role_id=1, alias="Luca")
     
+    #EMPLEADOS
+    luca = board.create_employee(nombre="Luca", apellido="Perez", dni="12345678", email="luca@gmail.com", fecha_inicio="2021-01-01",  activo=True)  
+
     print("Seed ejecutado correctamente")
     
 
