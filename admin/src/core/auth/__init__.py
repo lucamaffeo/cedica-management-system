@@ -4,6 +4,7 @@ from src.core.database import db
 from src.core.auth.user import User
 
 from sqlalchemy import text
+from werkzeug.security import generate_password_hash
 
 def list_users():
     users = User.query.all()
@@ -11,6 +12,8 @@ def list_users():
     return users
 
 def create_user(**kwargs):
+    if 'password' in kwargs:
+        kwargs['password'] = generate_password_hash(kwargs['password'])
     user = User(**kwargs)
     db.session.add(user)
     db.session.commit()

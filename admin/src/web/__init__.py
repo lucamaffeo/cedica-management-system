@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect, request, url_for
 from flask import render_template 
 from src.web.handlers import error
 from src.web.controllers.auth import bp as auth_bp
@@ -20,6 +20,15 @@ def create_app(env="development",static_folder="../../static"):
     @app.route("/about")
     def about():
         return render_template("about.html")
+
+    @app.route("/login", methods=['GET', 'POST'])
+    def login():
+        if request.method == 'POST':
+            ## login logic
+            email = request.form.get('email')
+            password = request.form.get('password')
+            return redirect(url_for('home'))
+        return render_template('auth/login.html')
 
     app.register_error_handler(404, error.error_not_found)
 

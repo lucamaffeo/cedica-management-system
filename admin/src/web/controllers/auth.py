@@ -1,4 +1,6 @@
-from flask import Blueprint, flash, redirect, render_template, request, session, url_for, g
+from flask import Blueprint, flash, redirect, render_template, request, session, url_for
+
+from werkzeug.security import check_password_hash
 
 from src.core import auth
 
@@ -14,9 +16,13 @@ def login():
 def authenticate():
     params = request.form
 
-    user = auth.find_user_by_email_and_pass(params["email"], params["password"])
+    user = auth.find_user_by_email(params["email"])
 
     if not user:
+        flash("Usuario o clave incorrecto.", "error")
+        return redirect(url_for("auth.login"))
+
+    if not check_password_hash(user.password, params["password"]):
         flash("Usuario o clave incorrecto.", "error")
         return redirect(url_for("auth.login"))
 
