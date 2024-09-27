@@ -1,0 +1,28 @@
+{% extends "base_form.html" %}
+
+{% block form_action %}
+{{ url_for('users.update', id=user.id) if is_update else url_for('users.create') }}
+{% endblock %}
+
+{% block form_fields %}
+    <input type="text" name="alias" value="{{ user.alias if is_update else '' }}" placeholder="Nombre" required>
+    <input type="email" name="email" value="{{ user.email if is_update else '' }}" placeholder="a@a.com" required>
+    
+    {% if not is_update %}
+        <input type="password" name="password" placeholder="Contraseña" required>
+    {% endif %}
+
+    {% if is_update %}
+		<label for="active">Activo</label>
+		<input type="checkbox" name="active" value="true" {% if user.active %}checked{% endif %}>
+    {% endif %}
+
+    <select name="role_id" required>
+        <option value="" disabled {{ 'selected' if not is_update }}>Seleccione un rol</option>
+        <option value="1" {{ 'selected' if is_update and user.role_id == 1 }}>Administración</option>
+        <option value="2" {{ 'selected' if is_update and user.role_id == 2 }}>Técnica</option>
+        <option value="3" {{ 'selected' if is_update and user.role_id == 3 }}>Voluntariado</option>
+        <option value="4" {{ 'selected' if is_update and user.role_id == 4 }}>Ecuestre</option>
+    </select>
+{% endblock %}
+

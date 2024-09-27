@@ -1,0 +1,12 @@
+{% extends "layout.html" %} {% block title %}{{ title }}{% endblock %} {% block
+head %} {{ super() }} {% endblock %} {% block content %}
+<section>
+  <h1>{{ title }}</h1>
+  <form action="{{ form_action }}" method="POST">
+    {% block form_fields %}
+    <!-- Los campos específicos se definen en la plantilla que hereda -->
+    {% endblock %}
+    <input type="submit" value="{{ "Actualizar" if is_update else "Crear" }}"/>
+  </form>
+</section>
+{% endblock %}

@@ -21,6 +21,13 @@ def create_user(**kwargs):
 
     return user
 
+def update_user(id, **kwargs):
+    user = User.query.filter(User.id == id).first()
+    for key, value in kwargs.items():
+        setattr(user, key, value)
+    db.session.commit()
+    return user
+
 def list_roles():
     roles = Role.query.all()
     return roles
@@ -49,6 +56,10 @@ def create_employee(**kwargs):
 def list_employees():
     employees = Employee.query.all()
     return employees
+
+def get_user(id):
+    user = User.query.filter(User.id == id).first()
+    return user
 
 def find_user_by_email(email):
     return User.query.filter(User.email == email).first()

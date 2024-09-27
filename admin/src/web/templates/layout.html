@@ -22,19 +22,19 @@
 			  <a class="nav-link active" href="{{ url_for('home') }}">Home</a>
 			</li>
 			<li class="nav-item">
-			  <a class="nav-link" href="{{ url_for('about') }}">About</a>
+			  <a class="nav-link" href="{{ url_for('users.register') }}">Register</a>
 			</li>
 		  </ul>
 		  <ul class="navbar-nav">
-			{% if not user %}
+			{% if not logged_user %}
 			<li class="nav-item">
-			  <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+			  <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
 			</li>
 			{% endif %}
-			{% if user %}
+			{% if logged_user %}
 			<li class="nav-item dropdown">
 			  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-				{{ user }}
+				{{ logged_user.email }}
 			  </a>
 			  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 				<li><a class="dropdown-item" href="#">Profile</a></li>

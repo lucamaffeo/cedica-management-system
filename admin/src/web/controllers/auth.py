@@ -1,5 +1,7 @@
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 
+from src.core.models.user import User
+
 from werkzeug.security import check_password_hash
 
 from src.core import auth
@@ -16,7 +18,7 @@ def login():
 def authenticate():
     params = request.form
 
-    user = auth.find_user_by_email(params["email"])
+    user: User = auth.find_user_by_email(params["email"])
 
     if not user:
         flash("Usuario o clave incorrecto.", "error")
@@ -26,11 +28,10 @@ def authenticate():
         flash("Usuario o clave incorrecto.", "error")
         return redirect(url_for("auth.login"))
 
-    session["user"] = user.email
+    session["user"] = user.to_dict()
     flash("La sesión se inició correctamente.", "success")
 
     return redirect(url_for("home"))
-
 
 @bp.get("/logout")
 def logout():
