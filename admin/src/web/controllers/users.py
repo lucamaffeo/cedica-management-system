@@ -14,6 +14,7 @@ def index():
     return render_template("users/index.html", users=users)
 
 @user_blueprint.route("/create", methods=["POST"])
+
 @login_required
 def create():
     if request.method == "POST":
