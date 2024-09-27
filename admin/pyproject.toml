@@ -15,6 +15,9 @@ flask-sqlalchemy = "^3.1.1"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.2"
 
+[tool.basedpyright]
+typeCheckingMode = "basic"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

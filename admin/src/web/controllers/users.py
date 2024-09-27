@@ -1,7 +1,7 @@
 from flask import Blueprint, redirect, render_template, request, url_for
 
 from src.core import auth
-from src.web.helpers.auth import has_permissions, login_required
+from src.web.helpers.auth import has_permission, login_required
 
 bp = Blueprint("users", __name__, url_prefix="/users")
 
@@ -35,7 +35,7 @@ def index():
     users = auth.list_users()
     return render_template("users/index.html", users=users)
 
-@has_permissions("user_new")
+@has_permission("user_create")
 @bp.post("/create")
 def create():
     if request.method == "POST":

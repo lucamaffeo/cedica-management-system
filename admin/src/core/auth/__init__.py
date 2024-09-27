@@ -4,7 +4,6 @@ from src.core.models.role import Role
 from src.core.models.user import User
 from src.core.models.employee import Employee
 
-from sqlalchemy import text
 from werkzeug.security import generate_password_hash
 
 def list_users():
@@ -66,7 +65,7 @@ def find_user_by_email(email):
 
 
 def find_user_by_active():
-   return User.query.filter(User.activo == True).all()
+   return User.query.filter(User.active == True).all()
 
 
 def find_user_by_role(role_id):

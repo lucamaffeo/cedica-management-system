@@ -2,21 +2,21 @@ from src.core import auth
 from src.core import models
 def run():
 
-    #ROLES
-    system_admin = auth.create_role(name="system_admin")
-    administracion = auth.create_role(name="administracion")
-    voluntario = auth.create_role(name="voluntario")
-    tecnica = auth.create_role(name="tecnica")
-    ecuestre = auth.create_role(name="ecuestre")
+    # Permissions
 
-    #Administración: index, show, update, create, destroy. (PERMISIONS)
-    index = auth.create_permission(name="index")
-    show = auth.create_permission(name="show")
-    update = auth.create_permission(name="update")
-    create = auth.create_permission(name="create")
-    destroy = auth.create_permission(name="destroy")
+    #User: index, show, update, create, destroy
+    user_index = auth.create_permission(name="user_index")
+    user_show = auth.create_permission(name="user_show")
+    user_update = auth.create_permission(name="user_update")
+    user_create = auth.create_permission(name="user_create")
+    user_destroy = auth.create_permission(name="user_destroy")
 
-    #ROLE_PERMISSIONS
+    # Roles
+    _ = auth.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy])
+    _ = auth.create_role(name="administracion")
+    _ = auth.create_role(name="voluntario")
+    _ = auth.create_role(name="tecnica")
+    _ = auth.create_role(name="ecuestre")
 
 
     #USUARIOS
