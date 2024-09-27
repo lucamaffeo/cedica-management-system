@@ -1,4 +1,3 @@
-from datetime import datetime
 from sqlalchemy import JSON
 from src.core.database import db
 
