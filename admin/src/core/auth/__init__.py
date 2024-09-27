@@ -1,7 +1,8 @@
-from src.core.board.permission import Permission
-from src.core.board.role import Role
 from src.core.database import db
+from src.core.auth.permission import Permission
+from src.core.auth.role import Role
 from src.core.auth.user import User
+from src.core.auth.employee import Employee
 
 from sqlalchemy import text
 from werkzeug.security import generate_password_hash
@@ -38,6 +39,16 @@ def create_permission(**kwargs):
 
     return permission
 
+def create_employee(**kwargs):
+    employee = Employee(**kwargs)
+    db.session.add(employee)
+    db.session.commit()
+
+    return employee
+
+def list_employees():
+    employees = Employee.query.all()
+    return employees
 
 def find_user_by_email(email):
     return User.query.filter(User.email == email).first()
