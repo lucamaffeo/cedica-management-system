@@ -1,4 +1,4 @@
-from flask import Flask, redirect, request, url_for
+from flask import Flask, redirect, request, session, url_for
 from flask import render_template 
 from src.web.handlers import error
 from src.web.controllers.auth import bp as auth_bp
@@ -10,6 +10,10 @@ def create_app(env="development",static_folder="../../static"):
 
     app.config.from_object(config[env])
     database.init_app(app)
+
+    @app.context_processor
+    def inject_user():
+        return {'user': session.get('user')}
 
     @app.route("/")
     def home():
