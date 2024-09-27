@@ -11,7 +11,7 @@ def init_app(app):
 
 def config(app):
 
-    @app.teardown_context
+    @app.teardown_appcontext
     def close_session(exception=None):
         db.session.close()
 
