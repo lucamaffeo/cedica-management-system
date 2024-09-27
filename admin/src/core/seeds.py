@@ -1,29 +1,29 @@
-from src.core import board
 from src.core import auth
 def run():
-    issue1 = board.create.issue(
-        email ="jose@mail.com",
-        tittle ="Mi computadora no funciona",
-        descripcion ="Mi departamento me compro una nueva "
-    )
-    issue2 = board.create.issue(
-        email ="maria@mail.com",
-        tittle ="No puedo obtener mis emails",
-        descripcion ="no puedo acceder a mis emails",
-        status = "in progress"
-    )
-    issue3 = board.create.issue(
-        email ="ruben@mail.com",
-        tittle ="No puedo imprimir",
-        descripcion ="no puedo imprimir en la impresora de la oficina",
-        status = "done"
-    )
 
-Luca = auth.create_user(email="luca@mail.com", password="123456")
-Franco = auth.create_user(email="franco@mail.com", password="123456")
-Messi = auth.create_user(email="messi@mail.com", password="123456")
+    #ROLES
+    system_admin = auth.create_role(name="system_admin")
+    administracion = auth.create_role(name="administracion")
+    voluntario = auth.create_role(name="voluntario")
+    tecnica = auth.create_role(name="tecnica")
+    ecuestre = auth.create_role(name="ecuestre")
+
+    #Administración: index, show, update, create, destroy. (PERMISIONS)
+    index = auth.create_permission(name="index")
+    show = auth.create_permission(name="show")
+    update = auth.create_permission(name="update")
+    create = auth.create_permission(name="create")
+    destroy = auth.create_permission(name="destroy")
+    
+    #ROLE_PERMISSIONS
 
 
-board.assign_user(issue1, Luca)
-board.assign_user(issue2, Franco)
-board.assign_user(issue3, Messi)
+    #USUARIOS
+    luca = auth.create_user(email="luca@mail.com", password="123456", role_id=1, alias="Luca")
+    
+    print("Seed ejecutado correctamente")
+    
+
+    
+
+    
