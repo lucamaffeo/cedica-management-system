@@ -52,3 +52,5 @@ logs/
 # Ignores for nixos dev
 flake.nix
 flake.lock
+.envrc
+.direnv/

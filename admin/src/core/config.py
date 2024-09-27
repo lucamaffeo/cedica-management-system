@@ -1,5 +1,6 @@
 class Config(object):
     TESTING = False
+    SECRET_KEY = "my_precious"
 
 class ProductionConfig(Config):
     pass
