@@ -2,8 +2,8 @@ from datetime import datetime
 from sqlalchemy import JSON
 from src.core.database import db
 
-class JineteAmazonas(db.Model):
-    __tablename__ = 'jinetes_amazonas'
+class Rider(db.Model):
+    __tablename__ = 'riders'
     
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), nullable=False)

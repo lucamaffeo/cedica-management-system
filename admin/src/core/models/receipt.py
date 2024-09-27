@@ -6,7 +6,7 @@ class Receipt(db.Model):
     __tablename__ = 'receipts'
     
     id = db.Column(db.Integer, primary_key=True)
-    ja_id = db.Column(db.Integer, db.ForeignKey('jinetes_amazonas.id'), nullable=False)
+    ja_id = db.Column(db.Integer, db.ForeignKey('riders.id'), nullable=False)
     fecha_pago = db.Column(db.DateTime, default=datetime.now, nullable=False)
     monto = db.Column(db.Numeric(10, 2), nullable=False)
     medio_pago = db.Column(db.Enum('Efectivo', 'Tarjeta de Crédito', 'Tarjeta de Débito', name='medio_pago'), nullable=False)

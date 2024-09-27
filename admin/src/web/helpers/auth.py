@@ -15,3 +15,11 @@ def login_required(f):
         return f(*args, **kwargs)
 
     return decorated_function
+
+def has_permission(f, permission):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get("user") is None or permission not in session.get("user").role.permissions:
+            return abort(401)
+        return f(*args, **kwargs)
+    return decorated_function

@@ -1,8 +1,8 @@
 from src.core.database import db
-from src.core.board.horse import Horse
-from src.core.board.receipt import Receipt
-from src.core.board.jinetesAmazona import JineteAmazonas
-from src.core.board.payment import Payment
+from src.core.models.horse import Horse
+from src.core.models.receipt import Receipt
+from src.core.models.rider import Rider
+from src.core.models.payment import Payment
 
 def list_Horse():
     horses = Horse.query.all()
@@ -26,16 +26,16 @@ def create_receipt(**kwargs):
 
     return receipt
 
-def list_JineteAmazonas():
-    jinetesAmazonas = JineteAmazonas.query.all()
-    return jinetesAmazonas
+def list_riders():
+    rider = Rider.query.all()
+    return rider
 
-def create_jineteAmazona(**kwargs):
-    jineteAmazona = JineteAmazonas(**kwargs)
-    db.session.add(jineteAmazona)
+def create_rider(**kwargs):
+    rider = Rider(**kwargs)
+    db.session.add(rider)
     db.session.commit()
 
-    return jineteAmazona
+    return rider
 
 def create_payment(**kwargs):
     payment = Payment(**kwargs)

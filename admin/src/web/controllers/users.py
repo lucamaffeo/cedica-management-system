@@ -13,8 +13,8 @@ def index():
     users = auth.list_users()
     return render_template("users/index.html", users=users)
 
+#TODO @has_permission("user_new")
 @user_blueprint.route("/create", methods=["POST"])
-
 @login_required
 def create():
     if request.method == "POST":

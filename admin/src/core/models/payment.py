@@ -2,10 +2,10 @@ from datetime import datetime
 from src.core.database import db
 
 class Payment(db.Model):
-    __tablename__ = 'payment'
+    __tablename__ = 'payments'
     
     id = db.Column(db.Integer, primary_key=True)
-    beneficiary_id = db.Column(db.Integer, db.ForeignKey('employees.id'), nullable=False)
+    beneficiary_id = db.Column(db.Integer, db.ForeignKey('employees.id', ondelete='CASCADE'), nullable=False)
     amount = db.Column(db.Numeric(10, 2), nullable=False)
     payment_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     payment_type = db.Column(db.Enum('Honorarios', 'Proveedor', 'Gastos Varios', name='tipo_pago'), nullable=False)

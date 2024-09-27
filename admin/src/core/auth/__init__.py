@@ -1,8 +1,8 @@
 from src.core.database import db
-from src.core.auth.permission import Permission
-from src.core.auth.role import Role
-from src.core.auth.user import User
-from src.core.auth.employee import Employee
+from src.core.models.permission import Permission
+from src.core.models.role import Role
+from src.core.models.user import User
+from src.core.models.employee import Employee
 
 from sqlalchemy import text
 from werkzeug.security import generate_password_hash
