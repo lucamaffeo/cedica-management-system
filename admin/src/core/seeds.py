@@ -23,10 +23,10 @@ def run():
     luca = auth.create_user(email="luca@mail.com", password="123456", role_id=1, alias="Luca")
     
     #EMPLEADOS
-    luca = auth.create_employee(nombre="Luca", apellido="Perez", dni="12345679", email="luca1@gmail.com", fecha_inicio="2021-01-01",  activo=True)  
+    luca = auth.create_employee(name="Luca", surname="Perez", dni="12345679", email="luca1@gmail.com", start_date="2021-01-01",  active=True)  
 
     #PAGOS
-    pago1 = board.create_payment(monto=1000, beneficiario_id=1, tipo_pago="Honorarios", descripcion="Pago de honorarios")
+    pago1 = board.create_payment(amount=1000, beneficiary_id=1, payment_type="Honorarios", description="Pago de honorarios")
 
     print("Seed ejecutado correctamente")
     
