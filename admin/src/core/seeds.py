@@ -23,7 +23,7 @@ def run():
     luca = auth.create_user(email="luca@mail.com", password="123456", role_id=1, alias="Luca")
     
     #EMPLEADOS
-    luca = board.create_employee(nombre="Luca", apellido="Perez", dni="12345678", email="luca@gmail.com", fecha_inicio="2021-01-01",  activo=True)  
+    luca = auth.create_employee(nombre="Luca", apellido="Perez", dni="12345679", email="luca1@gmail.com", fecha_inicio="2021-01-01",  activo=True)  
 
     print("Seed ejecutado correctamente")
     
