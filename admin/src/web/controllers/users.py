@@ -52,11 +52,12 @@ def index():
     sort_by = request.args.get('sort_by', 'alias')
     direction = request.args.get('direction', 'asc')
     active = request.args.get('active', None)
+    page = request.args.get('page', 1, type=int)  # Get the page number from query parameters
 
-    # Pasar los parámetros a la función `list_users`
-    users = auth.list_users(search, role_filter, sort_by, direction, active)
+    # Pass the parameters to the `list_users` function
+    users = auth.list_users(search, role_filter, sort_by, direction, active, page)
 
-    return render_template("users/index.html", users=users)
+    return render_template("users/index.html", pagination=users)
 
 @bp.post("/create")
 @has_permission("user_create")

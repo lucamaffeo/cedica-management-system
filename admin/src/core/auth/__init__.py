@@ -6,7 +6,7 @@ from src.core.models.employee import Employee
 
 from werkzeug.security import generate_password_hash
 
-def list_users(search='', role_id=None, sort_by='alias', direction='asc', active=None):
+def list_users(search='', role_id=None, sort_by='alias', direction='asc', active=None, page=1, items_per_page=5):
     # Inicializar la consulta de base de datos
     query = User.query
 
@@ -29,7 +29,9 @@ def list_users(search='', role_id=None, sort_by='alias', direction='asc', active
     else:
         query = query.order_by(getattr(User, sort_by).desc())
 
-    return query.all()
+    paginated_users = query.paginate(page=page, per_page=items_per_page, error_out=False)
+
+    return paginated_users
 
 def user_has_permission(user, permission):
     return permission in [p.name for p in user.role.permissions]

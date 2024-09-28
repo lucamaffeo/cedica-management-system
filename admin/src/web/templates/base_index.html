@@ -1,29 +1,26 @@
 {% extends "layout.html" %} {% block title %} Listado {% endblock %} {% block
 head %} {{ super() }}
-<style>
-/* Estilos personalizados para el listado, filtros, etc. */
-</style>
 {% endblock %} {% block content %}
-<section>
   <h1>{% block page_title %}Listado{% endblock %}</h1>
 
   <!-- Formulario de búsqueda y filtros -->
-  <form method="GET" action="{{ request.path }}">
-	  <input
-		type="text"
-		name="search"
-		placeholder="{% block search_placeholder %}Buscar...{% endblock %}"
-		value="{{ request.args.get('search', '') }}"
-	  />
+  <form method="GET" action="{{ request.path }}" class="form-inline mb-3">
+    <input
+      type="text"
+      name="search"
+      class="form-control mr-2"
+      placeholder="{% block search_placeholder %}Buscar...{% endblock %}"
+      value="{{ request.args.get('search', '') }}"
+    />
 
-	<!-- Filtros adicionales definidos en la plantilla hija -->
-	{% block filters %}{% endblock %}
+    <!-- Filtros adicionales definidos en la plantilla hija -->
+    {% block filters %}{% endblock %}
 
-	<button type="submit">Buscar</button>
+    <button type="submit" class="btn btn-primary">Buscar</button>
   </form>
 
-  <table>
-	<thead>
+  <table class="table table-striped">
+    <thead class="thead-dark">
 	  {% block table_headers %}
 	  <tr>
 		{% for field, display_name in sorting_criteria %}
@@ -69,8 +66,41 @@ head %} {{ super() }}
 	</tbody>
   </table>
 
-  {% block pagination %}
-  <!-- Implementación de paginación personalizada aquí -->
-  {% endblock %}
-</section>
+{% block pagination %}
+<nav aria-label="Page navigation">
+  <ul class="pagination justify-content-center">
+    {% if pagination.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?{% for key, value in request.args.items() %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ pagination.previous_page_number }}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <span class="page-link" aria-hidden="true">&laquo;</span>
+      </li>
+    {% endif %}
+
+    {% for num in pagination.iter_pages() %}
+      {% if pagination.page == num %}
+        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+      {% elif num > pagination.page - 10 and num < pagination.page + 10 %}
+        <li class="page-item"><a class="page-link" href="?{% for key, value in request.args.items() %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ num }}">{{ num }}</a></li>
+      {% endif %}
+    {% endfor %}
+
+    {% if pagination.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?{% for key, value in request.args.items() %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ pagination.next_page_number }}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <span class="page-link" aria-hidden="true">&raquo;</span>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
+{% endblock %}
 {% endblock %}

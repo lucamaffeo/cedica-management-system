@@ -22,7 +22,15 @@ def run():
     #USUARIOS
     admin = auth.create_user(email="admin@admin.com", password="admin", role_id=1, alias="admin")
     luca = auth.create_user(email="luca@mail.com", password="123456", role_id=2, alias="Luca")
-    
+
+
+    _ = auth.create_user(email="1@mail.com", password="123456", role_id=2, alias="1")
+    _ = auth.create_user(email="2@mail.com", password="123456", role_id=2, alias="2")
+    _ = auth.create_user(email="3@mail.com", password="123456", role_id=2, alias="1")
+    _ = auth.create_user(email="4@mail.com", password="123456", role_id=2, alias="2")
+    _ = auth.create_user(email="5@mail.com", password="123456", role_id=2, alias="1")
+    _ = auth.create_user(email="6@mail.com", password="123456", role_id=2, alias="2")
+
     #EMPLEADOS
     luca = auth.create_employee(name="Luca", surname="Perez", dni="12345679", email="luca1@gmail.com", start_date="2021-01-01",  active=True)  
 
