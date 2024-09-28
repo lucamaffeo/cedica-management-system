@@ -22,7 +22,12 @@ Buscar por email
         <option value="5" {% if request.args.get('role_id') == '5' %}selected{% endif %}>Ecuestre</option>
     </select>
 	<!-- filter by active true/false -->
-
+    <select name="active" id="active">
+        <option value="">Todos</option>
+        <option value="true" {% if request.args.get('active')=='true' %}selected{% endif %}>Activos</option>
+        <option value="false" {% if request.args.get('active')=='false' %}selected{% endif %}>Inactivos</option>
+    </select>
+    
 {% endblock %}
 
 {% set sorting_criteria = [("alias", "Nombre"), ("email", "Email"), ("role_id", "Rol"), ("inserted_at", "Creación"), ("active", "Activo")] %}

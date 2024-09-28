@@ -51,9 +51,10 @@ def index():
     role_filter = request.args.get('role_id', None)
     sort_by = request.args.get('sort_by', 'alias')
     direction = request.args.get('direction', 'asc')
+    active = request.args.get('active', None)
 
     # Pasar los parámetros a la función `list_users`
-    users = auth.list_users(search, role_filter, sort_by, direction)
+    users = auth.list_users(search, role_filter, sort_by, direction, active)
 
     return render_template("users/index.html", users=users)
 

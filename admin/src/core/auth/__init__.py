@@ -6,7 +6,7 @@ from src.core.models.employee import Employee
 
 from werkzeug.security import generate_password_hash
 
-def list_users(search='', role_id=None, sort_by='alias', direction='asc'):
+def list_users(search='', role_id=None, sort_by='alias', direction='asc', active=None):
     # Inicializar la consulta de base de datos
     query = User.query
 
@@ -18,6 +18,11 @@ def list_users(search='', role_id=None, sort_by='alias', direction='asc'):
     if role_id:
         query = query.filter_by(role_id=role_id)
 
+    # Aplicar filtro de estado activo si el parámetro 'active' no es None
+    if active is not None and active != '':  # Verifica que active no sea None ni vacío
+        # Convierte el string 'true' o 'false' a booleano
+        active_value = active == 'true'
+        query = query.filter_by(active=active_value)
     # Aplicar ordenación
     if direction == 'asc':
         query = query.order_by(getattr(User, sort_by).asc())
