@@ -11,7 +11,7 @@ class Error:
 
 def error_not_found(e):
     error = Error(404, "Not Found", "The Requested URL was not found on the server.")
-    
+
     return render_template('error.html', error=error), 404
 
 def forbidden(e):

@@ -1,0 +1,27 @@
+{% extends "base_show.html" %}
+
+{% block title %}
+    Perfil de {{ user.alias }}
+{% endblock %}
+
+{% block page_title %}
+    Perfil de {{ user.alias }}
+{% endblock %}
+
+{% block content %}
+<section>
+    <h1>Perfil de {{ user.alias }}</h1>
+
+    <div>
+        <p><strong>Nombre:</strong> {{ user.alias }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Rol:</strong> {{ user.role.name }}</p>
+        <p><strong>Activo:</strong> {{ 'Sí' if user.active else 'No' }}</p>
+    </div>
+
+    <div>
+        <a href="{{ url_for('users.edit', id=user.id) }}">Editar</a>
+        <a href="{{ url_for('users.index') }}">Volver a la lista</a>
+    </div>
+</section>
+{% endblock %}
