@@ -19,7 +19,7 @@ class User(db.Model):
         return f"<User {self.email}>"
 
     def has_permission(self, permission: str):
-        return bool(permission == p.name for p in self.role.permissions)
+        return any(permission == p.name for p in self.role.permissions)
 
     def to_dict(self):
         return {

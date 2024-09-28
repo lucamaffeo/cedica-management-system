@@ -13,7 +13,6 @@ Buscar por email
 {% endblock %}
 
 {% block filters %}
-    <!-- Filtro personalizado para roles -->
     <select name="role_id">
         <option value="">Todos los roles</option>
         <option value="1" {% if request.args.get('role_id') == '1' %}selected{% endif %}>System Admin</option>
@@ -22,6 +21,8 @@ Buscar por email
         <option value="4" {% if request.args.get('role_id') == '4' %}selected{% endif %}>Voluntariado</option>
         <option value="5" {% if request.args.get('role_id') == '5' %}selected{% endif %}>Ecuestre</option>
     </select>
+	<!-- filter by active true/false -->
+
 {% endblock %}
 
 {% set sorting_criteria = [("alias", "Nombre"), ("email", "Email"), ("role_id", "Rol"), ("inserted_at", "Creación"), ("active", "Activo")] %}

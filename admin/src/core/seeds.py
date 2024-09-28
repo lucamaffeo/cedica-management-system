@@ -14,14 +14,14 @@ def run():
     # Roles
     _ = auth.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy])
     _ = auth.create_role(name="administracion")
-    _ = auth.create_role(name="voluntario")
+    _ = auth.create_role(name="voluntariado")
     _ = auth.create_role(name="tecnica")
     _ = auth.create_role(name="ecuestre")
 
 
     #USUARIOS
     admin = auth.create_user(email="admin@admin.com", password="admin", role_id=1, alias="admin")
-    luca = auth.create_user(email="luca@mail.com", password="123456", role_id=1, alias="Luca")
+    luca = auth.create_user(email="luca@mail.com", password="123456", role_id=2, alias="Luca")
     
     #EMPLEADOS
     luca = auth.create_employee(name="Luca", surname="Perez", dni="12345679", email="luca1@gmail.com", start_date="2021-01-01",  active=True)  

@@ -6,7 +6,7 @@ from src.core.models.employee import Employee
 
 from werkzeug.security import generate_password_hash
 
-def list_users(search='', role_filter=None, sort_by='alias', direction='asc'):
+def list_users(search='', role_id=None, sort_by='alias', direction='asc'):
     # Inicializar la consulta de base de datos
     query = User.query
 
@@ -15,8 +15,8 @@ def list_users(search='', role_filter=None, sort_by='alias', direction='asc'):
         query = query.filter(User.email.ilike(f'%{search}%'))
 
     # Aplicar filtro de rol si el parámetro 'role' no es None o vacío
-    if role_filter:
-        query = query.filter_by(role_id=role_filter)
+    if role_id:
+        query = query.filter_by(role_id=role_id)
 
     # Aplicar ordenación
     if direction == 'asc':
@@ -25,6 +25,9 @@ def list_users(search='', role_filter=None, sort_by='alias', direction='asc'):
         query = query.order_by(getattr(User, sort_by).desc())
 
     return query.all()
+
+def user_has_permission(user, permission):
+    return permission in [p.name for p in user.role.permissions]
 
 def create_user(**kwargs):
     if 'password' in kwargs:
@@ -76,7 +79,7 @@ def list_employees():
     employees = Employee.query.all()
     return employees
 
-def get_user(id):
+def get_user(id) -> User | None:
     user = User.query.filter(User.id == id).first()
     return user
 

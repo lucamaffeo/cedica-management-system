@@ -6,25 +6,25 @@ from src.web.helpers.auth import has_permission
 bp = Blueprint("users", __name__, url_prefix="/users")
 
 # register
-@has_permission("user_create")
 @bp.get("/register")
+@has_permission("user_create")
 def register():
     return render_template("users/form.html", is_update=False, title='Crear Usuario')
 
-@has_permission("user_update")
 @bp.get("/<int:id>/update")
+@has_permission("user_update")
 def edit(id):
     user = auth.get_user(id)
     return render_template("users/form.html", is_update=True, title='Actualizar Usuario', user=user)
 
-@has_permission("user_show")
 @bp.get("/<int:id>/show")
+@has_permission("user_show")
 def show(id):
     user = auth.get_user(id)
     return render_template("users/show.html", user=user)
 
-@has_permission("user_update")
 @bp.post("/<int:id>/update")
+@has_permission("user_update")
 def update(id):
     if request.method == "POST":
         params = request.form
@@ -38,17 +38,17 @@ def update(id):
         return redirect(url_for("users.index"))
     return render_template("home")
 
-@has_permission("user_destroy")
 @bp.get("/<int:id>/delete")
+@has_permission("user_destroy")
 def delete(id):
     auth.delete_user(id)
     return redirect(url_for("users.index"))
 
-@has_permission("user_index")
 @bp.get("/")
+@has_permission("user_index")
 def index():
     search = request.args.get('search', '')
-    role_filter = request.args.get('role', None)
+    role_filter = request.args.get('role_id', None)
     sort_by = request.args.get('sort_by', 'alias')
     direction = request.args.get('direction', 'asc')
 
@@ -57,8 +57,8 @@ def index():
 
     return render_template("users/index.html", users=users)
 
-@has_permission("user_create")
 @bp.post("/create")
+@has_permission("user_create")
 def create():
     if request.method == "POST":
         params = request.form

@@ -27,22 +27,34 @@ head %} {{ super() }}
 	  {% block table_headers %}
 	  <tr>
 		{% for field, display_name in sorting_criteria %}
-		<th>
-		  {% if field in sortable_fields %}
-		  <a href="{{ url_for(request.endpoint, sort_by=field, direction='asc' if request.args.get('sort_by') != field or request.args.get('direction') == 'desc' else 'desc') }}">
+	  <th>
+		{% if field in sortable_fields %}
+            {% set current_sort = request.args.get('sort_by') %}
+            {% set current_direction = request.args.get('direction', 'asc') %}
+            
+            {% if current_sort == field %}
+                {% set next_direction = 'desc' if current_direction == 'asc' else 'asc' %}
+            {% else %}
+                {% set next_direction = 'asc' %}
+            {% endif %}
+
+            {% set args = request.args.to_dict() %}
+            {% set args = args | merge({'sort_by': field, 'direction': next_direction}) %} 
+
+            <a href="{{ url_for(request.endpoint, **args) }}">
+                {{ display_name }}
+                {% if current_sort == field %}
+                    {% if current_direction == 'asc' %}
+                        ▲
+                    {% else %}
+                        ▼
+                    {% endif %}
+                {% endif %}
+            </a>
+		{% else %}
 			{{ display_name }}
-			{% if request.args.get('sort_by') == field %}
-			{% if request.args.get('direction') == 'asc' %}
-			▲
-			{% else %}
-			▼
-			{% endif %}
-			{% endif %}
-		  </a>
-		  {% else %}
-		  {{ display_name }}  {# Just display the field name without a link #}
-		  {% endif %}
-		</th>
+        {% endif %}
+        </th>
 		{% endfor %}
 		<th>Acciones</th>
 	  </tr>
