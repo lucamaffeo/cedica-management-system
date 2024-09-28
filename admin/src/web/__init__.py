@@ -12,11 +12,6 @@ def create_app(env="development",static_folder="../../static"):
     app.config.from_object(config[env])
     database.init_app(app)
 
-    @app.template_filter('merge')
-    def merge(dict1, dict2):
-        """Merge two dictionaries."""
-        return {**dict1, **dict2}
-
     @app.context_processor
     def inject_user():
         return {'logged_user': session.get('user')}
@@ -30,6 +25,8 @@ def create_app(env="development",static_folder="../../static"):
     app.register_blueprint(users_bp)
 
     app.register_error_handler(404, error.error_not_found)
+
+    app.register_error_handler(403, error.forbidden)
 
     @app.cli.command(name="reset-db")
     def reset_db():
