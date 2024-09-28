@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import session, abort, request
+from flask import session, abort
 
 from src.core.models.user import User
 

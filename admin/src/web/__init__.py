@@ -1,6 +1,5 @@
-from flask import Flask, redirect, request, session, url_for
+from flask import Flask, session
 from flask import render_template 
-from src.core.models.user import User
 from src.web.handlers import error
 from src.web.controllers.auth import bp as auth_bp
 from src.web.controllers.users import bp as users_bp

@@ -1,0 +1,64 @@
+{% extends "layout.html" %} {% block title %} Listado {% endblock %} {% block
+head %} {{ super() }}
+<style>
+/* Estilos personalizados para el listado, filtros, etc. */
+</style>
+{% endblock %} {% block content %}
+<section>
+  <h1>{% block page_title %}Listado{% endblock %}</h1>
+
+  <!-- Formulario de búsqueda y filtros -->
+  <form method="GET" action="{{ request.path }}">
+	  <input
+		type="text"
+		name="search"
+		placeholder="{% block search_placeholder %}Buscar...{% endblock %}"
+		value="{{ request.args.get('search', '') }}"
+	  />
+
+	<!-- Filtros adicionales definidos en la plantilla hija -->
+	{% block filters %}{% endblock %}
+
+	<button type="submit">Buscar</button>
+  </form>
+
+  <table>
+	<thead>
+	  {% block table_headers %}
+	  <tr>
+		{% for field, display_name in sorting_criteria %}
+		<th>
+		  {% if field in sortable_fields %}
+		  <a href="{{ url_for(request.endpoint, sort_by=field, direction='asc' if request.args.get('sort_by') != field or request.args.get('direction') == 'desc' else 'desc') }}">
+			{{ display_name }}
+			{% if request.args.get('sort_by') == field %}
+			{% if request.args.get('direction') == 'asc' %}
+			▲
+			{% else %}
+			▼
+			{% endif %}
+			{% endif %}
+		  </a>
+		  {% else %}
+		  {{ display_name }}  {# Just display the field name without a link #}
+		  {% endif %}
+		</th>
+		{% endfor %}
+		<th>Acciones</th>
+	  </tr>
+	  {% endblock %}
+	</thead>
+	<tbody>
+	  {% block table_rows %}
+	  <tr>
+		<td colspan="4">No hay elementos para mostrar</td>
+	  </tr>
+	  {% endblock %}
+	</tbody>
+  </table>
+
+  {% block pagination %}
+  <!-- Implementación de paginación personalizada aquí -->
+  {% endblock %}
+</section>
+{% endblock %}
