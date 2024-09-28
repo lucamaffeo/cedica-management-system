@@ -4,14 +4,9 @@
     Perfil de {{ user.alias }}
 {% endblock %}
 
-{% block page_title %}
-    Perfil de {{ user.alias }}
-{% endblock %}
 
-{% block content %}
-<section>
-    <h1>Perfil de {{ user.alias }}</h1>
-
+	{% block content %}
+	<h1>Perfil de {{ user.alias }}</h1>
     <div>
         <p><strong>Nombre:</strong> {{ user.alias }}</p>
         <p><strong>Email:</strong> {{ user.email }}</p>
@@ -20,8 +15,6 @@
     </div>
 
     <div>
-        <a href="{{ url_for('users.edit', id=user.id) }}">Editar</a>
         <a href="{{ url_for('users.index') }}">Volver a la lista</a>
     </div>
-</section>
-{% endblock %}
+	{% endblock %}

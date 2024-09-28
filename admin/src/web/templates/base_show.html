@@ -6,26 +6,9 @@
 
 {% block head %}
     {{ super() }}
-    <style>
-        /* Estilos personalizados para el perfil */
-    </style>
 {% endblock %}
 
-{% block content %}
 <section>
-    <h1>{% block page_title %}Perfil{% endblock %}</h1>
-
-    <div>
-        <!-- Información del usuario -->
-        <p><strong>Nombre:</strong> {{ user.alias }}</p>
-        <p><strong>Email:</strong> {{ user.email }}</p>
-        <p><strong>Rol:</strong> {{ user.role.name }}</p>
-        <p><strong>Activo:</strong> {{ 'Sí' if user.active else 'No' }}</p>
-    </div>
-
-    <div>
-        <a href="{{ url_for('users.edit', id=user.id) }}">Editar</a>
-        <a href="{{ url_for('users.index') }}">Volver a la lista</a>
-    </div>
+  {% block content %}
+  {% endblock %}
 </section>
-{% endblock %}
