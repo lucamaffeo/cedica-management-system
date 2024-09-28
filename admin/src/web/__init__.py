@@ -12,6 +12,11 @@ def create_app(env="development",static_folder="../../static"):
     app.config.from_object(config[env])
     database.init_app(app)
 
+    @app.template_filter('merge')
+    def merge(dict1, dict2):
+        """Merge two dictionaries."""
+        return {**dict1, **dict2}
+
     @app.context_processor
     def inject_user():
         return {'logged_user': session.get('user')}
