@@ -1,49 +1,75 @@
-from flask import Blueprint, redirect, render_template, request, url_for
-
+from flask import Blueprint, redirect, render_template, request, url_for, flash
 from src.core import auth
 from src.web.helpers.auth import has_permission
 
 bp = Blueprint("users", __name__, url_prefix="/users")
 
-# register
+# Register
 @bp.get("/register")
 @has_permission("user_create")
 def register():
     return render_template("users/form.html", is_update=False, title='Crear Usuario')
 
+
+# Edit user
 @bp.get("/<int:id>/update")
 @has_permission("user_update")
 def edit(id):
     user = auth.get_user(id)
+    if not user:
+        flash("User not found.", "error")
+        return redirect(url_for("users.index"))
     return render_template("users/form.html", is_update=True, title='Actualizar Usuario', user=user)
 
+
+# Show user
 @bp.get("/<int:id>/show")
 @has_permission("user_show")
 def show(id):
     user = auth.get_user(id)
+    if not user:
+        flash("User not found.", "error")
+        return redirect(url_for("users.index"))
     return render_template("users/show.html", user=user)
 
+
+# Update user
 @bp.post("/<int:id>/update")
 @has_permission("user_update")
 def update(id):
-    if request.method == "POST":
-        params = request.form
-        _ = auth.update_user(
-            id=id,
-            alias=params["alias"],
-            email=params["email"],
-            active= 'active' in params,
-            role_id=params["role_id"],
-        )
+    params = request.form
+    user = auth.get_user(id)
+    if not user:
+        flash("User not found.", "error")
         return redirect(url_for("users.index"))
-    return render_template("home")
+    
+    auth.update_user(
+        id=id,
+        alias=params.get("alias"),
+        email=params.get("email"),
+        active='active' in params,
+        role_id=params.get("role_id"),
+    )
+    
+    flash("User updated successfully.", "success")
+    return redirect(url_for("users.index"))
 
+
+# Delete user
 @bp.get("/<int:id>/delete")
 @has_permission("user_destroy")
 def delete(id):
+    user = auth.get_user(id)
+    if not user:
+        flash("User not found.", "error")
+        return redirect(url_for("users.index"))
+
     auth.delete_user(id)
+    flash("User deleted successfully.", "info")
     return redirect(url_for("users.index"))
 
+
+# List users
 @bp.get("/")
 @has_permission("user_index")
 def index():
@@ -52,23 +78,31 @@ def index():
     sort_by = request.args.get('sort_by', 'alias')
     direction = request.args.get('direction', 'asc')
     active = request.args.get('active', None)
-    page = request.args.get('page', 1, type=int)  # Get the page number from query parameters
+    page = request.args.get('page', 1, type=int)
 
-    # Pass the parameters to the `list_users` function
     users = auth.list_users(search, role_filter, sort_by, direction, active, page)
+    
+    if not users.items:
+        flash("No users found.", "info")
 
     return render_template("users/index.html", pagination=users)
 
+
+# Create user
 @bp.post("/create")
 @has_permission("user_create")
 def create():
-    if request.method == "POST":
-        params = request.form
-        _ = auth.create_user(
-            alias=params["alias"],
-            email=params["email"],
-            password=params["password"],
-            role_id=params["role_id"],
-        )
-        return redirect(url_for("users.index"))
-    return render_template("users/create.html")
+    params = request.form
+    if not params.get("alias") or not params.get("email") or not params.get("password"):
+        flash("Alias, email, and password are required.", "error")
+        return render_template("users/create.html")
+    
+    auth.create_user(
+        alias=params["alias"],
+        email=params["email"],
+        password=params["password"],  # Make sure to hash the password in the core
+        role_id=params["role_id"],
+    )
+    
+    flash("User created successfully.", "success")
+    return redirect(url_for("users.index"))
