@@ -18,7 +18,7 @@ def login():
 def authenticate():
     params = request.form
 
-    user: User = auth.find_user_by_email(params["email"])
+    user: User | None = auth.find_user_by_email(params["email"])
 
     if not user:
         flash("Usuario o clave incorrecto.", "error")
