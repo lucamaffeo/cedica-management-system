@@ -12,11 +12,11 @@ def run():
     user_destroy = auth.create_permission(name="user_destroy")
 
     # Roles
-    _ = auth.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy])
-    _ = auth.create_role(name="administracion")
-    _ = auth.create_role(name="voluntariado")
-    _ = auth.create_role(name="tecnica")
-    _ = auth.create_role(name="ecuestre")
+    _ = auth.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy], id=1)
+    _ = auth.create_role(name="administracion", id=2)
+    _ = auth.create_role(name="tecnica", id=3)
+    _ = auth.create_role(name="voluntariado", id=4)
+    _ = auth.create_role(name="ecuestre", id=5)
 
 
     #USUARIOS
