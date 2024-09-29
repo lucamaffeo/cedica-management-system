@@ -17,7 +17,7 @@ def register():
 def edit(id):
     user = auth.get_user(id)
     if not user:
-        flash("User not found.", "error")
+        flash("Usuario no encontrado.", "error")
         return redirect(url_for("users.index"))
     return render_template("users/form.html", is_update=True, title='Actualizar Usuario', user=user)
 
@@ -28,7 +28,7 @@ def edit(id):
 def show(id):
     user = auth.get_user(id)
     if not user:
-        flash("User not found.", "error")
+        flash("Usuario no encontrado.", "error")
         return redirect(url_for("users.index"))
     return render_template("users/show.html", user=user)
 
@@ -40,7 +40,7 @@ def update(id):
     params = request.form
     user = auth.get_user(id)
     if not user:
-        flash("User not found.", "error")
+        flash("Usuario no encontrado.", "error")
         return redirect(url_for("users.index"))
     
     auth.update_user(
@@ -51,7 +51,7 @@ def update(id):
         role_id=params.get("role_id"),
     )
     
-    flash("User updated successfully.", "success")
+    flash("Usuario actualizado con éxito.", "success")
     return redirect(url_for("users.index"))
 
 
@@ -61,11 +61,11 @@ def update(id):
 def delete(id):
     user = auth.get_user(id)
     if not user:
-        flash("User not found.", "error")
+        flash("Usuario no encontrado.", "error")
         return redirect(url_for("users.index"))
 
     auth.delete_user(id)
-    flash("User deleted successfully.", "info")
+    flash("Usuario eliminado con éxito.", "info")
     return redirect(url_for("users.index"))
 
 
@@ -83,8 +83,7 @@ def index():
     users = auth.list_users(search, role_filter, sort_by, direction, active, page)
     
     if not users.items:
-        flash("No users found.", "info")
-
+        flash("No se encontraron usuarios.", "info")
     return render_template("users/index.html", pagination=users)
 
 
@@ -94,7 +93,7 @@ def index():
 def create():
     params = request.form
     if not params.get("alias") or not params.get("email") or not params.get("password"):
-        flash("Alias, email, and password are required.", "error")
+        flash("Alias, correo electrónico y contraseña son obligatorios.", "error")
         return render_template("users/create.html")
     
     auth.create_user(
@@ -104,5 +103,5 @@ def create():
         role_id=params["role_id"],
     )
     
-    flash("User created successfully.", "success")
+    flash("Usuario creado con éxito.", "success")
     return redirect(url_for("users.index"))
