@@ -6,7 +6,7 @@ head %} {{ super() }} {% endblock %} {% block content %}
     {% block form_fields %}
     <!-- Los campos específicos se definen en la plantilla que hereda -->
     {% endblock %}
-    <input type="submit" value="{{ "Actualizar" if is_update else "Crear" }}"/>
+    <input class="btn btn-primary mb-2" type="submit" value="{{ "Actualizar" if is_update else "Crear" }}"/>
   </form>
 </section>
 {% endblock %}

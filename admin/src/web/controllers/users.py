@@ -42,15 +42,20 @@ def update(id):
     if not user:
         flash("Usuario no encontrado.", "error")
         return redirect(url_for("users.index"))
-    
+
+    if not params.get("password") or not params.get("new_password") or params.get("password") != params.get("new_password"):
+        flash("Las contraseñas no coinciden o están vacías.", "error")
+        return redirect(url_for("users.update", id=id))
+
     auth.update_user(
         id=id,
         alias=params.get("alias"),
         email=params.get("email"),
+        password=params.get("password"),
         active='active' in params,
         role_id=params.get("role_id"),
     )
-    
+
     flash("Usuario actualizado con éxito.", "success")
     return redirect(url_for("users.index"))
 

@@ -41,6 +41,8 @@ def create_user(**kwargs):
 
 def update_user(id, **kwargs):
     user = User.query.filter(User.id == id).first()
+    if 'password' in kwargs:
+        kwargs['password'] = generate_password_hash(kwargs['password'])
     for key, value in kwargs.items():
         setattr(user, key, value)
     db.session.commit()
