@@ -2,7 +2,7 @@ from functools import wraps
 import logging
 from flask import session, abort
 
-from src.core import auth
+from src.core.repositories import user as auth
 from src.core.models.user import User
 
 logger = logging.getLogger(__name__)

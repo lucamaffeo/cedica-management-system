@@ -39,5 +39,5 @@ def create_app(env="development",static_folder="../../static"):
     @app.cli.command(name="seeds-db")
     def seeds_db():
         seeds.run()
-        
+
     return app

@@ -1,5 +1,5 @@
 from flask import Blueprint, redirect, render_template, request, url_for, flash
-from src.core import auth
+from src.core.repositories import user as auth
 from src.web.helpers.auth import has_permission
 
 bp = Blueprint("users", __name__, url_prefix="/users")
