@@ -1,5 +1,4 @@
 from os import environ
-from re import DEBUG
 
 class Config(object):
     """ Base configuration. """
@@ -14,6 +13,11 @@ class Config(object):
 class ProductionConfig(Config):
     """ Production specific configuration. """
     SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL")
+    DB_NAME = environ.get("DATABASE_URL")
+    DB_USER = environ.get("DATABASE_USERNAME")
+    DB_PASS = environ.get("DATABASE_PASSWORD")
+    DB_HOST = environ.get("DATABASE_HOST")
+    DB_PORT = environ.get("DATABASE_PORT")
     DEBUG = False
 
 class DevelopmentConfig(Config):
