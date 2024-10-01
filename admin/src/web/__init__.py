@@ -4,6 +4,14 @@ from src.web.handlers import error
 from src.web.controllers import register_blueprints
 from src.core import database, seeds
 from src.core.config import config
+import logging
+
+
+
+logging.basicConfig()
+logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+
+
 
 def create_app(env="development",static_folder="../../static"):
     app = Flask(__name__, static_folder=static_folder)   

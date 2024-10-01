@@ -1,4 +1,5 @@
 from datetime import datetime
+from time import strftime
 from src.core.database import db
 
 
@@ -14,6 +15,11 @@ class User(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)
     role = db.relationship('Role', backref='user_role', lazy=True)
+
+    @property
+    def formatted_inserted_at(self):
+        return self.inserted_at.strftime('%Y-%m-%d %H:%M')
+        
 
     def __repr__(self):
         return f"<User {self.email}>"
