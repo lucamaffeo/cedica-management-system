@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request, url_for, flash
+from flask import Blueprint, redirect, render_template, request, session, url_for, flash
 from src.core.repositories import user as auth
 from src.web.helpers.auth import has_permission
 
@@ -21,6 +21,15 @@ def edit(id):
         return redirect(url_for("users.index"))
     return render_template("users/form.html", is_update=True, title='Actualizar Usuario', user=user)
 
+# Edit own profile
+@bp.get("/profile/update")
+def edit_profile():
+    id = session["user"]["id"]
+    user = auth.get_user(id)
+    if not user:
+        flash("Usuario no encontrado.", "error")
+        return redirect(url_for("home"))
+    return render_template("users/form.html", title='Actualizar Perfil', user=user)
 
 # Show user
 @bp.get("/<int:id>/show")
@@ -32,8 +41,17 @@ def show(id):
         return redirect(url_for("users.index"))
     return render_template("users/show.html", user=user)
 
+# Show profile
+@bp.get("/profile")
+def profile():
+    id = session["user"]["id"]
+    print(id)
+    user = auth.get_user(id)
+    if not user:
+        flash("Usuario no encontrado.", "error")
+        return redirect(url_for("home"))
+    return render_template("users/show.html", user=user)
 
-# Update user
 @bp.post("/<int:id>/update")
 @has_permission("user_update")
 def update(id):
@@ -58,6 +76,7 @@ def update(id):
 
     flash("Usuario actualizado con éxito.", "success")
     return redirect(url_for("users.index"))
+
 
 
 # Delete user
