@@ -10,7 +10,6 @@ bp = Blueprint("users", __name__, url_prefix="/users")
 def register():
     return render_template("users/form.html", is_update=False, title='Crear Usuario')
 
-
 # Edit user
 @bp.get("/<int:id>/update")
 @has_permission("user_update")
@@ -61,8 +60,8 @@ def update(id):
         flash("Usuario no encontrado.", "error")
         return redirect(url_for("users.index"))
 
-    if not params.get("password") or not params.get("new_password") or params.get("password") != params.get("new_password"):
-        flash("Las contraseñas no coinciden o están vacías.", "error")
+    if params.get("password") and params.get("new_password") and params.get("password") != params.get("new_password"):
+        flash("Las contraseñas no coinciden.", "error")
         return redirect(url_for("users.update", id=id))
 
     auth.update_user(
