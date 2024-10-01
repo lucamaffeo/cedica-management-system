@@ -1,30 +1,38 @@
-from src.core import auth
+from src.core.repositories import user, employee, role, permission
 from src.core import models
 def run():
 
-    #ROLES
-    system_admin = auth.create_role(name="system_admin")
-    administracion = auth.create_role(name="administracion")
-    voluntario = auth.create_role(name="voluntario")
-    tecnica = auth.create_role(name="tecnica")
-    ecuestre = auth.create_role(name="ecuestre")
+    # Permissions
 
-    #Administración: index, show, update, create, destroy. (PERMISIONS)
-    index = auth.create_permission(name="index")
-    show = auth.create_permission(name="show")
-    update = auth.create_permission(name="update")
-    create = auth.create_permission(name="create")
-    destroy = auth.create_permission(name="destroy")
+    #User: index, show, update, create, destroy
+    user_index = permission.create_permission(name="user_index")
+    user_show = permission.create_permission(name="user_show")
+    user_update = permission.create_permission(name="user_update")
+    user_create = permission.create_permission(name="user_create")
+    user_destroy = permission.create_permission(name="user_destroy")
 
-    #ROLE_PERMISSIONS
+    # Roles
+    _ = role.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy], id=1)
+    _ = role.create_role(name="administracion", id=2)
+    _ = role.create_role(name="tecnica", id=3)
+    _ = role.create_role(name="voluntariado", id=4)
+    _ = role.create_role(name="ecuestre", id=5)
 
 
     #USUARIOS
-    admin = auth.create_user(email="admin@admin.com", password="admin", role_id=1, alias="admin")
-    luca = auth.create_user(email="luca@mail.com", password="123456", role_id=1, alias="Luca")
-    
+    admin = user.create_user(email="admin@admin.com", password="admin", role_id=1, alias="admin")
+    luca = user.create_user(email="luca@mail.com", password="123456", role_id=2, alias="Luca")
+
+
+    _ = user.create_user(email="1@mail.com", password="123456", role_id=2, alias="1")
+    _ = user.create_user(email="2@mail.com", password="123456", role_id=2, alias="2")
+    _ = user.create_user(email="3@mail.com", password="123456", role_id=2, alias="1")
+    _ = user.create_user(email="4@mail.com", password="123456", role_id=2, alias="2")
+    _ = user.create_user(email="5@mail.com", password="123456", role_id=2, alias="1")
+    _ = user.create_user(email="6@mail.com", password="123456", role_id=2, alias="2")
+
     #EMPLEADOS
-    luca = auth.create_employee(name="Luca", surname="Perez", dni="12345679", email="luca1@gmail.com", start_date="2021-01-01",  active=True)  
+    luca = employee.create_employee(name="Luca", surname="Perez", dni="12345679", email="luca1@gmail.com", start_date="2021-01-01",  active=True)  
 
 
     #PAGOS

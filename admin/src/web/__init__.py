@@ -1,9 +1,17 @@
-from flask import Flask, redirect, request, session, url_for
+from flask import Flask, session
 from flask import render_template 
 from src.web.handlers import error
-from src.web.controllers.auth import bp as auth_bp
+from src.web.controllers import register_blueprints
 from src.core import database, seeds
 from src.core.config import config
+import logging
+
+
+
+logging.basicConfig()
+logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+
+
 
 def create_app(env="development",static_folder="../../static"):
     app = Flask(__name__, static_folder=static_folder)   
@@ -11,9 +19,14 @@ def create_app(env="development",static_folder="../../static"):
     app.config.from_object(config[env])
     database.init_app(app)
 
+    @app.template_filter('merge')
+    def merge(dict1, dict2):
+        """Merge two dictionaries."""
+        return {**dict1, **dict2}
+
     @app.context_processor
     def inject_user():
-        return {'user': session.get('user')}
+        return {'logged_user': session.get('user')}
 
     @app.route("/")
     def home():
@@ -34,7 +47,13 @@ def create_app(env="development",static_folder="../../static"):
             return redirect(url_for('home'))
         return render_template('auth/login.html')
 
+    register_blueprints(app)
+
     app.register_error_handler(404, error.error_not_found)
+
+    app.register_error_handler(403, error.forbidden)
+
+    app.register_error_handler(401, error.error_unauthorized)
 
     @app.cli.command(name="reset-db")
     def reset_db():
@@ -43,5 +62,5 @@ def create_app(env="development",static_folder="../../static"):
     @app.cli.command(name="seeds-db")
     def seeds_db():
         seeds.run()
-        
+
     return app

@@ -1,0 +1,55 @@
+{% extends "base_index.html" %}
+
+{% block title %}
+    Listado de Usuarios
+{% endblock %}
+
+{% block page_title %}
+    Usuarios
+{% endblock %}
+
+{% block search_placeholder %}
+Buscar por email
+{% endblock %}
+
+{% block filters %}
+    <select name="role_id">
+        <option value="">Todos los roles</option>
+        <option value="1" {% if request.args.get('role_id') == '1' %}selected{% endif %}>System Admin</option>
+        <option value="2" {% if request.args.get('role_id') == '2' %}selected{% endif %}>Administración</option>
+        <option value="3" {% if request.args.get('role_id') == '3' %}selected{% endif %}>Técnica</option>
+        <option value="4" {% if request.args.get('role_id') == '4' %}selected{% endif %}>Voluntariado</option>
+        <option value="5" {% if request.args.get('role_id') == '5' %}selected{% endif %}>Ecuestre</option>
+    </select>
+	<!-- filter by active true/false -->
+    <select name="active" id="active">
+        <option value="">Todos</option>
+        <option value="true" {% if request.args.get('active')=='true' %}selected{% endif %}>Activos</option>
+        <option value="false" {% if request.args.get('active')=='false' %}selected{% endif %}>Inactivos</option>
+    </select>
+    
+{% endblock %}
+
+{% set sorting_criteria = [("alias", "Nombre"), ("email", "Email"), ("role_id", "Rol"), ("inserted_at", "Creación"), ("active", "Activo")] %}
+
+{% set sortable_fields = ["email", "inserted_at"] %}
+
+{% block table_rows %}
+    {% for user in pagination %}
+    <tr>
+        <td>{{ user.alias }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.role.name }}</td>
+        <td>{{ user.formatted_inserted_at }}</td>
+        <td>{{ 'Sí' if user.active else 'No' }}</td>
+        <td>
+		  <a href="{{ url_for('users.update', id=user.id) }}">Editar</a><br>
+			<a href="{{ url_for('users.delete', id=user.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
+        </td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="5">No se encontraron usuarios.</td>
+    </tr>
+    {% endfor %}
+{% endblock %}
