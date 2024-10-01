@@ -31,8 +31,6 @@ def create_app(env="development",static_folder="../../static"):
     @app.route("/")
     def home():
         return render_template("home.html")
-    
-    app.register_blueprint(auth_bp)
 
     @app.route("/about")
     def about():

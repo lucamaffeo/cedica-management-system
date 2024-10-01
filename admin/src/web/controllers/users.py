@@ -10,6 +10,25 @@ bp = Blueprint("users", __name__, url_prefix="/users")
 def register():
     return render_template("users/form.html", is_update=False, title='Crear Usuario')
 
+# Create user
+@bp.post("/register")
+@has_permission("user_create")
+def create():
+    params = request.form
+    if not params.get("alias") or not params.get("email") or not params.get("password"):
+        flash("Alias, correo electrónico y contraseña son obligatorios.", "error")
+        return render_template("users/create.html")
+    
+    auth.create_user(
+        alias=params["alias"],
+        email=params["email"],
+        password=params["password"],  # Make sure to hash the password in the core
+        role_id=params["role_id"],
+    )
+    
+    flash("Usuario creado con éxito.", "success")
+    return redirect(url_for("users.index"))
+
 # Edit user
 @bp.get("/<int:id>/update")
 @has_permission("user_update")
@@ -19,6 +38,31 @@ def edit(id):
         flash("Usuario no encontrado.", "error")
         return redirect(url_for("users.index"))
     return render_template("users/form.html", is_update=True, title='Actualizar Usuario', user=user)
+
+@bp.post("/<int:id>/update")
+@has_permission("user_update")
+def update(id):
+    params = request.form
+    user = auth.get_user(id)
+    if not user:
+        flash("Usuario no encontrado.", "error")
+        return redirect(url_for("users.index"))
+
+    if params.get("password") and params.get("new_password") and params.get("password") != params.get("new_password"):
+        flash("Las contraseñas no coinciden.", "error")
+        return redirect(url_for("users.update", id=id))
+
+    auth.update_user(
+            id=id,
+            alias=params.get("alias"),
+            email=params.get("email"),
+            password=params.get("password"),
+            active='active' in params,
+            role_id=params.get("role_id"),
+            )
+
+    flash("Usuario actualizado con éxito.", "success")
+    return redirect(url_for("users.index"))
 
 # Edit own profile
 @bp.get("/profile/update")
@@ -50,32 +94,6 @@ def profile():
         flash("Usuario no encontrado.", "error")
         return redirect(url_for("home"))
     return render_template("users/show.html", user=user)
-
-@bp.post("/<int:id>/update")
-@has_permission("user_update")
-def update(id):
-    params = request.form
-    user = auth.get_user(id)
-    if not user:
-        flash("Usuario no encontrado.", "error")
-        return redirect(url_for("users.index"))
-
-    if params.get("password") and params.get("new_password") and params.get("password") != params.get("new_password"):
-        flash("Las contraseñas no coinciden.", "error")
-        return redirect(url_for("users.update", id=id))
-
-    auth.update_user(
-        id=id,
-        alias=params.get("alias"),
-        email=params.get("email"),
-        password=params.get("password"),
-        active='active' in params,
-        role_id=params.get("role_id"),
-    )
-
-    flash("Usuario actualizado con éxito.", "success")
-    return redirect(url_for("users.index"))
-
 
 
 # Delete user
@@ -109,22 +127,3 @@ def index():
         flash("No se encontraron usuarios.", "info")
     return render_template("users/index.html", pagination=users)
 
-
-# Create user
-@bp.post("/create")
-@has_permission("user_create")
-def create():
-    params = request.form
-    if not params.get("alias") or not params.get("email") or not params.get("password"):
-        flash("Alias, correo electrónico y contraseña son obligatorios.", "error")
-        return render_template("users/create.html")
-    
-    auth.create_user(
-        alias=params["alias"],
-        email=params["email"],
-        password=params["password"],  # Make sure to hash the password in the core
-        role_id=params["role_id"],
-    )
-    
-    flash("Usuario creado con éxito.", "success")
-    return redirect(url_for("users.index"))

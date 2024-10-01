@@ -10,6 +10,10 @@
     <input type="text" name="alias" class="form-control" value="{{ user.alias if user else '' }}" placeholder="Nombre" required>
     <input type="email" name="email" class="form-control" value="{{ user.email if user else '' }}" placeholder="a@a.com" required>
 
+	{% if not user %}
+        <input class="form-control" type="password" name="password" placeholder="Contraseña" required>
+    {% endif %}
+
     {% if is_update %}
         <label for="active">Activo</label>
         <input type="checkbox" name="active" value="true" {% if user.active %}checked{% endif %}>
