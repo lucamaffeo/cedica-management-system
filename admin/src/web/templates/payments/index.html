@@ -1,0 +1,57 @@
+{% extends "base_index.html" %}
+
+{% block title %}
+    Listado de Pagos
+{% endblock %}
+
+{% block page_title %}
+    Pagos
+{% endblock %}
+
+{% set show_search = false %}
+
+{% block filters %}
+    <div class="form-group">
+        <label for="type">Tipo</label>
+        <select class="form-control" id="type" name="type">
+            <option value="">Todos los tipos</option>
+            <option value="Honorarios" {% if request.args.get('type') == 'Honorarios' %}selected{% endif %}>Honorarios</option>
+            <option value="Proveedor" {% if request.args.get('type') == 'Proveedor' %}selected{% endif %}>Proveedor</option>
+            <option value="Gastos varios" {% if request.args.get('type') == 'Gastos varios' %}selected{% endif %}>Gastos varios</option>
+        </select>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-6">
+            <label for="start_date">Fecha de inicio</label>
+            <input class="form-control" type="date" id="start_date" name="start_date" value="{{ request.args.get('start_date', '') }}" onchange="document.getElementById('end_date').setAttribute('min', this.value)">
+        </div>
+        <div class="col-md-6">
+            <label for="end_date">Fecha de fin</label>
+            <input class="form-control" type="date" id="end_date" name="end_date" value="{{ request.args.get('end_date', '') }}" onchange="document.getElementById('start_date').setAttribute('max', this.value)">
+        </div>
+    </div>
+{% endblock %}
+
+{% set sorting_criteria = [("date", "Fecha"), ("beneficiary_id", "Beneficiario"), ("amount", "Monto"), ("type", "Tipo")] %}
+
+{% set sortable_fields = ["date"] %}
+
+{% block table_rows %}
+    {% for payment in pagination %}
+    <tr>
+		<td>{{ payment.formatted_date }}</td>
+        <td>{{ payment.beneficiary_id if payment.beneficiary_id != None else "N/A"}}</td>
+        <td>{{ payment.amount }}</td>
+        <td>{{ payment.type }}</td>
+        <td>
+		  <a href="{{ url_for('payments.show', id=payment.id) }}">Ver</a><br>
+		  <a href="{{ url_for('payments.update', id=payment.id) }}">Editar</a><br>
+			<a href="{{ url_for('payments.delete', id=payment.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
+        </td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="5">No se encontraron pagos.</td>
+    </tr>
+    {% endfor %}
+{% endblock %}
