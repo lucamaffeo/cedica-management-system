@@ -40,7 +40,7 @@ Buscar por email
         <td>{{ user.alias }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.role.name }}</td>
-        <td>{{ user.inserted_at }}</td>
+        <td>{{ user.formatted_inserted_at }}</td>
         <td>{{ 'Sí' if user.active else 'No' }}</td>
         <td>
 		  <a href="{{ url_for('users.update', id=user.id) }}">Editar</a><br>

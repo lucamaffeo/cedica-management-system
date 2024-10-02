@@ -1,10 +1,17 @@
 from flask import Flask, session
 from flask import render_template 
 from src.web.handlers import error
-from src.web.controllers.auth import bp as auth_bp
-from src.web.controllers.users import bp as users_bp
+from src.web.controllers import register_blueprints
 from src.core import database, seeds
 from src.core.config import config
+import logging
+
+
+
+logging.basicConfig()
+logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+
+
 
 def create_app(env="development",static_folder="../../static"):
     app = Flask(__name__, static_folder=static_folder)   
@@ -25,9 +32,11 @@ def create_app(env="development",static_folder="../../static"):
     def home():
         return render_template("home.html")
 
-    app.register_blueprint(auth_bp)
+    @app.route("/about")
+    def about():
+        return render_template("about.html")
 
-    app.register_blueprint(users_bp)
+    register_blueprints(app)
 
     app.register_error_handler(404, error.error_not_found)
 
@@ -42,5 +51,5 @@ def create_app(env="development",static_folder="../../static"):
     @app.cli.command(name="seeds-db")
     def seeds_db():
         seeds.run()
-        
+
     return app
