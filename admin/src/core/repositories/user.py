@@ -41,8 +41,10 @@ def create_user(**kwargs):
 
 def update_user(id, **kwargs):
     user = User.query.filter(User.id == id).first()
-    if 'password' in kwargs:
+    if 'password' in kwargs and kwargs['password'] is not None:
         kwargs['password'] = generate_password_hash(kwargs['password'])
+    else:
+        kwargs.pop('password', None)
     for key, value in kwargs.items():
         setattr(user, key, value)
     db.session.commit()
