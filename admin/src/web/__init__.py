@@ -31,19 +31,10 @@ def create_app(env="development",static_folder="../../static"):
     @app.route("/")
     def home():
         return render_template("home.html")
-    
+
     @app.route("/about")
     def about():
         return render_template("about.html")
-
-    @app.route("/login", methods=['GET', 'POST'])
-    def login():
-        if request.method == 'POST':
-            ## login logic
-            email = request.form.get('email')
-            password = request.form.get('password')
-            return redirect(url_for('home'))
-        return render_template('auth/login.html')
 
     register_blueprints(app)
 
