@@ -39,27 +39,43 @@ def edit(id):
         return redirect(url_for("users.index"))
     return render_template("users/form.html", is_update=True, title='Actualizar Usuario', user=user)
 
-@bp.post("/<int:id>/update")
-@has_permission("user_update")
+@bp.route("/<int:id>/update", methods=["POST", "PATCH"])
 def update(id):
-    params = request.form
+    # Check if the current user has permission to update another user's profile
+    is_update_own = id == session["user"]["id"]
+
+    if not is_update_own:
+        has_permission("user_update")(lambda: None)()
+
+    # Get the current user object
     user = auth.get_user(id)
     if not user:
         flash("Usuario no encontrado.", "error")
         return redirect(url_for("users.index"))
 
-    if params.get("password") and params.get("new_password") and params.get("password") != params.get("new_password"):
-        flash("Las contraseñas no coinciden.", "error")
-        return redirect(url_for("users.update", id=id))
+    # Extract the form data
+    params = request.form
 
-    auth.update_user(
-            id=id,
-            alias=params.get("alias"),
-            email=params.get("email"),
-            password=params.get("password"),
-            active='active' in params,
-            role_id=params.get("role_id"),
-            )
+    # If password is being updated, ensure the new passwords match
+    if params.get("password") and params.get("new_password"):
+        if params.get("password") != params.get("new_password"):
+            flash("Las contraseñas no coinciden.", "error")
+            return redirect(url_for("users.update", id=id))
+
+    # Prepare the parameters for the update
+    update_data = {
+        "alias": params.get("alias"),
+        "email": params.get("email"),
+        "password": params.get("password") if params.get("password") and params.get("new_password") else None,
+        "active": 'active' in params if not is_update_own else None,
+        "role_id": params.get("role_id") if not is_update_own else None
+    }
+
+    # Remove any None values to prevent overwriting fields unintentionally
+    update_data = {k: v for k, v in update_data.items() if v is not None}
+
+    # Call the update_user function from the repository
+    auth.update_user(id=id, **update_data)
 
     flash("Usuario actualizado con éxito.", "success")
     return redirect(url_for("users.index"))
@@ -72,7 +88,13 @@ def edit_profile():
     if not user:
         flash("Usuario no encontrado.", "error")
         return redirect(url_for("home"))
-    return render_template("users/form.html", title='Actualizar Perfil', user=user)
+    return render_template("users/form.html", is_update_own=True, title='Actualizar Perfil', user=user)
+
+@bp.post("/profile/update")
+def update_profile():
+    id = session["user"]["id"]
+    update(id)
+    return redirect(url_for("users.profile"))
 
 # Show user
 @bp.get("/<int:id>/show")

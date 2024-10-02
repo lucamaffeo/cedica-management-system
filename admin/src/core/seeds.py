@@ -11,9 +11,15 @@ def run():
     user_create = permission.create_permission(name="user_create")
     user_destroy = permission.create_permission(name="user_destroy")
 
+    payment_index = permission.create_permission(name="payment_index")
+    payment_show = permission.create_permission(name="payment_show")
+    payment_update = permission.create_permission(name="payment_update")
+    payment_create = permission.create_permission(name="payment_create")
+    payment_destroy = permission.create_permission(name="payment_destroy")
+
     # Roles
-    _ = role.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy], id=1)
-    _ = role.create_role(name="administracion", id=2)
+    _ = role.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy, payment_index, payment_show, payment_update, payment_create, payment_destroy], id=1)
+    _ = role.create_role(name="administracion", permissions=[payment_index, payment_show, payment_update, payment_create, payment_destroy], id=2)
     _ = role.create_role(name="tecnica", id=3)
     _ = role.create_role(name="voluntariado", id=4)
     _ = role.create_role(name="ecuestre", id=5)

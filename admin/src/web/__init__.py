@@ -36,15 +36,6 @@ def create_app(env="development",static_folder="../../static"):
     def about():
         return render_template("about.html")
 
-    @app.route("/login", methods=['GET', 'POST'])
-    def login():
-        if request.method == 'POST':
-            ## login logic
-            email = request.form.get('email')
-            password = request.form.get('password')
-            return redirect(url_for('home'))
-        return render_template('auth/login.html')
-
     register_blueprints(app)
 
     app.register_error_handler(404, error.error_not_found)
