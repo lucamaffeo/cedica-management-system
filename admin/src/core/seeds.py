@@ -42,7 +42,7 @@ def run():
 
 
     #PAGOS
-    pago1 = models.create_payment(amount=1000, beneficiary_id=1, payment_type="Honorarios", description="Pago de honorarios")
+    pago1 = models.create_payment(amount=1000, beneficiary_id=1, type="Honorarios", description="Pago de honorarios")
 
     #JINETES/AMAZONAS
     jinete1 = models.create_rider(nombre="Juan", apellido="Perez", dni=51321513, edad=25, fecha_nacimiento="1996-01-01", lugar_nacimiento="CABA", domicilio="Av. Siempre Viva 123", telefono="123456789", contacto_emergencia="Maria", tel_contacto="123456789", becado=False, porcentaje_beca=0, profesionales="Dr. Juan Perez", documentacion={"dni": "url", "certificado_discapacidad": "url"})

@@ -19,7 +19,6 @@ class User(db.Model):
     @property
     def formatted_inserted_at(self):
         return self.inserted_at.strftime('%Y-%m-%d %H:%M')
-        
 
     def __repr__(self):
         return f"<User {self.email}>"

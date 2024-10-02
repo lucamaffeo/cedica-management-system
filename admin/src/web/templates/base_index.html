@@ -5,13 +5,19 @@ head %} {{ super() }}
 
   <!-- Formulario de búsqueda y filtros -->
   <form method="GET" action="{{ request.path }}" class="form-inline mb-3">
-    <input
-      type="text"
-      name="search"
-      class="form-control mr-2"
-      placeholder="{% block search_placeholder %}Buscar...{% endblock %}"
-      value="{{ request.args.get('search', '') }}"
-    />
+ {% if show_search is not defined or show_search %}
+      {% block search %}
+                 <label for="search-input" class="form-label">Buscar</label>
+                 <input
+                   type="text"
+                   id="search-input"
+                   name="search"
+                   class="form-control mr-2"
+                   placeholder="{% block search_placeholder %}Buscar...{% endblock %}"
+                   value="{{ request.args.get('search', '') }}"
+                 />
+      {% endblock %}
+	{% endif %}
 
     <!-- Filtros adicionales definidos en la plantilla hija -->
     {% block filters %}{% endblock %}
