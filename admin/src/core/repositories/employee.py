@@ -29,9 +29,9 @@ def list_employees(search='', profession=None, sort_by='name', direction='asc', 
             query = query.order_by(getattr(Employee, sort_by).desc())
     
 
-    paginated_users = query.paginate(page=page, per_page=items_per_page, error_out=False)
+    pagination_employees = query.paginate(page=page, per_page=items_per_page, error_out=False)
 
-    return paginated_users
+    return pagination_employees
 
 def find_employee_by_name(name):
     employee = Employee.query.filter(Employee.name == name).first()
@@ -61,3 +61,6 @@ def delete_employee(id):
     db.session.delete(employee)
     db.session.commit()
 
+def get_employee(id):
+    employee = Employee.query.filter(Employee.id == id).first()
+    return employee

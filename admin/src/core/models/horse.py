@@ -14,7 +14,7 @@ class Horse(db.Model):
     compra_donacion = db.Column(db.Enum('Compra', 'Donación', name='tipo_adquisicion'), nullable=False)
     fecha_ingreso = db.Column(db.DateTime, default=datetime.now)
     sede_asignada = db.Column(db.String(100))
-    entrenador_id = db.Column(db.Integer, db.ForeignKey('employees.id'))
+    entrenador_id = db.Column(db.Integer, db.ForeignKey('employees.id', ondelete='CASCADE'))
     tipo_ja_asignados = db.Column(db.Enum('Hipoterapia', 'Monta Terapéutica', 'Deporte Ecuestre Adaptado', 'Actividades Recreativas', 'Equitación', name='tipo_ja')) # Jinetes y Amazonas
     documentacion = db.Column(JSON)
 

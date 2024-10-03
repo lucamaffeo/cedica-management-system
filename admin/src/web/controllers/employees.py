@@ -19,23 +19,23 @@ def index():
 
     if not employees.items:
         flash("No se encontraron empleados.", "info")
-    return render_template("employees/index.html", employees=employees)
+    return render_template("employees/index.html", pagination=employees)
 
 
 # Register
-@bp.get("/register")
+@bp.get("/create")
 @has_permission("employee_create")
 def register():
-    return render_template("users/form.html", is_update=False, title='Crear Empleado')
+    return render_template("employees/form.html", is_update=False, title='Crear Empleado')
 
 # Create employee
-@bp.post("/register")
+@bp.post("/create")
 @has_permission("employee_create")
 def create():
     params = request.form
     required_fields = ['name', 'surname', 'dni', 'address', 'email', 'city', 'telephone',
-                       'profession', 'job_position', 'start_date','emergency_contact_info=emergency_contact_info',
-                       'condition']
+                       'profession', 'job_position', 'start_date','emergency_contact_info', 'social_work', 'associate_number',
+                       'condition', 'termination_date']
     for field in required_fields:
         if field not in params:
             flash(f"El campo {field} es requerido.", "error")
@@ -57,7 +57,7 @@ def create():
         social_work = params.get('social_work'),
         associate_number = params.get('associate_number'),
         condition = params['condition'],
-        active = params.get('active', False),
+        active = True,
     )
 
     flash("Empleado creado con éxito.", "info")
@@ -86,11 +86,7 @@ def edit(id):
 @bp.post("/<int:id>/update")
 @has_permission("employee_update")
 def update(id):
-    #is_update_own = id == session["user"]["id"]
-                                                                    
-  #  if not is_update_own:
-   #     has_permission("user_update")(lambda: None)() # estas 3 no se si van, supongo q si
-
+    
     employee = employee_repository.get_employee(id)
     if not employee:
         flash("Empleado no encontrado.", "error")
@@ -115,7 +111,7 @@ def update(id):
         social_work=params.get("social_work"),
         associate_number=params.get("associate_number"),
         condition=params.get("condition"),
-        active=params.get("active"),
+        active= 'active' in params
     )
 
     flash("Empleado actualizado con éxito.", "success")
