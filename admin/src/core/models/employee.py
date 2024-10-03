@@ -29,3 +29,6 @@ class Employee(db.Model):
 
     def __repr__(self):
         return f'<Employee {self.name} {self.surname}>'
+
+def has_permission(self, permission: str):
+    return any(permission == p.name for p in self.role.permissions)
