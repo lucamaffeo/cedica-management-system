@@ -38,47 +38,47 @@
     
         <label class="form-label" for="profession">Profesión:</label>
         <select id="profession" name="profession" required class="form-control">
-            <option value="Psicólogo/a" {{ 'selected' if employee.profession=='Psicólogo/a' else '' }}>Psicólogo/a
+            <option value="Psicólogo/a" {{ 'selected' if employee and employee.profession=='Psicólogo/a' else '' }}>Psicólogo/a
             </option>
-            <option value="Psicomotricista" {{ 'selected' if employee.profession=='Psicomotricista' else '' }}>
+            <option value="Psicomotricista" {{ 'selected' if employee and employee.profession=='Psicomotricista' else '' }}>
                 Psicomotricista</option>
-            <option value="Médico/a" {{ 'selected' if employee.profession=='Médico/a' else '' }}>Médico/a</option>
-            <option value="Kinesiólogo/a" {{ 'selected' if employee.profession=='Kinesiólogo/a' else '' }}>Kinesiólogo/a
+            <option value="Médico/a" {{ 'selected' if employee and employee.profession=='Médico/a' else '' }}>Médico/a</option>
+            <option value="Kinesiólogo/a" {{ 'selected' if employee and employee.profession=='Kinesiólogo/a' else '' }}>Kinesiólogo/a
             </option>
-            <option value="Terapista Ocupacional" {{ 'selected' if employee.profession=='Terapista Ocupacional' else ''
+            <option value="Terapista Ocupacional" {{ 'selected' if employee and employee.profession=='Terapista Ocupacional' else ''
                 }}>Terapista Ocupacional</option>
-            <option value="Psicopedagogo/a" {{ 'selected' if employee.profession=='Psicopedagogo/a' else '' }}>
+            <option value="Psicopedagogo/a" {{ 'selected' if employee and employee.profession=='Psicopedagogo/a' else '' }}>
                 Psicopedagogo/a</option>
-            <option value="Docente" {{ 'selected' if employee.profession=='Docente' else '' }}>Docente</option>
-            <option value="Profesor" {{ 'selected' if employee.profession=='Profesor' else '' }}>Profesor</option>
-            <option value="Fonoaudiólogo/a" {{ 'selected' if employee.profession=='Fonoaudiólogo/a' else '' }}>
+            <option value="Docente" {{ 'selected' if employee and employee.profession=='Docente' else '' }}>Docente</option>
+            <option value="Profesor" {{ 'selected' if employee and employee.profession=='Profesor' else '' }}>Profesor</option>
+            <option value="Fonoaudiólogo/a" {{ 'selected' if employee and employee.profession=='Fonoaudiólogo/a' else '' }}>
                 Fonoaudiólogo/a</option>
-            <option value="Veterinario/a" {{ 'selected' if employee.profession=='Veterinario/a' else '' }}>Veterinario/a
+            <option value="Veterinario/a" {{ 'selected' if employee and employee.profession=='Veterinario/a' else '' }}>Veterinario/a
             </option>
-            <option value="Otro" {{ 'selected' if employee.profession=='Otro' else '' }}>Otro</option>
+            <option value="Otro" {{ 'selected' if employee and employee.profession=='Otro' else '' }}>Otro</option>
         </select>
 
         <label class="form-label" for="job_position">Puesto Laboral:</label>
         <select id="job_position" name="job_position" required class="form-control">
-            <option value="Administrativo/a" {{ 'selected' if employee.job_position=='Administrativo/a' else '' }}>
+            <option value="Administrativo/a" {{ 'selected' if employee and employee.job_position=='Administrativo/a' else '' }}>
                 Administrativo/a</option>
-            <option value="Terapeuta" {{ 'selected' if employee.job_position=='Terapeuta' else '' }}>Terapeuta</option>
-            <option value="Conductor" {{ 'selected' if employee.job_position=='Conductor' else '' }}>Conductor</option>
-            <option value="Auxiliar de pista" {{ 'selected' if employee.job_position=='Auxiliar de pista' else '' }}>
+            <option value="Terapeuta" {{ 'selected' if employee and employee.job_position=='Terapeuta' else '' }}>Terapeuta</option>
+            <option value="Conductor" {{ 'selected' if employee and employee.job_position=='Conductor' else '' }}>Conductor</option>
+            <option value="Auxiliar de pista" {{ 'selected' if employee and employee.job_position=='Auxiliar de pista' else '' }}>
                 Auxiliar de pista</option>
-            <option value="Herrero" {{ 'selected' if employee.job_position=='Herrero' else '' }}>Herrero</option>
-            <option value="Veterinario" {{ 'selected' if employee.job_position=='Veterinario' else '' }}>Veterinario
+            <option value="Herrero" {{ 'selected' if employee and employee.job_position=='Herrero' else '' }}>Herrero</option>
+            <option value="Veterinario" {{ 'selected' if employee and employee.job_position=='Veterinario' else '' }}>Veterinario
             </option>
-            <option value="Entrenador de Caballos" {{ 'selected' if employee.job_position=='Entrenador de Caballos'
+            <option value="Entrenador de Caballos" {{ 'selected' if employee and employee.job_position=='Entrenador de Caballos'
                 else '' }}>Entrenador de Caballos</option>
-            <option value="Domador" {{ 'selected' if employee.job_position=='Domador' else '' }}>Domador</option>
-            <option value="Profesor de Equitación" {{ 'selected' if employee.job_position=='Profesor de Equitación'
+            <option value="Domador" {{ 'selected' if employee and employee.job_position=='Domador' else '' }}>Domador</option>
+            <option value="Profesor de Equitación" {{ 'selected' if employee and employee.job_position=='Profesor de Equitación'
                 else '' }}>Profesor de Equitación</option>
-            <option value="Docente de Capacitación" {{ 'selected' if employee.job_position=='Docente de Capacitación'
+            <option value="Docente de Capacitación" {{ 'selected' if employee and employee.job_position=='Docente de Capacitación'
                 else '' }}>Docente de Capacitación</option>
-            <option value="Auxiliar de mantenimiento" {{ 'selected' if
-                employee.job_position=='Auxiliar de mantenimiento' else '' }}>Auxiliar de mantenimiento</option>
-            <option value="Otro" {{ 'selected' if employee.job_position=='Otro' else '' }}>Otro</option>
+            <option value="Auxiliar de mantenimiento" {{ 'selected' if employee and 
+               employee.job_position=='Auxiliar de mantenimiento' else '' }}>Auxiliar de mantenimiento</option>
+            <option value="Otro" {{ 'selected' if employee and employee.job_position=='Otro' else '' }}>Otro</option>
         </select>
 
         <label class="form-label" for="start_date">Fecha de Inicio:</label>
@@ -107,8 +107,8 @@
 
         <label class="form-label" for="condition">Condición:</label>
         <select class="form-control" id="condition" name="condition" required>
-            <option value="Voluntario" {{ 'selected' if employee.condition=='Voluntario' else '' }}>Voluntario</option>
-            <option value="Personal Rentado" {{ 'selected' if employee.condition=='Personal Rentado' else '' }}>Personal
+            <option value="Voluntario" {{ 'selected' if employee and employee.condition=='Voluntario' else '' }}>Voluntario</option>
+            <option value="Personal Rentado" {{ 'selected' if employee and employee.condition=='Personal Rentado' else '' }}>Personal
                 Rentado</option>
         </select>
         {% if is_update %}
