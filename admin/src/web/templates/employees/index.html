@@ -1,0 +1,85 @@
+{% extends "base_index.html" %}
+{% block content %}
+<h1>Employees</h1>
+
+<form method="GET" action="{{ url_for('employees.index') }}">
+    <input type="text" name="search" placeholder="Buscar por nombre, apellido, DNI o email"
+        value="{{ request.args.get('search', '') }}">
+    <select name="professions" multiple>
+        <option value="">Todas las profesiones</option>
+        <option value="Psicólogo/a" {% if 'Psicólogo/a' in request.args.getlist('professions') %}selected{% endif %}>
+            Psicólogo/a</option>
+        <option value="Psicomotricista" {% if 'Psicomotricista' in request.args.getlist('professions') %}selected{%
+            endif %}>Psicomotricista</option>
+        <option value="Médico/a" {% if 'Médico/a' in request.args.getlist('professions') %}selected{% endif %}>Médico/a
+        </option>
+        <option value="Kinesiólogo/a" {% if 'Kinesiólogo/a' in request.args.getlist('professions') %}selected{% endif
+            %}>Kinesiólogo/a</option>
+        <option value="Terapista Ocupacional" {% if 'Terapista Ocupacional' in request.args.getlist('professions')
+            %}selected{% endif %}>Terapista Ocupacional</option>
+        <option value="Psicopedagogo/a" {% if 'Psicopedagogo/a' in request.args.getlist('professions') %}selected{%
+            endif %}>Psicopedagogo/a</option>
+        <option value="Docente" {% if 'Docente' in request.args.getlist('professions') %}selected{% endif %}>Docente
+        </option>
+        <option value="Profesor" {% if 'Profesor' in request.args.getlist('professions') %}selected{% endif %}>Profesor
+        </option>
+        <option value="Fonoaudiólogo/a" {% if 'Fonoaudiólogo/a' in request.args.getlist('professions') %}selected{%
+            endif %}>Fonoaudiólogo/a</option>
+        <option value="Veterinario/a" {% if 'Veterinario/a' in request.args.getlist('professions') %}selected{% endif
+            %}>Veterinario/a</option>
+        <option value="Otro" {% if 'Otro' in request.args.getlist('professions') %}selected{% endif %}>Otro</option>
+    </select>
+    <button type="submit">Buscar</button>
+</form>
+<!-- Employee table -->
+<table>
+    <thead>
+        <tr>
+            <th><a
+                    href="?sort_by=name&direction={{ 'asc' if request.args.get('direction') == 'desc' else 'desc' }}">Name</a>
+            </th>
+            <th>Apellido</th>
+            <th>DNI</th>
+            <th>Profession</th>
+            <th>Fecha de inicio</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for employee in pagination.items %}
+        <tr>
+            <td>{{ employee.name }}</td>
+            <td>{{ employee.surname }}</td>
+            <td>{{ employee.dni }}</td>
+            <td>{{ employee.profession }}</td>
+            <td>{{ employee.start_date }}</td>
+            <td>
+                <a href="{{ url_for('employees.show', id=employee.id) }}">Mostrar</a>
+                <a href="{{ url_for('employees.edit', id=employee.id) }}">Editar</a>
+                <a href="{{ url_for('employees.delete', id=employee.id) }}"
+                    onclick="return confirm('Are you sure?')">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Pagination -->
+{% if pagination.pages > 1 %}
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        {% if pagination.has_prev %}
+        <li><a href="{{ url_for('employees.index', page=pagination.prev_num) }}">Anterior</a></li>
+        {% endif %}
+        {% for page in pagination.iter_pages() %}
+        <li class="{{ 'active' if page == pagination.page else '' }}">
+            <a href="{{ url_for('employees.index', page=page) }}">{{ page }}</a>
+        </li>
+        {% endfor %}
+        {% if pagination.has_next %}
+        <li><a href="{{ url_for('employees.index', page=pagination.next_num) }}">Siguiente</a></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}
