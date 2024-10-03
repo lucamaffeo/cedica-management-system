@@ -1,6 +1,6 @@
 {% extends "base_index.html" %}
 {% block content %}
-<h1>Employees</h1>
+<h1>Empleados</h1>
 
 <form method="GET" action="{{ url_for('employees.index') }}">
     <input type="text" name="search" placeholder="Buscar por nombre, apellido, DNI o email"
@@ -36,7 +36,7 @@
     <thead>
         <tr>
             <th><a
-                    href="?sort_by=name&direction={{ 'asc' if request.args.get('direction') == 'desc' else 'desc' }}">Name</a>
+                    href="?sort_by=name&direction={{ 'asc' if request.args.get('direction') == 'desc' else 'desc' }}">Nombre</a>
             </th>
             <th>Apellido</th>
             <th>DNI</th>
