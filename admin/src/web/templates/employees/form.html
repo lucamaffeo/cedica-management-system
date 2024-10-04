@@ -90,12 +90,8 @@
             value="{{ employee.termination_date if employee else '' }}">
 
         <label class="form-label" for="emergency_contact">Contacto de Emergencia:</label>
-        <input class="form-control" type="text" id="emergency_contact" name="emergency_contact" required
-            value="{{ employee.emergency_contact if employee else '' }}">
-
-        <label class="form-label" for="emergency_telephone">Teléfono de Emergencia:</label>
-        <input class="form-control" type="text" id="emergency_telephone" name="emergency_telephone" required
-            value="{{ employee.emergency_telephone if employee else '' }}">
+        <input placeholder="Indicar nombre y telefono" class="form-control" type="text" id="emergency_contact_info" name="emergency_contact_info" required
+            value="{{ employee.emergency_contact_info if employee else '' }}">
 
         <label class="form-label" for="social_work">Obra Social:</label>
         <input class="form-control" type="text" id="social_work" name="social_work"

@@ -9,7 +9,7 @@ class Employee(db.Model):
     name = db.Column(db.String(100), nullable=False)
     surname = db.Column(db.String(100), nullable=False)
     dni = db.Column(db.String(20), unique=True, nullable=False)
-    adress = db.Column(db.String(255))
+    address = db.Column(db.String(255))
     email = db.Column(db.String(120), unique=True, nullable=False)
     city = db.Column(db.String(100))
     telephone = db.Column(db.String(50))
