@@ -18,8 +18,10 @@ def list_employees(search='', profession=None, sort_by='name', direction='asc', 
             (Employee.dni.ilike(f'%{search}%')) |
             (Employee.email.ilike(f'%{search}%'))
         )
-    if profession is not None:
+    if profession:
         query = query.filter(Employee.profession == profession)
+    else:
+        query = query  # No aplicar filtro, mostrar todos
     
     # Aplicar ordenación
     if sort_by in ['name', 'surname', 'start_date']:

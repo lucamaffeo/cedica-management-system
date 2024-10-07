@@ -18,7 +18,7 @@ Buscar por Nombre, Apellido, DNI o Email
 
 {% block filters %}
     <div>
-        <select name="professions" class="form-control">
+        <select name="profession" class="form-control">
             <option value="">Todas las profesiones</option>
             <option value="Psicólogo/a" {% if 'Psicólogo/a' in request.args.getlist('professions') %}selected{% endif %}>Psicólogo/a</option>
             <option value="Psicomotricista" {% if 'Psicomotricista' in request.args.getlist('professions') %}selected{%endif %}>Psicomotricista</option>
