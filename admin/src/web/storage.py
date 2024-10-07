@@ -19,10 +19,10 @@ class Storage:
 
     @property	
     def client(self):
-        return self.client
+        return self._client
     
     @client.setter
     def client(self, value):
-        self.client = value
+        self._client = value
 
 storage = Storage()

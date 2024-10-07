@@ -83,11 +83,12 @@
 
         <label class="form-label" for="start_date">Fecha de Inicio:</label>
         <input class="form-control" type="date" id="start_date" name="start_date" required
-            value="{{ employee.start_date if employee else '' }}">
+            value="{{ employee.start_date.strftime('%Y-%m-%d') if employee and employee.start_date else '' }}">
 
         <label class="form-label" for="termination_date">Fecha de Cese:</label>
         <input class="form-control" type="date" id="termination_date" name="termination_date"
-            value="{{ employee.termination_date if employee else '' }}">
+            value="{{ employee.termination_date.strftime('%Y-%m-%d') if employee and employee.termination_date else '' }}">
+
 
         <label class="form-label" for="emergency_contact">Contacto de Emergencia:</label>
         <input placeholder="Indicar nombre y telefono" class="form-control" type="text" id="emergency_contact_info" name="emergency_contact_info" required
@@ -111,5 +112,16 @@
         <label for="active">Activo</label>
         <input type="checkbox" name="active" value="true" {% if employee.active %}checked{% endif %}>
         {% endif %}
+        
+        <h4>Documentación Complementaria:</h4>
+        
+        <label class="form-label" for="title_file">Título:</label>
+        <input type="file" id="title_file" name="title_file" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+        
+        <label class="form-label" for="dni_file">Copia DNI:</label>
+        <input type="file" id="dni_file" name="dni_file" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
+        
+        <label class="form-label" for="cv_file">CV Actualizado:</label>
+        <input type="file" id="cv_file" name="cv_file" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
 
 {% endblock %}

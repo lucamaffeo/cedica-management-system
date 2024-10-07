@@ -1,6 +1,10 @@
 from flask import Blueprint, redirect, render_template, request, session, url_for, flash
 from src.core.repositories import employee as employee_repository
 from src.web.helpers.auth import has_permission
+from werkzeug.utils import secure_filename
+from os import fstat
+from flask import current_app
+
 
 bp = Blueprint("employees", __name__, url_prefix="/employees")
 
@@ -113,6 +117,30 @@ def update(id):
         condition=params.get("condition"),
         active= 'active' in params
     )
+    # Manejar la carga de archivos
+    files_to_upload = {
+        'dni_copy': 'Copia DNI',
+        'cv': 'CV Actualizado',
+        'title': 'Título'
+    }
+
+    client = current_app.storage.client
+
+    for field, doc_type in files_to_upload.items():
+        if field in request.files:
+            file = request.files[field]
+            if file and file.filename:
+                # Asegurarse de que el nombre del archivo sea seguro
+                filename = secure_filename(file.filename)
+                size = fstat(file.fileno()).st_size
+                client.put_object(
+                    "grupo10",  # Nombre del bucket
+                    filename,  # Nombre del archivo en Minio
+                    file,  # El archivo que se va a subir
+                    size,  # Tamaño del archivo
+                    content_type=file.content_type  # Tipo de contenido
+                )
+                flash(f"{doc_type} subido exitosamente.", "success")
 
     flash("Empleado actualizado con éxito.", "success")
     return redirect(url_for("employees.index"))
