@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 from flask import render_template
 
-
-
 @dataclass
 class Error:
     code: int
@@ -22,4 +20,4 @@ def forbidden(e):
 def error_unauthorized(e):
     error = Error(401, "Unauthorized", "You are not authorized to view this page.")
     
-    return render_template('error401.html', error=error), 401
+    return render_template('error.html', error=error), 401

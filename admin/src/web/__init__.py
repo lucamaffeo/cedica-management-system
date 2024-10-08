@@ -7,8 +7,6 @@ from src.core.config import config
 import logging
 from src.web.storage import storage
 
-
-
 logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
@@ -24,7 +22,7 @@ def create_app(env="development",static_folder="../../static"):
     storage.init_app(app)
 
     @app.template_filter('merge')
-    def merge(dict1, dict2):
+    def _jinja2_merge(dict1, dict2):
         """Merge two dictionaries."""
         return {**dict1, **dict2}
 

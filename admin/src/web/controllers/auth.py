@@ -26,8 +26,8 @@ def authenticate():
     # Find user by email
     user: User | None = auth.find_user_by_email(email)
 
-    if not user or not check_password_hash(user.password, password):
-        flash("Usuario o clave incorrecto.", "error")
+    if not user or not user.active or not check_password_hash(user.password, password):
+        flash("Usuario o clave incorrecto o cuenta inactiva.", "error")
         return redirect(url_for("auth.login"))
 
     # Set session for user

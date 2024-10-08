@@ -17,7 +17,7 @@ def create():
     params = request.form
     if not params.get("alias") or not params.get("email") or not params.get("password"):
         flash("Alias, correo electrónico y contraseña son obligatorios.", "error")
-        return render_template("users/create.html")
+        return redirect(url_for("users.register"))
     
     auth.create_user(
         alias=params["alias"],
