@@ -11,6 +11,11 @@ class Config(object):
     SESSION_COOKIE_SAMESITE = "Lax"
 
 class ProductionConfig(Config):
+    MINIO_SERVER = environ.get("MINIO_SERVER")
+    MINIO_ACCESS_KEY = environ.get("MINIO_ACCESS_KEY")
+    MINIO_SECRET_KEY = environ.get("MINIO_SECRET_KEY")
+    MINIO_SECURE = environ.get("MINIO_SECURE", True)
+    
     """ Production specific configuration. """
     SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL")
     DB_NAME = environ.get("DATABASE_URL")
@@ -21,6 +26,11 @@ class ProductionConfig(Config):
     DEBUG = False
 
 class DevelopmentConfig(Config):
+    """ Development environment specific configuration """
+    MINIO_SERVER = "localhost:9000"
+    MINIO_ACCESS_KEY = "1MPYEdD45EDw1smfmRLh"
+    MINIO_SECRET_KEY = "ogMilPuE9OunHTvaQxl3qx7uoS5TANPb22xnBBuN"
+    MINIO_SECURE = True
     """ Development environment configuration """
     DB_USER = "postgres"
     DB_PASS = "postgres"

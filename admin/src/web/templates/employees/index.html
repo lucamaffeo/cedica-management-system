@@ -1,0 +1,59 @@
+{% extends "base_index.html" %}
+
+{% block title %}
+Listado de Empleados
+{% endblock %}
+
+{% block page_title %}
+Empleados
+{% endblock %}
+
+{% set show_search=true %}
+
+{% block search_placeholder %}
+Buscar por Nombre, Apellido, DNI o Email
+{% endblock %}
+
+
+
+{% block filters %}
+    <div>
+        <select name="profession" class="form-control">
+            <option value="">Todas las profesiones</option>
+            <option value="Psicólogo/a" {% if 'Psicólogo/a' in request.args.getlist('professions') %}selected{% endif %}>Psicólogo/a</option>
+            <option value="Psicomotricista" {% if 'Psicomotricista' in request.args.getlist('professions') %}selected{%endif %}>Psicomotricista</option>
+            <option value="Médico/a" {% if 'Médico/a' in request.args.getlist('professions') %}selected{% endif %}>Médico/a</option>
+            <option value="Kinesiólogo/a" {% if 'Kinesiólogo/a' in request.args.getlist('professions') %}selected{% endif%}>Kinesiólogo/a</option>
+            <option value="Terapista Ocupacional" {% if 'Terapista Ocupacional' in request.args.getlist('professions')%}selected{% endif %}>Terapista Ocupacional</option>
+            <option value="Psicopedagogo/a" {% if 'Psicopedagogo/a' in request.args.getlist('professions') %}selected{%endif %}>Psicopedagogo/a</option>
+            <option value="Docente" {% if 'Docente' in request.args.getlist('professions') %}selected{% endif %}>Docente</option>
+            <option value="Profesor" {% if 'Profesor' in request.args.getlist('professions') %}selected{% endif %}>Profesor</option>
+            <option value="Fonoaudiólogo/a" {% if 'Fonoaudiólogo/a' in request.args.getlist('professions') %}selected{%endif %}>Fonoaudiólogo/a</option>
+            <option value="Veterinario/a" {% if 'Veterinario/a' in request.args.getlist('professions') %}selected{% endif%}>Veterinario/a</option>
+            <option value="Otro" {% if 'Otro' in request.args.getlist('professions') %}selected{% endif %}>Otro</option>
+        </select>
+    </div>
+{% endblock %}
+
+
+
+<!-- Employee table -->
+    {% set sorting_criteria = [("name", "Nombre"), ("surname", "Apellido"), ("dni", "DNI"), ("profession", "Profesión"), ("start_date", "Fecha de Ingreso")] %}
+    {% set sortable_fields = ["name", "surname", "start_date"] %}
+    {% block table_rows %}
+        {% for employee in pagination.items %}
+        <tr>
+            <td>{{ employee.name }}</td>
+            <td>{{ employee.surname }}</td>
+            <td>{{ employee.dni }}</td>
+            <td>{{ employee.profession }}</td>
+            <td>{{ employee.start_date }}</td>
+            <td>
+                <a href="{{ url_for('employees.show', id=employee.id) }}">Mostrar</a>
+                <a href="{{ url_for('employees.edit', id=employee.id) }}">Editar</a>
+                <a href="{{ url_for('employees.delete', id=employee.id) }}" onclick="return confirm('Are you sure?')">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+        {% endblock %}  
+

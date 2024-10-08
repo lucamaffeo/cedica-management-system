@@ -5,6 +5,7 @@ from src.web.controllers import register_blueprints
 from src.core import database, seeds
 from src.core.config import config
 import logging
+from src.web.storage import storage
 
 logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
@@ -16,6 +17,9 @@ def create_app(env="development",static_folder="../../static"):
 
     app.config.from_object(config[env])
     database.init_app(app)
+
+    # Initialize storage
+    storage.init_app(app)
 
     @app.template_filter('merge')
     def _jinja2_merge(dict1, dict2):
