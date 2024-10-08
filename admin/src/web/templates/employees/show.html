@@ -12,8 +12,8 @@
     <p><strong>Telefono:</strong> {{ employee.telephone }}</p>
     <p><strong>Profesion:</strong> {{ employee.profession }}</p>
     <p><strong>Puesto Laboral:</strong> {{ employee.job_position }}</p>
-    <p><strong>Fecha de Inicio:</strong> {{ employee.start_date }}</p>
-    <p><strong>fecha de Cese:</strong> {{ employee.termination_date }}</p>
+    <p><strong>Fecha de Inicio:</strong> {{ employee.start_date.strftime('%d/%m/%Y')}}</p>
+    <p><strong>Fecha de Cese:</strong> {{ employee.termination_date.strftime('%d/%m/%Y') if employee.termination_date else '-' }}</p>
     <p><strong>Contacto de Emergencia:</strong> {{ employee.emergency_contact_info}}</p>
     <p><strong>Obra Social:</strong> {{ employee.social_work }}</p>
     <p><strong>N° de Afiliado:</strong> {{ employee.associate_number }}</p>

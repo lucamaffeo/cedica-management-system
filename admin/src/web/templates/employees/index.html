@@ -47,7 +47,7 @@ Buscar por Nombre, Apellido, DNI o Email
             <td>{{ employee.surname }}</td>
             <td>{{ employee.dni }}</td>
             <td>{{ employee.profession }}</td>
-            <td>{{ employee.start_date }}</td>
+            <td>{{ employee.start_date.strftime('%d/%m/%Y')}}</td>
             <td>
                 <a href="{{ url_for('employees.show', id=employee.id) }}">Mostrar</a>
                 <a href="{{ url_for('employees.edit', id=employee.id) }}">Editar</a>

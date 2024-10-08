@@ -97,6 +97,9 @@ def update(id):
         return redirect(url_for("employees.index"))
 
     params = request.form
+    termination_date = params.get("termination_date")
+    if not termination_date:  # Si está vacío o None
+        termination_date = None
     # Actualizar el empleado
     employee_repository.update_employee(
         id=id,
@@ -110,12 +113,13 @@ def update(id):
         profession=params.get("profession"),
         job_position=params.get("job_position"),
         start_date=params.get("start_date"),
-        termination_date=params.get("termination_date"),
+        termination_date=termination_date,
         emergency_contact_info=params.get("emergency_contact_info"),
         social_work=params.get("social_work"),
         associate_number=params.get("associate_number"),
         condition=params.get("condition"),
         active= 'active' in params
+
     )
     # Manejar la carga de archivos
     files_to_upload = {
