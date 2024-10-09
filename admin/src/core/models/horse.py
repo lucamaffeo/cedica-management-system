@@ -6,16 +6,16 @@ class Horse(db.Model):
     __tablename__ = 'horses'
     
     id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(100), nullable=False)
-    fecha_nacimiento = db.Column(db.DateTime)
-    sexo = db.Column(db.String(10))
-    raza = db.Column(db.String(50))
-    pelaje = db.Column(db.String(50))
-    compra_donacion = db.Column(db.Enum('Compra', 'Donación', name='tipo_adquisicion'), nullable=False)
-    fecha_ingreso = db.Column(db.DateTime, default=datetime.now)
-    sede_asignada = db.Column(db.String(100))
-    entrenador_id = db.Column(db.Integer, db.ForeignKey('employees.id', ondelete='CASCADE'))
-    tipo_ja_asignados = db.Column(db.Enum('Hipoterapia', 'Monta Terapéutica', 'Deporte Ecuestre Adaptado', 'Actividades Recreativas', 'Equitación', name='tipo_ja')) # Jinetes y Amazonas
+    name = db.Column(db.String(100), nullable=False)
+    birth_date = db.Column(db.DateTime)
+    gender = db.Column(db.String(10))
+    breed = db.Column(db.String(50))
+    coat = db.Column(db.String(50))
+    purchase_donation = db.Column(db.Enum('Purchase', 'Donation', name='purchase_donation'), nullable=False)
+    entry_date = db.Column(db.DateTime, default=datetime.now)
+    assigned_location = db.Column(db.String(100))
+    trainer_id = db.Column(db.Integer, db.ForeignKey('employees.id', ondelete='CASCADE'))
+    assigned_activities_ja = db.Column(db.Enum('Hippotherapy', 'Therapeutic Riding', 'Adaptive Equestrian Sport', 'Recreational Activities', 'Equitation', name='assigned_activities'))
     documentacion = db.Column(JSON)
 
     def __repr__(self):
