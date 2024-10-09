@@ -8,15 +8,15 @@ Listado de Caballos
 Caballos
 {% endblock %}
 
-{% set show_search = true %}
+{% set show_search=true %}
 {% block search_placeholder %}
 Buscar por Nombre
 {% endblock %}
 
 {% block filters %}
-    <label class="form-label" for="assigned_activities_ja">Buscar por Tipo de J&A:</label>
-    <select class="form-control" name="assigned_activities_ja">
-        <option value="">Seleccionar</option>
+
+    <select class="form-control" name="assigned_activities_ja" >
+        <option value="">Seleccionar un tipo de J&A</option>
         <option value="Hippotherapy" {% if request.args.get('assigned_activities_ja')=='Hipoterapia' %}selected{% endif %}>
             Hipoterapia</option>
         <option value="Therapeutic Riding" {% if request.args.get('assigned_activities_ja')=='Monta Terapéutica' %}selected{%
@@ -32,7 +32,7 @@ Buscar por Nombre
 {% endblock %}
 
 <!-- horse table -->
-{% set sorting_criteria = [("name", "Nombre"), ("birth_date", "Fecha de Nacimiento"), ("entry_date", "Fecha de Ingreso")] %}
+{% set sorting_criteria = [("name", "Nombre"), ("birth_date", "Fecha de Nacimiento"), ("entry_date", "Fecha de Ingreso"), ("assigned_activities_ja", "Tipo de J&A")] %}
 {%set sortable_fields = ["name", "birth_date", "entry_date"] %}
     {% block table_rows %}
     {% for horse in pagination.items %}
@@ -40,6 +40,7 @@ Buscar por Nombre
         <td>{{ horse.name }}</td>
         <td>{{ horse.birth_date.strftime('%d/%m/%Y') if horse.birth_date else 'N/A' }}</td>
         <td>{{ horse.gender }}</td>
+        <td>{{horse.assigned_activities_ja}}</td>
         
         <td>
             <a href="{{ url_for('horses.show', id=horse.id) }}">Show</a>

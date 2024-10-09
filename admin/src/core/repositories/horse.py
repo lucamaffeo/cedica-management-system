@@ -6,13 +6,14 @@ def list_horses(search='', assigned_activities_ja=None, sort_by='name', directio
     query = Horse.query
 
     if search:
-        query.filter(
+       query= query.filter(
             (Horse.name.ilike(f"%{search}%")) 
         )
     if assigned_activities_ja:
-        query.filter(Horse.assigned_activities_ja == assigned_activities_ja)
+       query = query.filter(Horse.assigned_activities_ja == assigned_activities_ja)
     else:
         query = query
+    
     if sort_by in ['name', 'birth_date', 'entry_date']:
         if direction == 'asc':
             query = query.order_by(getattr(Horse, sort_by).asc())

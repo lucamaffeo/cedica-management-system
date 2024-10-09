@@ -13,7 +13,7 @@
 
         <label class="form-label" for="gender">Sexo:</label>
         <select class="form-control" name="gender">
-            <option value="">Seleccionar</option>
+
             <option value="Male" {{ 'selected' if horse and horse.gender=='Male' else '' }}>Macho</option>
             <option value="Female" {{ 'selected' if horse and horse.gender=='Female' else '' }}>Hembra</option>
         </select>
@@ -41,9 +41,8 @@
 
         <label class="form-label" for="trainer_id">Entrenador:</label>
         <select class="form-control" name="trainer_id">
-            <option value="">Seleccionar</option>
             {% for trainer in trainers %}
-            <option value="{{ trainer.id }}" {% if trainer.id == horse.trainer_id %}selected{% endif %}>{{ trainer.name }} {{ trainer.surname }} - Puesto laboral: {{ trainer.job_position}}</option>
+            <option value="{{ trainer.id }}" {{ 'selected' if horse and horse.trainer_id==trainer.id else '' }}>{{ trainer.name }} {{ trainer.surname }} - Puesto laboral: {{ trainer.job_position}}</option>
             {% else %}
             <option value="">No hay entrenadores disponibles</option> <!-- Mensaje alternativo -->
             {% endfor %}
@@ -51,7 +50,6 @@
 
         <label class="form-label" for="assigned_activities_ja">Tipo de J&A Asignados:</label>
         <select class="form-control" name="assigned_activities_ja">
-            <option value="">Seleccionar</option>
             <option value="Hippotherapy" {{ 'selected' if horse and horse.assigned_activities_ja =="Hippotherapy" else '' }}>Hipoterapia
             </option>
             <option value="Therapeutic Riding" {{ 'selected' if horse and horse.assigned_activities_ja =="Therapeutic Riding" else '' }}>
