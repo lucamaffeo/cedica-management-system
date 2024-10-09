@@ -1,7 +1,7 @@
-from flask import Blueprint, redirect, render_template, request, session, url_for, flash
+from flask import Blueprint, redirect, render_template, request, url_for, flash
 from src.core.repositories import horse as horse_repository
 from src.web.helpers.auth import has_permission
-from flask import current_app
+
 
 bp = Blueprint("horses", __name__, url_prefix="/horses")
 
@@ -70,7 +70,7 @@ def create():
 @bp.get("/<int:id>/show")
 @has_permission("horse_show")
 def show(id):
-    horse = horse_repository.get_horse_by_id(id)
+    horse = horse_repository.get_horse(id)
     if not horse:
         flash("Caballo no encontrado.", "error")
         return redirect(url_for("horses.index"))
@@ -80,7 +80,7 @@ def show(id):
 @bp.get("/<int:id>/update")
 @has_permission("horse_update")
 def edit(id):
-    horse = horse_repository.get_horse_by_id(id)
+    horse = horse_repository.get_horse(id)
     if not horse:
         flash("Caballo no encontrado.", "error")
         return redirect(url_for("horses.index"))
@@ -90,7 +90,7 @@ def edit(id):
 @bp.post("/<int:id>/update")
 @has_permission("horse_update")
 def update(id):
-    horse = horse_repository.get_horse_by_id(id)
+    horse = horse_repository.get_horse(id)
     if not horse:
         flash("Caballo no encontrado.", "error")
         return redirect(url_for("horses.index"))
@@ -117,7 +117,7 @@ def update(id):
 @bp.get("/<int:id>/delete")
 @has_permission("horse_delete")
 def delete(id):
-    horse = horse_repository.get_horse_by_id(id)
+    horse = horse_repository.get_horse(id)
     if not horse:
         flash("Caballo no encontrado.", "error")
         return redirect(url_for("horses.index"))

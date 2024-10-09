@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request, session, url_for, flash
+from flask import Blueprint, redirect, render_template, request, url_for, flash
 from src.core.repositories import employee as employee_repository
 from src.web.helpers.auth import has_permission
 from werkzeug.utils import secure_filename

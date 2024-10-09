@@ -8,7 +8,7 @@ class Horse(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     birth_date = db.Column(db.DateTime)
-    gender = db.Column(db.String(10))
+    gender = db.Column(db.Enum('Macho', 'Hembra', name='gender'), nullable=False)
     breed = db.Column(db.String(50))
     coat = db.Column(db.String(50))
     purchase_donation = db.Column(db.Enum('Purchase', 'Donation', name='purchase_donation'), nullable=False)
@@ -19,7 +19,8 @@ class Horse(db.Model):
     documentacion = db.Column(JSON)
 
     def __repr__(self):
-        return f'<Horse {self.nombre}>'
+        return f'<Horse {self.name}>'
     
+
 def has_permission(self, permission: str):
     return any(permission == p.name for p in self.role.permissions)
