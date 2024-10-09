@@ -20,3 +20,6 @@ class Horse(db.Model):
 
     def __repr__(self):
         return f'<Horse {self.nombre}>'
+    
+def has_permission(self, permission: str):
+    return any(permission == p.name for p in self.role.permissions)
