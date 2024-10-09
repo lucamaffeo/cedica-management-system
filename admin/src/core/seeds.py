@@ -55,7 +55,7 @@ def run():
     _ = user.create_user(email="6@mail.com", password="123456", role_id=2, alias="2")
 
     #EMPLEADOS
-    luca = employee.create_employee(name="Luca", surname="Perez", dni="12345679", email="luca1@gmail.com", start_date="2021-01-01",  active=True)  
+    luca = employee.create_employee(name="Luca", surname="Perez", dni="12345679", email="luca1@gmail.com", start_date="2021-01-01",  active=True, job_position = "Conductor")  
 
 
     #PAGOS
@@ -65,7 +65,7 @@ def run():
     jinete1 = models.create_rider(nombre="Juan", apellido="Perez", dni=51321513, edad=25, fecha_nacimiento="1996-01-01", lugar_nacimiento="CABA", domicilio="Av. Siempre Viva 123", telefono="123456789", contacto_emergencia="Maria", tel_contacto="123456789", becado=False, porcentaje_beca=0, profesionales="Dr. Juan Perez", documentacion={"dni": "url", "certificado_discapacidad": "url"})
 
     #CABALLOS
-    caballo1 = horse.create_horse(name="Caballo1", birth_date="2020-01-01",purchase_donation="Purchase",gender = "Macho")
+    caballo1 = horse.create_horse(name="Caballo1", birth_date="2020-01-01",purchase_donation="Purchase",gender = "Male", trainer_id=luca.id)
     #RECIBOS
     recibo = models.create_receipt(ja_id=1, monto=1000, medio_pago="Efectivo", empleado_id=1, observaciones="Sin observaciones") 
 

@@ -8,7 +8,7 @@ class Horse(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     birth_date = db.Column(db.DateTime)
-    gender = db.Column(db.Enum('Macho', 'Hembra', name='gender'), nullable=False)
+    gender = db.Column(db.Enum('Male', 'Female', name='gender'), nullable=False)
     breed = db.Column(db.String(50))
     coat = db.Column(db.String(50))
     purchase_donation = db.Column(db.Enum('Purchase', 'Donation', name='purchase_donation'), nullable=False)
@@ -17,6 +17,8 @@ class Horse(db.Model):
     trainer_id = db.Column(db.Integer, db.ForeignKey('employees.id', ondelete='CASCADE'))
     assigned_activities_ja = db.Column(db.Enum('Hippotherapy', 'Therapeutic Riding', 'Adaptive Equestrian Sport', 'Recreational Activities', 'Equitation', name='assigned_activities'))
     documentacion = db.Column(JSON)
+
+    employee = db.relationship('Employee', backref='horses')
 
     def __repr__(self):
         return f'<Horse {self.name}>'

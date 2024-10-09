@@ -9,13 +9,13 @@
         <input class="form-control" type="text" name="name" value="{{ horse.name if horse else '' }}" required>
 
         <label class="form-label" for="birth_date">Fecha de Nacimiento:</label>
-        <input type="date" name="birth_date" value="{{ horse.birth_date.strftime('%Y-%m-%d') if horse else '' }}">
+        <input class="form-control" type="date" name="birth_date" value="{{ horse.birth_date.strftime('%Y-%m-%d') if horse else '' }}">
 
-        <label for="gender">Sexo:</label>
-        <select name="gender">
+        <label class="form-label" for="gender">Sexo:</label>
+        <select class="form-control" name="gender">
             <option value="">Seleccionar</option>
-            <option value="Macho" {% if horse.gender=='Macho' %}selected{% endif %}>Macho</option>
-            <option value="Hembra" {% if horse.gender=='Hembra' %}selected{% endif %}>Hembra</option>
+            <option value="Male" {{ 'selected' if horse and horse.gender=='Male' else '' }}>Macho</option>
+            <option value="Female" {{ 'selected' if horse and horse.gender=='Female' else '' }}>Hembra</option>
         </select>
  
 
@@ -27,36 +27,38 @@
 
         <label class="form-label" for="purchase_donation">Compra/Donación:</label>
         <select class="form-control" name="purchase_donation" required>
-            <option value="Compra" {% if horse.purchase_donation=='Compra' %}selected{% endif %}>Compra</option>
-            <option value="Donación" {% if horse.purchase_donation=='Donación' %}selected{% endif %}>Donación</option>
+            <option value="Purchase" {{ 'selected' if horse and horse.purchase_donation=='Purchase' else '' }}>Compra</option>
+            <option value="Donation" {{ 'selected' if horse and horse.purchase_donation=='Donation' else '' }}>Donación</option>
         </select>
 
         <label class="form-label"  for="entry_date">Fecha de Ingreso:</label>
-        <input class="form-control" type="date" name="entry_date" value="{{ horse.entry_date.strftime('%Y-%m-%d') if horse.entry_date else '' }}"
+        <input class="form-control" type="date" id="entry_date" name="entry_date"
+         value="{{ horse.entry_date.strftime('%Y-%m-%d') if horse and horse.entry_date else '' }}"
             required>
-
+        
         <label class="form-label" for="assigned_location">Sede Asignada:</label>
         <input class="form-control"  type="text" name="assigned_location" value="{{ horse.assigned_location if horse else '' }}">
 
         <label class="form-label" for="trainer_id">Entrenador:</label>
         <select class="form-control" name="trainer_id">
             <option value="">Seleccionar</option>
-            <option value="{{ trainer.id }}" {% if horse.trainer_id==trainer.id %}selected{% endif %}>{{ trainer.name }}
-            </option>
+            {% for trainer in trainers %}
+            <option value="{{ trainer.id }}" {% if trainer.id == horse.trainer_id %}selected{% endif %}>{{ trainer.name }} {{ trainer.surname }} - Puesto laboral: {{ trainer.job_position}}</option>
+            {% else %}
+            <option value="">No hay entrenadores disponibles</option> <!-- Mensaje alternativo -->
+            {% endfor %}
         </select>
 
         <label class="form-label" for="assigned_activities_ja">Tipo de J&A Asignados:</label>
         <select class="form-control" name="assigned_activities_ja">
             <option value="">Seleccionar</option>
-            <option value="Hippotherapy" {% if horse.assigned_activities_ja=='Hipoterapia' %}selected{% endif %}>Hipoterapia
+            <option value="Hippotherapy" {{ 'selected' if horse and horse.assigned_activities_ja =="Hippotherapy" else '' }}>Hipoterapia
             </option>
-            <option value="Therapeutic Riding" {% if horse.assigned_activities_ja=='Monta Terapéutica' %}selected{% endif %}>
+            <option value="Therapeutic Riding" {{ 'selected' if horse and horse.assigned_activities_ja =="Therapeutic Riding" else '' }}>
                 Monta Terapéutica</option>
-            <option value="Adaptive Equestrian Sport" {% if horse.assigned_activities_ja=='Deporte Ecuestre Adaptado'
-                %}selected{% endif %}>Deporte Ecuestre Adaptado</option>
-            <option value="Recreational Activities" {% if horse.assigned_activities_ja=='Actividades Recreativas' %}selected{%
-                endif %}>Actividades Recreativas</option>
-            <option value="Equitation" {% if horse.assigned_activities_ja=='Equitación' %}selected{% endif %}>Equitación
+            <option value="Adaptive Equestrian Sport" {{ 'selected' if horse and horse.assigned_activities_ja =="Adaptive Equestrian Sport" else '' }}>Deporte Ecuestre Adaptado</option>
+            <option value="Recreational Activities" {{ 'selected' if horse and horse.assigned_activities_ja =="Recreational Activities" else '' }}>Actividades Recreativas</option>
+            <option value="Equitation" {{ 'selected' if horse and horse.assigned_activities_ja =="Equitation" else '' }}>Equitación
             </option>
         </select>
 

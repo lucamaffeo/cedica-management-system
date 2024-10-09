@@ -1,6 +1,7 @@
 from flask import Blueprint, redirect, render_template, request, url_for, flash
 from src.core.repositories import horse as horse_repository
 from src.web.helpers.auth import has_permission
+from src.core.repositories.employee import get_employees_by_job_positions
 
 
 bp = Blueprint("horses", __name__, url_prefix="/horses")
@@ -26,7 +27,9 @@ def index():
 @bp.get("/create")
 @has_permission("horse_create")
 def register():
-    return render_template("horses/form.html", is_update=False, title='Crear Caballo')
+    job_positions =["Conductor", "Entrenador de Caballos"]
+    trainers = get_employees_by_job_positions(job_positions)
+    return render_template("horses/form.html", is_update=False, title='Crear Caballo', trainers=trainers)
 
 # Create horse
 @bp.post("/create")
@@ -34,7 +37,6 @@ def register():
 def create():
     params = request.form
     required_fields = [
-        'id',
         'name',
         'birth_date',
         'gender',
@@ -43,15 +45,17 @@ def create():
         'purchase_donation',
         'entry_date',
         'assigned_location',
-        'trainer_id',
         'assigned_activities_ja'
     ]
     for field in required_fields:
         if field not in params:
             flash(f"El campo {field} es requerido.", "error")
             return redirect(url_for("horses.register"))
+        
+    trainer_id = params.get('trainer_id')
+    if trainer_id == "":  # Si está vacío, lo dejamos como None
+        trainer_id = None
     horse_repository.create_horse(
-        id = params['id'],
         name = params['name'],
         birth_date = params['birth_date'],
         gender = params['gender'],
@@ -81,10 +85,13 @@ def show(id):
 @has_permission("horse_update")
 def edit(id):
     horse = horse_repository.get_horse(id)
+    job_positions =["Conductor", "Entrenador de Caballos"]
+    trainers = get_employees_by_job_positions(job_positions)
+
     if not horse:
         flash("Caballo no encontrado.", "error")
         return redirect(url_for("horses.index"))
-    return render_template("horses/form.html", is_update=True, title='Editar Caballo', horse=horse)
+    return render_template("horses/form.html", is_update=True, title='Editar Caballo', horse=horse, trainers=trainers)
 
 #update horse
 @bp.post("/<int:id>/update")
@@ -96,9 +103,13 @@ def update(id):
         return redirect(url_for("horses.index"))
     
     params = request.form
+    trainer_id = params.get('trainer_id')
+    if trainer_id == "":  # Si está vacío, lo dejamos como None
+        trainer_id = None
+    
 
     horse_repository.update_horse(
-        id=id,
+        horse_id=id,
         name = params['name'],
         birth_date = params['birth_date'],
         gender = params['gender'],
@@ -107,7 +118,7 @@ def update(id):
         purchase_donation = params['purchase_donation'],
         entry_date = params['entry_date'],
         assigned_location = params['assigned_location'],
-        trainer_id = params['trainer_id'],
+        trainer_id = trainer_id,
         assigned_activities_ja = params['assigned_activities_ja'],
     )
     flash("Caballo actualizado con éxito.", "info")
@@ -115,7 +126,7 @@ def update(id):
 
 #delete horse
 @bp.get("/<int:id>/delete")
-@has_permission("horse_delete")
+@has_permission("horse_destroy")
 def delete(id):
     horse = horse_repository.get_horse(id)
     if not horse:
