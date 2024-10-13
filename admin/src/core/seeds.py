@@ -24,13 +24,19 @@ def run():
     employee_update = permission.create_permission(name="employee_update")
     employee_create = permission.create_permission(name="employee_create")
     employee_destroy = permission.create_permission(name="employee_destroy")
-    
+
+    #Receipt: index, show, update, create, destroy
+    receipt_index = permission.create_permission(name="receipt_index")
+    receipt_show = permission.create_permission(name="receipt_show")
+    receipt_update = permission.create_permission(name="receipt_update")
+    receipt_create = permission.create_permission(name="receipt_create")
+    receipt_destroy = permission.create_permission(name="receipt_destroy")
 
 
     # Roles
     _ = role.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy, payment_index, payment_show, payment_update, payment_create, payment_destroy,employee_create, employee_destroy, employee_index, employee_show, employee_update], id=1)
-    _ = role.create_role(name="administracion", permissions=[payment_index, payment_show, payment_update, payment_create, payment_destroy, employee_create, employee_destroy, employee_index, employee_show, employee_update], id=2)
-    _ = role.create_role(name="tecnica", id=3)
+    _ = role.create_role(name="administracion", permissions=[receipt_index, receipt_show, receipt_update, receipt_create, receipt_destroy , payment_index, payment_show, payment_update, payment_create, payment_destroy, employee_create, employee_destroy, employee_index, employee_show, employee_update], id=2)
+    _ = role.create_role(name="tecnica", permission=[receipt_index, receipt_show], id=3)
     _ = role.create_role(name="voluntariado", id=4)
     _ = role.create_role(name="ecuestre", id=5)
 
