@@ -29,12 +29,13 @@ def index():
 @bp.get("/create")
 @has_permission("rider_create")
 def register():
-    return render_template("rider/form.html", is_update=False, title='Crear Jinete/Amazona')
+    return render_template("riders/form.html", is_update=False, title='Crear Jinete/Amazona')
 
 # Create rider
 @bp.post("/create")
 @has_permission("rider_create")
 def create():
+    becado = 'becado' in request.form
     params = request.form
     required_fields = ['nombre', 'apellido', 'dni', 'edad', 'fecha_nacimiento', 'lugar_nacimiento', 'domicilio',
                        'telefono', 'contacto_emergencia', 'tel_contacto','becado', 'porcentaje_beca', 'profesionales'
@@ -55,7 +56,7 @@ def create():
         telefono = params['telefono'],
         contacto_emergencia = params['contacto_emergencia'],
         tel_contacto = params['tel_contacto'],
-        becado = params['becado'],
+        becado = becado,
         porcentaje_beca = params['porcentaje_beca'],
         profesionales = params['profesionales'],
     )
@@ -92,7 +93,8 @@ def update(id):
         flash("Jinete/Amazona no encontrado.", "error")
         return redirect(url_for("riders.index"))
 
-    params = request.form
+    params = request.form    
+    becado = 'becado' in request.form
     # Actualizar el jinete
     rider_repository.update_rider(
         id=id,
@@ -106,7 +108,7 @@ def update(id):
         telefono=params.get("telefono"),
         contacto_emergencia=params.get("contacto_emergencia"),
         tel_contacto=params.get("tel_contacto"),
-        becado=params.get("becado"),
+        becado=becado,
         porcentaje_beca=params.get("porcentaje_beca"),
         profesionales=params.get("profesionales")
     )
