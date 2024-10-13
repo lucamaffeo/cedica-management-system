@@ -25,14 +25,19 @@ def run():
     employee_create = permission.create_permission(name="employee_create")
     employee_destroy = permission.create_permission(name="employee_destroy")
     
-
+    #Riders: index, show, update, create, destroy
+    rider_index = permission.create_permission(name="rider_index")
+    rider_show = permission.create_permission(name="rider_show")
+    rider_update = permission.create_permission(name="rider_update")
+    rider_create = permission.create_permission(name="rider_create")
+    rider_destroy = permission.create_permission(name="rider_destroy")
 
     # Roles
-    _ = role.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy, payment_index, payment_show, payment_update, payment_create, payment_destroy,employee_create, employee_destroy, employee_index, employee_show, employee_update], id=1)
-    _ = role.create_role(name="administracion", permissions=[payment_index, payment_show, payment_update, payment_create, payment_destroy, employee_create, employee_destroy, employee_index, employee_show, employee_update], id=2)
-    _ = role.create_role(name="tecnica", id=3)
+    _ = role.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy, payment_index, payment_show, payment_update, payment_create, payment_destroy,employee_create, employee_destroy, employee_index, employee_show, employee_update, rider_show, rider_index, rider_update, rider_destroy, rider_create], id=1)
+    _ = role.create_role(name="administracion", permissions=[payment_index, payment_show, payment_update, payment_create, payment_destroy, employee_create, employee_destroy, employee_index, employee_show, employee_update, rider_show, rider_index, rider_update, rider_destroy, rider_create], id=2)
+    _ = role.create_role(name="tecnica", permissions=[rider_index, rider_create, rider_destroy, rider_show, rider_update], id=3)
     _ = role.create_role(name="voluntariado", id=4)
-    _ = role.create_role(name="ecuestre", id=5)
+    _ = role.create_role(name="ecuestre", permissions=[rider_index, rider_show], id=5)
 
 
     #USUARIOS
