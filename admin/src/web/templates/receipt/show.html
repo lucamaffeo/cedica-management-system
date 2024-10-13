@@ -1,0 +1,22 @@
+<!-- muestra los detalles de un recibo específico -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Detalles del Recibo</h1>
+
+<ul>
+    <li><strong>ID del Recibo:</strong> {{ receipt.id }}</li>
+    <li><strong>J&A:</strong> {{ receipt.ja_id }}</li>
+    <li><strong>Fecha de Pago:</strong> {{ receipt.fecha_pago.strftime('%Y-%m-%d') }}</li>
+    <li><strong>Monto:</strong> {{ receipt.monto }}</li>
+    <li><strong>Medio de Pago:</strong> {{ receipt.medio_pago }}</li>
+    <li><strong>Recibido por (Empleado ID):</strong> {{ receipt.empleado_id }}</li>
+    <li><strong>Observaciones:</strong> {{ receipt.observaciones or 'N/A' }}</li>
+</ul>
+
+<a href="{{ url_for('receipts.index') }}" class="btn btn-secondary">Volver</a>
+<a href="{{ url_for('receipts.edit', id=receipt.id) }}" class="btn btn-warning">Editar</a>
+<a href="{{ url_for('receipts.delete', id=receipt.id) }}" class="btn btn-danger">Eliminar</a>
+
+{% endblock %}

@@ -1,0 +1,49 @@
+<!-- muestra el formulario para crear o actualizar -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label for="ja_id">J&A</label>
+        <input type="text" name="ja_id" id="ja_id" class="form-control" value="{{ receipt.ja_id if is_update else '' }}"
+            required>
+    </div>
+    <div class="form-group">
+        <label for="fecha_pago">Fecha de Pago</label>
+        <input type="date" name="fecha_pago" id="fecha_pago" class="form-control"
+            value="{{ receipt.fecha_pago.strftime('%Y-%m-%d') if is_update else '' }}" required>
+    </div>
+    <div class="form-group">
+        <label for="monto">Monto</label>
+        <input type="number" name="monto" id="monto" class="form-control" step="0.01"
+            value="{{ receipt.monto if is_update else '' }}" required>
+    </div>
+    <div class="form-group">
+        <label for="medio_pago">Medio de Pago</label>
+        <select name="medio_pago" id="medio_pago" class="form-control" required>
+            <option value="Efectivo" {% if receipt.medio_pago=='Efectivo' %}selected{% endif %}>Efectivo</option>
+            <option value="Tarjeta de Crédito" {% if receipt.medio_pago=='Tarjeta de Crédito' %}selected{% endif %}>
+                Tarjeta de Crédito</option>
+            <option value="Tarjeta de Débito" {% if receipt.medio_pago=='Tarjeta de Débito' %}selected{% endif %}>
+                Tarjeta de Débito</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="empleado_id">Recibido por (Empleado ID)</label>
+        <input type="number" name="empleado_id" id="empleado_id" class="form-control"
+            value="{{ receipt.empleado_id if is_update else '' }}" required>
+    </div>
+    <div class="form-group">
+        <label for="observaciones">Observaciones</label>
+        <textarea name="observaciones" id="observaciones"
+            class="form-control">{{ receipt.observaciones if is_update else '' }}</textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">{{ 'Actualizar' if is_update else 'Registrar' }}</button>
+    <a href="{{ url_for('receipts.index') }}" class="btn btn-secondary">Cancelar</a>
+</form>
+
+{% endblock %}
