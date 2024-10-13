@@ -60,7 +60,7 @@ def run():
     pago1 = models.create_payment(amount=1000, beneficiary_id=1, type="Honorarios", description="Pago de honorarios")
 
     #JINETES/AMAZONAS
-    jinete1 = models.create_rider(nombre="Juan", apellido="Perez", dni=51321513, edad=25, fecha_nacimiento="1996-01-01", lugar_nacimiento="CABA", domicilio="Av. Siempre Viva 123", telefono="123456789", contacto_emergencia="Maria", tel_contacto="123456789", becado=False, porcentaje_beca=0, profesionales="Dr. Juan Perez", documentacion={"dni": "url", "certificado_discapacidad": "url"})
+    jinete1 = models.create_rider(nombre="Juan", apellido="Perez", dni=51321513, edad=25, fecha_nacimiento="1996-01-01", lugar_nacimiento="CABA", domicilio="Av. Siempre Viva 123", telefono="123456789", contacto_emergencia="Maria", tel_contacto="123456789", becado=False, porcentaje_beca=0, profesionales="Dr. Juan Perez")
 
     #CABALLOS
     caballo = models.create_horse(nombre="Caballo1", fecha_nacimiento="2010-01-01", sexo="Macho", raza="Criollo", pelaje="Blanco", compra_donacion="Compra", sede_asignada="Sede1", entrenador_id=1, tipo_ja_asignados="Hipoterapia", documentacion={"certificado_veterinario": "url"})
