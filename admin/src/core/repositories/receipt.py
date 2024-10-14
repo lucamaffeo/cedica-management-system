@@ -28,15 +28,15 @@ def list_receipts(start_date=None, end_date=None, medio_pago=None, sort_by='id',
 
 def create_receipt(**kwargs):
     # Validar si los campos requeridos están presentes
-    if kwargs.get('type') == 'Administracion':
-        if not kwargs.get('empleado_id'):
-            raise ValueError('Empleado ID es requerido.')
-        else:
-            administracion = employee.get_employee(kwargs.get('empleado_id'))
-            if not administracion:
-                raise ValueError('Administracion ID no existe')
-    else:
-        kwargs['empleado_id'] = None        
+    # if kwargs.get('type') == 'Administracion':
+    #     if not kwargs.get('empleado_id'):
+    #         raise ValueError('Empleado ID es requerido.')
+    #     else:
+    #         administracion = employee.get_employee(kwargs.get('empleado_id'))
+    #         if not administracion:
+    #             raise ValueError('Administracion ID no existe')
+    # else:
+    #     kwargs['empleado_id'] = None        
 
     receipt = Receipt(**kwargs)
     db.session.add(receipt)
@@ -49,16 +49,16 @@ def update_receipt(id, **kwargs):
         raise ValueError('Recibo no encontrado.')
 
     # Check the type and administracion_id for validation
-    new_type = kwargs.get('type')
-    if new_type == 'Administracion':
-            if not kwargs.get('empleado_id'):
-                raise ValueError('Empleado ID is required when the type is Administracion.')
-            else:
-                beneficiary = employee.get_employee(kwargs.get('empleado_id'))
-                if not beneficiary:
-                    raise ValueError('Empleado ID does not exist.')
-    else:
-        kwargs['empleado_id'] = None
+    # new_type = kwargs.get('type')
+    # if new_type == 'Administracion':
+    #         if not kwargs.get('empleado_id'):
+    #             raise ValueError('Empleado ID is required when the type is Administracion.')
+    #         else:
+    #             beneficiary = employee.get_employee(kwargs.get('empleado_id'))
+    #             if not beneficiary:
+    #                 raise ValueError('Empleado ID does not exist.')
+    # else:
+    #     kwargs['empleado_id'] = None
 
     for key, value in kwargs.items():
         setattr(receipt, key, value)
