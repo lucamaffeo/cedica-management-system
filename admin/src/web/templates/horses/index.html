@@ -17,16 +17,16 @@ Buscar por Nombre
 
     <select class="form-control" name="assigned_activities_ja" >
         <option value="">Seleccionar un tipo de J&A</option>
-        <option value="Hippotherapy" {% if request.args.get('assigned_activities_ja')=='Hipoterapia' %}selected{% endif %}>
+        <option value="Hipoterapia" {% if request.args.get('assigned_activities_ja')=='Hipoterapia' %}selected{% endif %}>
             Hipoterapia</option>
-        <option value="Therapeutic Riding" {% if request.args.get('assigned_activities_ja')=='Monta Terapéutica' %}selected{%
+        <option value="Monta Terapeutica" {% if request.args.get('assigned_activities_ja')=='Monta Terapéutica' %}selected{%
             endif %}>Monta Terapéutica</option>
-        <option value="Adaptive Equestrian Sport" {% if
+        <option value="Deporte Ecuestre Adaptado" {% if
             request.args.get('assigned_activities_ja')=='Deporte Ecuestre Adaptado' %}selected{% endif %}>Deporte Ecuestre
             Adaptado</option>
-        <option value="Recreational Activities" {% if request.args.get('assigned_activities_ja')=='Actividades Recreativas'
+        <option value="Actividades Recreativas" {% if request.args.get('assigned_activities_ja')=='Actividades Recreativas'
             %}selected{% endif %}>Actividades Recreativas</option>
-        <option value="Equitation" {% if request.args.get('assigned_activities_ja')=='Equitación' %}selected{% endif %}>
+        <option value="Equitacion" {% if request.args.get('assigned_activities_ja')=='Equitación' %}selected{% endif %}>
             Equitación</option>
     </select>
 {% endblock %}
@@ -43,9 +43,9 @@ Buscar por Nombre
         <td>{{horse.assigned_activities_ja}}</td>
         
         <td>
-            <a href="{{ url_for('horses.show', id=horse.id) }}">Show</a>
-            <a href="{{ url_for('horses.edit', id=horse.id) }}">Edit</a>
-            <a href="{{ url_for('horses.delete', id=horse.id) }}" onclick="return confirm('Are you sure?')">Delete</a>
+            <a href="{{ url_for('horses.show', id=horse.id) }}">Mostrar</a>
+            <a href="{{ url_for('horses.edit', id=horse.id) }}">Editar</a>
+            <a href="{{ url_for('horses.delete', id=horse.id) }}" onclick="return confirm('Are you sure?')">Eliminar</a>
         </td>
         {% else %}
         <tr>
