@@ -1,4 +1,4 @@
-from src.core.repositories import user, employee, role, permission
+from src.core.repositories import user, employee, role, permission, horse
 from src.core import models
 def run():
 
@@ -24,15 +24,22 @@ def run():
     employee_update = permission.create_permission(name="employee_update")
     employee_create = permission.create_permission(name="employee_create")
     employee_destroy = permission.create_permission(name="employee_destroy")
+
+    #Horses: index, show, update, create, destroy
+    horse_index = permission.create_permission(name="horse_index")
+    horse_show = permission.create_permission(name="horse_show")
+    horse_update = permission.create_permission(name="horse_update")
+    horse_create = permission.create_permission(name="horse_create")
+    horse_destroy = permission.create_permission(name="horse_destroy")
     
 
 
     # Roles
-    _ = role.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy, payment_index, payment_show, payment_update, payment_create, payment_destroy,employee_create, employee_destroy, employee_index, employee_show, employee_update], id=1)
-    _ = role.create_role(name="administracion", permissions=[payment_index, payment_show, payment_update, payment_create, payment_destroy, employee_create, employee_destroy, employee_index, employee_show, employee_update], id=2)
-    _ = role.create_role(name="tecnica", id=3)
+    _ = role.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy, payment_index, payment_show, payment_update, payment_create, payment_destroy,employee_create, employee_destroy, employee_index, employee_show, employee_update, horse_create, horse_destroy, horse_index, horse_show, horse_update], id=1)
+    _ = role.create_role(name="administracion", permissions=[payment_index, payment_show, payment_update, payment_create, payment_destroy, employee_create, employee_destroy, employee_index, employee_show, employee_update, horse_index, horse_show], id=2)
+    _ = role.create_role(name="tecnica",permissions=[horse_index, horse_show], id=3)
     _ = role.create_role(name="voluntariado", id=4)
-    _ = role.create_role(name="ecuestre", id=5)
+    _ = role.create_role(name="ecuestre", permissions=[horse_index, horse_show, horse_update, horse_create, horse_destroy], id=5)
 
 
     #USUARIOS
@@ -48,7 +55,7 @@ def run():
     _ = user.create_user(email="6@mail.com", password="123456", role_id=2, alias="2")
 
     #EMPLEADOS
-    luca = employee.create_employee(name="Luca", surname="Perez", dni="12345679", email="luca1@gmail.com", start_date="2021-01-01",  active=True)  
+    luca = employee.create_employee(name="Luca", surname="Perez", dni="12345679", email="luca1@gmail.com", start_date="2021-01-01",  active=True, job_position = "Conductor")  
 
 
     #PAGOS
@@ -58,8 +65,7 @@ def run():
     jinete1 = models.create_rider(nombre="Juan", apellido="Perez", dni=51321513, edad=25, fecha_nacimiento="1996-01-01", lugar_nacimiento="CABA", domicilio="Av. Siempre Viva 123", telefono="123456789", contacto_emergencia="Maria", tel_contacto="123456789", becado=False, porcentaje_beca=0, profesionales="Dr. Juan Perez", documentacion={"dni": "url", "certificado_discapacidad": "url"})
 
     #CABALLOS
-    caballo = models.create_horse(nombre="Caballo1", fecha_nacimiento="2010-01-01", sexo="Macho", raza="Criollo", pelaje="Blanco", compra_donacion="Compra", sede_asignada="Sede1", entrenador_id=1, tipo_ja_asignados="Hipoterapia", documentacion={"certificado_veterinario": "url"})
-
+    caballo1 = horse.create_horse(name="Caballo1", birth_date="2020-01-01",purchase_donation="Purchase",gender = "Male", trainer_id=luca.id)
     #RECIBOS
     recibo = models.create_receipt(ja_id=1, monto=1000, medio_pago="Efectivo", empleado_id=1, observaciones="Sin observaciones") 
 

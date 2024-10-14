@@ -63,6 +63,9 @@ def delete_employee(id):
     db.session.delete(employee)
     db.session.commit()
 
+def get_employees_by_job_positions(job_positions):
+    return db.session.query(Employee).filter(Employee.job_position.in_(job_positions)).all()
+
 def get_employee(id):
     employee = Employee.query.filter(Employee.id == id).first()
     return employee
