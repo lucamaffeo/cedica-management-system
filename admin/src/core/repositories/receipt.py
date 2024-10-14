@@ -1,80 +1,84 @@
-from datetime import datetime, timedelta
-from src.core.database import db
-from src.core.models.receipt import Receipt
-from src.core.repositories import employee
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from src.core.repositories import receipt
+from src.web.helpers.auth import has_permission
+from src.core.repositories import receipt
 
-def list_receipts(start_date=None, end_date=None, medio_pago=None, sort_by='id', direction='asc', page=1, items_per_page=5):
-    # Iniciar la consulta
-    query = Receipt.query
+bp = Blueprint("receipts", __name__, url_prefix="/receipts")
 
-    # Filtrar por fecha si se proporcionan las fechas de inicio y fin
-    if start_date and end_date:
-        end_date = datetime.strptime(end_date, '%Y-%m-%d')  # Convertir str a fecha para poder agregar timedelta
-        query = query.filter(Receipt.fecha_pago >= start_date, Receipt.fecha_pago < end_date + timedelta(days=1))
-
-    # Filtrar por medio de pago si se proporciona
-    if medio_pago:
-        query = query.filter(Receipt.medio_pago == medio_pago)
-
-    # Ordenar
-    if direction == 'asc':
-        query = query.order_by(getattr(Receipt, sort_by).asc())
-    else:
-        query = query.order_by(getattr(Receipt, sort_by).desc())
-
-    paginated_receipts = query.paginate(page=page, per_page=items_per_page, error_out=False)
-
-    return paginated_receipts
-
-def create_receipt(**kwargs):
-    # Validar si los campos requeridos están presentes
-    # if kwargs.get('type') == 'Administracion':
-    #     if not kwargs.get('empleado_id'):
-    #         raise ValueError('Empleado ID es requerido.')
-    #     else:
-    #         administracion = employee.get_employee(kwargs.get('empleado_id'))
-    #         if not administracion:
-    #             raise ValueError('Administracion ID no existe')
-    # else:
-    #     kwargs['empleado_id'] = None        
-
-    receipt = Receipt(**kwargs)
-    db.session.add(receipt)
-    db.session.commit()
-    return receipt
-
-def update_receipt(id, **kwargs):
-    receipt = Receipt.query.filter(Receipt.id == id).first()
-    if not receipt:
-        raise ValueError('Recibo no encontrado.')
-
-    # Check the type and administracion_id for validation
-    # new_type = kwargs.get('type')
-    # if new_type == 'Administracion':
-    #         if not kwargs.get('empleado_id'):
-    #             raise ValueError('Empleado ID is required when the type is Administracion.')
-    #         else:
-    #             beneficiary = employee.get_employee(kwargs.get('empleado_id'))
-    #             if not beneficiary:
-    #                 raise ValueError('Empleado ID does not exist.')
-    # else:
-    #     kwargs['empleado_id'] = None
-
-    for key, value in kwargs.items():
-        setattr(receipt, key, value)
-
-    db.session.commit()
-    return receipt
-
-def delete_receipt(id):
-    receipt = Receipt.query.filter(Receipt.id == id).first()
-    if not receipt:
-        raise ValueError('Recibo no encontrado.')
+@bp.get("/")
+@has_permission("receipt_index")
+def index():
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
+    medio_pago = request.args.get('medio_pago')
+    sort_by = request.args.get('sort_by', 'id')
+    direction = request.args.get('direction', 'asc')
+    page = request.args.get('page', 1, type=int)
+    items_per_page = 5
     
-    db.session.delete(receipt)
-    db.session.commit()
+    receipts = receipt.list_receipts(start_date, end_date, medio_pago, sort_by, direction, page, items_per_page)
+    
+    return render_template("receipts/index.html", pagination=receipts)
 
-def get_receipt(id) -> Receipt | None:
-    receipt = Receipt.query.filter(Receipt.id == id).first()
-    return receipt
+@bp.get("/create")
+@has_permission("receipt_create")
+def register():
+    return render_template("receipts/form.html", is_update=False, title="Registrar Recibo")
 
+@bp.post("/create")
+@has_permission("receipt_create")
+def create():
+    params = request.form
+    required_fields = ['fecha_pago', 'monto', 'medio_pago', 'observaciones']
+    for field in required_fields:
+        if field not in params:
+            flash(f"El campo {field} es requerido.", "error")
+            return redirect(url_for("receipts.register"))
+    receipt.create_receipt(
+        fecha_pago=params['fecha_pago'],
+        monto=params['monto'],
+        medio_pago=params['medio_pago'],
+        observaciones=params['observaciones']
+    )
+
+
+@bp.get("/<int:id>/show")
+@has_permission("receipt_show")
+def show(id):
+    r = receipt.get_receipt(id)
+    if not r:
+        flash("Recibo no encontrado.", "error")
+        return redirect(url_for("receipts.index"))
+    return render_template("receipts/show.html", receipt=r)
+
+@bp.get("/<int:id>/update")
+@has_permission("receipt_update")
+def edit(id):
+    r = receipt.get_receipt(id)
+    if not r:
+        flash("Recibo no encontrado.", "error")
+        return redirect(url_for("receipts.index"))
+    return render_template("receipts/form.html", is_update=True, title="Actualizar Recibo", receipt=r)
+
+@bp.route("/<int:id>/update", methods=["POST", "PATCH"])
+@has_permission("receipt_update")
+def update(id):
+    params = request.form
+    try:
+        r = receipt.update_receipt(id, **params)
+    except ValueError as e:
+        flash(str(e), 'error')
+        return redirect(url_for("receipts.index"))
+    return redirect(url_for("receipts.index"))
+
+@bp.get("/<int:id>/delete")
+@has_permission("receipt_destroy")
+def delete(id):
+    r = receipt.get_receipt(id)
+    if not r:
+        flash("Recibo no encontrado.", "error")
+        return redirect(url_for("receipts.index"))
+
+    receipt.delete_receipt(id)
+    flash("Recibo eliminado con Ã©xito.", "info")
+    return redirect(url_for("receipts.index"))
