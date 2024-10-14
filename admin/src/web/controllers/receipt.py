@@ -13,8 +13,9 @@ def index():
     sort_by = request.args.get('sort_by', 'id')
     direction = request.args.get('direction', 'asc')
     page = request.args.get('page', 1, type=int)
+    items_per_page = 5
     
-    receipts = receipt.list_receipts(start_date, end_date, medio_pago, sort_by, direction, page)
+    receipts = receipt.list_receipts(start_date, end_date, medio_pago, sort_by, direction, page, items_per_page)
     
     return render_template("receipts/index.html", pagination=receipts)
 

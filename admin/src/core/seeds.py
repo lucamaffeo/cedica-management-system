@@ -34,9 +34,9 @@ def run():
 
 
     # Roles
-    _ = role.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy, payment_index, payment_show, payment_update, payment_create, payment_destroy,employee_create, employee_destroy, employee_index, employee_show, employee_update], id=1)
+    _ = role.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy, payment_index, payment_show, payment_update, payment_create, payment_destroy,employee_create, employee_destroy, employee_index, employee_show, employee_update, receipt_index, receipt_show, receipt_update, receipt_create, receipt_destroy], id=1)
     _ = role.create_role(name="administracion", permissions=[receipt_index, receipt_show, receipt_update, receipt_create, receipt_destroy , payment_index, payment_show, payment_update, payment_create, payment_destroy, employee_create, employee_destroy, employee_index, employee_show, employee_update], id=2)
-    _ = role.create_role(name="tecnica", permission=[receipt_index, receipt_show], id=3)
+    _ = role.create_role(name="tecnica", permissions=[receipt_index, receipt_show], id=3)
     _ = role.create_role(name="voluntariado", id=4)
     _ = role.create_role(name="ecuestre", id=5)
 
@@ -70,4 +70,3 @@ def run():
     recibo = models.create_receipt(ja_id=1, monto=1000, medio_pago="Efectivo", empleado_id=1, observaciones="Sin observaciones") 
 
     print("Seed ejecutado correctamente")
-    
