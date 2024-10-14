@@ -14,8 +14,8 @@
         <label class="form-label" for="gender">Sexo:</label>
         <select class="form-control" name="gender">
 
-            <option value="Male" {{ 'selected' if horse and horse.gender=='Male' else '' }}>Macho</option>
-            <option value="Female" {{ 'selected' if horse and horse.gender=='Female' else '' }}>Hembra</option>
+            <option value="Macho" {{ 'selected' if horse and horse.gender=='Macho' else '' }}>Macho</option>
+            <option value="Hembra" {{ 'selected' if horse and horse.gender=='Hembra' else '' }}>Hembra</option>
         </select>
  
 
@@ -27,8 +27,8 @@
 
         <label class="form-label" for="purchase_donation">Compra/Donación:</label>
         <select class="form-control" name="purchase_donation" required>
-            <option value="Purchase" {{ 'selected' if horse and horse.purchase_donation=='Purchase' else '' }}>Compra</option>
-            <option value="Donation" {{ 'selected' if horse and horse.purchase_donation=='Donation' else '' }}>Donación</option>
+            <option value="Compra" {{ 'selected' if horse and horse.purchase_donation=='Compra' else '' }}>Compra</option>
+            <option value="Donacion" {{ 'selected' if horse and horse.purchase_donation=='Donacion' else '' }}>Donación</option>
         </select>
 
         <label class="form-label"  for="entry_date">Fecha de Ingreso:</label>
@@ -50,13 +50,13 @@
 
         <label class="form-label" for="assigned_activities_ja">Tipo de J&A Asignados:</label>
         <select class="form-control" name="assigned_activities_ja">
-            <option value="Hippotherapy" {{ 'selected' if horse and horse.assigned_activities_ja =="Hippotherapy" else '' }}>Hipoterapia
+            <option value="Hipoterapia" {{ 'selected' if horse and horse.assigned_activities_ja =="Hipoterapia" else '' }}>Hipoterapia
             </option>
-            <option value="Therapeutic Riding" {{ 'selected' if horse and horse.assigned_activities_ja =="Therapeutic Riding" else '' }}>
+            <option value="Monta Terapeutica" {{ 'selected' if horse and horse.assigned_activities_ja =="Monta Terapeutica" else '' }}>
                 Monta Terapéutica</option>
-            <option value="Adaptive Equestrian Sport" {{ 'selected' if horse and horse.assigned_activities_ja =="Adaptive Equestrian Sport" else '' }}>Deporte Ecuestre Adaptado</option>
-            <option value="Recreational Activities" {{ 'selected' if horse and horse.assigned_activities_ja =="Recreational Activities" else '' }}>Actividades Recreativas</option>
-            <option value="Equitation" {{ 'selected' if horse and horse.assigned_activities_ja =="Equitation" else '' }}>Equitación
+            <option value="Deporte Ecuestre Adaptado" {{ 'selected' if horse and horse.assigned_activities_ja =="Deporte Ecuestre Adaptado" else '' }}>Deporte Ecuestre Adaptado</option>
+            <option value="Actividades Recreativas" {{ 'selected' if horse and horse.assigned_activities_ja =="Actividades Recreativas" else '' }}>Actividades Recreativas</option>
+            <option value="Equitacion" {{ 'selected' if horse and horse.assigned_activities_ja =="Equitacion" else '' }}>Equitación
             </option>
         </select>
 
