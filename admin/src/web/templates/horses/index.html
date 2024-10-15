@@ -16,7 +16,7 @@ Buscar por Nombre
 {% block filters %}
 
     <select class="form-control" name="assigned_activities_ja" >
-        <option value="">Seleccionar un tipo de J&A</option>
+        <option value="">Todos los tipos de J&A</option>
         <option value="Hipoterapia" {% if request.args.get('assigned_activities_ja')=='Hipoterapia' %}selected{% endif %}>
             Hipoterapia</option>
         <option value="Monta Terapeutica" {% if request.args.get('assigned_activities_ja')=='Monta Terapéutica' %}selected{%

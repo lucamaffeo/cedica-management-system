@@ -8,7 +8,7 @@ def create_employee(**kwargs):
 
     return employee
 
-def list_employees(search='', profession=None, sort_by='name', direction='asc', page=1, items_per_page=5):
+def list_employees(search='', job_position=None, sort_by='name', direction='asc', page=1, items_per_page=5):
     query = Employee.query
 
     if search:
@@ -18,8 +18,8 @@ def list_employees(search='', profession=None, sort_by='name', direction='asc', 
             (Employee.dni.ilike(f'%{search}%')) |
             (Employee.email.ilike(f'%{search}%'))
         )
-    if profession:
-        query = query.filter(Employee.profession == profession)
+    if job_position:
+        query = query.filter(Employee.profession == job_position)
     else:
         query = query  # No aplicar filtro, mostrar todos
     
