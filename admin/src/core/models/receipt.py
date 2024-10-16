@@ -12,6 +12,11 @@ class Receipt(db.Model):
     medio_pago = db.Column(db.Enum('Efectivo', 'Tarjeta de Crédito', 'Tarjeta de Débito', name='medio_pago'), nullable=False)
     empleado_id = db.Column(db.Integer, db.ForeignKey('employees.id', ondelete='CASCADE'), nullable=False)
     observaciones = db.Column(db.Text)
+    al_dia = db.Column(db.Boolean, default=True)
 
+    # Relaciones
+    ja = db.relationship('Rider', backref='receipts')  # Relación con Jinetes y Amazonas (J&A)
+    empleado = db.relationship('Employee', backref='receipts')  # Relación con Empleados
+    
     def __repr__(self):
-        return f'<Receipt {self.id} - {self.monto}>'
+        return f'<Receipt {self.id} - {self.monto} - {"Al Día" if self.al_dia else "En Deuda"}>'

@@ -1,5 +1,5 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
-from src.core.repositories import receipt
+from src.core.repositories import receipt, employee
 from src.web.helpers.auth import has_permission
 
 bp = Blueprint("receipts", __name__, url_prefix="/receipts")
@@ -13,7 +13,7 @@ def index():
     sort_by = request.args.get('sort_by', 'id')
     direction = request.args.get('direction', 'asc')
     page = request.args.get('page', 1, type=int)
-    items_per_page = 5
+    items_per_page = request.args.get('items_per_page', 5, type=int)
     
     receipts = receipt.list_receipts(start_date, end_date, medio_pago, sort_by, direction, page, items_per_page)
     
@@ -28,11 +28,16 @@ def register():
 @has_permission("receipt_create")
 def create():
     params = request.form
+    # Validar los campos requeridos
+    if not params.get('ja_id') or not params.get('empleado_id'):
+        flash("J&A y Empleado son campos requeridos.", "error")
+        return redirect(url_for('receipts.register'))
     try:
         r = receipt.create_receipt(**params)
     except ValueError as e:
         flash(str(e), 'error')
         return redirect(url_for('receipts.register'))
+    flash("Recibo creado con éxito.", "success")
     return redirect(url_for('receipts.index'))
 
 @bp.get("/<int:id>/show")
@@ -57,11 +62,17 @@ def edit(id):
 @has_permission("receipt_update")
 def update(id):
     params = request.form
+    # Validar campos requeridos
+    if not params.get('monto') or not params.get('medio_pago'):
+        flash("Monto y medio de pago son campos requeridos.", "error")
+        return redirect(url_for("receipts.edit", id=id))
+    
     try:
         r = receipt.update_receipt(id, **params)
     except ValueError as e:
         flash(str(e), 'error')
         return redirect(url_for("receipts.index"))
+    flash("Recibo actualizado con éxito.", "success")
     return redirect(url_for("receipts.index"))
 
 @bp.get("/<int:id>/delete")

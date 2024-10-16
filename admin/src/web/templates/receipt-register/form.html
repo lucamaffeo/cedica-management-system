@@ -1,0 +1,62 @@
+{% extends "base_form.html" %}
+
+{% block title %}
+{{ 'Crear Recibo' if not receipt else 'Editar Recibo' }}
+{% endblock %}
+
+{% block form_action %}
+{{ url_for('receipts.update', id=receipt.id) if receipt else url_for('receipts.create') }}
+{% endblock %}
+
+{% block form_fields %}
+
+<div class="form-group">
+    <label for="ja_id">J&A (Jinete y Amazonas)</label>
+    <select name="ja_id" class="form-control" required>
+        <option value="" disabled {{ 'selected' if not receipt }}>Seleccione un jinete</option>
+        {% for rider in riders %}
+        <option value="{{ rider.id }}" {% if receipt and receipt.ja_id==rider.id %}selected{% endif %}>
+            {{ rider.alias }}
+        </option>
+        {% endfor %}
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="fecha_pago">Fecha de Pago</label>
+    <input type="date" name="fecha_pago" class="form-control"
+        value="{{ receipt.fecha_pago.strftime('%Y-%m-%d') if receipt else '' }}" required>
+</div>
+
+<div class="form-group">
+    <label for="monto">Monto</label>
+    <input type="number" name="monto" class="form-control" value="{{ receipt.monto if receipt else '' }}"
+        placeholder="Ingrese el monto" required>
+</div>
+
+<div class="form-group">
+    <label for="medio_pago">Medio de Pago</label>
+    <select class="form-control" name="medio_pago" required>
+        <option value="" disabled {{ 'selected' if not receipt }}>Seleccione un medio de pago</option>
+        <option value="Efectivo" {% if receipt and receipt.medio_pago=='Efectivo' %}selected{% endif %}>Efectivo
+        </option>
+        <option value="Tarjeta de Crédito" {% if receipt and receipt.medio_pago=='Tarjeta de Crédito' %}selected{% endif
+            %}>Tarjeta de Crédito</option>
+        <option value="Tarjeta de Débito" {% if receipt and receipt.medio_pago=='Tarjeta de Débito' %}selected{% endif
+            %}>Tarjeta de Débito</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="empleado_id">Recibido por (Empleado)</label>
+    <select name="empleado_id" class="form-control" required>
+        <option value="" disabled {{ 'selected' if not receipt }}>Seleccione un empleado</option>
+        {% for employee in employees %}
+        <option value="{{ employee.id }}" {% if receipt and receipt.empleado_id==employee.id %}selected{% endif %}>
+            {{ employee.nombre }}
+        </option>
+        {% endfor %}
+    </select>
+</div>
+
+{% endblock %}

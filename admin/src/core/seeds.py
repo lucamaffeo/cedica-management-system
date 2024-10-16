@@ -67,6 +67,6 @@ def run():
     caballo = models.create_horse(nombre="Caballo1", fecha_nacimiento="2010-01-01", sexo="Macho", raza="Criollo", pelaje="Blanco", compra_donacion="Compra", sede_asignada="Sede1", entrenador_id=1, tipo_ja_asignados="Hipoterapia", documentacion={"certificado_veterinario": "url"})
 
     #RECIBOS
-    recibo = models.create_receipt(ja_id=1, monto=1000, medio_pago="Efectivo", empleado_id=1, observaciones="Sin observaciones") 
+    recibo = models.create_receipt(ja_id=jinete1.id, monto=1000, medio_pago="Efectivo", empleado_id=luca.id, observaciones="Sin observaciones") 
 
     print("Seed ejecutado correctamente")

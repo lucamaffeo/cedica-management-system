@@ -51,7 +51,7 @@ Recibos
     <td>
         <a href="{{ url_for('receipts.show', id=receipt.id) }}">Mostrar</a>
         <a href="{{ url_for('receipts.edit', id=receipt.id) }}">Editar</a>
-        <a href="{{ url_for('receipts.delete', id=receipt.id) }}" onclick="return confirm('Are you sure?')">Eliminar</a>
+        <a href="{{ url_for('receipts.delete', id=receipt.id) }}" onclick="return confirm('Estas seguro?')">Eliminar</a>
     </td>
 </tr>
 {% endfor %}
