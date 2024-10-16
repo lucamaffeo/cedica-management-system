@@ -1,23 +1,13 @@
 from src.core.database import db
-from src.core.models.horse import Horse
 from src.core.models.receipt import Receipt
 from src.core.models.rider import Rider
 from src.core.models.payment import Payment
 
-def list_Horse():
-    horses = Horse.query.all()
-    return horses
 
 def list_Receipt():
     receipts = Receipt.query.all()
     return receipts 
 
-def create_horse(**kwargs):
-    horse = Horse(**kwargs)
-    db.session.add(horse)
-    db.session.commit()
-
-    return horse
 
 def create_receipt(**kwargs):
     receipt = Receipt(**kwargs)

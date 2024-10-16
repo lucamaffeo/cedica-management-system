@@ -10,7 +10,7 @@ def index():
 
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')
-    payment_type = request.args.get('payment_type')
+    payment_type = request.args.get('type')
     sort_by = request.args.get('sort_by', 'date')
     direction = request.args.get('direction', 'asc')
     page = request.args.get('page', 1, type=int)

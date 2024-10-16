@@ -1,0 +1,57 @@
+{% extends "base_index.html" %}
+
+{% block title %}
+Listado de Caballos
+{% endblock %}
+
+{% block page_title %}
+Caballos
+{% endblock %}
+
+{% set show_search=true %}
+{% block search_placeholder %}
+Buscar por Nombre
+{% endblock %}
+
+{% block filters %}
+
+    <select class="form-control" name="assigned_activities_ja" >
+        <option value="">Todos los tipos de J&A</option>
+        <option value="Hipoterapia" {% if request.args.get('assigned_activities_ja')=='Hipoterapia' %}selected{% endif %}>
+            Hipoterapia</option>
+        <option value="Monta Terapeutica" {% if request.args.get('assigned_activities_ja')=='Monta Terapéutica' %}selected{%
+            endif %}>Monta Terapéutica</option>
+        <option value="Deporte Ecuestre Adaptado" {% if
+            request.args.get('assigned_activities_ja')=='Deporte Ecuestre Adaptado' %}selected{% endif %}>Deporte Ecuestre
+            Adaptado</option>
+        <option value="Actividades Recreativas" {% if request.args.get('assigned_activities_ja')=='Actividades Recreativas'
+            %}selected{% endif %}>Actividades Recreativas</option>
+        <option value="Equitacion" {% if request.args.get('assigned_activities_ja')=='Equitación' %}selected{% endif %}>
+            Equitación</option>
+    </select>
+{% endblock %}
+
+<!-- horse table -->
+{% set sorting_criteria = [("name", "Nombre"), ("birth_date", "Fecha de Nacimiento"), ("entry_date", "Fecha de Ingreso"), ("assigned_activities_ja", "Tipo de J&A")] %}
+{%set sortable_fields = ["name", "birth_date", "entry_date"] %}
+    {% block table_rows %}
+    {% for horse in pagination.items %}
+    <tr>
+        <td>{{ horse.name }}</td>
+        <td>{{ horse.birth_date.strftime('%d/%m/%Y') if horse.birth_date else 'N/A' }}</td>
+        <td>{{ horse.gender }}</td>
+        <td>{{horse.assigned_activities_ja}}</td>
+        
+        <td>
+            <a href="{{ url_for('horses.show', id=horse.id) }}">Mostrar</a>
+            <a href="{{ url_for('horses.edit', id=horse.id) }}">Editar</a>
+            <a href="{{ url_for('horses.delete', id=horse.id) }}" onclick="return confirm('Are you sure?')">Eliminar</a>
+        </td>
+        {% else %}
+        <tr>
+            <td colspan="5">No se encontraron caballos.</td>
+        </tr>
+    </tr>
+    {% endfor %}
+    
+    {% endblock %}

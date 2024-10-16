@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request, session, url_for, flash
+from flask import Blueprint, redirect, render_template, request, url_for, flash
 from src.core.repositories import employee as employee_repository
 from src.web.helpers.auth import has_permission
 from werkzeug.utils import secure_filename
@@ -13,13 +13,13 @@ bp = Blueprint("employees", __name__, url_prefix="/employees")
 @has_permission("employee_index") #permiso para listar empleados
 def index():
     search = request.args.get("search", "")
-    profession_filter = request.args.get("profession", None)
+    job_position_filter = request.args.get("job_position", None)
     sort_by = request.args.get("sort_by", "name")
     direction = request.args.get("direction", "asc")
     page = int(request.args.get("page", 1))
     items_per_page = 5
 
-    employees = employee_repository.list_employees(search, profession_filter, sort_by, direction, page, items_per_page)    
+    employees = employee_repository.list_employees(search, job_position_filter, sort_by, direction, page, items_per_page)    
 
     if not employees.items:
         flash("No se encontraron empleados.", "info")
@@ -97,6 +97,9 @@ def update(id):
         return redirect(url_for("employees.index"))
 
     params = request.form
+    termination_date = params.get("termination_date")
+    if not termination_date:  # Si está vacío o None
+        termination_date = None
     # Actualizar el empleado
     employee_repository.update_employee(
         id=id,
@@ -110,12 +113,13 @@ def update(id):
         profession=params.get("profession"),
         job_position=params.get("job_position"),
         start_date=params.get("start_date"),
-        termination_date=params.get("termination_date"),
+        termination_date=termination_date,
         emergency_contact_info=params.get("emergency_contact_info"),
         social_work=params.get("social_work"),
         associate_number=params.get("associate_number"),
         condition=params.get("condition"),
         active= 'active' in params
+
     )
     # Manejar la carga de archivos
     files_to_upload = {
