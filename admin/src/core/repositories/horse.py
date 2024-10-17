@@ -1,3 +1,4 @@
+from src.core.models.employee import Employee
 from src.core.database import db
 from src.core.models.horse import Horse
 
@@ -53,3 +54,4 @@ def delete_horse(horse_id):
     db.session.delete(horse)
     db.session.commit()
     return horse
+
