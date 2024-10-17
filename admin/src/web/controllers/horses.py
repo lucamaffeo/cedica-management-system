@@ -1,7 +1,10 @@
 from flask import Blueprint, redirect, render_template, request, url_for, flash
+from src.core.models import horse
+from src.core.models.employee import Employee
 from src.core.repositories import horse as horse_repository
 from src.web.helpers.auth import has_permission
 from src.core.repositories.employee import get_employees_by_job_positions
+from src.core.database import db
 
 
 bp = Blueprint("horses", __name__, url_prefix="/horses")
@@ -51,22 +54,31 @@ def create():
         if field not in params:
             flash(f"El campo {field} es requerido.", "error")
             return redirect(url_for("horses.register"))
-        
-    trainer_id = params.get('trainer_id')
-    if trainer_id == "":  # Si está vacío, lo dejamos como None
-        trainer_id = None
-    horse_repository.create_horse(
+    
+    trainer_ids = request.form.getlist('trainer_id')
+    
+    horse = horse_repository.create_horse(
         name = params['name'],
-        birth_date = params['birth_date'],
+        birth_date = params['birth_date']  or None,
         gender = params['gender'],
         breed = params['breed'],
         coat = params['coat'],
         purchase_donation = params['purchase_donation'],
         entry_date = params['entry_date'],
         assigned_location = params['assigned_location'],
-        trainer_id = params['trainer_id'],
         assigned_activities_ja = params['assigned_activities_ja'],
     )
+    if trainer_ids:
+        for trainer_id in trainer_ids:
+            trainer = Employee.query.get(trainer_id)  # Busca el entrenador por ID
+            if trainer:  # Asegúrate de que el entrenador existe
+                horse.association.append(trainer)  # Agrega el entrenador a la relación
+            else:
+                flash(f"Entrenador con ID {trainer_id} no encontrado.", "error")
+    
+
+    # Guardar cambios en la base de datos
+    db.session.commit()
     flash("Caballo creado con éxito.", "success")
     return redirect(url_for("horses.index"))
 
@@ -87,11 +99,11 @@ def edit(id):
     horse = horse_repository.get_horse(id)
     job_positions =["Conductor", "Entrenador de Caballos"]
     trainers = get_employees_by_job_positions(job_positions)
-
+    associated_trainer_ids = [trainer.id for trainer in horse.association]
     if not horse:
         flash("Caballo no encontrado.", "error")
         return redirect(url_for("horses.index"))
-    return render_template("horses/form.html", is_update=True, title='Editar Caballo', horse=horse, trainers=trainers)
+    return render_template("horses/form.html", is_update=True, title='Editar Caballo', horse=horse, trainers=trainers,associated_trainer_ids=associated_trainer_ids)
 
 #update horse
 @bp.post("/<int:id>/update")
@@ -103,11 +115,11 @@ def update(id):
         return redirect(url_for("horses.index"))
     
     params = request.form
-    trainer_id = params.get('trainer_id')
-    if trainer_id == "":  # Si está vacío, lo dejamos como None
-        trainer_id = None
     
-
+    # Obtener los nuevos IDs de entrenadores seleccionados desde el formulario
+    trainer_ids = request.form.getlist('trainer_id')
+    
+    
     horse_repository.update_horse(
         horse_id=id,
         name = params['name'],
@@ -118,9 +130,24 @@ def update(id):
         purchase_donation = params['purchase_donation'],
         entry_date = params['entry_date'],
         assigned_location = params['assigned_location'],
-        trainer_id = trainer_id,
         assigned_activities_ja = params['assigned_activities_ja'],
+    
     )
+    # Limpia las asociaciones actuales de entrenadores
+    for trainer in horse.association[:]:  # Usar copia para evitar problemas al eliminar
+        horse.association.remove(trainer)
+    
+    if(trainer_ids):
+        for trainer_id in trainer_ids:
+            trainer = Employee.query.get(trainer_id)
+            if trainer:
+                horse.association.append(trainer)
+            else:
+                flash(f"Entrenador con ID {trainer_id} no encontrado.", "error")
+
+    db.session.commit()
+
+
     flash("Caballo actualizado con éxito.", "info")
     return redirect(url_for("horses.index"))
 
