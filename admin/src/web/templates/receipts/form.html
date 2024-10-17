@@ -7,8 +7,17 @@
 {% endblock %}
 
 {% block form_fields %}
-<label class="form-label" for="ja_id">J&A:</label>
-<input type="text" id="ja_id" name="ja_id" required class="form-control" value="{{ receipt.ja_id if receipt else '' }}">
+<div class="form-group">
+    <label class="form-label" for="ja_id">J&A (Jinete y Amazonas)</label>
+    <select name="ja_id" class="form-control" required>
+        <option value="" disabled {{ 'selected' if not receipt }}>Seleccione un jinete</option>
+        {% for rider in riders %}
+        <option value="{{ rider.id }}" {% if receipt and receipt.ja_id==rider.id %}selected{% endif %}>
+            {{ rider.alias }}
+        </option>
+        {% endfor %}
+    </select>
+</div>
 
 <label class="form-label" for="fecha_pago">Fecha de Pago:</label>
 <input class="form-control" type="date" id="fecha_pago" name="fecha_pago" required
@@ -31,9 +40,17 @@
     <option value="Otro" {{ 'selected' if receipt and receipt.payment_method=='Otro' else '' }}>Otro</option>
 </select>
 
-<label class="form-label" for="recipient">Recibido por:</label>
-<input type="text" id="recipient" name="recipient" required class="form-control"
-    value="{{ receipt.recipient if receipt else '' }}">
+<div class="form-group">
+    <label class="form-label" for="empleado_id">Recibido por (Empleado)</label>
+    <select name="empleado_id" class="form-control" required>
+        <option value="" disabled {{ 'selected' if not receipt }}>Seleccione un empleado</option>
+        {% for employee in employees %}
+        <option value="{{ employee.id }}" {% if receipt and receipt.empleado_id==employee.id %}selected{% endif %}>
+            {{ employee.nombre }}
+        </option>
+        {% endfor %}
+    </select>
+</div>
 
 <label class="form-label" for="observations">Observaciones:</label>
 <textarea class="form-control" id="observations"
