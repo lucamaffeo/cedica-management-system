@@ -43,7 +43,7 @@ def run():
     # Roles
     _ = role.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy, payment_index, payment_show, payment_update, payment_create, payment_destroy,employee_create, employee_destroy, employee_index, employee_show, employee_update, receipt_index, receipt_show, receipt_update, receipt_create, receipt_destroy, horse_create, horse_destroy, horse_index, horse_show, horse_update], id=1)
     _ = role.create_role(name="administracion", permissions=[receipt_index, receipt_show, receipt_update, receipt_create, receipt_destroy , payment_index, payment_show, payment_update, payment_create, payment_destroy, employee_create, employee_destroy, employee_index, employee_show, employee_update, horse_index, horse_show], id=2)
-    _ = role.create_role(name="tecnica",permissions=[horse_index, horse_show], permissions=[receipt_index, receipt_show], id=3)
+    _ = role.create_role(name="tecnica",permissions=[horse_index, horse_show, receipt_index, receipt_show], id=3)
     _ = role.create_role(name="voluntariado", id=4)
     _ = role.create_role(name="ecuestre", permissions=[horse_index, horse_show, horse_update, horse_create, horse_destroy], id=5)
 
