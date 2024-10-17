@@ -1,5 +1,6 @@
+from datetime import datetime
 from flask import Blueprint, flash, redirect, render_template, request, url_for
-from src.core.repositories import receipt, employee
+from src.core.repositories import receipt,employee as employee_repository
 from src.web.helpers.auth import has_permission
 
 bp = Blueprint("receipts", __name__, url_prefix="/receipts")
@@ -22,24 +23,38 @@ def index():
 @bp.get("/create")
 @has_permission("receipt_create")
 def register():
-    return render_template("receipts/form.html", is_update=False, title="Registrar Recibo")
+    employees = employee_repository.list_employees()
+    ##riders = riders_repository.list_riders()
+    return render_template("receipts/form.html", is_update=False, title="Registrar Recibo",employees=employees)##, riders=riders)
 
 @bp.post("/create")
 @has_permission("receipt_create")
 def create():
     params = request.form
-    # Validar los campos requeridos
-    if not params.get('ja_id') or not params.get('empleado_id'):
-        flash("J&A y Empleado son campos requeridos.", "error")
-        return redirect(url_for('receipts.register'))
-    try:
-        r = receipt.create_receipt(**params)
-    except ValueError as e:
-        flash(str(e), 'error')
-        return redirect(url_for('receipts.register'))
-    flash("Recibo creado con éxito.", "success")
-    return redirect(url_for('receipts.index'))
+    empleado_id = params.get('empleado_id')
+    ja_id = params.get('ja_id')
 
+    if not empleado_id and not ja_id:
+        flash("Debe seleccionar un empleado y J&A ", "error")
+        return redirect(url_for("receipts.create"))
+    monto = params.get('monto')
+    if monto:
+        monto = float(monto.replace('.', '').replace(',', '.'))
+
+    # Aquí agregas la lógica para crear el recibo
+    receipt.create_receipt(
+        empleado_id=empleado_id,
+        ja_id=1,
+        fecha_pago=params['fecha_pago'] or None,
+        monto=monto,
+        medio_pago=params['medio_pago'],
+        observaciones=params.get('observaciones'),
+        al_dia=params.get('al_dia') == 'True'
+    )
+    
+
+    flash("Recibo creado con éxito.", "info")
+    return redirect(url_for("receipts.index"))
 @bp.get("/<int:id>/show")
 @has_permission("receipt_show")
 def show(id):
@@ -56,22 +71,35 @@ def edit(id):
     if not r:
         flash("Recibo no encontrado.", "error")
         return redirect(url_for("receipts.index"))
-    return render_template("receipts/form.html", is_update=True, title="Actualizar Recibo", receipt=r)
+    employees = employee_repository.list_employees()
+    return render_template("receipts/form.html", is_update=True, title="Actualizar Recibo", receipt=r, employees=employees)# aqui tmb va el riders.
 
 @bp.route("/<int:id>/update", methods=["POST", "PATCH"])
 @has_permission("receipt_update")
 def update(id):
     params = request.form
-    # Validar campos requeridos
-    if not params.get('monto') or not params.get('medio_pago'):
-        flash("Monto y medio de pago son campos requeridos.", "error")
-        return redirect(url_for("receipts.edit", id=id))
+    empleado_id = params.get('empleado_id')
+    ja_id = params.get('ja_id')
+    monto = params.get('monto')
+    if monto:
+        monto = float(monto.replace('.', '').replace(',', '.'))
+
+    if not empleado_id and not ja_id:
+        flash("Debe seleccionar un empleado y J&A", "error")
+        return redirect(url_for("receipts.create"))
     
-    try:
-        r = receipt.update_receipt(id, **params)
-    except ValueError as e:
-        flash(str(e), 'error')
-        return redirect(url_for("receipts.index"))
+    
+    receipt.update_receipt(
+        id=id,
+        empleado_id=empleado_id,
+        ja_id=ja_id,
+        fecha_pago=params['fecha_pago'] or None,
+        monto=monto,
+        medio_pago=params['medio_pago'],
+        observaciones=params.get('observaciones'),
+        al_dia=params.get('al_dia') == 'True'
+    )
+    
     flash("Recibo actualizado con éxito.", "success")
     return redirect(url_for("receipts.index"))
 

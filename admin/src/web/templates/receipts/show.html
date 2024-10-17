@@ -11,7 +11,7 @@
     <li><strong>Fecha de Pago:</strong> {{ receipt.fecha_pago.strftime('%Y-%m-%d') }}</li>
     <li><strong>Monto:</strong> {{ receipt.monto }}</li>
     <li><strong>Medio de Pago:</strong> {{ receipt.medio_pago }}</li>
-    <li><strong>Recibido por (Empleado ID):</strong> {{ receipt.empleado_id }}</li>
+    <li><strong>Recibido por (Empleado ID):</strong> {{ receipt.empleado.name }} {{ receipt.empleado.surname }}</li>
     <li><strong>Observaciones:</strong> {{ receipt.observaciones or 'N/A' }}</li>
 </ul>
 

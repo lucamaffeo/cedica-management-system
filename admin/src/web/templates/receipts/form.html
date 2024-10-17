@@ -7,17 +7,15 @@
 {% endblock %}
 
 {% block form_fields %}
-<div class="form-group">
-    <label class="form-label" for="ja_id">J&A (Jinete y Amazonas)</label>
-    <select name="ja_id" class="form-control" required>
-        <option value="" disabled {{ 'selected' if not receipt }}>Seleccione un jinete</option>
-        {% for rider in riders %}
-        <option value="{{ rider.id }}" {% if receipt and receipt.ja_id==rider.id %}selected{% endif %}>
-            {{ rider.alias }}
-        </option>
-        {% endfor %}
-    </select>
-</div>
+<label class="form-label" for="ja_id">J&A (Jinete y Amazonas)</label>
+<select name="ja_id" class="form-control">
+    <option value="" {{ 'selected' if not receipt }}>Seleccione un jinete</option>
+    {% for rider in riders %}
+    <option value="{{ rider.id }}" {% if receipt and receipt.ja_id==rider.id %}selected{% endif %}>
+        {{ rider.alias }}
+    </option>
+    {% endfor %}
+</select>
 
 <label class="form-label" for="fecha_pago">Fecha de Pago:</label>
 <input class="form-control" type="date" id="fecha_pago" name="fecha_pago" required
@@ -27,30 +25,26 @@
 <input class="form-control" type="number" id="monto" name="monto" required step="0.01"
     value="{{ receipt.monto if receipt else '' }}">
 
-<label class="form-label" for="payment_method">Método de Pago:</label>
-<select class="form-control" id="payment_method" name="payment_method" required>
-    <option value="Efectivo" {{ 'selected' if receipt and receipt.payment_method=='Efectivo' else '' }}>Efectivo
+<label class="form-label" for="medio_pago">Método de Pago:</label>
+<select class="form-control" id="medio_pago" name="medio_pago" required>
+    <option value="Efectivo" {{ 'selected' if receipt and receipt.medio_pago=='Efectivo' else '' }}>Efectivo
     </option>
-    <option value="Transferencia" {{ 'selected' if receipt and receipt.payment_method=='Transferencia' else '' }}>
+    <option value="Transferencia" {{ 'selected' if receipt and receipt.medio_pago=='Transferencia' else '' }}>
         Transferencia</option>
-    <option value="Tarjeta de Crédito" {{ 'selected' if receipt and receipt.payment_method=='Tarjeta de Crédito' else ''
-        }}>Tarjeta de Crédito</option>
-    <option value="Tarjeta de Débito" {{ 'selected' if receipt and receipt.payment_method=='Tarjeta de Débito' else ''
-        }}>Tarjeta de Débito</option>
-    <option value="Otro" {{ 'selected' if receipt and receipt.payment_method=='Otro' else '' }}>Otro</option>
+    <option value="Tarjeta de Crédito" {{ 'selected' if receipt and receipt.medio_pago=='Tarjeta de Crédito' else '' }}>
+        Tarjeta de Crédito</option>
+    <option value="Tarjeta de Débito" {{ 'selected' if receipt and receipt.medio_pago=='Tarjeta de Débito' else '' }}>
+        Tarjeta de Débito</option>
+    <option value="Otro" {{ 'selected' if receipt and receipt.medio_pago=='Otro' else '' }}>Otro</option>
 </select>
 
-<div class="form-group">
-    <label class="form-label" for="empleado_id">Recibido por (Empleado)</label>
-    <select name="empleado_id" class="form-control" required>
-        <option value="" disabled {{ 'selected' if not receipt }}>Seleccione un empleado</option>
-        {% for employee in employees %}
-        <option value="{{ employee.id }}" {% if receipt and receipt.empleado_id==employee.id %}selected{% endif %}>
-            {{ employee.nombre }}
-        </option>
-        {% endfor %}
-    </select>
-</div>
+<label for="empleado" class="form-label">Recibido por (Empleado):</label>
+<select name="empleado_id" id="empleado" class="form-control">
+    <option value="">Seleccione un empleado</option>
+    {% for employee in employees %}
+    <option value="{{ employee.id }}">{{ employee.name }} {{ employee.surname }}</option>
+    {% endfor %}
+</select>
 
 <label class="form-label" for="observations">Observaciones:</label>
 <textarea class="form-control" id="observations"
