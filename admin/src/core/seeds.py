@@ -40,11 +40,11 @@ def run():
     rider_destroy = permission.create_permission(name="rider_destroy")
 
     # Roles
-    _ = role.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy, payment_index, payment_show, payment_update, payment_create, payment_destroy,employee_create, employee_destroy, employee_index, employee_show, employee_update, horse_create, horse_destroy, horse_index, horse_show, horse_update, rider_show, rider_index, rider_update, rider_destroy, rider_create], id=1)
-    _ = role.create_role(name="administracion", permissions=[payment_index, payment_show, payment_update, payment_create, payment_destroy, employee_create, employee_destroy, employee_index, employee_show, employee_update, horse_index, horse_show, rider_show, rider_index, rider_update, rider_destroy, rider_create], id=2)
-    _ = role.create_role(name="tecnica",permissions=[horse_index, horse_show, rider_index, rider_create, rider_destroy, rider_show, rider_update], id=3)
-    _ = role.create_role(name="voluntariado", id=4)
-    _ = role.create_role(name="ecuestre", permissions=[horse_index, horse_show, horse_update, horse_create, horse_destroy, rider_index, rider_show], id=5)
+    _ = role.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy, payment_index, payment_show, payment_update, payment_create, payment_destroy,employee_create, employee_destroy, employee_index, employee_show, employee_update, horse_create, horse_destroy, horse_index, horse_show, horse_update, rider_show, rider_index, rider_update, rider_destroy, rider_create])
+    _ = role.create_role(name="administracion", permissions=[payment_index, payment_show, payment_update, payment_create, payment_destroy, employee_create, employee_destroy, employee_index, employee_show, employee_update, horse_index, horse_show, rider_show, rider_index, rider_update, rider_destroy, rider_create])
+    _ = role.create_role(name="tecnica",permissions=[horse_index, horse_show, rider_index, rider_create, rider_destroy, rider_show, rider_update])
+    _ = role.create_role(name="voluntariado")
+    _ = role.create_role(name="ecuestre", permissions=[horse_index, horse_show, horse_update, horse_create, horse_destroy, rider_index, rider_show])
 
 
     #USUARIOS
@@ -54,10 +54,10 @@ def run():
 
     _ = user.create_user(email="1@mail.com", password="123456", role_id=2, alias="1")
     _ = user.create_user(email="2@mail.com", password="123456", role_id=2, alias="2")
-    _ = user.create_user(email="3@mail.com", password="123456", role_id=2, alias="1")
-    _ = user.create_user(email="4@mail.com", password="123456", role_id=2, alias="2")
-    _ = user.create_user(email="5@mail.com", password="123456", role_id=2, alias="1")
-    _ = user.create_user(email="6@mail.com", password="123456", role_id=2, alias="2")
+    _ = user.create_user(email="3@mail.com", password="123456", role_id=3, alias="3")
+    _ = user.create_user(email="4@mail.com", password="123456", role_id=4, alias="4")
+    _ = user.create_user(email="5@mail.com", password="123456", role_id=5, alias="5")
+    _ = user.create_user(email="6@mail.com", password="123456", role_id=5, alias="6")
 
     #EMPLEADOS
     luca = employee.create_employee(name="Luca", surname="Perez", dni="12345679", email="luca1@gmail.com", start_date="2021-01-01",  active=True, job_position = "Conductor")  
