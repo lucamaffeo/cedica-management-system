@@ -9,10 +9,10 @@
         <input class="form-control" type="text" name="name" value="{{ horse.name if horse else '' }}" required>
 
         <label class="form-label" for="birth_date">Fecha de Nacimiento:</label>
-        <input class="form-control" type="date" name="birth_date" value="{{ horse.birth_date.strftime('%Y-%m-%d') if horse else '' }}">
+        <input class="form-control" type="date" name="birth_date" value="{{ horse.birth_date.strftime('%Y-%m-%d') if horse else '' }}" required>
 
         <label class="form-label" for="gender">Sexo:</label>
-        <select class="form-control" name="gender">
+        <select class="form-control" name="gender" required>
 
             <option value="Macho" {{ 'selected' if horse and horse.gender=='Macho' else '' }}>Macho</option>
             <option value="Hembra" {{ 'selected' if horse and horse.gender=='Hembra' else '' }}>Hembra</option>
@@ -20,10 +20,10 @@
  
 
         <label class="form-label" for="breed">Raza:</label>
-        <input class="form-control" type="text" name="breed" value="{{ horse.breed if horse else '' }}">
+        <input class="form-control" type="text" name="breed" value="{{ horse.breed if horse else '' }}" required>
 
         <label class="form-label" for="coat">Pelaje:</label>
-        <input class="form-control" type="text" name="coat" value="{{ horse.coat if horse else ''}}">
+        <input class="form-control" type="text" name="coat" value="{{ horse.coat if horse else ''}}" required>
 
         <label class="form-label" for="purchase_donation">Compra/Donación:</label>
         <select class="form-control" name="purchase_donation" required>
@@ -37,14 +37,14 @@
             required>
         
         <label class="form-label" for="assigned_location">Sede Asignada:</label>
-        <input class="form-control"  type="text" name="assigned_location" value="{{ horse.assigned_location if horse else '' }}">
-
+        <input class="form-control"  type="text" name="assigned_location" value="{{ horse.assigned_location if horse else '' }}" required>
+        
         <label class="form-label" for="trainer_id">Entrenadores/Conductores:</label>
         <div class="form-check">
-            {% if trainers|length > 0 %}
+            {% if trainers %}
             {% for trainer in trainers %}
             <input class="form-check-input" type="checkbox" name="trainer_id" value="{{ trainer.id }}"
-                id="trainer_{{ trainer.id }}" {% if trainer.id in associated_trainer_ids %}checked{% endif %}>
+                id="trainer_{{ trainer.id }}" {% if trainer.id in associated_trainer_ids %}checked{% endif %}> 
             <label class="form-check-label" for="trainer_{{ trainer.id }}">
                 {{ trainer.name }} {{ trainer.surname }} - Puesto laboral: {{ trainer.job_position }}
             </label>
@@ -56,7 +56,7 @@
         </div>
 
         <label class="form-label" for="assigned_activities_ja">Tipo de J&A Asignados:</label>
-        <select class="form-control" name="assigned_activities_ja">
+        <select class="form-control" name="assigned_activities_ja" required>
             <option value="Hipoterapia" {{ 'selected' if horse and horse.assigned_activities_ja =="Hipoterapia" else '' }}>Hipoterapia
             </option>
             <option value="Monta Terapeutica" {{ 'selected' if horse and horse.assigned_activities_ja =="Monta Terapeutica" else '' }}>

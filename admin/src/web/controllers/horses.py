@@ -75,9 +75,7 @@ def create():
                 horse.association.append(trainer)  # Agrega el entrenador a la relación
             else:
                 flash(f"Entrenador con ID {trainer_id} no encontrado.", "error")
-    else:   
-        flash("Debe seleccionar al menos un entrenador.", "error")
-        return redirect(url_for("horses.register"))
+    
 
     # Guardar cambios en la base de datos
     db.session.commit()
@@ -101,11 +99,11 @@ def edit(id):
     horse = horse_repository.get_horse(id)
     job_positions =["Conductor", "Entrenador de Caballos"]
     trainers = get_employees_by_job_positions(job_positions)
-
+    associated_trainer_ids = [trainer.id for trainer in horse.association]
     if not horse:
         flash("Caballo no encontrado.", "error")
         return redirect(url_for("horses.index"))
-    return render_template("horses/form.html", is_update=True, title='Editar Caballo', horse=horse, trainers=trainers)
+    return render_template("horses/form.html", is_update=True, title='Editar Caballo', horse=horse, trainers=trainers,associated_trainer_ids=associated_trainer_ids)
 
 #update horse
 @bp.post("/<int:id>/update")
@@ -121,7 +119,7 @@ def update(id):
     # Obtener los nuevos IDs de entrenadores seleccionados desde el formulario
     trainer_ids = request.form.getlist('trainer_id')
     
-
+    
     horse_repository.update_horse(
         horse_id=id,
         name = params['name'],
@@ -133,9 +131,11 @@ def update(id):
         entry_date = params['entry_date'],
         assigned_location = params['assigned_location'],
         assigned_activities_ja = params['assigned_activities_ja'],
+    
     )
-
-    horse.association.clear()
+    # Limpia las asociaciones actuales de entrenadores
+    for trainer in horse.association[:]:  # Usar copia para evitar problemas al eliminar
+        horse.association.remove(trainer)
     
     if(trainer_ids):
         for trainer_id in trainer_ids:
@@ -144,7 +144,7 @@ def update(id):
                 horse.association.append(trainer)
             else:
                 flash(f"Entrenador con ID {trainer_id} no encontrado.", "error")
-    
+
     db.session.commit()
 
 
