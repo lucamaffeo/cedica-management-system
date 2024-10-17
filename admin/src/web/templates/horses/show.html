@@ -1,0 +1,35 @@
+{% extends "base_show.html" %}
+
+{% block title %}
+Perfil de {{ horse.name }}
+{% endblock %}
+{% block content %}
+<p><strong>Fecha de Nacimiento:</strong> {{ horse.birth_date.strftime('%Y-%m-%d') if horse.birth_date else 'No
+    especificado' }}</p>
+<p><strong>Sexo:</strong> {{ horse.gender or 'No especificado' }}</p>
+<p><strong>Raza:</strong> {{ horse.breed or 'No especificado' }}</p>
+<p><strong>Pelaje:</strong> {{ horse.coat or 'No especificado' }}</p>
+<p><strong>Compra/Donación:</strong> {{ horse.purchase_donation }}</p>
+<p><strong>Fecha de Ingreso:</strong> {{ horse.entry_date.strftime('%Y-%m-%d') }}</p>
+<p><strong>Sede Asignada:</strong> {{ horse.assigned_location or 'No especificado' }}</p>
+<p><strong>Actividades Asignadas:</strong> {{ horse.assigned_activities_ja }}</p>
+<h3>Empleados Asociados:</h3>
+{% if horse.association %}
+{% if horse.association|list %}
+<ul>
+    {% for association in horse.association %}
+    <li>{{ association.name }} - {{ association.job_position }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No hay empleados asociados.</p>
+{% endif %}
+{% else %}
+<p>No hay empleados asociados.</p>
+{% endif %}
+
+
+<a href="{{ url_for('horses.edit', id=horse.id) }}">Editar</a>
+<a href="{{ url_for('horses.index') }}">Volver al listado</a>
+
+{% endblock %}

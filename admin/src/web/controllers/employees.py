@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request, session, url_for, flash
+from flask import Blueprint, redirect, render_template, request, url_for, flash
 from src.core.repositories import employee as employee_repository
 from src.web.helpers.auth import has_permission
 from werkzeug.utils import secure_filename
@@ -13,13 +13,13 @@ bp = Blueprint("employees", __name__, url_prefix="/employees")
 @has_permission("employee_index") #permiso para listar empleados
 def index():
     search = request.args.get("search", "")
-    profession_filter = request.args.get("profession", None)
+    job_position_filter = request.args.get("job_position", None)
     sort_by = request.args.get("sort_by", "name")
     direction = request.args.get("direction", "asc")
     page = int(request.args.get("page", 1))
     items_per_page = 5
 
-    employees = employee_repository.list_employees(search, profession_filter, sort_by, direction, page, items_per_page)    
+    employees = employee_repository.list_employees(search, job_position_filter, sort_by, direction, page, items_per_page)    
 
     if not employees.items:
         flash("No se encontraron empleados.", "info")
@@ -56,7 +56,7 @@ def create():
         profession = params['profession'],
         job_position = params['job_position'],
         start_date = params['start_date'],
-        termination_date = params.get('termination_date'),
+        termination_date = params.get('termination_date') or None,
         emergency_contact_info= params.get('emergency_contact_info'),
         social_work = params.get('social_work'),
         associate_number = params.get('associate_number'),
