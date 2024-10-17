@@ -1,5 +1,4 @@
 from datetime import datetime
-from lib2to3.pytree import Base
 from sqlalchemy import JSON
 from src.core.database import db
 
