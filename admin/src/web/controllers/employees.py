@@ -56,7 +56,7 @@ def create():
         profession = params['profession'],
         job_position = params['job_position'],
         start_date = params['start_date'],
-        termination_date = params.get('termination_date'),
+        termination_date = params.get('termination_date') or None,
         emergency_contact_info= params.get('emergency_contact_info'),
         social_work = params.get('social_work'),
         associate_number = params.get('associate_number'),
