@@ -11,7 +11,7 @@ class Tutor(db.Model):
     address = db.Column(db.String(255))
     cellphone = db.Column(db.String(50))
     email = db.Column(db.String(120), unique=True, nullable=False)
-    educational_level = db.Column(db.Enum('Primario', 'Secundario', 'Terciario', 'Universitario'))
+    educational_level = db.Column(db.Enum('Primario', 'Secundario', 'Terciario', 'Universitario', name='educational_level'))
     occupation = db.Column(db.String(100))
 
     def __repr__(self):

@@ -8,15 +8,15 @@ def create_rider(**kwargs):
 
     return rider
 
-def list_riders(search='', sort_by='name', direction='asc', page=1, items_per_page=5):
+def list_riders(search='', sort_by='nombre', direction='asc', page=1, items_per_page=5):
     query = Rider.query
 
     if search:
         query = query.filter(
-            (Rider.nombre.ilike(f'%{search}%')) |
-            (Rider.apellido.ilike(f'%{search}%')) |
+            (Rider.name.ilike(f'%{search}%')) |
+            (Rider.surname.ilike(f'%{search}%')) |
             (Rider.dni.ilike(f'%{search}%')) |
-            (Rider.profesionales.ilike(f'%{search}%'))
+            (Rider.professionals.ilike(f'%{search}%'))
         )
 
     query = query  # No aplicar filtro, mostrar todos
@@ -34,11 +34,11 @@ def list_riders(search='', sort_by='name', direction='asc', page=1, items_per_pa
     return pagination_riders
 
 def find_rider_by_name(name):
-    rider = Rider.query.filter(Rider.nombre == name).first()
+    rider = Rider.query.filter(Rider.name == name).first()
     return rider
 
 def find_rider_by_apellido(surname):
-    rider = Rider.query.filter(Rider.apellido == surname).first()
+    rider = Rider.query.filter(Rider.surname == surname).first()
     return rider
 
 def find_rider_by_dni(dni):
@@ -46,7 +46,7 @@ def find_rider_by_dni(dni):
     return rider
 
 def find_rider_by_professionals(professionals):
-    rider = Rider.query.filter(Rider.profesionales == professionals).first()
+    rider = Rider.query.filter(Rider.professionals == professionals).first()
     return rider
 
 def update_rider(id, **kwargs):

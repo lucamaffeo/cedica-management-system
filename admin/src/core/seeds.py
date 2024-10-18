@@ -1,4 +1,4 @@
-from src.core.repositories import user, employee, role, permission, horse, assignment, tutor
+from src.core.repositories import user, employee, role, permission, horse, assignment, tutor, day, action, document
 from src.core import models
 def run():
 
@@ -51,6 +51,20 @@ def run():
     assignment2 = assignment.create_assignment(name="Asignación Universal por hijo con Discapacidad")
     assignment3 = assignment.create_assignment(name="Asignación por ayuda escolar anual")
 
+    # Días
+    lunes = day.create_day(name="Lunes")
+    martes = day.create_day(name="Martes")
+    miercoles = day.create_day(name="Miercoles")
+    jueves = day.create_day(name="Jueves")
+    viernes = day.create_day(name="Viernes")
+    sabado = day.create_day(name="Sabado")
+    domingo = day.create_day(name="Domingo")
+
+    # Acciones
+    editar = action.create_action(name="Editar")
+    eliminar = action.create_action(name="Eliminar")
+    descargar = action.create_action(name="Descargar")
+    ir_al_documento = action.create_action(name="Ir al documento")
 
     #USUARIOS
     admin = user.create_user(email="admin@admin.com", password="admin", role_id=1, alias="admin")
@@ -73,13 +87,17 @@ def run():
 
     #TUTOR
     tutor1 = tutor.create_tutor(name="Maria", surname="Gomez", dni="12345678", email="emailtutor@mail.com", address="Av. Siempre Viva 123", cellphone="123456789", educational_level="Universitario", occupation="Profesora")
+    #DOCUMENTOS
+    documento1 = document.create_document(file="Documento1", title="Titulo del documento", document_type="Entrevista", actions=[editar, eliminar, descargar])
     #JINETES/AMAZONAS
-    jinete1 = models.create_rider(nombre="Juan", apellido="Perez", dni=51321513, edad=25, fecha_nacimiento="1996-01-01", lugar_nacimiento="CABA", domicilio="Av. Siempre Viva 123", telefono="123456789", contacto_emergencia="Maria", tel_contacto="123456789", becado=False, porcentaje_beca=0, profesionales="Dr. Juan Perez", tutores=[tutor1])
+    jinete1 = models.create_rider(name="Juan", surname="Perez", dni=51321513, age=25, birthdate="1996-01-01", birth_place="CABA", address="Av. Siempre Viva 123", phone="123456789", emergency_contact="Maria", emergency_contact_phone_number="123456789", scholarship=False, scholarship_percentage=0, professionals="Dr. Juan Perez", tutors=[tutor1], documents=[documento1])
 
     #CABALLOS
     caballo1 = horse.create_horse(name="Caballo1", birth_date="2020-01-01",purchase_donation="Compra",gender = "Macho", trainer_id=luca.id, assigned_activities_ja="Hipoterapia")
     #RECIBOS
     recibo = models.create_receipt(ja_id=1, monto=1000, medio_pago="Efectivo", empleado_id=1, observaciones="Sin observaciones") 
+
+
 
     print("Seed ejecutado correctamente")
     
