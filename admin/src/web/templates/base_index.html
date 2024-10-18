@@ -109,4 +109,7 @@ head %} {{ super() }}
   </ul>
 </nav>
 {% endblock %}
+{% block add_new %}
+  <a href="{% block url_placeholder %}{% endblock %}" class="btn btn-primary">{% block name_placeholder %} Nuevo {% endblock %}</a>
+{% endblock %}
 {% endblock %}
