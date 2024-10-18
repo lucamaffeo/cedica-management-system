@@ -41,7 +41,7 @@ def register():
 def create():
     scolarship = 'scolarship' in request.form
     params = request.form
-    required_fields = ['name', 'surname', 'dni', 'age', 'birthday', 'birth_place', 'address',
+    required_fields = ['name', 'surname', 'dni', 'age', 'birthdate', 'birth_place', 'address',
                        'phone', 'emergency_contact', 'emergency_contact_phone_number','becado', 'scholarship_percentage',
                         'professionals', 'disability_certificate', 'family_assignment', 'pension', 'health_insurance', 
                         'affiliate_number', 'guardianship', 'observations', 'school_institution', 'institution_address', 'grade',
@@ -96,7 +96,7 @@ def create():
         surname = params['surname'],
         dni = params['dni'],
         age = params['age'],
-        birthday = params['birthday'],
+        birthdate = params['birthdate'],
         birth_place = params['birth_place'],
         address = params['address'],
         phone = params['phone'],
@@ -233,7 +233,7 @@ def update(id):
         surname = params['surname'],
         dni = params['dni'],
         age = params['age'],
-        birthday = params['birthday'],
+        birthdate = params['birthdate'],
         birth_place = params['birth_place'],
         address = params['address'],
         phone = params['phone'],
@@ -288,7 +288,7 @@ def update(id):
                 rider.days.append(day)  
             else:
                 flash(f"Día con ID {day_id} no encontrado.", "error")
-                
+
     # Guardar cambios en la base de datos -- NO SE SI ES NECESARIO !!! VER
     db.session.commit()
     flash("Jinete/Amazona actualizado con éxito.", "success")
