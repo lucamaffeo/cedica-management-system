@@ -2,6 +2,12 @@ from datetime import datetime
 from sqlalchemy import JSON
 from src.core.database import db
 
+employee_association = db.Table(
+    'employee_association',
+    db.Column('employee_id', db.Integer, db.ForeignKey('employees.id'), primary_key=True),
+    db.Column('horse_id', db.Integer, db.ForeignKey('horses.id'), primary_key=True)
+    )
+
 class Horse(db.Model):
     __tablename__ = 'horses'
     
@@ -14,11 +20,10 @@ class Horse(db.Model):
     purchase_donation = db.Column(db.Enum('Compra', 'Donacion', name='purchase_donation'), nullable=False)
     entry_date = db.Column(db.DateTime, default=datetime.now)
     assigned_location = db.Column(db.String(100))
-    trainer_id = db.Column(db.Integer, db.ForeignKey('employees.id', ondelete='CASCADE'))
-    assigned_activities_ja = db.Column(db.Enum('Hipoterapia', 'Monta Terapéutica', 'Deporte Ecuestre Adaptado', 'Actividades Recreativas', 'Equitación', name='assigned_activities'))
+    assigned_activities_ja = db.Column(db.Enum('Hipoterapia', 'Monta Terapeutica', 'Deporte Ecuestre Adaptado', 'Actividades Recreativas', 'Equitación', name='assigned_activities'))
     documentacion = db.Column(JSON)
-
-    employee = db.relationship('Employee', backref='horses')
+    association = db.relationship('Employee', secondary='employee_association', backref='horses', lazy='dynamic')
+    
 
     def __repr__(self):
         return f'<Horse {self.name}>'

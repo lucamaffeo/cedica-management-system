@@ -96,11 +96,11 @@
 
         <label class="form-label" for="social_work">Obra Social:</label>
         <input class="form-control" type="text" id="social_work" name="social_work"
-            value="{{ employee.social_work if employee else '' }}">
+            value="{{ employee.social_work if employee else '' }}" required>
 
         <label class="form-label" for="associate_number">N° de Afiliado:</label>
         <input class="form-control" type="text" id="associate_number" name="associate_number"
-            value="{{ employee.associate_number if employee else '' }}">
+            value="{{ employee.associate_number if employee else '' }}" required>
 
         <label class="form-label" for="condition">Condición:</label>
         <select class="form-control" id="condition" name="condition" required>
@@ -110,7 +110,7 @@
         </select>
         {% if is_update %}
         <label for="active">Activo</label>
-        <input type="checkbox" name="active" value="true" {% if employee.active %}checked{% endif %}>
+        <input type="checkbox" name="active" value="true" {% if employee.active %}checked{% endif %} >
         {% endif %}
         
         <h4>Documentación Complementaria:</h4>
