@@ -1,0 +1,62 @@
+<!-- muestra la lista de recibos con paginación, y permite ordenar y filtrar los resultados -->
+
+{% extends "base_index.html" %}
+
+{% block title %}
+Listado de Recibos
+{% endblock %}
+
+{% block page_title %}
+Recibos
+{% endblock %}
+{% block search_placeholder %}
+Buscar por Nombre o Apellido de quien recibe el dinero
+{% endblock %}
+
+{% set show_search=true %}
+
+
+{% block filters %}
+<div class="form-group">
+    <label for="start_date" class="form-label">Fecha de inicio</label>
+    <input class="form-control" type="date" name="start_date" id="start_date"
+        value="{{ request.args.get('start_date') }}">
+</div>
+<div class="form-group">
+    <label class="form-label" for="end_date">Fecha de fin</label>
+    <input class="form-control" type="date" name="end_date" id="end_date" value="{{ request.args.get('end_date') }}">
+</div>
+<div class="form-group">
+    <label class="form-label" for="payment_method">Medio de Pago</label>
+    <select name="payment_method" id="payment_method" class="form-control">
+        <option value="">Todos</option>
+        <option value="Efectivo" {% if request.args.get('payment_method')=='Efectivo' %}selected{% endif %}>Efectivo
+        </option>
+        <option value="Tarjeta de Crédito" {% if request.args.get('payment_method')=='Tarjeta de Crédito' %}selected{%
+            endif %}>Tarjeta de Crédito</option>
+        <option value="Tarjeta de Débito" {% if request.args.get('payment_method')=='Tarjeta de Débito' %}selected{%
+            endif %}>Tarjeta de Débito</option>
+    </select>
+</div>
+
+{% endblock %}
+{% set sorting_criteria = [("payment_date", "Fecha de Pago"), ("payment_method", "Medio de Pago"),
+("employee_id", "Recibido por")] %}
+{% set sortable_fields = ["payment_date"] %}
+{% block table_rows %}
+{% for receipt in pagination.items %}
+
+
+<tr>
+    <td>{{ receipt.payment_date.strftime('%Y-%m-%d') }}</td>
+    <td>{{ receipt.payment_method }}</td>
+    <td>{{ receipt.employee_id }}</td>
+    <td>
+        <a href="{{ url_for('receipts.show', id=receipt.id) }}">Mostrar</a>
+        <a href="{{ url_for('receipts.edit', id=receipt.id) }}">Editar</a>
+        <a href="{{ url_for('receipts.delete', id=receipt.id) }}" onclick="return confirm('Estas seguro?')">Eliminar</a>
+    </td>
+</tr>
+{% endfor %}
+
+{% endblock %}

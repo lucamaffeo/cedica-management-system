@@ -4,18 +4,6 @@ from src.core.models.rider import Rider
 from src.core.models.payment import Payment
 
 
-def list_Receipt():
-    receipts = Receipt.query.all()
-    return receipts 
-
-
-def create_receipt(**kwargs):
-    receipt = Receipt(**kwargs)
-    db.session.add(receipt)
-    db.session.commit()
-
-    return receipt
-
 def list_riders():
     rider = Rider.query.all()
     return rider
