@@ -1,4 +1,4 @@
-from src.core.repositories import user, employee, role, permission, horse
+from src.core.repositories import user, employee, role, permission, horse, assignment, tutor
 from src.core import models
 def run():
 
@@ -46,6 +46,11 @@ def run():
     _ = role.create_role(name="voluntariado")
     _ = role.create_role(name="ecuestre", permissions=[horse_index, horse_show, horse_update, horse_create, horse_destroy, rider_index, rider_show])
 
+    # Asignaciones
+    assignment1 = assignment.create_assignment(name="Asignación Universal por hijo")
+    assignment2 = assignment.create_assignment(name="Asignación Universal por hijo con Discapacidad")
+    assignment3 = assignment.create_assignment(name="Asignación por ayuda escolar anual")
+
 
     #USUARIOS
     admin = user.create_user(email="admin@admin.com", password="admin", role_id=1, alias="admin")
@@ -66,8 +71,10 @@ def run():
     #PAGOS
     pago1 = models.create_payment(amount=1000, beneficiary_id=1, type="Honorarios", description="Pago de honorarios")
 
+    #TUTOR
+    tutor1 = tutor.create_tutor(name="Maria", surname="Gomez", dni="12345678", email="emailtutor@mail.com", address="Av. Siempre Viva 123", cellphone="123456789", educational_level="Universitario", occupation="Profesora")
     #JINETES/AMAZONAS
-    jinete1 = models.create_rider(nombre="Juan", apellido="Perez", dni=51321513, edad=25, fecha_nacimiento="1996-01-01", lugar_nacimiento="CABA", domicilio="Av. Siempre Viva 123", telefono="123456789", contacto_emergencia="Maria", tel_contacto="123456789", becado=False, porcentaje_beca=0, profesionales="Dr. Juan Perez")
+    jinete1 = models.create_rider(nombre="Juan", apellido="Perez", dni=51321513, edad=25, fecha_nacimiento="1996-01-01", lugar_nacimiento="CABA", domicilio="Av. Siempre Viva 123", telefono="123456789", contacto_emergencia="Maria", tel_contacto="123456789", becado=False, porcentaje_beca=0, profesionales="Dr. Juan Perez", tutores=[tutor1])
 
     #CABALLOS
     caballo1 = horse.create_horse(name="Caballo1", birth_date="2020-01-01",purchase_donation="Compra",gender = "Macho", trainer_id=luca.id, assigned_activities_ja="Hipoterapia")
