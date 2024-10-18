@@ -5,19 +5,19 @@ from src.web.helpers.auth import has_permission
 bp = Blueprint("users", __name__, url_prefix="/users")
 
 # Register
-@bp.get("/register")
+@bp.get("/create")
 @has_permission("user_create")
 def register():
     return render_template("users/form.html", is_update=False, title='Crear Usuario')
 
 # Create user
-@bp.post("/register")
+@bp.post("/create")
 @has_permission("user_create")
 def create():
     params = request.form
     if not params.get("alias") or not params.get("email") or not params.get("password"):
         flash("Alias, correo electrónico y contraseña son obligatorios.", "error")
-        return redirect(url_for("users.register"))
+        return redirect(url_for("users.create"))
     
     auth.create_user(
         alias=params["alias"],

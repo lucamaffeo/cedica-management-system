@@ -45,7 +45,7 @@ Buscar por Nombre
         <td>
             <a href="{{ url_for('horses.show', id=horse.id) }}">Mostrar</a>
             <a href="{{ url_for('horses.edit', id=horse.id) }}">Editar</a>
-            <a href="{{ url_for('horses.delete', id=horse.id) }}" onclick="return confirm('Are you sure?')">Eliminar</a>
+            <a href="{{ url_for('horses.delete', id=horse.id) }}" onclick="return confirm('Esta seguro?')">Eliminar</a>
         </td>
         {% else %}
         <tr>

@@ -6,37 +6,39 @@
 {% endblock %}
 
 {% block form_fields %}
-    <input type="text" name="alias" class="form-control" value="{{ user.alias if user else '' }}" placeholder="Nombre" required>
-    <input type="email" name="email" class="form-control" value="{{ user.email if user else '' }}" placeholder="a@a.com" required>
+<input type="text" name="alias" class="form-control" value="{{ user.alias if user else '' }}" placeholder="Nombre"
+	required>
+<input type="email" name="email" class="form-control" value="{{ user.email if user else '' }}" placeholder="a@a.com"
+	required>
 
-	{% if not user %}
-        <input class="form-control" type="password" name="password" placeholder="Contraseña" required>
-    {% endif %}
+{% if not user %}
+<input class="form-control" type="password" name="password" placeholder="Contraseña" required>
+{% endif %}
 
-    {% if is_update %}
-        <label for="active">Activo</label>
-        <input type="checkbox" name="active" value="true" {% if user.active %}checked{% endif %}>
-		<div class="d-flex justify-content-center">
-		  <div class="card shadow mt-4 mb-4 w-50">
-			<div class="card-body">
-			  <h5 class="card-title">Contraseña</h5>
-			  <input class="form-control small" type="password" name="password" placeholder="Nueva contraseña">
-			  <input class="form-control small" type="password" name="new_password" placeholder="Repetir nueva contraseña">
-			</div>
-		  </div>
+{% if is_update %}
+<label for="active">Activo</label>
+<input type="checkbox" name="active" value="true" {% if user.active %}checked{% endif %}>
+<div class="d-flex justify-content-center">
+	<div class="card shadow mt-4 mb-4 w-50">
+		<div class="card-body">
+			<h5 class="card-title">Contraseña</h5>
+			<input class="form-control small" type="password" name="password" placeholder="Nueva contraseña">
+			<input class="form-control small" type="password" name="new_password"
+				placeholder="Repetir nueva contraseña">
 		</div>
-    {% endif %}
+	</div>
+</div>
+{% endif %}
 
-	{% if not is_update_own %}
-	<select class="form-control" name="role_id" required>
-	  <!-- value 1 is system_admin -->
-	  <option value="" disabled {{ 'selected' if not user }}>Seleccione un rol</option>
-	  <option value="2" {{ 'selected' if user and user.role_id == 2 }}>Administración</option>
-	  <option value="3" {{ 'selected' if user and user.role_id == 3 }}>Técnica</option>
-	  <option value="4" {{ 'selected' if user and user.role_id == 4 }}>Voluntariado</option>
-	  <option value="5" {{ 'selected' if user and user.role_id == 5 }}>Ecuestre</option>
-	</select>
-    {% endif %}
+{% if not is_update_own %}
+<select class="form-control" name="role_id" required>
+	<!-- value 1 is system_admin -->
+	<option value="" disabled {{ 'selected' if not user }}>Seleccione un rol</option>
+	<option value="2" {{ 'selected' if user and user.role_id==2 }}>Administración</option>
+	<option value="3" {{ 'selected' if user and user.role_id==3 }}>Técnica</option>
+	<option value="4" {{ 'selected' if user and user.role_id==4 }}>Voluntariado</option>
+	<option value="5" {{ 'selected' if user and user.role_id==5 }}>Ecuestre</option>
+</select>
+{% endif %}
 
 {% endblock %}
-
