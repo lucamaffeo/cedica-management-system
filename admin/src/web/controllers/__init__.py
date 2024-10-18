@@ -1,7 +1,15 @@
-from .auth import bp as auth_bp
-from .users import bp as users_bp
+from .auth import bp as auth
+from .users import bp as users
+from .payments import bp as payments
+from .employees import bp as employees
+from .riders import bp as riders
+from .horses import bp as horses
 
 def register_blueprints(app):
     """Register all blueprints with the Flask app."""
-    app.register_blueprint(auth_bp)
-    app.register_blueprint(users_bp)
+    app.register_blueprint(auth)
+    app.register_blueprint(users)
+    app.register_blueprint(payments)
+    app.register_blueprint(employees)
+    app.register_blueprint(riders)
+    app.register_blueprint(horses)

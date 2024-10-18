@@ -1,0 +1,41 @@
+{% extends "base_index.html" %}
+
+{% block title %}
+Listado de Jinetes/Amazonas
+{% endblock %}
+
+{% block page_title %}
+Jinetes & Amazonas
+{% endblock %}
+
+{% set show_search=true %}
+
+{% block search_placeholder %}
+Buscar por Nombre, Apellido, DNI o Profesionales que lo atienden
+{% endblock %}
+
+
+<!-- Rider table -->
+    {% set sorting_criteria = [("name", "Nombre"), ("surname", "Apellido"), ("dni", "DNI"), ("professionals", "Profesionales")] %}
+    {% set sortable_fields = ["name", "surname"] %}
+    {% block table_rows %}
+        {% for rider in pagination.items %}
+        <tr>
+            <td>{{ rider.name }}</td>
+            <td>{{ rider.surname }}</td>
+            <td>{{ rider.dni }}</td>
+            <td>{{ rider.professionals }}</td>
+            <td>
+                <a href="{{ url_for('riders.show', id=rider.id) }}">Mostrar</a>
+                <a href="{{ url_for('riders.edit', id=rider.id) }}">Editar</a>
+                <a href="{{ url_for('riders.delete', id=rider.id) }}" onclick="return confirm('Are you sure?')">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    {% endblock %}  
+
+    {% block url_placeholder %}
+    {{ url_for('riders.create') }}"
+    {% endblock %} 
+    
+    {% block name_placeholder %} Nuevo Jinete{% endblock %}

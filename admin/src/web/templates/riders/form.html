@@ -1,0 +1,75 @@
+{% extends "base_form.html" %}
+
+{% block form_action %}
+{{ url_for('riders.update', id=rider.id) if rider else url_for('riders.create') }}
+{% endblock %}
+
+{% block form_fields %}
+        <label class="form-label" for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required class="form-control"
+            value="{{ rider.nombre if rider else '' }}">
+
+        <label class="form-label" for="apellido">Apellido:</label>
+        <input type="text" id="apellido" name="apellido" required class="form-control"
+            value="{{ rider.apellido if rider else '' }}">
+
+
+        <label class="form-label" for="dni">DNI:</label>
+        <input type="text" id="dni" name="dni" required class="form-control"
+            value="{{ rider.dni if rider else '' }}">
+
+        <label class="form-label" for="edad">Edad:</label>
+        <input type="number" id="edad" name="edad" required class="form-control"
+            value="{{ rider.edad if rider else '' }}">
+
+        <label class="form-label" for="fecha_nacimiento">Fecha de Nacimiento:</label>
+        <input class="form-control" type="date" id="fecha_nacimiento" name="fecha_nacimiento" required
+            value="{{ rider.fecha_nacimiento.strftime('%Y-%m-%d') if rider else '' }}">   
+
+        <label class="form-label" for="lugar_nacimiento">Lugar de Nacimiento:</label>
+        <input type="text" id="lugar_nacimiento" name="lugar_nacimiento" required class="form-control"
+                value="{{ rider.lugar_nacimiento if rider else '' }}">
+
+        <label class="form-label" for="domicilio">Domicilio:</label>
+        <input type="text" id="domicilio" name="domicilio" required class="form-control"
+            value="{{ rider.domicilio if rider else '' }}">
+
+        <label class="form-label" for="telefono">Teléfono actual:</label>
+        <input type="tel" id="telefono" name="telefono" required class="form-control"
+                value="{{ rider.telefono if rider else '' }}">
+
+        <label class="form-label" for="contacto_emergencia">Contacto de Emergencia:</label>
+        <input type="text" id="contacto_emergencia" name="contacto_emergencia" required class="form-control"
+                value="{{ rider.contacto_emergencia if rider else '' }}">
+
+        <label class="form-label" for="tel_contacto">Teléfono de contacto:</label>
+        <input type="tel" id="tel_contacto" name="tel_contacto" required class="form-control"
+                value="{{ rider.tel_contacto if rider else '' }}">
+
+        <label class="form-label" for="becado">Becado:</label>
+        <input type="checkbox" id="becado" name="becado" class="form-check-input" 
+            {% if rider and rider.becado %}checked{% endif %}>
+
+        <br>
+
+        <label class="form-label" for="porcentaje_beca">Porcentaje de Beca:</label>
+        <input type="number" id="porcentaje_beca" name="porcentaje_beca" step="0.01" min="0" max="100" required class="form-control"
+            value="{{ (rider.porcentaje_beca | float) if rider else '' }}">
+        
+        <label class="form-label" for="profesionales">Profesionales que lo atienden:</label>
+        <input type="text" id="profesionales" name="profesionales" required class="form-control"
+                value="{{ rider.profesionales if rider else '' }}">
+        
+<!--
+        <h4>Documentación Complementaria:</h4>
+        
+        <label class="form-label" for="title_file">Título:</label>
+        <input type="file" id="title_file" name="title_file" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+        
+        <label class="form-label" for="dni_file">Copia DNI:</label>
+        <input type="file" id="dni_file" name="dni_file" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
+        
+        <label class="form-label" for="cv_file">CV Actualizado:</label>
+        <input type="file" id="cv_file" name="cv_file" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+-->
+{% endblock %}

@@ -36,11 +36,24 @@
 			<li class="nav-item">
 			  <a class="nav-link active" href="{{ url_for('home') }}">Home</a>
 			</li>
+			{% if logged_user and logged_user.has_permission('user_create') %}
 			<li class="nav-item">
 			  <a class="nav-link" href="{{ url_for('users.register') }}">Register</a>
 			</li>
+			{% endif %}
+			{% if logged_user and logged_user.has_permission('user_index') %}
 			<li class="nav-item">
 			  <a class="nav-link" href="{{ url_for('users.index') }}">Users</a>
+			</li>
+			{% endif %}
+			<li class="nav-item">
+			  <a class="nav-link" href="{{ url_for('employees.index') }}">Equipo</a>
+			</li>
+			<li class="nav-item">
+			  <a class="nav-link" href="{{ url_for('riders.index') }}">Jinetes</a>
+			</li>
+			<li class="nav-item">
+			  <a class="nav-link" href="{{ url_for('horses.index') }}">Ecuestre</a>
 			</li>
 		  </ul>
 		  <ul class="navbar-nav">

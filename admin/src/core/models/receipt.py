@@ -10,7 +10,7 @@ class Receipt(db.Model):
     fecha_pago = db.Column(db.DateTime, default=datetime.now, nullable=False)
     monto = db.Column(db.Numeric(10, 2), nullable=False)
     medio_pago = db.Column(db.Enum('Efectivo', 'Tarjeta de Crédito', 'Tarjeta de Débito', name='medio_pago'), nullable=False)
-    empleado_id = db.Column(db.Integer, db.ForeignKey('employees.id'), nullable=False)
+    empleado_id = db.Column(db.Integer, db.ForeignKey('employees.id', ondelete='CASCADE'), nullable=False)
     observaciones = db.Column(db.Text)
 
     def __repr__(self):

@@ -1,0 +1,23 @@
+{% extends "base_show.html" %}
+
+{% block title %}
+    Detalles de Pago #{{ payment.id }}
+{% endblock %}
+
+{% block content %}
+<h1>Detalles de Pago #{{ payment.id }}</h1>
+<div>
+    <p><strong>Monto:</strong> {{ payment.amount }}</p>
+    <p><strong>Fecha:</strong> {{ payment.date }}</p>
+    <p><strong>Tipo:</strong> {{ payment.type }}</p>
+    <p><strong>ID Beneficiario:</strong> {{ payment.beneficiary_id if payment.type == "Honorarios" else 'N/A'}}</p>
+    <p><strong>Descripción:</strong> {{ payment.description }}</p>
+
+</div>
+    </div>
+
+    <div>
+        <a href="{{ url_for('payments.index') }}">Volver a la lista</a>
+    </div>
+	{% endblock %}
+	

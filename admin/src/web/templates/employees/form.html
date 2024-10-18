@@ -1,0 +1,127 @@
+{% extends "base_form.html" %}
+
+{% block form_action %}
+{{ url_for('employees.update', id=employee.id) if employee else url_for('employees.create') }}
+{% endblock %}
+
+{% block form_fields %}
+        <label class="form-label" for="name">Nombre:</label>
+        <input type="text" id="name" name="name" required class="form-control"
+            value="{{ employee.name if employee else '' }}">
+
+        <label class="form-label" for="surname">Apellido:</label>
+        <input type="text" id="surname" name="surname" required class="form-control"
+            value="{{ employee.surname if employee else '' }}">
+
+
+        <label class="form-label" for="dni">DNI:</label>
+        <input type="text" id="dni" name="dni" required class="form-control"
+            value="{{ employee.dni if employee else '' }}">
+
+        <label class="form-label" for="address">Domicilio:</label>
+        <input type="text" id="address" name="address" required class="form-control"
+            value="{{ employee.address if employee else '' }}">
+
+        <label class="form-label" for="email">Email:</label>
+        <input type="email" id="email" name="email" required class="form-control"
+            value="{{ employee.email if employee else '' }}">
+
+    
+        <label class="form-label" for="city">Localidad:</label>
+        <input type="text" id="city" name="city" required class="form-control"
+            value="{{ employee.city if employee else '' }}">
+
+        <label class="form-label" for="telephone">Teléfono:</label>
+        <input type="text" id="telephone" name="telephone" required class="form-control"
+            value="{{ employee.telephone if employee else '' }}">
+
+    
+        <label class="form-label" for="profession">Profesión:</label>
+        <select id="profession" name="profession" required class="form-control">
+            <option value="Psicólogo/a" {{ 'selected' if employee and employee.profession=='Psicólogo/a' else '' }}>Psicólogo/a
+            </option>
+            <option value="Psicomotricista" {{ 'selected' if employee and employee.profession=='Psicomotricista' else '' }}>
+                Psicomotricista</option>
+            <option value="Médico/a" {{ 'selected' if employee and employee.profession=='Médico/a' else '' }}>Médico/a</option>
+            <option value="Kinesiólogo/a" {{ 'selected' if employee and employee.profession=='Kinesiólogo/a' else '' }}>Kinesiólogo/a
+            </option>
+            <option value="Terapista Ocupacional" {{ 'selected' if employee and employee.profession=='Terapista Ocupacional' else ''
+                }}>Terapista Ocupacional</option>
+            <option value="Psicopedagogo/a" {{ 'selected' if employee and employee.profession=='Psicopedagogo/a' else '' }}>
+                Psicopedagogo/a</option>
+            <option value="Docente" {{ 'selected' if employee and employee.profession=='Docente' else '' }}>Docente</option>
+            <option value="Profesor" {{ 'selected' if employee and employee.profession=='Profesor' else '' }}>Profesor</option>
+            <option value="Fonoaudiólogo/a" {{ 'selected' if employee and employee.profession=='Fonoaudiólogo/a' else '' }}>
+                Fonoaudiólogo/a</option>
+            <option value="Veterinario/a" {{ 'selected' if employee and employee.profession=='Veterinario/a' else '' }}>Veterinario/a
+            </option>
+            <option value="Otro" {{ 'selected' if employee and employee.profession=='Otro' else '' }}>Otro</option>
+        </select>
+
+        <label class="form-label" for="job_position">Puesto Laboral:</label>
+        <select id="job_position" name="job_position" required class="form-control">
+            <option value="Administrativo/a" {{ 'selected' if employee and employee.job_position=='Administrativo/a' else '' }}>
+                Administrativo/a</option>
+            <option value="Terapeuta" {{ 'selected' if employee and employee.job_position=='Terapeuta' else '' }}>Terapeuta</option>
+            <option value="Conductor" {{ 'selected' if employee and employee.job_position=='Conductor' else '' }}>Conductor</option>
+            <option value="Auxiliar de pista" {{ 'selected' if employee and employee.job_position=='Auxiliar de pista' else '' }}>
+                Auxiliar de pista</option>
+            <option value="Herrero" {{ 'selected' if employee and employee.job_position=='Herrero' else '' }}>Herrero</option>
+            <option value="Veterinario" {{ 'selected' if employee and employee.job_position=='Veterinario' else '' }}>Veterinario
+            </option>
+            <option value="Entrenador de Caballos" {{ 'selected' if employee and employee.job_position=='Entrenador de Caballos'
+                else '' }}>Entrenador de Caballos</option>
+            <option value="Domador" {{ 'selected' if employee and employee.job_position=='Domador' else '' }}>Domador</option>
+            <option value="Profesor de Equitación" {{ 'selected' if employee and employee.job_position=='Profesor de Equitación'
+                else '' }}>Profesor de Equitación</option>
+            <option value="Docente de Capacitación" {{ 'selected' if employee and employee.job_position=='Docente de Capacitación'
+                else '' }}>Docente de Capacitación</option>
+            <option value="Auxiliar de mantenimiento" {{ 'selected' if employee and 
+               employee.job_position=='Auxiliar de mantenimiento' else '' }}>Auxiliar de mantenimiento</option>
+            <option value="Otro" {{ 'selected' if employee and employee.job_position=='Otro' else '' }}>Otro</option>
+        </select>
+
+        <label class="form-label" for="start_date">Fecha de Inicio:</label>
+        <input class="form-control" type="date" id="start_date" name="start_date" required
+            value="{{ employee.start_date.strftime('%Y-%m-%d') if employee and employee.start_date else '' }}">
+
+        <label class="form-label" for="termination_date">Fecha de Cese:</label>
+        <input class="form-control" type="date" id="termination_date" name="termination_date"
+            value="{{ employee.termination_date.strftime('%Y-%m-%d') if employee and employee.termination_date else '' }}">
+
+
+        <label class="form-label" for="emergency_contact">Contacto de Emergencia:</label>
+        <input placeholder="Indicar nombre y telefono" class="form-control" type="text" id="emergency_contact_info" name="emergency_contact_info" required
+            value="{{ employee.emergency_contact_info if employee else '' }}">
+
+        <label class="form-label" for="social_work">Obra Social:</label>
+        <input class="form-control" type="text" id="social_work" name="social_work"
+            value="{{ employee.social_work if employee else '' }}" required>
+
+        <label class="form-label" for="associate_number">N° de Afiliado:</label>
+        <input class="form-control" type="text" id="associate_number" name="associate_number"
+            value="{{ employee.associate_number if employee else '' }}" required>
+
+        <label class="form-label" for="condition">Condición:</label>
+        <select class="form-control" id="condition" name="condition" required>
+            <option value="Voluntario" {{ 'selected' if employee and employee.condition=='Voluntario' else '' }}>Voluntario</option>
+            <option value="Personal Rentado" {{ 'selected' if employee and employee.condition=='Personal Rentado' else '' }}>Personal
+                Rentado</option>
+        </select>
+        {% if is_update %}
+        <label for="active">Activo</label>
+        <input type="checkbox" name="active" value="true" {% if employee.active %}checked{% endif %} >
+        {% endif %}
+        
+        <h4>Documentación Complementaria:</h4>
+        
+        <label class="form-label" for="title_file">Título:</label>
+        <input type="file" id="title_file" name="title_file" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+        
+        <label class="form-label" for="dni_file">Copia DNI:</label>
+        <input type="file" id="dni_file" name="dni_file" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
+        
+        <label class="form-label" for="cv_file">CV Actualizado:</label>
+        <input type="file" id="cv_file" name="cv_file" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+
+{% endblock %}

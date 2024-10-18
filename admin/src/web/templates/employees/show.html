@@ -1,0 +1,26 @@
+{% extends "base_show.html" %}
+{% block content %}
+
+<h1>Detalles de Empleado</h1>
+<div>
+    <p><strong>Nombre:</strong> {{ employee.name }}</p>
+    <p><strong>Apellido:</strong> {{ employee.surname }}</p>
+    <p><strong>DNI:</strong> {{ employee.dni }}</p>
+    <p><strong>Domicilio:</strong> {{ employee.address }}</p>
+    <p><strong>Email:</strong> {{ employee.email }}</p>
+    <p><strong>Localidad:</strong>{{ employee.city}}</p>
+    <p><strong>Telefono:</strong> {{ employee.telephone }}</p>
+    <p><strong>Profesion:</strong> {{ employee.profession }}</p>
+    <p><strong>Puesto Laboral:</strong> {{ employee.job_position }}</p>
+    <p><strong>Fecha de Inicio:</strong> {{ employee.start_date.strftime('%d/%m/%Y')}}</p>
+    <p><strong>Fecha de Cese:</strong> {{ employee.termination_date.strftime('%d/%m/%Y') if employee.termination_date else '-' }}</p>
+    <p><strong>Contacto de Emergencia:</strong> {{ employee.emergency_contact_info}}</p>
+    <p><strong>Obra Social:</strong> {{ employee.social_work }}</p>
+    <p><strong>N° de Afiliado:</strong> {{ employee.associate_number }}</p>
+    <p><strong>Condicion:</strong> {{ employee.condition }}</p>
+    <p><strong>Activo:</strong> {{ 'Sí' if employee.active else 'No' }}</p>
+</div>
+
+<a href="{{ url_for('employees.edit', id=employee.id) }}">Editar</a>
+<a href="{{ url_for('employees.index') }}">Volver a la lista</a>
+{% endblock %}
