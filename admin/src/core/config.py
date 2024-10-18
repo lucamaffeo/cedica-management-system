@@ -18,6 +18,13 @@ class ProductionConfig(Config):
     
     """ Production specific configuration. """
     SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL")
+ 
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "pool_size": 10,
+        "pool_recycle": 60,
+        "pool_pre_ping": True,
+    }
+    
     DB_NAME = environ.get("DATABASE_URL")
     DB_USER = environ.get("DATABASE_USERNAME")
     DB_PASS = environ.get("DATABASE_PASSWORD")
