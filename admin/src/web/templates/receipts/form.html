@@ -12,7 +12,7 @@
     <option value="">Seleccione un jinete</option>
     {% for rider in riders %}
     <option value="{{ rider.id }}" {% if receipt and receipt.ja_id==rider.id %}selected{% endif %}>
-        {{ rider.alias }}
+        {{ rider.name }} {{ rider.surname }}
     </option>
     {% endfor %}
 </select>
@@ -21,7 +21,7 @@
 <input class="form-control" type="date" id="payment_date" name="payment_date" required
     value="{{ receipt.payment_date.strftime('%Y-%m-%d') if receipt and receipt.payment_date else '' }}">
 
-<label class="form-label" for="quantity">quantity:</label>
+<label class="form-label" for="quantity">Monto:</label>
 <input class="form-control" type="number" id="quantity" name="quantity" required step="0.01"
     value="{{ receipt.quantity if receipt else '' }}">
 

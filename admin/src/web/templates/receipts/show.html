@@ -6,8 +6,7 @@
 <h1>Detalles del Recibo</h1>
 
 <ul>
-    <li><strong>ID del Recibo:</strong> {{ receipt.id }}</li>
-    <li><strong>J&A:</strong> {{ receipt.ja_id }}</li>
+    <li><strong>J&A:</strong> {{ receipt.ja.name }} {{ receipt.ja.surname }} </li>
     <li><strong>Fecha de Pago:</strong> {{ receipt.payment_date.strftime('%Y-%m-%d') }}</li>
     <li><strong>Monto:</strong> {{ receipt.quantity }}</li>
     <li><strong>Medio de Pago:</strong> {{ receipt.payment_method }}</li>

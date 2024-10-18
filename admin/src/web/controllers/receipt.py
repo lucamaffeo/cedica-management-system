@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask import Blueprint, flash, redirect, render_template, request, url_for
-from src.core.repositories import receipt,employee as employee_repository
+from src.core.repositories import receipt,employee as employee_repository, riders as riders_repository
 from src.web.helpers.auth import has_permission
 
 bp = Blueprint("receipts", __name__, url_prefix="/receipts")
@@ -24,8 +24,8 @@ def index():
 @has_permission("receipt_create")
 def register():
     employees = employee_repository.list_employees()
-    ##riders = riders_repository.list_riders()
-    return render_template("receipts/form.html", is_update=False, title="Registrar Recibo",employees=employees)##, riders=riders)
+    riders = riders_repository.list_riders()
+    return render_template("receipts/form.html", is_update=False, title="Registrar Recibo",employees=employees,riders=riders)
 
 @bp.post("/create")
 @has_permission("receipt_create")
@@ -44,7 +44,7 @@ def create():
     
     receipt.create_receipt(
         employee_id=employee_id,
-        ja_id=1,
+        ja_id=ja_id,
         payment_date=params['payment_date'] or None,
         quantity=quantity,
         payment_method=params['payment_method'],
@@ -73,7 +73,8 @@ def edit(id):
         flash("Recibo no encontrado.", "error")
         return redirect(url_for("receipts.index"))
     employees = employee_repository.list_employees()
-    return render_template("receipts/form.html", is_update=True, title="Actualizar Recibo", receipt=r, employees=employees)# aqui tmb va el riders.
+    riders = riders_repository.list_riders()
+    return render_template("receipts/form.html", is_update=True, title="Actualizar Recibo", receipt=r, employees=employees,riders=riders)
 
 @bp.route("/<int:id>/update", methods=["POST", "PATCH"])
 @has_permission("receipt_update")
@@ -92,7 +93,7 @@ def update(id):
     receipt.update_receipt(
         id=id,
         employee_id=employee_id,
-        ja_id=1,
+        ja_id=ja_id,
         payment_date=params['payment_date'] or None,
         quantity=quantity,
         payment_method=params['payment_method'],

@@ -110,6 +110,8 @@ head %} {{ super() }}
 </nav>
 {% endblock %}
 {% block add_new %}
-  <a href="{% block url_placeholder %}{% endblock %}" class="btn btn-primary">{% block name_placeholder %} Nuevo {% endblock %}</a>
+<a href="{{ url_for(request.endpoint) }}create" class="btn btn-primary">{% block name_placeholder %} Crear {% endblock
+  %}</a>
 {% endblock %}
+
 {% endblock %}
