@@ -8,11 +8,13 @@
 <ul>
     <li><strong>ID del Recibo:</strong> {{ receipt.id }}</li>
     <li><strong>J&A:</strong> {{ receipt.ja_id }}</li>
-    <li><strong>Fecha de Pago:</strong> {{ receipt.fecha_pago.strftime('%Y-%m-%d') }}</li>
-    <li><strong>Monto:</strong> {{ receipt.monto }}</li>
-    <li><strong>Medio de Pago:</strong> {{ receipt.medio_pago }}</li>
-    <li><strong>Recibido por (Empleado ID):</strong> {{ receipt.empleado.name }} {{ receipt.empleado.surname }}</li>
-    <li><strong>Observaciones:</strong> {{ receipt.observaciones or 'N/A' }}</li>
+    <li><strong>Fecha de Pago:</strong> {{ receipt.payment_date.strftime('%Y-%m-%d') }}</li>
+    <li><strong>Monto:</strong> {{ receipt.quantity }}</li>
+    <li><strong>Medio de Pago:</strong> {{ receipt.payment_method }}</li>
+    <li><strong>Recibido por (Empleado ID):</strong> {{ receipt.employee.name }} {{ receipt.employee.surname }}</li>
+    <li><strong>Observaciones:</strong> {{ receipt.remarks or 'N/A' }}</li>
+    <li><strong>Al día:</strong> {% if receipt.up_to_date %}Si{% else %}No{% endif %}</li>
+
 </ul>
 
 <a href="{{ url_for('receipts.index') }}">Volver</a>

@@ -7,16 +7,16 @@ class Receipt(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     ja_id = db.Column(db.Integer, db.ForeignKey('riders.id'), nullable=False)
-    fecha_pago = db.Column(db.DateTime, default=datetime.now, nullable=False)
-    monto = db.Column(db.Numeric(10, 2), nullable=False)
-    medio_pago = db.Column(db.Enum('Efectivo', 'Tarjeta de Crédito', 'Tarjeta de Débito', 'Transferencia', 'Otro', name='medio_pago'), nullable=False)
-    empleado_id = db.Column(db.Integer, db.ForeignKey('employees.id', ondelete='CASCADE'), nullable=False)
-    observaciones = db.Column(db.Text)
-    al_dia = db.Column(db.Boolean, default=True)
+    payment_date = db.Column(db.DateTime, default=datetime.now, nullable=False)
+    quantity = db.Column(db.Numeric(10, 2), nullable=False)
+    payment_method = db.Column(db.Enum('Efectivo', 'Tarjeta de Crédito', 'Tarjeta de Débito', 'Transferencia', 'Otro', name='payment_method'), nullable=False)
+    employee_id = db.Column(db.Integer, db.ForeignKey('employees.id', ondelete='CASCADE'), nullable=False)
+    remarks = db.Column(db.Text)
+    up_to_date = db.Column(db.Boolean, default=True)
 
     # Relaciones
     ja = db.relationship('Rider', backref='receipts')  # Relación con Jinetes y Amazonas (J&A)
-    empleado = db.relationship('Employee', backref='receipts')  # Relación con Empleados
+    employee = db.relationship('Employee', backref='receipts')  # Relación con Empleados
     
     def __repr__(self):
-        return f'<Receipt {self.id} - {self.monto} - {"Al Día" if self.al_dia else "En Deuda"}>'
+        return f'<Receipt {self.id} - {self.quantity} - {"Al Día" if self.up_to_date else "En Deuda"}>'

@@ -74,6 +74,6 @@ def run():
     #CABALLOS
     caballo1 = horse.create_horse(name="Caballo1", birth_date="2020-01-01",purchase_donation="Compra",gender = "Macho", assigned_activities_ja="Hipoterapia")
     #RECIBOS
-    recibo = receipt.create_receipt(ja_id=jinete1.id, monto=1000, medio_pago="Efectivo", empleado_id=luca.id, observaciones="Sin observaciones") 
+    recibo = receipt.create_receipt(ja_id=jinete1.id, quantity=1000, payment_method="Efectivo", employee_id=luca.id, remarks="Sin observaciones") 
     
     print("Seed ejecutado correctamente")

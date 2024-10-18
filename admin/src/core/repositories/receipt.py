@@ -5,7 +5,7 @@ from src.core.database import db
 from src.core.models.receipt import Receipt
 
 
-def list_receipts(start_date=None, end_date=None, medio_pago=None, sort_by='id', direction='asc', page=1, items_per_page=5):
+def list_receipts(start_date=None, end_date=None, payment_method=None, sort_by='id', direction='asc', page=1, items_per_page=5):
     # Iniciar la consulta
     query = Receipt.query
 
@@ -21,11 +21,11 @@ def list_receipts(start_date=None, end_date=None, medio_pago=None, sort_by='id',
             flash("La fecha de inicio no puede ser mayor a la fecha de fin", "error")
         else:
             end_date = datetime.strptime(end_date, '%Y-%m-%d')  # Convertir str a fecha para poder agregar timedelta
-            query = query.filter(Receipt.fecha_pago >= start_date, Receipt.fecha_pago < end_date + timedelta(days=1))
+            query = query.filter(Receipt.payment_date >= start_date, Receipt.payment_date < end_date + timedelta(days=1))
        
     # Filtrar por medio de pago si se proporciona
-    if medio_pago:
-        query = query.filter(Receipt.medio_pago == medio_pago)
+    if payment_method:
+        query = query.filter(Receipt.payment_method == payment_method)
 
     # Ordenar
     if direction == 'asc':

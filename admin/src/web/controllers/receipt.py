@@ -10,13 +10,13 @@ bp = Blueprint("receipts", __name__, url_prefix="/receipts")
 def index():
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')
-    medio_pago = request.args.get('medio_pago')
+    payment_method = request.args.get('payment_method')
     sort_by = request.args.get('sort_by', 'id')
     direction = request.args.get('direction', 'asc')
     page = request.args.get('page', 1, type=int)
     items_per_page = request.args.get('items_per_page', 5, type=int)
     
-    receipts = receipt.list_receipts(start_date, end_date, medio_pago, sort_by, direction, page, items_per_page)
+    receipts = receipt.list_receipts(start_date, end_date, payment_method, sort_by, direction, page, items_per_page)
     
     return render_template("receipts/index.html", pagination=receipts)
 
@@ -31,25 +31,27 @@ def register():
 @has_permission("receipt_create")
 def create():
     params = request.form
-    empleado_id = params.get('empleado_id')
+    employee_id = params.get('employee_id')
     ja_id = params.get('ja_id')
 
-    if not empleado_id and not ja_id:
+    if not employee_id and not ja_id:
         flash("Debe seleccionar un empleado y J&A ", "error")
         return redirect(url_for("receipts.create"))
-    monto = params.get('monto')
-    if monto:
-        monto = float(monto.replace('.', '').replace(',', '.'))
+    quantity = params.get('quantity')
+    if quantity:
+        quantity = float(quantity.replace('.', '').replace(',', '.'))
 
+    up_to_date_value = request.form.get('up_to_date') == True
     # Aquí agregas la lógica para crear el recibo
     receipt.create_receipt(
-        empleado_id=empleado_id,
+        employee_id=employee_id,
         ja_id=1,
-        fecha_pago=params['fecha_pago'] or None,
-        monto=monto,
-        medio_pago=params['medio_pago'],
-        observaciones=params.get('observaciones'),
-        al_dia=params.get('al_dia') == 'True'
+        payment_date=params['payment_date'] or None,
+        quantity=quantity,
+        payment_method=params['payment_method'],
+        remarks=params.get('remarks'),
+        up_to_date= up_to_date_value,
+        
     )
     
 
@@ -78,26 +80,25 @@ def edit(id):
 @has_permission("receipt_update")
 def update(id):
     params = request.form
-    empleado_id = params.get('empleado_id')
+    employee_id = params.get('employee_id')
     ja_id = params.get('ja_id')
-    monto = params.get('monto')
-    if monto:
-        monto = float(monto.replace('.', '').replace(',', '.'))
+    quantity = params.get('quantity')
+    if quantity:
+        quantity = float(quantity.replace('.', '').replace(',', '.'))
 
-    if not empleado_id and not ja_id:
-        flash("Debe seleccionar un empleado y J&A", "error")
-        return redirect(url_for("receipts.create"))
-    
+    if not employee_id and not ja_id:
+        flash("Debe seleccionar un empleado y J&A", "error") 
+        return redirect(url_for('receipts.update', id=id))   
     
     receipt.update_receipt(
         id=id,
-        empleado_id=empleado_id,
-        ja_id=ja_id,
-        fecha_pago=params['fecha_pago'] or None,
-        monto=monto,
-        medio_pago=params['medio_pago'],
-        observaciones=params.get('observaciones'),
-        al_dia=params.get('al_dia') == 'True'
+        employee_id=employee_id,
+        ja_id=1,
+        payment_date=params['payment_date'] or None,
+        quantity=quantity,
+        payment_method=params['payment_method'],
+        remarks=params.get('remarks') or None,
+        up_to_date=params.get('up_to_date') == "on",
     )
     
     flash("Recibo actualizado con éxito.", "success")

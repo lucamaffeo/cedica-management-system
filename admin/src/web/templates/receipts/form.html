@@ -17,29 +17,31 @@
     {% endfor %}
 </select>
 
-<label class="form-label" for="fecha_pago">Fecha de Pago:</label>
-<input class="form-control" type="date" id="fecha_pago" name="fecha_pago" required
-    value="{{ receipt.fecha_pago.strftime('%Y-%m-%d') if receipt and receipt.fecha_pago else '' }}">
+<label class="form-label" for="payment_date">Fecha de Pago:</label>
+<input class="form-control" type="date" id="payment_date" name="payment_date" required
+    value="{{ receipt.payment_date.strftime('%Y-%m-%d') if receipt and receipt.payment_date else '' }}">
 
-<label class="form-label" for="monto">Monto:</label>
-<input class="form-control" type="number" id="monto" name="monto" required step="0.01"
-    value="{{ receipt.monto if receipt else '' }}">
+<label class="form-label" for="quantity">quantity:</label>
+<input class="form-control" type="number" id="quantity" name="quantity" required step="0.01"
+    value="{{ receipt.quantity if receipt else '' }}">
 
-<label class="form-label" for="medio_pago">Método de Pago:</label>
-<select class="form-control" id="medio_pago" name="medio_pago" required>
-    <option value="Efectivo" {{ 'selected' if receipt and receipt.medio_pago=='Efectivo' else '' }}>Efectivo
+<label class="form-label" for="payment_method">Método de Pago:</label>
+<select class="form-control" id="payment_method" name="payment_method" required>
+    <option value="Efectivo" {{ 'selected' if receipt and receipt.payment_method=='Efectivo' else '' }}>Efectivo
     </option>
-    <option value="Transferencia" {{ 'selected' if receipt and receipt.medio_pago=='Transferencia' else '' }}>
+    <option value="Transferencia" {{ 'selected' if receipt and receipt.payment_method=='Transferencia' else '' }}>
         Transferencia</option>
-    <option value="Tarjeta de Crédito" {{ 'selected' if receipt and receipt.medio_pago=='Tarjeta de Crédito' else '' }}>
+    <option value="Tarjeta de Crédito" {{ 'selected' if receipt and receipt.payment_method=='Tarjeta de Crédito' else ''
+        }}>
         Tarjeta de Crédito</option>
-    <option value="Tarjeta de Débito" {{ 'selected' if receipt and receipt.medio_pago=='Tarjeta de Débito' else '' }}>
+    <option value="Tarjeta de Débito" {{ 'selected' if receipt and receipt.payment_method=='Tarjeta de Débito' else ''
+        }}>
         Tarjeta de Débito</option>
-    <option value="Otro" {{ 'selected' if receipt and receipt.medio_pago=='Otro' else '' }}>Otro</option>
+    <option value="Otro" {{ 'selected' if receipt and receipt.payment_method=='Otro' else '' }}>Otro</option>
 </select>
 
 <label for="empleado" class="form-label">Recibido por (Empleado):</label>
-<select name="empleado_id" id="empleado" class="form-control">
+<select name="employee_id" id="empleado" class="form-control">
     <option value="">Seleccione un empleado</option>
     {% for employee in employees %}
     <option value="{{ employee.id }}">{{ employee.name }} {{ employee.surname }}</option>
@@ -47,7 +49,12 @@
 </select>
 
 <label class="form-label" for="observations">Observaciones:</label>
-<textarea class="form-control" id="observations"
-    name="observations">{{ receipt.observations if receipt else '' }}</textarea>
+<textarea class="form-control" id="observations" name="remarks">{{ receipt.observations if receipt else '' }}</textarea>
+
+<label class="form-check-label" for="up_to_date">Al día:</label>
+<input class="form-check-input" type="checkbox" id="up_to_date" name="up_to_date" {% if receipt and receipt.up_to_date
+    %}{% endif %} checked>
+
+
 
 {% endblock %}
