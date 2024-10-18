@@ -8,8 +8,8 @@
 
 {% block form_fields %}
 <label class="form-label" for="ja_id">J&A (Jinete y Amazonas)</label>
-<select name="ja_id" class="form-control">
-    <option value="" {{ 'selected' if not receipt }}>Seleccione un jinete</option>
+<select name="ja_id" id="ja_id" class="form-control">
+    <option value="">Seleccione un jinete</option>
     {% for rider in riders %}
     <option value="{{ rider.id }}" {% if receipt and receipt.ja_id==rider.id %}selected{% endif %}>
         {{ rider.alias }}
@@ -44,16 +44,21 @@
 <select name="employee_id" id="empleado" class="form-control">
     <option value="">Seleccione un empleado</option>
     {% for employee in employees %}
-    <option value="{{ employee.id }}">{{ employee.name }} {{ employee.surname }}</option>
+    <option value="{{ employee.id }}" {% if receipt and receipt.employee_id==employee.id %}selected{% endif %}>
+        {{ employee.name }} {{ employee.surname }}
+    </option>
     {% endfor %}
 </select>
+
 
 <label class="form-label" for="observations">Observaciones:</label>
 <textarea class="form-control" id="observations" name="remarks">{{ receipt.observations if receipt else '' }}</textarea>
 
-<label class="form-check-label" for="up_to_date">Al día:</label>
-<input class="form-check-input" type="checkbox" id="up_to_date" name="up_to_date" {% if receipt and receipt.up_to_date
-    %}{% endif %} checked>
+{% if is_update %}
+<label class="form-label" for="up_to_date">Al dia</label>
+<input class="form-check-input" type="checkbox" name="up_to_date" value="true" {% if receipt.up_to_date %}checked{% endif %}>
+{% endif %}
+
 
 
 

@@ -41,8 +41,7 @@ def create():
     if quantity:
         quantity = float(quantity.replace('.', '').replace(',', '.'))
 
-    up_to_date_value = request.form.get('up_to_date') == True
-    # Aquí agregas la lógica para crear el recibo
+    
     receipt.create_receipt(
         employee_id=employee_id,
         ja_id=1,
@@ -50,7 +49,7 @@ def create():
         quantity=quantity,
         payment_method=params['payment_method'],
         remarks=params.get('remarks'),
-        up_to_date= up_to_date_value,
+        up_to_date= True,
         
     )
     
