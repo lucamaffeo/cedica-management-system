@@ -16,15 +16,15 @@ Buscar por Nombre, Apellido, DNI o Profesionales que lo atienden
 
 
 <!-- Rider table -->
-    {% set sorting_criteria = [("nombre", "Nombre"), ("apellido", "Apellido"), ("dni", "DNI"), ("profesionales", "Profesionales")] %}
-    {% set sortable_fields = ["nombre", "apellido"] %}
+    {% set sorting_criteria = [("name", "Nombre"), ("surname", "Apellido"), ("dni", "DNI"), ("professionals", "Profesionales")] %}
+    {% set sortable_fields = ["name", "surname"] %}
     {% block table_rows %}
         {% for rider in pagination.items %}
         <tr>
-            <td>{{ rider.nombre }}</td>
-            <td>{{ rider.apellido }}</td>
+            <td>{{ rider.name }}</td>
+            <td>{{ rider.surname }}</td>
             <td>{{ rider.dni }}</td>
-            <td>{{ rider.profesionales }}</td>
+            <td>{{ rider.professionals }}</td>
             <td>
                 <a href="{{ url_for('riders.show', id=rider.id) }}">Mostrar</a>
                 <a href="{{ url_for('riders.edit', id=rider.id) }}">Editar</a>

@@ -8,7 +8,7 @@ def create_rider(**kwargs):
 
     return rider
 
-def list_riders(search='', sort_by='nombre', direction='asc', page=1, items_per_page=5):
+def list_riders(search='', sort_by='name', direction='asc', page=1, items_per_page=5):
     query = Rider.query
 
     if search:
@@ -22,7 +22,7 @@ def list_riders(search='', sort_by='nombre', direction='asc', page=1, items_per_
     query = query  # No aplicar filtro, mostrar todos
     
     # Aplicar ordenación
-    if sort_by in ['nombre', 'apellido']:
+    if sort_by in ['name', 'surname']:
         if direction == 'asc':
             query = query.order_by(getattr(Rider, sort_by).asc())
         else:
