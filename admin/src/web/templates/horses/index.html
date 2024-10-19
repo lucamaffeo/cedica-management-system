@@ -43,9 +43,9 @@ Buscar por Nombre
         <td>{{horse.assigned_activities_ja}}</td>
         
         <td>
-            <a href="{{ url_for('horses.show', id=horse.id) }}">Mostrar</a>
+            <a href="{{ url_for('horses.show', id=horse.id) }}">Ver</a>
             <a href="{{ url_for('horses.edit', id=horse.id) }}">Editar</a>
-            <a href="{{ url_for('horses.delete', id=horse.id) }}" onclick="return confirm('Esta seguro?')">Eliminar</a>
+            <a href="{{ url_for('horses.delete', id=horse.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
         </td>
         {% else %}
         <tr>

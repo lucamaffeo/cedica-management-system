@@ -26,9 +26,9 @@ Buscar por Nombre, Apellido, DNI o Profesionales que lo atienden
             <td>{{ rider.dni }}</td>
             <td>{{ rider.professionals }}</td>
             <td>
-                <a href="{{ url_for('riders.show', id=rider.id) }}">Mostrar</a>
+                <a href="{{ url_for('riders.show', id=rider.id) }}">Ver</a>
                 <a href="{{ url_for('riders.edit', id=rider.id) }}">Editar</a>
-                <a href="{{ url_for('riders.delete', id=rider.id) }}" onclick="return confirm('Are you sure?')">Eliminar</a>
+                <a href="{{ url_for('riders.delete', id=rider.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
             </td>
         </tr>
         {% endfor %}

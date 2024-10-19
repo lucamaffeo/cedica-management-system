@@ -1,3 +1,4 @@
+import re
 from flask import Blueprint, redirect, render_template, request, session, url_for, flash
 from src.core.repositories import riders as rider_repository
 from src.core.models.assignment import Assignment
@@ -42,7 +43,7 @@ def create():
     scolarship = 'scolarship' in request.form
     params = request.form
     required_fields = ['name', 'surname', 'dni', 'age', 'birthdate', 'birth_place', 'address',
-                       'phone', 'emergency_contact', 'emergency_contact_phone_number','becado', 'scholarship_percentage',
+                       'phone', 'emergency_contact', 'emergency_contact_phone_number','scholarship', 'scholarship_percentage',
                         'professionals', 'disability_certificate', 'family_assignment', 'pension', 'health_insurance', 
                         'affiliate_number', 'guardianship', 'observations', 'school_institution', 'institution_address', 'grade',
                         'institution_phone', 'institution_observations', 'work_proposal', 'condition', 'headquarters'
@@ -90,6 +91,18 @@ def create():
         track_assistant_id = params['track_assistant_id']
     else:
         track_assistant_id = None
+
+    # Validar el DNI (solo números y puntos)
+    #if not re.match(r'^[\d.]+$', params['dni']):
+    #   flash("El DNI solo puede contener números y puntos.", "error")
+    #   return redirect(url_for("riders.register"))
+
+    # Validar si el DNI ya está registrado
+    dni = params['dni']
+    existing_rider_dni = rider_repository.find_rider_by_dni(dni)
+    if existing_rider_dni:
+        flash("El DNI ya está registrado por otro jinete o amazona.", "error")
+        return redirect(url_for("riders.register"))
 
     rider = rider_repository.create_rider(
         name = params['name'],
@@ -226,6 +239,20 @@ def update(id):
         track_assistant_id = params['track_assistant_id']
     else:
         track_assistant_id = None
+
+    # Validar el DNI (solo números y puntos)
+    #if not re.match(r'^[\d.]+$', params['dni']):
+    #   flash("El DNI solo puede contener números y puntos.", "error")
+    #   return redirect(url_for("riders.register"))
+
+     # Validar si el DNI ya está registrado por otro jinete/amazona
+    dni = params['dni']
+    if dni and dni != rider.dni:
+        existing_rider_dni = rider_repository.find_rider_by_dni(dni)
+        if existing_rider_dni:
+            flash("El DNI ya está registrado por otro jinete o amazona.", "error")
+            return redirect(url_for("riders.edit", id=id))
+
 
     # Actualizar el jinete
     rider = rider_repository.update_rider(

@@ -19,7 +19,7 @@ class Employee(db.Model):
     termination_date = db.Column(db.DateTime, nullable=True)
     emergency_contact_info = db.Column(db.String(150))
     social_work = db.Column(db.String(100))
-    associate_number = db.Column(db.String(50))
+    associate_number = db.Column(db.String(50), unique=True)
     condition = db.Column(db.String(50))  # Voluntario o Personal Rentado
     active = db.Column(db.Boolean, default=True, nullable=False)
     documentation = db.Column(JSON)

@@ -61,9 +61,9 @@ Buscar por Nombre, Apellido, DNI o Email
             <td>{{ employee.job_position }}</td>
             <td>{{ employee.start_date.strftime('%d/%m/%Y')}}</td>
             <td>
-                <a href="{{ url_for('employees.show', id=employee.id) }}">Mostrar</a>
+                <a href="{{ url_for('employees.show', id=employee.id) }}">Ver</a>
                 <a href="{{ url_for('employees.edit', id=employee.id) }}">Editar</a>
-                <a href="{{ url_for('employees.delete', id=employee.id) }}" onclick="return confirm('Esta seguro?')">Eliminar</a>
+                <a href="{{ url_for('employees.delete', id=employee.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
             </td>
         </tr>
         {% endfor %}

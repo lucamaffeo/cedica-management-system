@@ -5,13 +5,13 @@
 {% endblock %}
 
 {% block form_fields %}
-        <label class="form-label" for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" required class="form-control"
-            value="{{ rider.nombre if rider else '' }}">
+        <label class="form-label" for="name">Nombre:</label>
+        <input type="text" id="name" name="name" required class="form-control"
+            value="{{ rider.name if rider else '' }}">
 
-        <label class="form-label" for="apellido">Apellido:</label>
-        <input type="text" id="apellido" name="apellido" required class="form-control"
-            value="{{ rider.apellido if rider else '' }}">
+        <label class="form-label" for="surname">Apellido:</label>
+        <input type="text" id="surname" name="surname" required class="form-control"
+            value="{{ rider.surname if rider else '' }}">
 
 
         <label class="form-label" for="dni">DNI:</label>
@@ -19,46 +19,46 @@
             value="{{ rider.dni if rider else '' }}">
 
         <label class="form-label" for="edad">Edad:</label>
-        <input type="number" id="edad" name="edad" required class="form-control"
-            value="{{ rider.edad if rider else '' }}">
+        <input type="number" id="edad" name="age" required class="form-control"
+            value="{{ rider.age if rider else '' }}">
 
         <label class="form-label" for="fecha_nacimiento">Fecha de Nacimiento:</label>
-        <input class="form-control" type="date" id="fecha_nacimiento" name="fecha_nacimiento" required
-            value="{{ rider.fecha_nacimiento.strftime('%Y-%m-%d') if rider else '' }}">   
+        <input class="form-control" type="date" id="fecha_nacimiento" name="birthdate" required
+            value="{{ rider.birthdate.strftime('%Y-%m-%d') if rider else '' }}">   
 
-        <label class="form-label" for="lugar_nacimiento">Lugar de Nacimiento:</label>
-        <input type="text" id="lugar_nacimiento" name="lugar_nacimiento" required class="form-control"
-                value="{{ rider.lugar_nacimiento if rider else '' }}">
+        <label class="form-label" for="birth_place">Lugar de Nacimiento:</label>
+        <input type="text" id="birth_place" name="birth_place" required class="form-control"
+                value="{{ rider.birth_place if rider else '' }}">
 
-        <label class="form-label" for="domicilio">Domicilio:</label>
-        <input type="text" id="domicilio" name="domicilio" required class="form-control"
-            value="{{ rider.domicilio if rider else '' }}">
+        <label class="form-label" for="address">Domicilio:</label>
+        <input type="text" id="address" name="address" required class="form-control"
+            value="{{ rider.address if rider else '' }}">
 
-        <label class="form-label" for="telefono">Teléfono actual:</label>
-        <input type="tel" id="telefono" name="telefono" required class="form-control"
-                value="{{ rider.telefono if rider else '' }}">
+        <label class="form-label" for="phone">Teléfono actual:</label>
+        <input type="tel" id="phone" name="phone" required class="form-control"
+                value="{{ rider.phone if rider else '' }}">
 
-        <label class="form-label" for="contacto_emergencia">Contacto de Emergencia:</label>
-        <input type="text" id="contacto_emergencia" name="contacto_emergencia" required class="form-control"
-                value="{{ rider.contacto_emergencia if rider else '' }}">
+        <label class="form-label" for="emergency_contact">Contacto de Emergencia:</label>
+        <input type="text" id="emergency_contact" name="emergency_contact" required class="form-control"
+                value="{{ rider.emergency_contact if rider else '' }}">
 
-        <label class="form-label" for="tel_contacto">Teléfono de contacto:</label>
-        <input type="tel" id="tel_contacto" name="tel_contacto" required class="form-control"
-                value="{{ rider.tel_contacto if rider else '' }}">
+        <label class="form-label" for="emergency_contact_phone_number">Teléfono de contacto:</label>
+        <input type="tel" id="emergency_contact_phone_number" name="emergency_contact_phone_number" required class="form-control"
+                value="{{ rider.emergency_contact_phone_number if rider else '' }}">
 
-        <label class="form-label" for="becado">Becado:</label>
-        <input type="checkbox" id="becado" name="becado" class="form-check-input" 
-            {% if rider and rider.becado %}checked{% endif %}>
+        <label class="form-label" for="scholarship">Becado:</label>
+        <input type="checkbox" id="scholarship" name="scholarship" class="form-check-input" 
+            {% if rider and rider.scholarship %}checked{% endif %}>
 
         <br>
 
-        <label class="form-label" for="porcentaje_beca">Porcentaje de Beca:</label>
-        <input type="number" id="porcentaje_beca" name="porcentaje_beca" step="0.01" min="0" max="100" required class="form-control"
-            value="{{ (rider.porcentaje_beca | float) if rider else '' }}">
+        <label class="form-label" for="scholarship_percentage">Porcentaje de Beca:</label>
+        <input type="number" id="scholarship_percentage" name="scholarship_percentage" step="0.01" min="0" max="100" required class="form-control"
+            value="{{ (rider.scholarship_percentage | float) if rider else '' }}">
         
-        <label class="form-label" for="profesionales">Profesionales que lo atienden:</label>
-        <input type="text" id="profesionales" name="profesionales" required class="form-control"
-                value="{{ rider.profesionales if rider else '' }}">
+        <label class="form-label" for="professionals">Profesionales que lo atienden:</label>
+        <input type="text" id="professionals" name="professionals" required class="form-control"
+                value="{{ rider.professionals if rider else '' }}">
         
 <!--
         <h4>Documentación Complementaria:</h4>

@@ -35,6 +35,10 @@ def list_employees(search='', job_position=None, sort_by='name', direction='asc'
 
     return pagination_employees
 
+def get_by_email(email):
+    employee = Employee.query.filter(Employee.email == email).first()
+    return employee
+
 def find_employee_by_name(name):
     employee = Employee.query.filter(Employee.name == name).first()
     return employee
@@ -68,4 +72,8 @@ def get_employees_by_job_positions(job_positions):
 
 def get_employee(id):
     employee = Employee.query.filter(Employee.id == id).first()
+    return employee
+
+def find_employee_by_associate_number(associate_number):
+    employee = Employee.query.filter(Employee.associate_number == associate_number).first()
     return employee
