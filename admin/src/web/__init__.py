@@ -1,6 +1,7 @@
 from flask import Flask, session
 from flask import render_template 
 from src.core.models.user import User
+from src.core.repositories.riders import has_assignment
 from src.web.handlers import error
 from src.web.controllers import register_blueprints
 from src.core import database, seeds
@@ -52,6 +53,8 @@ def create_app(env="development",static_folder="../../static"):
     app.register_error_handler(403, error.forbidden)
 
     app.register_error_handler(401, error.error_unauthorized)
+
+    app.jinja_env.globals.update(has_assignment=has_assignment)
 
     @app.cli.command(name="reset-db")
     def reset_db():

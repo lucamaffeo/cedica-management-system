@@ -4,6 +4,8 @@ from src.core.repositories import riders as rider_repository
 from src.core.models.assignment import Assignment
 from src.core.models.tutor import Tutor
 from src.core.models.day import Day
+from src.core.models.employee import Employee
+from src.core.models.horse import Horse
 from src.core.models.rider import rider_tutor
 from src.web.helpers.auth import has_permission
 from werkzeug.utils import secure_filename
@@ -35,12 +37,16 @@ def index():
 @bp.get("/create")
 @has_permission("rider_create")
 def register():
-    return render_template("riders/form.html", is_update=False, title='Crear Jinete/Amazona')
+    all_days = Day.query.all()
+    all_employees = Employee.query.all()
+    all_horses = Horse.query.all()
+    return render_template("riders/form.html", is_update=False, title='Crear Jinete/Amazona', all_days=all_days, all_employees=all_employees, all_horses=all_horses, tutor_cant=0, tutors=[])
 
 # Create rider
 @bp.post("/create")
 @has_permission("rider_create")
 def create():
+
     scolarship = 'scolarship' in request.form
     params = request.form
     required_fields = ['name', 'surname', 'dni', 'age', 'birthdate', 'birth_place', 'address',
@@ -191,16 +197,28 @@ def show(id):
 @bp.get("/<int:id>/update")
 @has_permission("rider_update")
 def edit(id):
+    all_days = Day.query.all()
+    all_employees = Employee.query.all()
+    all_horses = Horse.query.all()
+
     rider = rider_repository.get_rider(id)
     if not rider:
         flash("Jinete/Amazona no encontrado.", "error")
         return redirect(url_for("riders.index"))
-    return render_template("riders/form.html", is_update=True, title='Actualizar Jinete/Amazona', rider=rider)
+    tutor_cant = len(rider.tutors)
+    tutors = db.session.query(
+        Tutor, rider_tutor.c.relationship
+    ).join(
+        rider_tutor, Tutor.id == rider_tutor.c.tutor_id
+    ).filter(
+        rider_tutor.c.rider_id == id
+    ).all()
+    print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', tutors)
+    return render_template("riders/form.html", is_update=True, title='Actualizar Jinete/Amazona', rider=rider, all_days=all_days, all_employees=all_employees, all_horses=all_horses, tutor_cant=tutor_cant, tutors=tutors)
 
 @bp.post("/<int:id>/update")
 @has_permission("rider_update")
 def update(id):
-    
     rider = rider_repository.get_rider(id)
     if not rider:
         flash("Jinete/Amazona no encontrado.", "error")
