@@ -51,6 +51,8 @@ def find_rider_by_professionals(professionals):
 
 def update_rider(id, **kwargs):
     rider = Rider.query.filter(Rider.id == id).first()
+    if not rider:
+        return None
     for key, value in kwargs.items():
         setattr(rider, key, value)
     db.session.commit()

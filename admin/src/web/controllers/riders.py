@@ -247,8 +247,11 @@ def update(id):
         flash("Jinete/Amazona no encontrado.", "error")
         return redirect(url_for("riders.index"))
 
-    params = request.form 
+    params = request.form
     scholarship = 'scholarship' in request.form
+    guardianship = 'guardianship' in request.form
+    family_assignment = 'family_assignment' in request.form
+    disability_certificate = 'disability_certificate' in request.form
 
     other = None    
     if 'diagnosis' in params:
@@ -262,32 +265,13 @@ def update(id):
         disability_type = params['disability_type']
     else:
         disability_type = None
+
+    if 'pension' in params:
+        pension = params['pension']
+    else:
+        pension = 'No'
         
-    if params['family_assignment'] == 'True':
-        assignments_ids = request.form.getlist('assignment_id')
-
-    tutors_ids = request.form.getlist('tutor_id')
-    days_ids = request.form.getlist('day_id')
-
-    if 'therapist_teacher_id' in params:
-        therapist_teacher_id = params['therapist_teacher_id']
-    else:
-        therapist_teacher_id = None
-    
-    if 'horse_conductor_id' in params:
-        horse_conductor_id = params['horse_conductor_id']
-    else:
-        horse_conductor_id = None
-
-    if 'horse_id' in params:
-        horse_id = params['horse_id']
-    else:
-        horse_id = None
-
-    if 'track_assistant_id' in params:
-        track_assistant_id = params['track_assistant_id']
-    else:
-        track_assistant_id = None
+    days = request.form.getlist('days')
 
     # Validar el DNI (solo números y puntos)
     #if not re.match(r'^[\d.]+$', params['dni']):
@@ -305,67 +289,99 @@ def update(id):
 
     # Actualizar el jinete
     rider = rider_repository.update_rider(
-        name = params['name'],
-        surname = params['surname'],
-        dni = params['dni'],
-        age = params['age'],
-        birthdate = params['birthdate'],
-        birth_place = params['birth_place'],
-        address = params['address'],
-        phone = params['phone'],
-        emergency_contact = params['emergency_contact'],
-        emergency_contact_phone_number = params['emergency_contact_phone_number'],
-        scholarship = scholarship,
-        scholarship_percentage = params['scholarship_percentage'],
-        professionals = params['professionals'],
-        disability_certificate = params['disability_certificate'],
-        diagnosis = diagnosis,
-        other = other,
-        disability_type = disability_type,
-        family_assignment = params['family_assignment'],
-        pension = params['pension'],
-        health_insurance = params['health_insurance'],
-        affiliate_number = params['affiliate_number'],
-        guardianship = params['guardianship'],
-        observations = params['observations'],
-        school_institution = params['school_institution'],
-        institution_address = params['institution_address'],
-        grade = params['grade'],
-        institution_phone = params['institution_phone'],
-        institution_observations = params['institution_observations'],
-        work_proposal = params['work_proposal'],
-        condition = params['condition'],
-        headquarters = params['headquarters'],
-        therapist_teacher_id = therapist_teacher_id,
-        horse_conductor_id = horse_conductor_id,
-        horse_id = horse_id,
-        track_assistant_id = track_assistant_id
+        id=id,
+        name=params['name'],
+        surname=params['surname'],
+        dni=params['dni'],
+        age=params['age'],
+        birthdate=params['birthdate'],
+        birth_place=params['birth_place'],
+        address=params['address'],
+        phone=params['phone'],
+        emergency_contact=params['emergency_contact'],
+        emergency_contact_phone_number=params['emergency_contact_phone_number'],
+        scholarship=scholarship,
+        scholarship_percentage=params['scholarship_percentage'],
+        professionals=params['professionals'],
+        disability_certificate=disability_certificate,
+        diagnosis=diagnosis,
+        other=other,
+        disability_type=disability_type,
+        family_assignment=family_assignment,
+        pension=pension,
+        health_insurance=params['health_insurance'],
+        affiliate_number=params['affiliate_number'],
+        guardianship=guardianship,
+        observations=params['observations'],
+        school_institution=params['school_institution'],
+        institution_address=params['institution_address'],
+        grade=params['grade'],
+        institution_phone=params['institution_phone'],
+        institution_observations=params['institution_observations'],
+        work_proposal=params['work_proposal'],
+        condition=params['condition'],
+        headquarters=params['headquarters']
     )
     # Manejar la carga de archivos
 
-    if assignments_ids:
-        for assignment_id in assignments_ids:
-            assignment = Assignment.query.get(assignment_id)  # Busca la asignación por ID
-            if assignment:  # Asegúrate de que la asignación existe
-                rider.assignments.append(assignment)  # Agrega la asignación a la relación
-            else:
-                flash(f"Asignación con ID {assignment_id} no encontrada.", "error")
-    if tutors_ids:
-        for tutor_id in tutors_ids:
-            tutor = Tutor.query.get(tutor_id)
-            if tutor: 
-                rider.tutors.append(tutor)  
-            else:
-                flash(f"Tutor con ID {tutor_id} no encontrado.", "error")
-    if days_ids:
-        for day_id in days_ids:
-            day = Day.query.get(day_id)
-            if day: 
-                rider.days.append(day)  
-            else:
-                flash(f"Día con ID {day_id} no encontrado.", "error")
+    if params['therapist_teacher_id'] != None and params['therapist_teacher_id'] != 'None':
+        rider.therapist_teacher_id = params['therapist_teacher_id']
+    
+    if params['horse_conductor_id'] != None and params['horse_conductor_id'] != 'None':
+        rider.horse_conductor_id = params['horse_conductor_id']
 
-    # Guardar cambios en la base de datos -- NO SE SI ES NECESARIO !!! VER
+    if params['horse_id'] != None and params['horse_id'] != 'None':
+        rider.horse_id = params['horse_id']
+
+    if params['track_assistant_id'] != None and params['track_assistant_id'] != 'None':
+        rider.track_assistant_id = params['track_assistant_id']
+
+    # Manejar asignaciones
+    if family_assignment:
+        assignments = request.form.getlist('assignments')
+        assignment_ids = get_assignment_ids_by_names(assignments)
+        rider.assignments = Assignment.query.filter(Assignment.id.in_(assignment_ids)).all()
+
+    # Manejar días
+    if days:
+        rider.days = Day.query.filter(Day.id.in_(days)).all()
+
+    # Manejar tutores
+    tutors = []
+    for i in range(2):
+        name = request.form.get(f'tutor_name_{i}')
+        surname = request.form.get(f'tutor_surname_{i}')
+        dni = request.form.get(f'tutor_dni_{i}')
+        relationship = request.form.get(f'tutor_relationship_{i}')
+        address = request.form.get(f'tutor_address_{i}')
+        cellphone = request.form.get(f'tutor_cellphone_{i}')
+        email = request.form.get(f'tutor_email_{i}')
+        educational_level = request.form.get(f'tutor_educational_level_{i}')
+        occupation = request.form.get(f'tutor_occupation_{i}')
+
+        if name and surname and dni:
+            tutor = Tutor.query.filter_by(dni=dni).first()
+            if not tutor:
+                tutor = Tutor(name=name, surname=surname, dni=dni, address=address, cellphone=cellphone, email=email, educational_level=educational_level, occupation=occupation)
+            else:
+                tutor.name = name
+                tutor.surname = surname
+                tutor.address = address
+                tutor.cellphone = cellphone
+                tutor.email = email
+                tutor.educational_level = educational_level
+                tutor.occupation = occupation
+            tutors.append((tutor, relationship))
+
+    # Limpiar relaciones del jinete con los tutores
+    db.session.execute(rider_tutor.delete().where(rider_tutor.c.rider_id == rider.id))
+
+    for tutor, relationship in tutors:
+        if tutor.id is None:
+            db.session.add(tutor)
+            db.session.flush()  
+        db.session.execute(rider_tutor.insert().values(rider_id=rider.id, tutor_id=tutor.id, relationship=relationship))
+ 
     db.session.commit()
     flash("Jinete/Amazona actualizado con éxito.", "success")
     return redirect(url_for("riders.index"))
