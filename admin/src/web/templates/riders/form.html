@@ -180,7 +180,7 @@
         <h4>DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s</h4>
         {% for i in range(2) %}
             <h6>Familiar o tutor responsable</h6>
-            <label class="form-label" for="tutor_name_{{ i }}">Nombre:</label>
+            <label class="form-label" for="tutor_ni_{{ i }}">Nombre:</label>
             <input type="text" id="tutor_name_{{ i }}" name="tutor_name_{{ i }}" class="form-control"
                 value="{{ tutors[i][0].name if tutors and i < tutor_cant else '' }}">
     
@@ -207,6 +207,18 @@
             <label class="form-label" for="tutor_email_{{ i }}">Email:</label>
             <input type="email" id="tutor_email_{{ i }}" name="tutor_email_{{ i }}" class="form-control"
                 value="{{ tutors[i][0].email if tutors and i < tutor_cant else '' }}">
+
+            <label class="form-label" for="tutor_educational_level_{{ i }}">Nivel de escolaridad:</label>
+            <select id="tutor_educational_level_{{ i }}" name="tutor_educational_level_{{ i }}" class="form-control">
+                <option value="Primario" {% if tutors and i < tutor_cant and tutors[i][0].educational_level == 'Primario' %}selected{% endif %}>Primario</option>
+                <option value="Secundario" {% if tutors and i < tutor_cant and tutors[i][0].educational_level == 'Secundario' %}selected{% endif %}>Secundario</option>
+                <option value="Terciario" {% if tutors and i < tutor_cant and tutors[i][0].educational_level == 'Terciario' %}selected{% endif %}>Terciario</option>
+                <option value="Universitario" {% if tutors and i < tutor_cant and tutors[i][0].educational_level == 'Universitario' %}selected{% endif %}>Universitario</option>
+            </select>
+
+            <label class="form-label" for="tutor_occupation_{{ i }}">Actividad u ocupación:</label>
+            <input type="text" id="tutor_occupation_{{ i }}" name="tutor_occupation_{{ i }}" class="form-control"
+                value="{{ tutors[i][0].occupation if tutors and i < tutor_cant else '' }}">
             <br>
         {% endfor %}
 

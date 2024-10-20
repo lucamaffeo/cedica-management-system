@@ -48,6 +48,7 @@
 
     <h4>DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s</h4>
     {% for tutor, relationship in tutors_with_relationship %}
+        <h6>Familiar o tutor responsable</h6>
         <p><strong>Nombre:</strong> {{ tutor.name }}</p>
         <p><strong>Apellido:</strong> {{ tutor.surname }}</p>
         <p><strong>DNI:</strong> {{ tutor.dni }}</p>
@@ -57,6 +58,7 @@
         <p><strong>Email:</strong> {{ tutor.email }}</p>
         <p><strong>Nivel de escolaridad:</strong> {{ tutor.educational_level }}</p>
         <p><strong>Actividad u ocupación:</strong> {{ tutor.occupation }}</p>
+        <br>
     {% endfor %}
 
     <h4>TRABAJO EN NUESTRA INSTITUCIÓN</h4>

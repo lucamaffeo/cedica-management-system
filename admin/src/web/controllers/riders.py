@@ -82,15 +82,8 @@ def create():
     else:
         pension = 'No'
 
-    tutors_ids = request.form.getlist('tutors_')
     days = request.form.getlist('days')
-    print()
-    print()
-    print()
-    print(days)
-    print()
-    print()
-    print()
+
 
     # Validar el DNI (solo números y puntos)
     #if not re.match(r'^[\d.]+$', params['dni']):
@@ -156,13 +149,6 @@ def create():
         assignment_ids = get_assignment_ids_by_names(assignments)
         rider.assignments = Assignment.query.filter(Assignment.id.in_(assignment_ids)).all()
 
-    if tutors_ids:
-        for tutor_id in tutors_ids:
-            tutor = Tutor.query.get(tutor_id)
-            if tutor: 
-                rider.tutors.append(tutor)  
-            else:
-                flash(f"Tutor con ID {tutor_id} no encontrado.", "error")
     if days != None:
         for day_id in days:
             day = Day.query.get(day_id)
@@ -170,6 +156,43 @@ def create():
                 rider.days.append(day)  
             else:
                 flash(f"Día con ID {day_id} no encontrado.", "error")
+
+    tutors = []
+    for i in range(2):
+        name = request.form.get(f'tutor_name_{i}')
+        surname = request.form.get(f'tutor_surname_{i}')
+        dni = request.form.get(f'tutor_dni_{i}')
+        relationship = request.form.get(f'tutor_relationship_{i}')
+        address = request.form.get(f'tutor_address_{i}')
+        cellphone = request.form.get(f'tutor_cellphone_{i}')
+        email = request.form.get(f'tutor_email_{i}')
+        educational_level = request.form.get(f'tutor_educational_level_{i}')
+        occupation = request.form.get(f'tutor_occupation_{i}')
+
+        if name and surname and dni:
+            tutor = Tutor.query.filter_by(dni=dni).first()
+            if not tutor:
+                tutor = Tutor(name=name, surname=surname, dni=dni, address=address, cellphone=cellphone, email=email, educational_level=educational_level, occupation=occupation)
+            else:
+                tutor.name = name
+                tutor.surname = surname
+                tutor.address = address
+                tutor.cellphone = cellphone
+                tutor.email = email
+                tutor.educational_level = educational_level
+                tutor.occupation = occupation
+            tutors.append((tutor, relationship))
+
+    db.session.add(rider)
+    # Asegura que el jinete obtenga un id
+    db.session.flush() 
+
+    for tutor, relationship in tutors:
+            if tutor.id is None:
+                db.session.add(tutor)
+                db.session.flush()  # Ensure the tutor gets an ID
+            db.session.execute(rider_tutor.insert().values(rider_id=rider.id, tutor_id=tutor.id, relationship=relationship))
+
 
     # Guardar cambios en la base de datos -- NO SE SI ES NECESARIO !!! VER
     db.session.commit()
