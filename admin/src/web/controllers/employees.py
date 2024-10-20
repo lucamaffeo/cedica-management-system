@@ -46,9 +46,9 @@ def create():
             flash(f"El campo {field} es requerido.", "error")
             return redirect(url_for("employees.register"))
     
-    # Validar telefono (solo números)
-    if not re.match(r'^[\d]+$', params['telephone']):
-        flash("El teléfono solo puede contener números.", "error")
+    # Validar telefono (solo números + o espacios)
+    if not re.match(r'^[\d +]+$', params['telephone']):
+        flash("El teléfono solo puede contener números + o espacios.", "error")
         return redirect(url_for("employees.register"))
     
     # Validar el DNI (solo números y puntos)
@@ -132,11 +132,10 @@ def update(id):
         termination_date = None
 
 
-    # validar telefono (solo números)
-    if not re.match(r'^[\d]+$', params['telephone']):
-        flash("El teléfono solo puede contener números.", "error")
-        return redirect(url_for("employees.edit", id=id))
-
+    # Validar telefono (solo números + o espacios)
+    if not re.match(r'^[\d +]+$', params['telephone']):
+        flash("El teléfono solo puede contener números + o espacios.", "error")
+        return redirect(url_for("employees.register"))
     # Validar el DNI (solo números y puntos)
     if not re.match(r'^[\d.]+$', params['dni']):
         flash("El DNI solo puede contener números y puntos.", "error")

@@ -259,7 +259,7 @@
         <label class="form-label" for="therapist_teacher_id">Profesor/a o Terapeuta:</label>
         <select id="therapist_teacher_id" name="therapist_teacher_id" class="form-control">
             <option value="None" {% if not rider or not rider.therapist_teacher %}selected{% endif %}>-</option>
-            {% for employee in all_employees %}
+            {% for employee in profesor_therapist %}
                 <option value="{{ employee.id }}" {% if rider and rider.therapist_teacher and rider.therapist_teacher.id == employee.id %}selected{% endif %}>{{ employee.name }}</option>
             {% endfor %}
         </select>
@@ -267,7 +267,7 @@
         <label class="form-label" for="horse_conductor_id">Conductor/a del caballo:</label>
         <select id="horse_conductor_id" name="horse_conductor_id" class="form-control">
             <option value="None" {% if not rider or not rider.horse_conductor %}selected{% endif %}>-</option>
-            {% for employee in all_employees %}
+            {% for employee in conductor %}
                 <option value="{{ employee.id }}" {% if rider and rider.horse_conductor and rider.horse_conductor.id == employee.id %}selected{% endif %}>{{ employee.name }}</option>
             {% endfor %}
         </select>
@@ -280,10 +280,10 @@
             {% endfor %}
         </select>
 
-        <label class="form-label" for="track_assistant_id">Conductor/a del caballo:</label>
+        <label class="form-label" for="track_assistant_id">Auxiliar de Pista:</label>
         <select id="track_assistant_id" name="track_assistant_id" class="form-control">
             <option value="None" {% if not rider or not rider.track_assistant %}selected{% endif %}>-</option>
-            {% for employee in all_employees %}
+            {% for employee in auxiliar_pista %}
                 <option value="{{ employee.id }}" {% if rider and rider.track_assistant and rider.track_assistant.id == employee.id %}selected{% endif %}>{{ employee.name }}</option>
             {% endfor %}
         </select>
