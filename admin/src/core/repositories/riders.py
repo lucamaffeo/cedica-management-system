@@ -51,6 +51,8 @@ def find_rider_by_professionals(professionals):
 
 def update_rider(id, **kwargs):
     rider = Rider.query.filter(Rider.id == id).first()
+    if not rider:
+        return None
     for key, value in kwargs.items():
         setattr(rider, key, value)
     db.session.commit()
@@ -64,3 +66,6 @@ def delete_rider(id):
 def get_rider(id):
     rider = Rider.query.filter(Rider.id == id).first()
     return rider
+
+def has_assignment(rider, assignment_name):
+    return any(assignment.name == assignment_name for assignment in rider.assignments)
