@@ -8,13 +8,13 @@
     <p><strong>DNI:</strong> {{ rider.dni }}</p>
     <p><strong>Edad:</strong> {{ rider.age }}</p>
     <p><strong>Fecha de Nacimiento:</strong> {{ rider.birthdate.strftime('%d/%m/%Y')}}</p>
-    <p><strong>Lugar de Nacimiento:</strong> {{ rider.birthplace }}</p>
+    <p><strong>Lugar de Nacimiento:</strong> {{ rider.birth_place }}</p>
     <p><strong>Domicilio:</strong>{{ rider.address}}</p>
     <p><strong>Telefono actual:</strong> {{ rider.phone }}</p>
     <p><strong>Contacto de Emergencia:</strong> {{ rider.emergency_contact}}</p>
     <p><strong>Telefono de Contacto:</strong> {{ rider.emergency_contact_phone_number }}</p>
-    <p><strong>Becado:</strong> {{ rider.scholarship }}</p>
-    <p><strong>Porcentaje de beca:</strong> {% if rider.scholarship == True %} {{ rider.scholarship_porcentaje | float }}% {% else %} N/A {% endif %}</p>
+    <p><strong>Becado:</strong> {% if rider.scholarship == True %} Si {% else %} No {% endif %}</p>
+    <p><strong>Porcentaje de beca:</strong> {% if rider.scholarship == True %} {{ rider.scholarship_percentage | float }}% {% else %} N/A {% endif %}</p>
     <p><strong>Profesionales que lo atienden:</strong> {{ rider.professionals }}</p>
     <p><strong>¿Posee Certificado de Discapacidad?</strong> {% if rider.disability_certificate == True %} Si {% else %} No {% endif %}</p>
     {% if rider.disability_certificate == True %} 
@@ -23,7 +23,7 @@
             <p><strong>Otro:</strong> {{ rider.other }}</p>
         {% endif %}
     {% endif %}
-    <p><strong>Tipo de Discapacidad:</strong> {{ rider.disability_type }}</p>
+    <p><strong>Tipo de Discapacidad:</strong> {% if rider.disability_type != 'None' %} {{ rider.disability_type }} {% else %} N/A {% endif %}</p>
     <p><strong>¿Percibe alguna asignación familiar?</strong> {% if rider.family_assignment == True %} Si {% else %} No {% endif %}</p>
     {% if rider.family_assignment == True %}
         {% for asignacion in rider.assignments %}
@@ -36,7 +36,7 @@
     <h4>SITUACIÓN PREVISIONAL</h4>
     <p><strong>Obra Social:</strong> {{ rider.health_insurance }}</p>
     <p><strong>Número de Afiliado:</strong> {{ rider.affiliate_number }}</p>
-    <p><strong>Curatela:</strong> {{ rider.guardianship }}</p>
+    <p><strong>Curatela:</strong> {% if rider.guardianship == True %} Si {% else %} No {% endif %}</p>
     <p><strong>Observaciones:</strong> {{ rider.observations }}</p>
 
     <h4>INSTITUCIÓN ESCOLAR a la que CONCURRE ACTUALMENTE</h4>
