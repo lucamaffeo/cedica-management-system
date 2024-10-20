@@ -15,9 +15,65 @@
     <p><strong>Telefono de Contacto:</strong> {{ rider.emergency_contact_phone_number }}</p>
     <p><strong>Becado:</strong> {{ rider.scholarship }}</p>
     <p><strong>Porcentaje de beca:</strong> {% if rider.scholarship == True %} {{ rider.scholarship_porcentaje | float }}% {% else %} N/A {% endif %}</p>
-    <p><strong>Profesionales:</strong> {{ rider.professionals }}</p>
+    <p><strong>Profesionales que lo atienden:</strong> {{ rider.professionals }}</p>
+    <p><strong>¿Posee Certificado de Discapacidad?</strong> {% if rider.disability_certificate == True %} Si {% else %} No {% endif %}</p>
+    {% if rider.disability_certificate == True %} 
+        <p><strong>Diagnóstico:</strong> {{ rider.diagnosis }}</p>
+        {% if rider.diagnosis == 'OTRO' %}
+            <p><strong>Otro:</strong> {{ rider.other }}</p>
+        {% endif %}
+    {% endif %}
+    <p><strong>Tipo de Discapacidad:</strong> {{ rider.disability_type }}</p>
+    <p><strong>¿Percibe alguna asignación familiar?</strong> {% if rider.family_assignment == True %} Si {% else %} No {% endif %}</p>
+    {% if rider.family_assignment == True %}
+        {% for asignacion in rider.assignments %}
+            <li>{{ asignacion.name }}</li>
+        {% endfor %}
+    {% endif %}
+    <br>
+    <p><strong>Pensión:</strong> {% if rider.pension %} {{ rider.pension }} {% else %} Ninguna {% endif %}</p>
+
+    <h4>SITUACIÓN PREVISIONAL</h4>
+    <p><strong>Obra Social:</strong> {{ rider.health_insurance }}</p>
+    <p><strong>Número de Afiliado:</strong> {{ rider.affiliate_number }}</p>
+    <p><strong>Curatela:</strong> {{ rider.guardianship }}</p>
+    <p><strong>Observaciones:</strong> {{ rider.observations }}</p>
+
+    <h4>INSTITUCIÓN ESCOLAR a la que CONCURRE ACTUALMENTE</h4>
+    <p><strong>Institución Escolar:</strong> {{ rider.school_institution }}</p>
+    <p><strong>Dirección de la Institución:</strong> {{ rider.institution_address }}</p>
+    <p><strong>Grado:</strong> {{ rider.grade }}</p>
+    <p><strong>Teléfono de la Institución:</strong> {{ rider.institution_phone }}</p>
+    <p><strong>Observaciones:</strong> {{ rider.institution_observations }}</p>
+
+    <h4>DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s</h4>
+    {% for tutor, relationship in tutors_with_relationship %}
+        <p><strong>Nombre:</strong> {{ tutor.name }}</p>
+        <p><strong>Apellido:</strong> {{ tutor.surname }}</p>
+        <p><strong>DNI:</strong> {{ tutor.dni }}</p>
+        <p><strong>Parentesco:</strong> {{ relationship }}</p>
+        <p><strong>Domicilio:</strong> {{ tutor.address }}</p>
+        <p><strong>Telefono:</strong> {{ tutor.cellphone }}</p>
+        <p><strong>Email:</strong> {{ tutor.email }}</p>
+        <p><strong>Nivel de escolaridad:</strong> {{ tutor.educational_level }}</p>
+        <p><strong>Actividad u ocupación:</strong> {{ tutor.occupation }}</p>
+    {% endfor %}
+
+    <h4>TRABAJO EN NUESTRA INSTITUCIÓN</h4>
+    <p><strong>Propuesta de Trabajo:</strong> {{ rider.work_proposal }}</p>
+    <p><strong>Condición:</strong> {{ rider.condition }}</p>
+    <p><strong>Sede:</strong> {{ rider.headquarters }}</p>
+    <p><strong>Días:</strong> {% for day in rider.days %} {{ day.name }} {% endfor %}</p>
+    <p><strong>Profesor/a o Terapeuta:</strong> {% if rider.therapist_teacher %} {{ rider.therapist_teacher.name }} {% else %} - {% endif %}</p>
+    <p><strong>Conductor/a del caballo:</strong> {% if rider.horse_conductor %} {{ rider.horse_conductor.name }} {% else %} - {% endif %}</p>
+    <p><strong>Caballo:</strong> {% if rider.horse %} {{ rider.horse.name }} {% else %} - {% endif %}</p>
+    <p><strong>Conductor/a del caballo:</strong> {% if rider.track_assistant %} {{ rider.track_assistant.name }} {% else %} - {% endif %}</p>
 </div>
 
+{% if logged_user and logged_user.has_permission('rider_update') %}
 <a href="{{ url_for('riders.edit', id=rider.id) }}">Editar</a>
+{% endif %}
+{% if logged_user and logged_user.has_permission('rider_index') %}
 <a href="{{ url_for('riders.index') }}">Volver a la lista</a>
+{% endif %}
 {% endblock %}

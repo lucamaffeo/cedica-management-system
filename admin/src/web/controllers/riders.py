@@ -4,6 +4,7 @@ from src.core.repositories import riders as rider_repository
 from src.core.models.assignment import Assignment
 from src.core.models.tutor import Tutor
 from src.core.models.day import Day
+from src.core.models.rider import rider_tutor
 from src.web.helpers.auth import has_permission
 from werkzeug.utils import secure_filename
 from os import fstat
@@ -177,7 +178,14 @@ def show(id):
     if not rider:
         flash("Jinete/Amazona no encontrado.", "error")
         return redirect(url_for("riders.index"))
-    return render_template("riders/show.html", rider=rider)
+    tutors_with_relationship = db.session.query(
+        Tutor, rider_tutor.c.relationship
+    ).join(
+        rider_tutor, Tutor.id == rider_tutor.c.tutor_id
+    ).filter(
+        rider_tutor.c.rider_id == id
+    ).all()
+    return render_template("riders/show.html", rider=rider, tutors_with_relationship=tutors_with_relationship)
 
 # Editar jinete/amazona
 @bp.get("/<int:id>/update")
