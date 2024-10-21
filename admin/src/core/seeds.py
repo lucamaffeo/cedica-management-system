@@ -1,5 +1,4 @@
-from src.core.repositories import user, employee, role, permission, horse, assignment, tutor, day, document, receipt
-from src.core import models
+from src.core.repositories import user, employee, role, permission, horse, assignment, tutor, day, document, receipt, payment, riders
 def run():
 
     # Permissions
@@ -85,7 +84,7 @@ def run():
     
 
     #PAGOS
-    pago1 = models.create_payment(amount=1000, beneficiary_id=1, type="Honorarios", description="Pago de honorarios")
+    pago1 = payment.create_payment(amount=1000, beneficiary_id=1, type="Honorarios", description="Pago de honorarios")
 
     #TUTOR
     tutor1 = tutor.create_tutor(name="Maria", surname="Gomez", dni="12345678", email="emailtutor@mail.com", address="Av. Siempre Viva 123", cellphone="123456789", educational_level="Universitario", occupation="Profesora")
@@ -93,8 +92,8 @@ def run():
     #CABALLOS
     caballo1 = horse.create_horse(name="Caballo1", birth_date="2020-01-01",purchase_donation="Compra",gender = "Macho", assigned_activities_ja="Hipoterapia")
     #JINETES/AMAZONAS
-    jinete1 = models.create_rider(name="Juan", surname="Perez", dni=51321513, age=25, birthdate="1996-01-01", birth_place="CABA", address="Av. Siempre Viva 123", phone="123456789", emergency_contact="Maria", emergency_contact_phone_number="123456789", scholarship=False, scholarship_percentage=0, professionals="Dr. Juan Perez", tutors=[tutor1], disability_certificate=False, diagnosis="ECNE", other="Otro", disability_type="Mental", family_assignment=True, assignments=[assignment1, assignment2], pension="Provincial", health_insurance="OSDE", affiliate_number="123456", guardianship=False, observations="Sin observaciones", school_institution="Escuela 123", institution_address="Av. Siempre Viva 123", grade="Primero", institution_phone="123456789", institution_observations="Sin observaciones", days=[lunes, martes], horse_id=caballo1.id, horse_conductor_id=luca.id, track_assistant_id=luca2.id, therapist_teacher_id=luca.id, work_proposal="Hipoterapia", condition="Regular", headquarters="CASJ")
-    jinete2 = models.create_rider(name="Juan", surname="Perez", dni=1, age=25, birthdate="1996-01-01", birth_place="CABA", address="Av. Siempre Viva 123", phone="123456789", emergency_contact="Maria", emergency_contact_phone_number="123456789", scholarship=False, scholarship_percentage=0, professionals="Dr. Juan Perez", tutors=[tutor1], disability_certificate=False, diagnosis="ECNE", other="Otro", disability_type="Mental", family_assignment=True, assignments=[assignment1, assignment2], pension="Provincial", health_insurance="OSDE", affiliate_number="123456", guardianship=False, observations="Sin observaciones", school_institution="Escuela 123", institution_address="Av. Siempre Viva 123", grade="Primero", institution_phone="123456789", institution_observations="Sin observaciones", days=[lunes, martes], horse_id=caballo1.id, horse_conductor_id=luca.id, track_assistant_id=luca2.id, therapist_teacher_id=luca.id, work_proposal="Hipoterapia", condition="Regular", headquarters="CASJ")
+    jinete1 = riders.create_rider(name="Juan", surname="Perez", dni=51321513, age=25, birthdate="1996-01-01", birth_place="CABA", address="Av. Siempre Viva 123", phone="123456789", emergency_contact="Maria", emergency_contact_phone_number="123456789", scholarship=False, scholarship_percentage=0, professionals="Dr. Juan Perez", tutors=[tutor1], disability_certificate=False, diagnosis="ECNE", other="Otro", disability_type="Mental", family_assignment=True, assignments=[assignment1, assignment2], pension="Provincial", health_insurance="OSDE", affiliate_number="123456", guardianship=False, observations="Sin observaciones", school_institution="Escuela 123", institution_address="Av. Siempre Viva 123", grade="Primero", institution_phone="123456789", institution_observations="Sin observaciones", days=[lunes, martes], horse_id=caballo1.id, horse_conductor_id=luca.id, track_assistant_id=luca2.id, therapist_teacher_id=luca.id, work_proposal="Hipoterapia", condition="Regular", headquarters="CASJ")
+    jinete2 = riders.create_rider(name="Juan", surname="Perez", dni=1, age=25, birthdate="1996-01-01", birth_place="CABA", address="Av. Siempre Viva 123", phone="123456789", emergency_contact="Maria", emergency_contact_phone_number="123456789", scholarship=False, scholarship_percentage=0, professionals="Dr. Juan Perez", tutors=[tutor1], disability_certificate=False, diagnosis="ECNE", other="Otro", disability_type="Mental", family_assignment=True, assignments=[assignment1, assignment2], pension="Provincial", health_insurance="OSDE", affiliate_number="123456", guardianship=False, observations="Sin observaciones", school_institution="Escuela 123", institution_address="Av. Siempre Viva 123", grade="Primero", institution_phone="123456789", institution_observations="Sin observaciones", days=[lunes, martes], horse_id=caballo1.id, horse_conductor_id=luca.id, track_assistant_id=luca2.id, therapist_teacher_id=luca.id, work_proposal="Hipoterapia", condition="Regular", headquarters="CASJ")
     #RECIBOS
     recibo = receipt.create_receipt(ja_id=jinete1.id, quantity=1000, payment_method="Efectivo", employee_id=luca.id, remarks="Sin observaciones") 
     #DOCUMENTOS
