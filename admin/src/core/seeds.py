@@ -69,14 +69,12 @@ def run():
 
     #USUARIOS
     admin = user.create_user(email="admin@admin.com", password="admin", role_id=1, alias="admin")
-    luca = user.create_user(email="luca@mail.com", password="123456", role_id=2, alias="Luca")
+    luca = user.create_user(email="rol2@mail.com", password="123456", role_id=2, alias="Luca")
 
-    _ = user.create_user(email="1@mail.com", password="123456", role_id=2, alias="1")
-    _ = user.create_user(email="2@mail.com", password="123456", role_id=2, alias="2")
-    _ = user.create_user(email="3@mail.com", password="123456", role_id=3, alias="3")
-    _ = user.create_user(email="4@mail.com", password="123456", role_id=4, alias="4")
-    _ = user.create_user(email="5@mail.com", password="123456", role_id=5, alias="5")
-    _ = user.create_user(email="6@mail.com", password="123456", role_id=5, alias="6")
+    tres = user.create_user(email="rol3@mail.com", password="123456", role_id=3, alias="1")
+    cuatro = user.create_user(email="rol4@mail.com", password="123456", role_id=4, alias="2")
+    cinco = user.create_user(email="rol5@mail.com", password="123456", role_id=5, alias="3")
+    
 
     #EMPLEADOS
     luca = employee.create_employee(name="Luca", surname="Perez", dni="12345679", email="luca1@gmail.com", start_date="2021-01-01",  active=True, job_position = "Conductor")
