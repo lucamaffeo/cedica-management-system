@@ -1,14 +1,15 @@
+from sqlalchemy import cast, String
 from src.core.database import db
 from src.core.models.document import Document
 
-
-def list_documents_by_id(id, search='', sort_by='name', direction='asc', page=1, items_per_page=5):
-    query = Document.query
+def list_documents_by_id(id, search='', sort_by='title', direction='asc', page=1, items_per_page=5):
+    query =Document.query.filter_by(rider_id=id)
 
     if search:
         query = query.filter(
             (Document.title.ilike(f'%{search}%')) |
-            (Document.document_type.ilike(f'%{search}%')) 
+            # Se castea porque document_type es de tipo Enum
+            (cast(Document.document_type, String).ilike(f'%{search}%'))
         )
 
     query = query  # No aplicar filtro, mostrar todos
@@ -31,3 +32,12 @@ def create_document(**kwargs):
     db.session.commit()
 
     return document
+
+def get_document(id):
+    document = Document.query.filter(Document.id == id).first()
+    return document
+
+def delete_document(id):
+    document = Document.query.filter(Document.id == id).first()
+    db.session.delete(document)
+    db.session.commit()

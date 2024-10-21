@@ -1,4 +1,4 @@
-from src.core.repositories import user, employee, role, permission, horse, assignment, tutor, day, action, document, receipt
+from src.core.repositories import user, employee, role, permission, horse, assignment, tutor, day, document, receipt
 from src.core import models
 def run():
 
@@ -68,16 +68,9 @@ def run():
     sabado = day.create_day(name="Sabado")
     domingo = day.create_day(name="Domingo")
 
-    # Acciones
-    editar = action.create_action(name="Editar")
-    eliminar = action.create_action(name="Eliminar")
-    descargar = action.create_action(name="Descargar")
-    ir_al_documento = action.create_action(name="Ir al documento")
-
     #USUARIOS
     admin = user.create_user(email="admin@admin.com", password="admin", role_id=1, alias="admin")
     luca = user.create_user(email="luca@mail.com", password="123456", role_id=2, alias="Luca")
-
 
     _ = user.create_user(email="1@mail.com", password="123456", role_id=2, alias="1")
     _ = user.create_user(email="2@mail.com", password="123456", role_id=2, alias="2")
@@ -96,14 +89,19 @@ def run():
 
     #TUTOR
     tutor1 = tutor.create_tutor(name="Maria", surname="Gomez", dni="12345678", email="emailtutor@mail.com", address="Av. Siempre Viva 123", cellphone="123456789", educational_level="Universitario", occupation="Profesora")
-    #DOCUMENTOS
-    documento1 = document.create_document(file="Documento1", title="Titulo del documento", document_type="Entrevista", actions=[editar, eliminar, descargar])
 
     #CABALLOS
     caballo1 = horse.create_horse(name="Caballo1", birth_date="2020-01-01",purchase_donation="Compra",gender = "Macho", assigned_activities_ja="Hipoterapia")
     #JINETES/AMAZONAS
-    jinete1 = models.create_rider(name="Juan", surname="Perez", dni=51321513, age=25, birthdate="1996-01-01", birth_place="CABA", address="Av. Siempre Viva 123", phone="123456789", emergency_contact="Maria", emergency_contact_phone_number="123456789", scholarship=False, scholarship_percentage=0, professionals="Dr. Juan Perez", tutors=[tutor1], documents=[documento1], disability_certificate=False, diagnosis="ECNE", other="Otro", disability_type="Mental", family_assignment=True, assignments=[assignment1, assignment2], pension="Provincial", health_insurance="OSDE", affiliate_number="123456", guardianship=False, observations="Sin observaciones", school_institution="Escuela 123", institution_address="Av. Siempre Viva 123", grade="Primero", institution_phone="123456789", institution_observations="Sin observaciones", days=[lunes, martes], horse_id=caballo1.id, horse_conductor_id=luca.id, track_assistant_id=luca2.id, therapist_teacher_id=luca.id, work_proposal="Hipoterapia", condition="Regular", headquarters="CASJ")
+    jinete1 = models.create_rider(name="Juan", surname="Perez", dni=51321513, age=25, birthdate="1996-01-01", birth_place="CABA", address="Av. Siempre Viva 123", phone="123456789", emergency_contact="Maria", emergency_contact_phone_number="123456789", scholarship=False, scholarship_percentage=0, professionals="Dr. Juan Perez", tutors=[tutor1], disability_certificate=False, diagnosis="ECNE", other="Otro", disability_type="Mental", family_assignment=True, assignments=[assignment1, assignment2], pension="Provincial", health_insurance="OSDE", affiliate_number="123456", guardianship=False, observations="Sin observaciones", school_institution="Escuela 123", institution_address="Av. Siempre Viva 123", grade="Primero", institution_phone="123456789", institution_observations="Sin observaciones", days=[lunes, martes], horse_id=caballo1.id, horse_conductor_id=luca.id, track_assistant_id=luca2.id, therapist_teacher_id=luca.id, work_proposal="Hipoterapia", condition="Regular", headquarters="CASJ")
+    jinete2 = models.create_rider(name="Juan", surname="Perez", dni=1, age=25, birthdate="1996-01-01", birth_place="CABA", address="Av. Siempre Viva 123", phone="123456789", emergency_contact="Maria", emergency_contact_phone_number="123456789", scholarship=False, scholarship_percentage=0, professionals="Dr. Juan Perez", tutors=[tutor1], disability_certificate=False, diagnosis="ECNE", other="Otro", disability_type="Mental", family_assignment=True, assignments=[assignment1, assignment2], pension="Provincial", health_insurance="OSDE", affiliate_number="123456", guardianship=False, observations="Sin observaciones", school_institution="Escuela 123", institution_address="Av. Siempre Viva 123", grade="Primero", institution_phone="123456789", institution_observations="Sin observaciones", days=[lunes, martes], horse_id=caballo1.id, horse_conductor_id=luca.id, track_assistant_id=luca2.id, therapist_teacher_id=luca.id, work_proposal="Hipoterapia", condition="Regular", headquarters="CASJ")
     #RECIBOS
     recibo = receipt.create_receipt(ja_id=jinete1.id, quantity=1000, payment_method="Efectivo", employee_id=luca.id, remarks="Sin observaciones") 
-    
+    #DOCUMENTOS
+    documento1 = document.create_document(file="Documento1", title="Titulo del documento 1", document_type="Entrevista", rider_id=jinete1.id)
+    documento2 = document.create_document(link="Link Documento2", title="Titulo del documento 2", document_type="Evaluación", rider_id=jinete1.id)
+    documento3 = document.create_document(file="Documento3", title="Titulo del documento 3", document_type="Entrevista", rider_id=jinete1.id)
+    documento4 = document.create_document(link="Link Documento4", title="Titulo del documento 4", document_type="Planificaciones", rider_id=jinete2.id)
+    documento5 = document.create_document(file="Documento5", title="Titulo del documento 5", document_type="Evolución", rider_id=jinete2.id)
+
     print("Seed ejecutado correctamente")

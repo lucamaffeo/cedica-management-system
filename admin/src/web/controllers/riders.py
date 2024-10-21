@@ -243,7 +243,6 @@ def edit(id):
     ).filter(
         rider_tutor.c.rider_id == id
     ).all()
-    print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', tutors)
     return render_template("riders/form.html", is_update=True, title='Actualizar Jinete/Amazona', rider=rider, all_days=all_days, all_horses=all_horses, tutor_cant=tutor_cant, tutors=tutors, profesor_therapist=profesor_therapist, conductor=conductor, auxiliar_pista=auxiliar_pista)
 
 @bp.post("/<int:id>/update")
@@ -411,15 +410,47 @@ def delete(id):
 @has_permission("rider_index") #permiso para listar documentos
 def index_documents(id):
     search = request.args.get("search", "")
-    sort_by = request.args.get("sort_by", "name")
+    sort_by = request.args.get("sort_by", "title")
     direction = request.args.get("direction", "asc")
     page = int(request.args.get("page", 1))
     items_per_page = 5
 
-    #SERÍA LIST DOCUMENTS BY ID (DEL RIDER)--------------------------------------------------------
+    # Listar documentos por ID del jinete
     documents = document_repository.list_documents_by_id(id, search, sort_by, direction, page, items_per_page)
 
     if not documents.items:
         flash("No se encontraron Documentos.", "info")
-    return render_template("riders/documents.html", pagination=documents)
+    return render_template("riders/documents_index.html", pagination=documents, rider_id=id)
 
+# destroy document
+@bp.get("/documents/<int:id>/delete")
+@has_permission("rider_update")
+def delete_document(id):
+    document = document_repository.get_document(id)
+    if not document:
+        flash("Documento no encontrado.", "error")
+        return redirect(url_for("riders.index_documents", id=document.rider_id))
+
+    document_repository.delete_document(id)
+    flash("Documento eliminado con éxito.", "info")
+    return redirect(url_for("riders.index_documents", id=document.rider_id))
+
+# edit document
+@bp.get("/documents/<int:id>/edit")
+@has_permission("rider_update")
+def edit_document(id):
+    document = document_repository.get_document(id)
+    if not document:
+        flash("Documento no encontrado.", "error")
+    else:
+        flash("Documento encontrado.", "info")
+
+# show document
+@bp.get("/documents/<int:id>/show")
+@has_permission("rider_show")
+def show_document(id):
+    document = document_repository.get_document(id)
+    if not document:
+        flash("Documento no encontrado.", "error")
+    else:
+        flash("Documento encontrado.", "info")

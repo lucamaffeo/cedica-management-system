@@ -20,12 +20,6 @@ rider_day = db.Table(
         db.Column('day_id', db.Integer, db.ForeignKey('days.id'), primary_key=True)
         )
 
-rider_document = db.Table(
-        'rider_document',
-        db.Column('rider_id', db.Integer, db.ForeignKey('riders.id'), primary_key=True),
-        db.Column('document_id', db.Integer, db.ForeignKey('documents.id'), primary_key=True)
-        )
-
 class Rider(db.Model):
     __tablename__ = 'riders'
     
@@ -72,7 +66,6 @@ class Rider(db.Model):
     horse_conductor = db.relationship('Employee', foreign_keys=[horse_conductor_id], backref='riders_horse_conductor')
     horse = db.relationship('Horse', backref='riders')
     track_assistant = db.relationship('Employee', foreign_keys=[track_assistant_id], backref='riders_track_assistant')
-    documents = db.relationship('Document', secondary='rider_document', backref='riders')
 
     def __repr__(self):
         return f'<Jinete/Amazona {self.name} {self.surname}>'

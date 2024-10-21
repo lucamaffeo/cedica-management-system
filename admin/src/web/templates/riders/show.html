@@ -68,8 +68,7 @@
     <p><strong>Días:</strong> {% for day in rider.days %} {{ day.name }} {% endfor %}</p>
     <p><strong>Profesor/a o Terapeuta:</strong>
         {% if rider.therapist_teacher %}
-        {{ rider.therapist_teacher.name }} {{ rider.therapist_teacher.surname }} - {{ rider.therapist_teacher.job_position
-        }}
+        {{ rider.therapist_teacher.name }} {{ rider.therapist_teacher.surname }} - {{ rider.therapist_teacher.job_position}}
         {% else %}
         -
         {% endif %}
