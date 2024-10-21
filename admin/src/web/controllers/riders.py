@@ -1,6 +1,7 @@
 import re
 from flask import Blueprint, redirect, render_template, request, session, url_for, flash
 from src.core.repositories import riders as rider_repository
+from src.core.repositories import document as document_repository
 from src.core.models.assignment import Assignment
 from src.core.models.tutor import Tutor
 from src.core.models.day import Day
@@ -398,3 +399,21 @@ def delete(id):
     rider_repository.delete_rider(id)
     flash("Jinete/Amazona eliminado con éxito.", "info")
     return redirect(url_for("riders.index"))
+
+#list documents
+@bp.get("/<int:id>/documents")
+@has_permission("rider_index") #permiso para listar documentos
+def index_documents(id):
+    search = request.args.get("search", "")
+    sort_by = request.args.get("sort_by", "name")
+    direction = request.args.get("direction", "asc")
+    page = int(request.args.get("page", 1))
+    items_per_page = 5
+
+    #SERÍA LIST DOCUMENTS BY ID (DEL RIDER)--------------------------------------------------------
+    documents = document_repository.list_documents_by_id(id, search, sort_by, direction, page, items_per_page)
+
+    if not documents.items:
+        flash("No se encontraron Documentos.", "info")
+    return render_template("riders/documents.html", pagination=documents)
+
