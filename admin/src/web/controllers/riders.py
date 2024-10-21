@@ -40,9 +40,12 @@ def index():
 @has_permission("rider_create")
 def register():
     all_days = Day.query.all()
-    all_employees = Employee.query.all()
+    jb = ['Profesor de Equitación', 'Terapeuta']
+    profesor_therapist = Employee.query.filter(Employee.job_position.in_(jb)).all()
+    conductor = Employee.query.filter(Employee.job_position == 'Conductor').all()
+    auxiliar_pista = Employee.query.filter(Employee.job_position == 'Auxiliar de pista').all()
     all_horses = Horse.query.all()
-    return render_template("riders/form.html", is_update=False, title='Crear Jinete/Amazona', all_days=all_days, all_employees=all_employees, all_horses=all_horses, tutor_cant=0, tutors=[])
+    return render_template("riders/form.html", is_update=False, title='Crear Jinete/Amazona', all_days=all_days, all_horses=all_horses, tutor_cant=0, tutors=[], profesor_therapist=profesor_therapist, conductor=conductor, auxiliar_pista=auxiliar_pista)
 
 # Create rider
 @bp.post("/create")
@@ -87,9 +90,9 @@ def create():
 
 
     # Validar el DNI (solo números y puntos)
-    #if not re.match(r'^[\d.]+$', params['dni']):
-    #   flash("El DNI solo puede contener números y puntos.", "error")
-    #   return redirect(url_for("riders.register"))
+    if not re.match(r'^[\d.]+$', params['dni']):
+        flash("El DNI solo puede contener números y puntos.", "error")
+        return redirect(url_for("riders.register"))
 
     # Validar si el DNI ya está registrado
     dni = params['dni']
@@ -222,7 +225,10 @@ def show(id):
 @has_permission("rider_update")
 def edit(id):
     all_days = Day.query.all()
-    all_employees = Employee.query.all()
+    jb = ['Profesor de Equitación', 'Terapeuta']
+    profesor_therapist = Employee.query.filter(Employee.job_position.in_(jb)).all()
+    conductor = Employee.query.filter(Employee.job_position == 'Conductor').all()
+    auxiliar_pista = Employee.query.filter(Employee.job_position == 'Auxiliar de pista').all()
     all_horses = Horse.query.all()
 
     rider = rider_repository.get_rider(id)
@@ -238,7 +244,7 @@ def edit(id):
         rider_tutor.c.rider_id == id
     ).all()
     print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', tutors)
-    return render_template("riders/form.html", is_update=True, title='Actualizar Jinete/Amazona', rider=rider, all_days=all_days, all_employees=all_employees, all_horses=all_horses, tutor_cant=tutor_cant, tutors=tutors)
+    return render_template("riders/form.html", is_update=True, title='Actualizar Jinete/Amazona', rider=rider, all_days=all_days, all_horses=all_horses, tutor_cant=tutor_cant, tutors=tutors, profesor_therapist=profesor_therapist, conductor=conductor, auxiliar_pista=auxiliar_pista)
 
 @bp.post("/<int:id>/update")
 @has_permission("rider_update")
@@ -275,9 +281,9 @@ def update(id):
     days = request.form.getlist('days')
 
     # Validar el DNI (solo números y puntos)
-    #if not re.match(r'^[\d.]+$', params['dni']):
-    #   flash("El DNI solo puede contener números y puntos.", "error")
-    #   return redirect(url_for("riders.register"))
+    if not re.match(r'^[\d.]+$', params['dni']):
+        flash("El DNI solo puede contener números y puntos.", "error")
+        return redirect(url_for("riders.register"))
 
      # Validar si el DNI ya está registrado por otro jinete/amazona
     dni = params['dni']

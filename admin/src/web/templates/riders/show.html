@@ -66,10 +66,38 @@
     <p><strong>Condición:</strong> {{ rider.condition }}</p>
     <p><strong>Sede:</strong> {{ rider.headquarters }}</p>
     <p><strong>Días:</strong> {% for day in rider.days %} {{ day.name }} {% endfor %}</p>
-    <p><strong>Profesor/a o Terapeuta:</strong> {% if rider.therapist_teacher %} {{ rider.therapist_teacher.name }} {% else %} - {% endif %}</p>
-    <p><strong>Conductor/a del caballo:</strong> {% if rider.horse_conductor %} {{ rider.horse_conductor.name }} {% else %} - {% endif %}</p>
-    <p><strong>Caballo:</strong> {% if rider.horse %} {{ rider.horse.name }} {% else %} - {% endif %}</p>
-    <p><strong>Conductor/a del caballo:</strong> {% if rider.track_assistant %} {{ rider.track_assistant.name }} {% else %} - {% endif %}</p>
+    <p><strong>Profesor/a o Terapeuta:</strong>
+        {% if rider.therapist_teacher %}
+        {{ rider.therapist_teacher.name }} {{ rider.therapist_teacher.surname }} - {{ rider.therapist_teacher.job_position
+        }}
+        {% else %}
+        -
+        {% endif %}
+    </p>
+    
+    <p><strong>Conductor/a del caballo:</strong>
+        {% if rider.horse_conductor %}
+        {{ rider.horse_conductor.name }} {{ rider.horse_conductor.surname }} - {{ rider.horse_conductor.job_position }}
+        {% else %}
+        -
+        {% endif %}
+    </p>
+    
+    <p><strong>Caballo:</strong>
+        {% if rider.horse %}
+        {{ rider.horse.name }}
+        {% else %}
+        -
+        {% endif %}
+    </p>
+    <p><strong>Conductor/a del caballo:</strong>
+        {% if rider.track_assistant %}
+        {{ rider.track_assistant.name }} {{ rider.track_assistant.surname }} - {{ rider.track_assistant.job_position }}
+        {% else %}
+        -
+        {% endif %}
+    </p>
+
 </div>
 
 {% if logged_user and logged_user.has_permission('rider_update') %}
