@@ -41,3 +41,13 @@ def delete_document(id):
     document = Document.query.filter(Document.id == id).first()
     db.session.delete(document)
     db.session.commit()
+
+    
+def update_document(id, **kwargs):
+    document = Document.query.filter(Document.id == id).first()
+    if not document:
+        return None
+    for key, value in kwargs.items():
+        setattr(document, key, value)
+    db.session.commit()
+    return document

@@ -435,16 +435,6 @@ def delete_document(id):
     flash("Documento eliminado con éxito.", "info")
     return redirect(url_for("riders.index_documents", id=document.rider_id))
 
-# edit document
-@bp.get("/documents/<int:id>/edit")
-@has_permission("rider_update")
-def edit_document(id):
-    document = document_repository.get_document(id)
-    if not document:
-        flash("Documento no encontrado.", "error")
-    else:
-        flash("Documento encontrado.", "info")
-
 # show document
 @bp.get("/documents/<int:id>/show")
 @has_permission("rider_show")
@@ -456,4 +446,94 @@ def download_document(id):
     else:
         flash("Descarga exitosa.", "info")
         return redirect(url_for("riders.index_documents", id=document.rider_id))
+
+
+# add document
+@bp.get("<int:id>/add_document")
+@has_permission("rider_update")
+def add_document(id):
+    return render_template("riders/documents_form.html", rider_id=id, is_update=False, title='Agregar Documento')
+ 
+# Create document
+@bp.post("<int:id>/add_document")
+@has_permission("rider_update")
+def create_document(id):
+    params = request.form
+
+    required_fields = ['title', 'document_type', 'link_or_doc', 'link_or_doc_input'
+                       ]
+    for field in required_fields:
+        if field not in params:
+            flash(f"El campo {field} es requerido.", "error")
+            return redirect(url_for("riders.add_document", id=id))
+        
+    if params['link_or_doc'] == 'Link':
+        file = None
+        link = params['link_or_doc_input']
+    else:
+        file = params['link_or_doc_input']
+        link = None
+
+    # Crear el documento
+    document = document_repository.create_document(
+        title=params['title'],
+        document_type=params['document_type'],
+        file=file,
+        link=link,
+        rider_id=id
+    )
+    
+    db.session.commit()
+    flash("Documento agregado con éxito.", "success")
+    return redirect(url_for("riders.index_documents", id=document.rider_id))
+
+
+# edit document
+@bp.get("/documents/<int:id>/update")
+@has_permission("rider_update")
+def edit_document(id):
+    document = document_repository.get_document(id)
+    if not document:
+        flash("Documento no encontrado.", "error")        
+        return redirect(url_for("riders.index_documents", id=document.rider_id))
+    return render_template("riders/documents_form.html", document=document, is_update=True, title='Actualizar Documento')
+
+@bp.post("/documents/<int:id>/update")
+@has_permission("rider_update")
+def update_document(id):
+    document = document_repository.get_document(id)
+    rider_id = document.rider_id
+    if not document:
+        flash("Documento no encontrado.", "error")        
+        return redirect(url_for("riders.index_documents", id=document.rider_id))
+
+    params = request.form
+    required_fields = ['title', 'document_type', 'link_or_doc', 'link_or_doc_input'
+                       ]
+    for field in required_fields:
+        if field not in params:
+            flash(f"El campo {field} es requerido.", "error")
+            return redirect(url_for("riders.edit_document", id=id))
+        
+    if params['link_or_doc'] == 'Link':
+        file = None
+        link = params['link_or_doc_input']
+    else:
+        file = params['link_or_doc_input']
+        link = None
+
+    # Actualizar el documento
+    document = document_repository.update_document(
+        id=id,
+        title=params['title'],
+        document_type=params['document_type'],
+        file=file,
+        link=link,
+        rider_id=rider_id
+    )
+    
+    db.session.commit()
+    flash("Documento actualizado con éxito.", "success")
+    return redirect(url_for("riders.index_documents", id=document.rider_id))
+
 
