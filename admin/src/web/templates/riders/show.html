@@ -68,8 +68,7 @@
     <p><strong>Días:</strong> {% for day in rider.days %} {{ day.name }} {% endfor %}</p>
     <p><strong>Profesor/a o Terapeuta:</strong>
         {% if rider.therapist_teacher %}
-        {{ rider.therapist_teacher.name }} {{ rider.therapist_teacher.surname }} - {{ rider.therapist_teacher.job_position
-        }}
+        {{ rider.therapist_teacher.name }} {{ rider.therapist_teacher.surname }} - {{ rider.therapist_teacher.job_position}}
         {% else %}
         -
         {% endif %}
@@ -105,5 +104,8 @@
 {% endif %}
 {% if logged_user and logged_user.has_permission('rider_index') %}
 <a href="{{ url_for('riders.index') }}">Volver a la lista</a>
+{% endif %}
+{% if logged_user and logged_user.has_permission('rider_show') %}
+<a href="{{ url_for('riders.index_documents', id=rider.id) }}">Ver documentos</a>
 {% endif %}
 {% endblock %}

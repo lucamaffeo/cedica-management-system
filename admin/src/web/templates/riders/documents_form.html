@@ -1,0 +1,32 @@
+{% extends "base_form.html" %}
+
+{% block form_action %}
+{{ url_for('riders.update_document', document=document) if document else url_for('riders.create_document', rider_id=rider_id) }}
+{% endblock %}
+
+{% block form_fields %}
+        <label class="form-label" for="title">Título:</label>
+        <input type="text" id="title" name="title" required class="form-control"
+            value="{{ document.title if document else '' }}">
+
+        <label class="form-label" for="link_or_doc">Subir Enlace/Documento:</label>
+        <select id="link_or_doc" name="link_or_doc" class="form-control" required>
+            <option value="Link" {% if document and document.link %}selected{% endif %}>Link</option>
+            <option value="Documento" {% if document and document.file %}selected{% endif %}>Documento</option>
+        </select>
+
+        <input type="text" id="link_or_doc_input" name="link_or_doc_input"  class="form-control" required
+            value="{{ document.link if document and document.link else document.file if document and document.file else '' }}">
+
+            
+        <label class="form-label" for="document_type" required>Tipo de Documento:</label>
+        <select id="document_type" name="document_type" class="form-control">
+            <option value="Entrevista" {% if document and document.document_type == 'Entrevista' %}selected{% endif %}>Entrevista</option>
+            <option value="Evaluación" {% if document and document.document_type == 'Evaluación' %}selected{% endif %}>Evaluación</option>
+            <option value="Planificaciones" {% if document and document.document_type == 'Planificaciones' %}selected{% endif %}>Planificaciones</option>
+            <option value="Evolución" {% if document and document.document_type == 'Evolución' %}selected{% endif %}>Evolución</option>
+            <option value="Crónicas" {% if document and document.document_type == 'Crónicas' %}selected{% endif %}>Crónicas</option>
+            <option value="Documental" {% if document and document.document_type == 'Documental' %}selected{% endif %}>Documental</option>
+        </select>
+
+{% endblock %}

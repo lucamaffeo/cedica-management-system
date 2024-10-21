@@ -54,7 +54,7 @@
 
         <label class="form-label" for="scholarship_percentage">Porcentaje de Beca:</label>
         <input type="number" id="scholarship_percentage" name="scholarship_percentage" step="0.01" min="0" max="100" required class="form-control"
-            value="{{ (rider.scholarship_percentage | float) if rider else '' }}">
+            value="{{ (rider.scholarship_percentage | float) if rider else 0 }}">
         
         <label class="form-label" for="professionals">Profesionales que lo atienden:</label>
         <input type="text" id="professionals" name="professionals" required class="form-control"
@@ -288,16 +288,4 @@
             {% endfor %}
         </select>
         
-<!--
-        <h4>Documentación Complementaria:</h4>
-        
-        <label class="form-label" for="title_file">Título:</label>
-        <input type="file" id="title_file" name="title_file" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
-        
-        <label class="form-label" for="dni_file">Copia DNI:</label>
-        <input type="file" id="dni_file" name="dni_file" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
-        
-        <label class="form-label" for="cv_file">CV Actualizado:</label>
-        <input type="file" id="cv_file" name="cv_file" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
--->
 {% endblock %}

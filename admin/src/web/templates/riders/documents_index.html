@@ -1,0 +1,54 @@
+{% extends "base_index.html" %}
+
+{% block title %}
+Listado de Documentos
+{% endblock %}
+
+{% block page_title %}
+Documentos
+{% endblock %}
+
+{% set show_search=true %}
+
+{% block search_placeholder %}
+Buscar por Tipo, Titulo
+{% endblock %}
+
+<!-- cambiar -->
+
+<!-- Documents table -->
+    {% set sorting_criteria = [("document_type", "Tipo"), ("title", "Título"), ("upload_date", "Fecha de subida")] %}
+    {% set sortable_fields = ["title", "upload_date"] %}
+
+    {% block table_rows %}
+        {% for document in pagination.items %}
+        <tr>
+            <td>{{ document.document_type }}</td>
+            <td>{{ document.title }}</td>
+            <td>{{ document.upload_date.strftime('%d/%m/%Y') }}</td>
+            <!-- ver -->
+            <td>
+                {% if logged_user and logged_user.has_permission('rider_update') %}
+                <a href="{{ url_for('riders.edit_document', id=document.id) }}">Editar</a>
+                {% endif %}
+                {% if logged_user and logged_user.has_permission('rider_update') %}
+                <a href="{{ url_for('riders.delete_document', id=document.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
+                {% endif %}
+                {% if logged_user and logged_user.has_permission('rider_show') and document.link %}
+                <a href="{{ document.link }}" target="_blank">Ir al documento</a>
+                {% endif %}
+                {% if logged_user and logged_user.has_permission('rider_show') and document.file %}
+                <a href="{{ url_for('riders.download_document', id=document.id) }}">Descargar</a>
+                {% endif %}
+            </td>
+
+        </tr>
+        {% endfor %}
+    {% endblock %}  
+    
+    {% block add_new %}
+    {% if logged_user and logged_user.has_permission('rider_update') %}
+    <a href="{{ url_for('riders.add_document', id=rider_id) }}" class="btn btn-primary">Añadir Documento</a>
+    {% endif %}
+    {% endblock %}
+    
