@@ -5,13 +5,13 @@
 {% endblock %}
 
 {% block form_fields %}
-        <label class="form-label" for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" required class="form-control"
-            value="{{ rider.nombre if rider else '' }}">
+        <label class="form-label" for="name">Nombre:</label>
+        <input type="text" id="name" name="name" required class="form-control"
+            value="{{ rider.name if rider else '' }}">
 
-        <label class="form-label" for="apellido">Apellido:</label>
-        <input type="text" id="apellido" name="apellido" required class="form-control"
-            value="{{ rider.apellido if rider else '' }}">
+        <label class="form-label" for="surname">Apellido:</label>
+        <input type="text" id="surname" name="surname" required class="form-control"
+            value="{{ rider.surname if rider else '' }}">
 
 
         <label class="form-label" for="dni">DNI:</label>
@@ -19,57 +19,273 @@
             value="{{ rider.dni if rider else '' }}">
 
         <label class="form-label" for="edad">Edad:</label>
-        <input type="number" id="edad" name="edad" required class="form-control"
-            value="{{ rider.edad if rider else '' }}">
+        <input type="number" id="edad" name="age" required class="form-control"
+            value="{{ rider.age if rider else '' }}">
 
         <label class="form-label" for="fecha_nacimiento">Fecha de Nacimiento:</label>
-        <input class="form-control" type="date" id="fecha_nacimiento" name="fecha_nacimiento" required
-            value="{{ rider.fecha_nacimiento.strftime('%Y-%m-%d') if rider else '' }}">   
+        <input class="form-control" type="date" id="fecha_nacimiento" name="birthdate" required
+            value="{{ rider.birthdate.strftime('%Y-%m-%d') if rider else '' }}">   
 
-        <label class="form-label" for="lugar_nacimiento">Lugar de Nacimiento:</label>
-        <input type="text" id="lugar_nacimiento" name="lugar_nacimiento" required class="form-control"
-                value="{{ rider.lugar_nacimiento if rider else '' }}">
+        <label class="form-label" for="birth_place">Lugar de Nacimiento:</label>
+        <input type="text" id="birth_place" name="birth_place" required class="form-control"
+                value="{{ rider.birth_place if rider else '' }}">
 
-        <label class="form-label" for="domicilio">Domicilio:</label>
-        <input type="text" id="domicilio" name="domicilio" required class="form-control"
-            value="{{ rider.domicilio if rider else '' }}">
+        <label class="form-label" for="address">Domicilio:</label>
+        <input type="text" id="address" name="address" required class="form-control"
+            value="{{ rider.address if rider else '' }}">
 
-        <label class="form-label" for="telefono">Teléfono actual:</label>
-        <input type="tel" id="telefono" name="telefono" required class="form-control"
-                value="{{ rider.telefono if rider else '' }}">
+        <label class="form-label" for="phone">Teléfono actual:</label>
+        <input type="tel" id="phone" name="phone" required class="form-control"
+                value="{{ rider.phone if rider else '' }}">
 
-        <label class="form-label" for="contacto_emergencia">Contacto de Emergencia:</label>
-        <input type="text" id="contacto_emergencia" name="contacto_emergencia" required class="form-control"
-                value="{{ rider.contacto_emergencia if rider else '' }}">
+        <label class="form-label" for="emergency_contact">Contacto de Emergencia:</label>
+        <input type="text" id="emergency_contact" name="emergency_contact" required class="form-control"
+                value="{{ rider.emergency_contact if rider else '' }}">
 
-        <label class="form-label" for="tel_contacto">Teléfono de contacto:</label>
-        <input type="tel" id="tel_contacto" name="tel_contacto" required class="form-control"
-                value="{{ rider.tel_contacto if rider else '' }}">
+        <label class="form-label" for="emergency_contact_phone_number">Teléfono de contacto:</label>
+        <input type="tel" id="emergency_contact_phone_number" name="emergency_contact_phone_number" required class="form-control"
+                value="{{ rider.emergency_contact_phone_number if rider else '' }}">
 
-        <label class="form-label" for="becado">Becado:</label>
-        <input type="checkbox" id="becado" name="becado" class="form-check-input" 
-            {% if rider and rider.becado %}checked{% endif %}>
+        <label class="form-label" for="scholarship">Becado:</label>
+        <input type="checkbox" id="scholarship" name="scholarship" class="form-check-input" 
+            {% if rider and rider.scholarship %}checked{% endif %}>
 
         <br>
 
-        <label class="form-label" for="porcentaje_beca">Porcentaje de Beca:</label>
-        <input type="number" id="porcentaje_beca" name="porcentaje_beca" step="0.01" min="0" max="100" required class="form-control"
-            value="{{ (rider.porcentaje_beca | float) if rider else '' }}">
+        <label class="form-label" for="scholarship_percentage">Porcentaje de Beca:</label>
+        <input type="number" id="scholarship_percentage" name="scholarship_percentage" step="0.01" min="0" max="100" required class="form-control"
+            value="{{ (rider.scholarship_percentage | float) if rider else 0 }}">
         
-        <label class="form-label" for="profesionales">Profesionales que lo atienden:</label>
-        <input type="text" id="profesionales" name="profesionales" required class="form-control"
-                value="{{ rider.profesionales if rider else '' }}">
+        <label class="form-label" for="professionals">Profesionales que lo atienden:</label>
+        <input type="text" id="professionals" name="professionals" required class="form-control"
+                value="{{ rider.professionals if rider else '' }}">
+  
+        <label class="form-label" for="disability_certificate">¿Posee Certificado de Discapacidad?</label>
+        <input type="checkbox" id="disability_certificate" name="disability_certificate" class="form-check-input"
+            {% if rider and rider.disability_certificate %}checked{% endif %}>
+        <br>
+         
+        <label class="form-label" for="diagnosis">Diagnóstico:</label>
+        <select id="diagnosis" name="diagnosis" class="form-control">
+            <option value="None" {% if not rider or not rider.diagnosis %}selected{% endif %}>-</option>
+            <option value="ECNE" {% if rider and rider.diagnosis == 'ECNE' %}selected{% endif %}>ECNE</option>
+            <option value="Lesión post-traumática" {% if rider and rider.diagnosis == 'Lesión post-traumática' %}selected{% endif %}>Lesión post-traumática</option>
+            <option value="Mielomeningocele" {% if rider and rider.diagnosis == 'Mielomeningocele' %}selected{% endif %}>Mielomeningocele</option>
+            <option value="Esclerosis Múltiple" {% if rider and rider.diagnosis == 'Esclerosis Múltiple' %}selected{% endif %}>Esclerosis Múltiple</option>
+            <option value="Escoliosis Leve" {% if rider and rider.diagnosis == 'Escoliosis Leve' %}selected{% endif %}>Escoliosis Leve</option>
+            <option value="Secuelas de ACV" {% if rider and rider.diagnosis == 'Secuelas de ACV' %}selected{% endif %}>Secuelas de ACV</option>
+            <option value="Discapacidad Intelectual" {% if rider and rider.diagnosis == 'Discapacidad Intelectual' %}selected{% endif %}>Discapacidad Intelectual</option>
+            <option value="Trastorno del Espectro Autista" {% if rider and rider.diagnosis == 'Trastorno del Espectro Autista' %}selected{% endif %}>Trastorno del Espectro Autista</option>
+            <option value="Trastorno del Aprendizaje" {% if rider and rider.diagnosis == 'Trastorno del Aprendizaje' %}selected{% endif %}>Trastorno del Aprendizaje</option>
+            <option value="Trastorno por Déficit de Atención/Hiperactividad" {% if rider and rider.diagnosis == 'Trastorno por Déficit de Atención/Hiperactividad' %}selected{% endif %}>Trastorno por Déficit de Atención/Hiperactividad</option>
+            <option value="Trastorno de la Comunicación" {% if rider and rider.diagnosis == 'Trastorno de la Comunicación' %}selected{% endif %}>Trastorno de la Comunicación</option>
+            <option value="Trastorno de Ansiedad" {% if rider and rider.diagnosis == 'Trastorno de Ansiedad' %}selected{% endif %}>Trastorno de Ansiedad</option>
+            <option value="Síndrome de Down" {% if rider and rider.diagnosis == 'Síndrome de Down' %}selected{% endif %}>Síndrome de Down</option>
+            <option value="Retraso Madurativo" {% if rider and rider.diagnosis == 'Retraso Madurativo' %}selected{% endif %}>Retraso Madurativo</option>
+            <option value="Psicosis" {% if rider and rider.diagnosis == 'Psicosis' %}selected{% endif %}>Psicosis</option>
+            <option value="Trastorno de Conducta" {% if rider and rider.diagnosis == 'Trastorno de Conducta' %}selected{% endif %}>Trastorno de Conducta</option>
+            <option value="Trastornos del ánimo y afectivos" {% if rider and rider.diagnosis == 'Trastornos del ánimo y afectivos' %}selected{% endif %}>Trastornos del ánimo y afectivos</option>
+            <option value="Trastorno Alimentario" {% if rider and rider.diagnosis == 'Trastorno Alimentario' %}selected{% endif %}>Trastorno Alimentario</option>
+            <option value="OTRO" {% if rider and rider.diagnosis == 'OTRO' %}selected{% endif %}>OTRO</option>
+        </select>
+
+        <label class="form-label" for="other">Otro:</label>
+        <input type="text" id="other" name="other" class="form-control"
+            value="{{ rider.other if rider else '' }}">
+
+        <label class="form-label" for="disability_type">Tipo de Discapacidad:</label>
+        <select id="disability_type" name="disability_type" class="form-control">
+            <option value="None" {% if not rider or not rider.diagnosis %}selected{% endif %}>Ninguna</option>
+            <option value="Mental" {% if rider and rider.disability_type == 'Mental' %}selected{% endif %}>Mental</option>
+            <option value="Motora" {% if rider and rider.disability_type == 'Motora' %}selected{% endif %}>Motora</option>
+            <option value="Sensorial" {% if rider and rider.disability_type == 'Sensorial' %}selected{% endif %}>Sensorial</option>
+            <option value="Viceral" {% if rider and rider.disability_type == 'Viceral' %}selected{% endif %}>Viceral</option>
+        </select>
+
+        <label class="form-label" for="family_assignment">¿Percibe alguna asignación familiar?</label>
+        <input type="checkbox" id="family_assignment" name="family_assignment" class="form-check-input"
+            {% if rider and rider.family_assignment %}checked{% endif %}>
+    
+        <br>
+
+        <label class="form-label" for="assignments">Asignaciones:</label>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="assignment_universal" name="assignments" value="Asignación Universal por hijo"
+                {% if rider and has_assignment(rider, 'Asignación Universal por hijo') %}checked{% endif %}>
+            <label class="form-check-label" for="assignment_universal">
+                Asignación Universal por hijo
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="assignment_disability" name="assignments" value="Asignación Universal por hijo con Discapacidad"
+                {% if rider and has_assignment(rider, 'Asignación Universal por hijo con Discapacidad') %}checked{% endif %}>
+            <label class="form-check-label" for="assignment_disability">
+                Asignación Universal por hijo con Discapacidad
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="assignment_school" name="assignments" value="Asignación por ayuda escolar anual"
+                {% if rider and has_assignment(rider, 'Asignación por ayuda escolar anual') %}checked{% endif %}>
+            <label class="form-check-label" for="assignment_school">
+                Asignación por ayuda escolar anual
+            </label>
+        </div>
+
+        <br>
+        <label class="form-label" for="pension">¿Es beneficiario de alguna pensión?:</label>
+        <select id="pension" name="pension" class="form-control" value="No">
+            <option value="Provincial" {% if rider and rider.pension == 'Provincial' %}selected{% endif %}>Provincial</option>
+            <option value="Nacional" {% if rider and rider.pension == 'Nacional' %}selected{% endif %}>Nacional</option>
+            <option value="No" {% if not rider or not rider.pension %}selected{% endif %}>No</option>
+        </select>
+
+        <h4>SITUACIÓN PREVISIONAL</h4>
+        <label class="form-label" for="health_insurance">Obra Social:</label>
+        <input type="text" id="health_insurance" name="health_insurance" class="form-control" required
+            value="{{ rider.health_insurance if rider else '' }}">
+    
+        <label class="form-label" for="affiliate_number">Número de Afiliado:</label>
+        <input type="text" id="affiliate_number" name="affiliate_number" class="form-control" required
+            value="{{ rider.affiliate_number if rider else '' }}">
+    
+        <label class="form-label" for="guardianship">Curatela:</label>
+        <input type="checkbox" id="guardianship" name="guardianship" class="form-check-input"
+            {% if rider and rider.guardianship %}checked{% endif %}>
+    
+        <br>
+    
+        <label class="form-label" for="observations">Observaciones:</label>
+        <textarea id="observations" name="observations" class="form-control" required>{{ rider.observations if rider else '' }}</textarea>
+    
+        <h4>INSTITUCIÓN ESCOLAR a la que CONCURRE ACTUALMENTE</h4>
+        <label class="form-label" for="school_institution">Institución Escolar:</label>
+        <input type="text" id="school_institution" name="school_institution" class="form-control" required
+            value="{{ rider.school_institution if rider else '' }}">
+    
+        <label class="form-label" for="institution_address">Dirección de la Institución:</label>
+        <input type="text" id="institution_address" name="institution_address" class="form-control" required
+            value="{{ rider.institution_address if rider else '' }}">
+    
+        <label class="form-label" for="grade">Grado:</label>
+        <input type="text" id="grade" name="grade" class="form-control" required
+            value="{{ rider.grade if rider else '' }}">
+    
+        <label class="form-label" for="institution_phone">Teléfono de la Institución:</label>
+        <input type="tel" id="institution_phone" name="institution_phone" class="form-control" required
+            value="{{ rider.institution_phone if rider else '' }}">
+    
+        <label class="form-label" for="institution_observations">Observaciones:</label>
+        <textarea id="institution_observations" name="institution_observations" class="form-control" required>{{ rider.institution_observations if rider else '' }}</textarea>
+    
+        <h4>DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s</h4>
+        {% for i in range(2) %}
+            <h6>Familiar o tutor responsable</h6>
+            <label class="form-label" for="tutor_ni_{{ i }}">Nombre:</label>
+            <input type="text" id="tutor_name_{{ i }}" name="tutor_name_{{ i }}" class="form-control"
+                value="{{ tutors[i][0].name if tutors and i < tutor_cant else '' }}">
+    
+            <label class="form-label" for="tutor_surname_{{ i }}">Apellido:</label>
+            <input type="text" id="tutor_surname_{{ i }}" name="tutor_surname_{{ i }}" class="form-control"
+                value="{{ tutors[i][0].surname if tutors and i < tutor_cant else '' }}">
+    
+            <label class="form-label" for="tutor_dni_{{ i }}">DNI:</label>
+            <input type="text" id="tutor_dni_{{ i }}" name="tutor_dni_{{ i }}" class="form-control"
+                value="{{ tutors[i][0].dni if tutors and i < tutor_cant else '' }}">
+    
+            <label class="form-label" for="tutor_relationship_{{ i }}">Parentesco:</label>
+            <input type="text" id="tutor_relationship_{{ i }}" name="tutor_relationship_{{ i }}" class="form-control"
+                value="{{ tutors[i].relationship if tutors and i < tutor_cant else '' }}">
+    
+            <label class="form-label" for="tutor_address_{{ i }}">Domicilio:</label>
+            <input type="text" id="tutor_address_{{ i }}" name="tutor_address_{{ i }}" class="form-control"
+                value="{{ tutors[i][0].address if tutors and i < tutor_cant else '' }}">
+    
+            <label class="form-label" for="tutor_cellphone_{{ i }}">Telefono:</label>
+            <input type="tel" id="tutor_cellphone_{{ i }}" name="tutor_cellphone_{{ i }}" class="form-control"
+                value="{{ tutors[i][0].cellphone if tutors and i < tutor_cant else '' }}">
+    
+            <label class="form-label" for="tutor_email_{{ i }}">Email:</label>
+            <input type="email" id="tutor_email_{{ i }}" name="tutor_email_{{ i }}" class="form-control"
+                value="{{ tutors[i][0].email if tutors and i < tutor_cant else '' }}">
+
+            <label class="form-label" for="tutor_educational_level_{{ i }}">Nivel de escolaridad:</label>
+            <select id="tutor_educational_level_{{ i }}" name="tutor_educational_level_{{ i }}" class="form-control">
+                <option value="Primario" {% if tutors and i < tutor_cant and tutors[i][0].educational_level == 'Primario' %}selected{% endif %}>Primario</option>
+                <option value="Secundario" {% if tutors and i < tutor_cant and tutors[i][0].educational_level == 'Secundario' %}selected{% endif %}>Secundario</option>
+                <option value="Terciario" {% if tutors and i < tutor_cant and tutors[i][0].educational_level == 'Terciario' %}selected{% endif %}>Terciario</option>
+                <option value="Universitario" {% if tutors and i < tutor_cant and tutors[i][0].educational_level == 'Universitario' %}selected{% endif %}>Universitario</option>
+            </select>
+
+            <label class="form-label" for="tutor_occupation_{{ i }}">Actividad u ocupación:</label>
+            <input type="text" id="tutor_occupation_{{ i }}" name="tutor_occupation_{{ i }}" class="form-control"
+                value="{{ tutors[i][0].occupation if tutors and i < tutor_cant else '' }}">
+            <br>
+        {% endfor %}
+
+        <h4>TRABAJO EN NUESTRA INSTITUCIÓN</h4>
+        <label class="form-label" for="work_proposal">Propuesta de Trabajo:</label>
+        <select id="work_proposal" name="work_proposal" class="form-control" required>
+            <option value="Hipoterapia" {% if rider and rider.work_proposal == 'Hipoterapia' %}selected{% endif %}>Hipoterapia</option>
+            <option value="Monta Terapéutica" {% if rider and rider.work_proposal == 'Monta Terapéutica' %}selected{% endif %}>Monta Terapéutica</option>
+            <option value="Deporte Ecuestre Adaptado" {% if rider and rider.work_proposal == 'Deporte Ecuestre Adaptado' %}selected{% endif %}>Deporte Ecuestre Adaptado</option>
+            <option value="Actividades Recreativas" {% if rider and rider.work_proposal == 'Actividades Recreativas' %}selected{% endif %}>Actividades Recreativas</option>
+            <option value="Equitación" {% if rider and rider.work_proposal == 'Equitación' %}selected{% endif %}>Equitación</option>
+        </select>
+    
+        <label class="form-label" for="condition">Condición:</label>
+        <select id="condition" name="condition" class="form-control" required>
+            <option value="Regular" {% if rider and rider.condition == 'Regular' %}selected{% endif %}>Regular</option>
+            <option value="De Baja" {% if rider and rider.condition == 'De Baja' %}selected{% endif %}>De Baja</option>
+        </select>
+    
+        <label class="form-label" for="headquarters">Sede:</label>
+        <select id="headquarters" name="headquarters" class="form-control" required>
+            <option value="CASJ" {% if rider and rider.headquarters == 'CASJ' %}selected{% endif %}>CASJ</option>
+            <option value="HLP" {% if rider and rider.headquarters == 'HLP' %}selected{% endif %}>HLP</option>
+            <option value="OTRO" {% if rider and rider.headquarters == 'OTRO' %}selected{% endif %}>OTRO</option>
+        </select>
+
+    <label class="form-label" for="days">Días:</label>
+    {% for day in all_days %}
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="{{ day.id }}" name="days" value="{{ day.id }}"
+        {% if rider and day in rider.days %}checked{% endif %}>
+        <label class="form-check-label" for="{{ day.id }}">
+            {{ day.name }}
+        </label>
+    </div>
+    {% endfor %}
         
-<!--
-        <h4>Documentación Complementaria:</h4>
+        <label class="form-label" for="therapist_teacher_id">Profesor/a o Terapeuta:</label>
+        <select id="therapist_teacher_id" name="therapist_teacher_id" class="form-control">
+            <option value="None" {% if not rider or not rider.therapist_teacher %}selected{% endif %}>-</option>
+            {% for employee in profesor_therapist %}
+                <option value="{{ employee.id }}" {% if rider and rider.therapist_teacher and rider.therapist_teacher.id == employee.id %}selected{% endif %}>{{ employee.name }}</option>
+            {% endfor %}
+        </select>
+
+        <label class="form-label" for="horse_conductor_id">Conductor/a del caballo:</label>
+        <select id="horse_conductor_id" name="horse_conductor_id" class="form-control">
+            <option value="None" {% if not rider or not rider.horse_conductor %}selected{% endif %}>-</option>
+            {% for employee in conductor %}
+                <option value="{{ employee.id }}" {% if rider and rider.horse_conductor and rider.horse_conductor.id == employee.id %}selected{% endif %}>{{ employee.name }}</option>
+            {% endfor %}
+        </select>
+
+        <label class="form-label" for="horse_id">Caballo:</label>
+        <select id="horse_id" name="horse_id" class="form-control">
+            <option value="None" {% if not rider or not rider.horse %}selected{% endif %}>-</option>
+            {% for horse in all_horses %}
+                <option value="{{ horse.id }}" {% if rider and rider.horse and rider.horse.id == horse.id %}selected{% endif %}>{{ horse.name }}</option>
+            {% endfor %}
+        </select>
+
+        <label class="form-label" for="track_assistant_id">Auxiliar de Pista:</label>
+        <select id="track_assistant_id" name="track_assistant_id" class="form-control">
+            <option value="None" {% if not rider or not rider.track_assistant %}selected{% endif %}>-</option>
+            {% for employee in auxiliar_pista %}
+                <option value="{{ employee.id }}" {% if rider and rider.track_assistant and rider.track_assistant.id == employee.id %}selected{% endif %}>{{ employee.name }}</option>
+            {% endfor %}
+        </select>
         
-        <label class="form-label" for="title_file">Título:</label>
-        <input type="file" id="title_file" name="title_file" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
-        
-        <label class="form-label" for="dni_file">Copia DNI:</label>
-        <input type="file" id="dni_file" name="dni_file" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
-        
-        <label class="form-label" for="cv_file">CV Actualizado:</label>
-        <input type="file" id="cv_file" name="cv_file" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
--->
 {% endblock %}

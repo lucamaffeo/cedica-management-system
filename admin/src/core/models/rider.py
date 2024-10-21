@@ -20,12 +20,6 @@ rider_day = db.Table(
         db.Column('day_id', db.Integer, db.ForeignKey('days.id'), primary_key=True)
         )
 
-rider_document = db.Table(
-        'rider_document',
-        db.Column('rider_id', db.Integer, db.ForeignKey('riders.id'), primary_key=True),
-        db.Column('document_id', db.Integer, db.ForeignKey('documents.id'), primary_key=True)
-        )
-
 class Rider(db.Model):
     __tablename__ = 'riders'
     
@@ -44,12 +38,12 @@ class Rider(db.Model):
     scholarship_percentage = db.Column(db.Numeric(5, 2))
     professionals = db.Column(db.Text)  # Campo libre para listar los profesionales
     disability_certificate = db.Column(db.Boolean, default=False)
-    diagnosis = db.Column(db.Enum('ECNE', 'Lesión post-traumática', 'Mielomeningocele', 'Esclerosis Múltiple', 'Escoliosis Leve', 'Secuelas de ACV', 'Discapacidad Intelectual', 'Trastorno del Espectro Autista', 'Trastorno del Aprendizaje', 'Trastorno por Déficit de Atención/Hiperactividad',     'Trastorno de la Comunicación', 'Trastorno de Ansiedad', 'Síndrome de Down', 'Retraso Madurativo', 'Psicosis', 'Trastorno de Conducta', 'Trastornos del ánimo y afectivos', 'Trastorno Alimentario', 'OTRO', name='diagnosis'))
+    diagnosis = db.Column(db.Enum('None', 'ECNE', 'Lesión post-traumática', 'Mielomeningocele', 'Esclerosis Múltiple', 'Escoliosis Leve', 'Secuelas de ACV', 'Discapacidad Intelectual', 'Trastorno del Espectro Autista', 'Trastorno del Aprendizaje', 'Trastorno por Déficit de Atención/Hiperactividad',     'Trastorno de la Comunicación', 'Trastorno de Ansiedad', 'Síndrome de Down', 'Retraso Madurativo', 'Psicosis', 'Trastorno de Conducta', 'Trastornos del ánimo y afectivos', 'Trastorno Alimentario', 'OTRO', name='diagnosis'))
     other = db.Column(db.String(100), default=None)
-    disability_type = db.Column(db.Enum('Mental', 'Motora', 'Sensorial', 'Viceral', name='disability_type'))
+    disability_type = db.Column(db.Enum('None', 'Mental', 'Motora', 'Sensorial', 'Viceral', name='disability_type'))
     family_assignment = db.Column(db.Boolean, default=False)
     assignments = db.relationship('Assignment', secondary='rider_assignment', backref='riders')
-    pension = db.Column(db.Enum('Provincial', 'Nacional', name='pension'), default=None)
+    pension = db.Column(db.Enum('No', 'Provincial', 'Nacional', name='pension'))
     health_insurance = db.Column(db.String(100))
     affiliate_number = db.Column(db.String(30))
     guardianship = db.Column(db.Boolean)
@@ -72,7 +66,6 @@ class Rider(db.Model):
     horse_conductor = db.relationship('Employee', foreign_keys=[horse_conductor_id], backref='riders_horse_conductor')
     horse = db.relationship('Horse', backref='riders')
     track_assistant = db.relationship('Employee', foreign_keys=[track_assistant_id], backref='riders_track_assistant')
-    documents = db.relationship('Document', secondary='rider_document', backref='riders')
 
     def __repr__(self):
         return f'<Jinete/Amazona {self.name} {self.surname}>'

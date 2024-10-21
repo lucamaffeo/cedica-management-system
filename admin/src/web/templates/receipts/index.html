@@ -52,9 +52,9 @@ Buscar por Nombre o Apellido de quien recibe el dinero
     <td>{{ receipt.payment_method }}</td>
     <td>{{ receipt.employee_id }}</td>
     <td>
-        <a href="{{ url_for('receipts.show', id=receipt.id) }}">Mostrar</a>
+        <a href="{{ url_for('receipts.show', id=receipt.id) }}">Ver</a>
         <a href="{{ url_for('receipts.edit', id=receipt.id) }}">Editar</a>
-        <a href="{{ url_for('receipts.delete', id=receipt.id) }}" onclick="return confirm('Estas seguro?')">Eliminar</a>
+        <a href="{{ url_for('receipts.delete', id=receipt.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
     </td>
 </tr>
 {% endfor %}

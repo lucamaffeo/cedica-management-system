@@ -12,3 +12,6 @@ def create_assignment(**kwargs):
 
     return assignment
 
+def get_assignment_ids_by_names(names):
+    assignments = Assignment.query.filter(Assignment.name.in_(names)).all()
+    return [assignment.id for assignment in assignments]

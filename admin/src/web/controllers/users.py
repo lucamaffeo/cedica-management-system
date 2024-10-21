@@ -19,6 +19,12 @@ def create():
         flash("Alias, correo electrónico y contraseña son obligatorios.", "error")
         return redirect(url_for("users.create"))
     
+    # Validar correo electrónico único
+    if auth.find_user_by_email(params["email"]):
+        flash("El correo electrónico ya está en uso.", "error")
+        return redirect(url_for("users.create"))
+
+    
     auth.create_user(
         alias=params["alias"],
         email=params["email"],
@@ -55,6 +61,8 @@ def update(id):
 
     # Extract the form data
     params = request.form
+   
+
 
     # If password is being updated, ensure the new passwords match
     if params.get("password") and params.get("new_password"):
@@ -65,7 +73,6 @@ def update(id):
     # Prepare the parameters for the update
     update_data = {
         "alias": params.get("alias"),
-        "email": params.get("email"),
         "password": params.get("password") if params.get("password") and params.get("new_password") else None,
         "active": 'active' in params if not is_update_own else None,
         "role_id": params.get("role_id") if not is_update_own else None
