@@ -448,9 +448,12 @@ def edit_document(id):
 # show document
 @bp.get("/documents/<int:id>/show")
 @has_permission("rider_show")
-def show_document(id):
-    document = document_repository.get_document(id)
+def download_document(id):
+    document = document_repository.get_document(id) 
     if not document:
-        flash("Documento no encontrado.", "error")
+        flash("Documento no encontrado.", "error")    
+        return redirect(url_for("riders.index_documents", id=document.rider_id))
     else:
-        flash("Documento encontrado.", "info")
+        flash("Descarga exitosa.", "info")
+        return redirect(url_for("riders.index_documents", id=document.rider_id))
+

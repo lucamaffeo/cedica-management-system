@@ -99,9 +99,9 @@ def run():
     recibo = receipt.create_receipt(ja_id=jinete1.id, quantity=1000, payment_method="Efectivo", employee_id=luca.id, remarks="Sin observaciones") 
     #DOCUMENTOS
     documento1 = document.create_document(file="Documento1", title="Titulo del documento 1", document_type="Entrevista", rider_id=jinete1.id)
-    documento2 = document.create_document(link="Link Documento2", title="Titulo del documento 2", document_type="Evaluación", rider_id=jinete1.id)
+    documento2 = document.create_document(link="http://google.com/", title="Titulo del documento 2", document_type="Evaluación", rider_id=jinete1.id)
     documento3 = document.create_document(file="Documento3", title="Titulo del documento 3", document_type="Entrevista", rider_id=jinete1.id)
-    documento4 = document.create_document(link="Link Documento4", title="Titulo del documento 4", document_type="Planificaciones", rider_id=jinete2.id)
+    documento4 = document.create_document(link="http://example.com/document.pdf", title="Titulo del documento 4", document_type="Planificaciones", rider_id=jinete2.id)
     documento5 = document.create_document(file="Documento5", title="Titulo del documento 5", document_type="Evolución", rider_id=jinete2.id)
 
     print("Seed ejecutado correctamente")
