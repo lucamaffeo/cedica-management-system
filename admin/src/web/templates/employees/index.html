@@ -64,6 +64,8 @@ Buscar por Nombre, Apellido, DNI o Email
                 <a href="{{ url_for('employees.show', id=employee.id) }}">Ver</a>
                 <a href="{{ url_for('employees.edit', id=employee.id) }}">Editar</a>
                 <a href="{{ url_for('employees.delete', id=employee.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
+                <a href="{{ url_for('documents.index', entity_type=" employees", entity_id=employee.id) }}">Ver documentos</a>
+
             </td>
         </tr>
         {% endfor %}

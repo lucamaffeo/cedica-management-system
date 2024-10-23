@@ -5,28 +5,69 @@
 {% endblock %}
 
 {% block form_fields %}
-        <label class="form-label" for="title">Título:</label>
-        <input type="text" id="title" name="title" required class="form-control"
-            value="{{ document.title if document else '' }}">
-
-        <div id="link_input">
-            <label class="form-label" for="link">Enlace:</label>
-            <input type="url" id="link" name="link" class="form-control">
+        <div class="mb-3">
+            <label for="title" class="form-label">Título</label>
+            <input type="text" id="title" name="title" required class="form-control"
+                value="{{ document.title if document else '' }}">
         </div>
+    
 
-        <div id="file_input">
-            <label class="form-label" for="file">Archivo:</label>
-            <input type="file" id="file" name="file" class="form-control">
+        <div class="mb-3">
+            <label for="document_type" class="form-label">Seleccione Documento/Enlace</label>
+            <select class="form-select" id="doc_enl" name="doc_enl" required onchange="toggleInputFields()">
+                <option value="file" selected>Documento</option>
+                <option value="link">Enlace</option>
+            </select>
+            <div class="mb-3" id="fileInput">
+                <label for="file" class="form-label">Archivo</label>
+                <input type="file" id="file" name="file" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+            </div>
+            
+            <div class="mb-3" id="linkInput">
+                <label for="link" class="form-label">Enlace</label>
+                <input type="url" id="link" name="link" class="form-control" placeholder="Ej: https://example.com/document.pdf">
+            </div>
+
+
+            <label for="document_type" class="form-label">Tipo de Documento</label>
+            <select class="form-select" id="document_type" name="document_type">
+                <option value="Entrevista" {% if document and document.document_type=='Entrevista' %}selected{% endif %}>
+                    Entrevista</option>
+                <option value="Evaluación" {% if document and document.document_type=='Evaluación' %}selected{% endif %}>
+                    Evaluación</option>
+                <option value="Planificaciones" {% if document and document.document_type=='Planificaciones' %}selected{% endif
+                    %}>Planificaciones</option>
+                <option value="Evolución" {% if document and document.document_type=='Evolución' %}selected{% endif %}>Evolución
+                </option>
+                <option value="Crónicas" {% if document and document.document_type=='Crónicas' %}selected{% endif %}>Crónicas
+                </option>
+                <option value="Documental" {% if document and document.document_type=='Documental' %}selected{% endif %}>
+                    Documental</option>
+            </select>
         </div>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+        <!-- Script de Bootstrap -->
+        <script>
+            // Ocultar/mostrar campos según el tipo de documento
+            function toggleInputFields() {
+                const doc_enl = document.getElementById('doc_enl').value;
+                const linkInput = document.getElementById('linkInput');
+                const fileInput = document.getElementById('fileInput');
 
-        <label class="form-label" for="document_type" required>Tipo de Documento:</label>
-        <select id="document_type" name="document_type" class="form-control">
-            <option value="Entrevista" {% if document and document.document_type == 'Entrevista' %}selected{% endif %}>Entrevista</option>
-            <option value="Evaluación" {% if document and document.document_type == 'Evaluación' %}selected{% endif %}>Evaluación</option>
-            <option value="Planificaciones" {% if document and document.document_type == 'Planificaciones' %}selected{% endif %}>Planificaciones</option>
-            <option value="Evolución" {% if document and document.document_type == 'Evolución' %}selected{% endif %}>Evolución</option>
-            <option value="Crónicas" {% if document and document.document_type == 'Crónicas' %}selected{% endif %}>Crónicas</option>
-            <option value="Documental" {% if document and document.document_type == 'Documental' %}selected{% endif %}>Documental</option>
-        </select>
+                if (doc_enl === 'link') {
+                    linkInput.style.display = 'block'; // Mostrar campo de enlace
+                    fileInput.style.display = 'none';  // Ocultar campo de archivo
+                } else {
+                    linkInput.style.display = 'none';  // Ocultar campo de enlace
+                    fileInput.style.display = 'block';  // Mostrar campo de archivo
+                }
+            }
+
+            // Inicializar visibilidad de campos al cargar la página
+            document.addEventListener('DOMContentLoaded', function () {
+                toggleInputFields();
+            });
+        </script>
 
 {% endblock %}

@@ -1,4 +1,5 @@
 from flask import Blueprint, redirect, render_template, request, url_for, flash
+from src.web.helpers.documentation import clean_entity_type
 from src.core.repositories import document as document_repository
 from src.web.helpers.auth import has_permission
 from src.core.database import db
@@ -7,6 +8,7 @@ bp = Blueprint("documents", __name__, url_prefix="/documents")
 
 #list documents
 @bp.get("/<string:entity_type>/<int:entity_id>/")
+@clean_entity_type
 def index(entity_type, entity_id):
     search = request.args.get("search", "")
     sort_by = request.args.get("sort_by", "title")
@@ -23,6 +25,7 @@ def index(entity_type, entity_id):
 
 # destroy document
 @bp.get("/<string:entity_type>/<int:entity_id>/<int:id>/delete")
+@clean_entity_type
 def delete(entity_type, entity_id, id):
     document = document_repository.get_document(id)
     if not document:
@@ -47,11 +50,13 @@ def download(entity_type, entity_id, id):
 
 # add document
 @bp.get("/<string:entity_type>/<int:entity_id>/create")
+@clean_entity_type
 def add(entity_type, entity_id):
     return render_template("documents/form.html", entity_type=entity_type, entity_id=entity_id, title='Agregar Documento')
 
 # Create document
 @bp.post("/<string:entity_type>/<int:entity_id>/create")
+@clean_entity_type
 def create(entity_type, entity_id):
     print(f"type: {entity_type}, id: {entity_id}")  # Add this line to check what values are passed
     params = request.form

@@ -1,3 +1,4 @@
+import hashlib
 import logging
 from typing import BinaryIO, Optional
 from minio import Minio
@@ -102,8 +103,16 @@ def create_document(file, entity_type, entity_id, **kwargs):
         entity_id: the ID of the entity (e.g. employee_id, rider_id, horse_id)
     """
 
-    # Create a unique filename using uuid
-    file_name = f"{uuid.uuid4()}-{file.filename}"
+    
+
+    # Generar un UUID
+    unique_id = str(uuid.uuid4())
+
+    # Crear un hash SHA-1 y tomar solo los primeros 8 caracteres
+    short_uid = hashlib.sha1(unique_id.encode()).hexdigest()[:8]
+
+    # Generar el nombre del archivo con el hash corto y el nombre original
+    file_name = f"{short_uid}-{file.filename}"
 
     # Construct the Minio path as {module}/{id}/{filename}
     file_path = f"{entity_type}/{entity_id}/{file_name}"
@@ -141,3 +150,7 @@ def update_document(id, **kwargs):
         setattr(document, key, value)
     db.session.commit()
     return document
+
+def is_valid_entity_type(entity_type):
+    valid_entity_types = ['employees', 'horses', 'riders']
+    return entity_type in valid_entity_types

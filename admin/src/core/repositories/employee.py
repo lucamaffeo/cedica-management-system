@@ -19,7 +19,7 @@ def list_employees(search='', job_position=None, sort_by='name', direction='asc'
             (Employee.email.ilike(f'%{search}%'))
         )
     if job_position:
-        query = query.filter(Employee.profession == job_position)
+        query = query.filter(Employee.job_position == job_position)
     else:
         query = query  # No aplicar filtro, mostrar todos
     

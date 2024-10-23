@@ -136,11 +136,11 @@ def update(id):
     # Validar telefono (solo números + o espacios)
     if not re.match(r'^[\d +]+$', params['telephone']):
         flash("El teléfono solo puede contener números + o espacios.", "error")
-        return redirect(url_for("employees.register"))
+        return redirect(url_for("employees.edit",id=id))
     # Validar el DNI (solo números y puntos)
     if not re.match(r'^[\d.]+$', params['dni']):
         flash("El DNI solo puede contener números y puntos.", "error")
-        return redirect(url_for("employees.register"))
+        return redirect(url_for("employees.edit", id=id))
 
     # Validar si el DNI fue modificado y si el nuevo DNI ya está registrado
     new_dni = params.get("dni")
