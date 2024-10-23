@@ -15,16 +15,16 @@ class ProductionConfig(Config):
     MINIO_ACCESS_KEY = environ.get("MINIO_ACCESS_KEY")
     MINIO_SECRET_KEY = environ.get("MINIO_SECRET_KEY")
     MINIO_SECURE = environ.get("MINIO_SECURE", True)
-        
+
     """ Production specific configuration. """
     SQLALCHEMY_DATABASE_URI = environ.get("DATABASE_URL")
- 
+
     SQLALCHEMY_ENGINE_OPTIONS = {
         "pool_size": 10,
         "pool_recycle": 60,
         "pool_pre_ping": True,
     }
-    
+
     DB_NAME = environ.get("DATABASE_URL")
     DB_USER = environ.get("DATABASE_USERNAME")
     DB_PASS = environ.get("DATABASE_PASSWORD")
@@ -34,8 +34,8 @@ class ProductionConfig(Config):
 
 class DevelopmentConfig(Config):
     """ Development environment specific configuration """
-    MINIO_SERVER = "localhost:9000"
-    MINIO_ACCESS_KEY = "1MPYEdD45EDw1smfmRLh"
+    MINIO_SERVER = "minio.proyecto2024.linti.unlp.edu.ar"
+    MINIO_ACCESS_KEY = "1MPYEdD45EDw2smfmRLh"
     MINIO_SECRET_KEY = "ogMilPuE9OunHTvaQxl3qx7uoS5TANPb22xnBBuN"
     MINIO_SECURE = True
     """ Development environment configuration """

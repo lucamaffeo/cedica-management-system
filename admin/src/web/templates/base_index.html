@@ -34,16 +34,16 @@
       {% if field in sortable_fields %}
               {% set current_sort = request.args.get('sort_by') %}
               {% set current_direction = request.args.get('direction', 'asc') %}
-              
+
               {% if current_sort == field %}
                   {% set next_direction = 'desc' if current_direction == 'asc' else 'asc' %}
               {% else %}
                   {% set next_direction = 'asc' %}
               {% endif %}
-  
+
               {% set args = request.args.to_dict() %}
-              {% set args = args | merge({'sort_by': field, 'direction': next_direction, 'id': rider_id}) %} 
-  
+              {% set args = args | merge({'sort_by': field, 'direction': next_direction, 'entity_type': entity_type, 'entity_id': entity_id}) %} 
+
               <a href="{{ url_for(request.endpoint, **args) }}">
                   {{ display_name }}
                   {% if current_sort == field %}

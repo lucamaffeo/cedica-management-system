@@ -2,6 +2,7 @@ from flask import Blueprint, redirect, render_template, request, url_for, flash
 from src.core.models import horse
 from src.core.models.employee import Employee
 from src.core.repositories import horse as horse_repository
+from src.core.repositories import document as document_repository
 from src.web.helpers.auth import has_permission
 from src.core.repositories.employee import get_employees_by_job_positions
 from src.core.database import db

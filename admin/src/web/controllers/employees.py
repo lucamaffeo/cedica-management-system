@@ -1,6 +1,7 @@
 import re
 from flask import Blueprint, redirect, render_template, request, url_for, flash
 from src.core.repositories import employee as employee_repository
+from src.core.repositories import document as document_repository
 from src.web.helpers.auth import has_permission
 from werkzeug.utils import secure_filename
 from os import fstat

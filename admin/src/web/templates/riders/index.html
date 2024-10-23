@@ -36,7 +36,7 @@ Buscar por Nombre, Apellido, DNI o Profesionales que lo atienden
                 <a href="{{ url_for('riders.delete', id=rider.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
                 {% endif %}
                 {% if logged_user and logged_user.has_permission('rider_show') %}
-                <a href="{{ url_for('riders.index_documents', id=rider.id) }}">Ver documentos</a>
+                <a href="{{ url_for('documents.index', entity_type="riders", entity_id=rider.id) }}">Ver documentos</a>
                 {% endif %}
             </td>
         </tr>
