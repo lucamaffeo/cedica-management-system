@@ -187,30 +187,7 @@ def update(id):
         active= 'active' in params
 
     )
-    # Manejar la carga de archivos
-    files_to_upload = {
-        'dni_copy': 'Copia DNI',
-        'cv': 'CV Actualizado',
-        'title': 'Título'
-    }
-
-    client = current_app.storage.client
-
-    for field, doc_type in files_to_upload.items():
-        if field in request.files:
-            file = request.files[field]
-            if file and file.filename:
-                # Asegurarse de que el nombre del archivo sea seguro
-                filename = secure_filename(file.filename)
-                size = fstat(file.fileno()).st_size
-                client.put_object(
-                    "grupo10",  # Nombre del bucket
-                    filename,  # Nombre del archivo en Minio
-                    file,  # El archivo que se va a subir
-                    size,  # Tamaño del archivo
-                    content_type=file.content_type  # Tipo de contenido
-                )
-                flash(f"{doc_type} subido exitosamente.", "success")
+    
 
     flash("Empleado actualizado con éxito.", "success")
     return redirect(url_for("employees.index"))

@@ -94,7 +94,7 @@ def list_documents_by_id(type, id, search='', sort_by='title', direction='asc', 
 
     return pagination_documents
 
-def create_document(file, entity_type, entity_id, **kwargs):
+def create_document(file, entity_type, entity_id,document_type, **kwargs):
     """
     Creates a document and stores it in Minio with a path structure: {module}/{entity_id}/{filename}
     Args:
@@ -115,8 +115,7 @@ def create_document(file, entity_type, entity_id, **kwargs):
     file_name = f"{short_uid}-{file.filename}"
 
     # Construct the Minio path as {module}/{id}/{filename}
-    file_path = f"{entity_type}/{entity_id}/{file_name}"
-
+    file_path = f"{entity_type}/{entity_id}/{document_type}/{file_name}"
     # upload file
     _upload_file(file, file_path)
 
@@ -124,6 +123,7 @@ def create_document(file, entity_type, entity_id, **kwargs):
     kwargs['file'] = file_path
     kwargs['entity_type'] = entity_type
     kwargs['entity_id'] = entity_id
+    kwargs['document_type'] = document_type
 
     # Create the document in the database
     document = Document(**kwargs)
@@ -151,6 +151,3 @@ def update_document(id, **kwargs):
     db.session.commit()
     return document
 
-def is_valid_entity_type(entity_type):
-    valid_entity_types = ['employees', 'horses', 'riders']
-    return entity_type in valid_entity_types

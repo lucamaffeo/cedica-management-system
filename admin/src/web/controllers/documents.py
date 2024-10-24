@@ -52,7 +52,7 @@ def download(entity_type, entity_id, id):
 @bp.get("/<string:entity_type>/<int:entity_id>/create")
 @clean_entity_type
 def add(entity_type, entity_id):
-    return render_template("documents/form.html", entity_type=entity_type, entity_id=entity_id, title='Agregar Documento')
+    return render_template("documents/form.html", entity_type=entity_type, entity_id=entity_id, title=f'Agregar Documento a {entity_type.capitalize()}')
 
 # Create document
 @bp.post("/<string:entity_type>/<int:entity_id>/create")

@@ -16,7 +16,9 @@
             <label for="document_type" class="form-label">Seleccione Documento/Enlace</label>
             <select class="form-select" id="doc_enl" name="doc_enl" required onchange="toggleInputFields()">
                 <option value="file" selected>Documento</option>
+                {% if entity_type != 'employees' %}
                 <option value="link">Enlace</option>
+                {% endif %}
             </select>
             <div class="mb-3" id="fileInput">
                 <label for="file" class="form-label">Archivo</label>
@@ -30,21 +32,49 @@
 
 
             <label for="document_type" class="form-label">Tipo de Documento</label>
+            {% if entity_type == 'riders' %}
             <select class="form-select" id="document_type" name="document_type">
-                <option value="Entrevista" {% if document and document.document_type=='Entrevista' %}selected{% endif %}>
-                    Entrevista</option>
-                <option value="Evaluación" {% if document and document.document_type=='Evaluación' %}selected{% endif %}>
-                    Evaluación</option>
-                <option value="Planificaciones" {% if document and document.document_type=='Planificaciones' %}selected{% endif
-                    %}>Planificaciones</option>
+                <option value="Entrevista" {% if document and document.document_type=='Entrevista' %}selected{% endif %}>Entrevista
+                </option>
+                <option value="Evaluación" {% if document and document.document_type=='Evaluación' %}selected{% endif %}>Evaluación
+                </option>
+                <option value="Planificaciones" {% if document and document.document_type=='Planificaciones' %}selected{% endif %}>
+                    Planificaciones</option>
                 <option value="Evolución" {% if document and document.document_type=='Evolución' %}selected{% endif %}>Evolución
                 </option>
                 <option value="Crónicas" {% if document and document.document_type=='Crónicas' %}selected{% endif %}>Crónicas
                 </option>
-                <option value="Documental" {% if document and document.document_type=='Documental' %}selected{% endif %}>
-                    Documental</option>
+                <option value="Documental" {% if document and document.document_type=='Documental' %}selected{% endif %}>Documental
+                </option>
             </select>
-        </div>
+            {% endif %}
+
+            {% if entity_type == 'horses' %}
+            <select class="form-select" id="document_type" name="document_type">
+                <option value="Ficha general del caballo" {% if document and document.document_type=='Ficha general del caballo'
+                    %}selected{% endif %}>Ficha general del caballo</option>
+                <option value="Planificación de Entrenamiento" {% if document and
+                    document.document_type=='Planificación de Entrenamiento' %}selected{% endif %}>Planificación de Entrenamiento
+                </option>
+                <option value="Informe de Evolución" {% if document and document.document_type=='Informe de Evolución' %}selected{%
+                    endif %}>Informe de Evolución</option>
+                <option value="Carga de Imágenes" {% if document and document.document_type=='Carga de Imágenes' %}selected{% endif
+                    %}>Carga de Imágenes</option>
+                <option value="Registro veterinario" {% if document and document.document_type=='Registro veterinario' %}selected{%
+                    endif %}>Registro veterinario</option>
+            </select>
+            {% endif %}
+            {% if entity_type == 'employees' %}
+            <select class="form-select" id="document_type" name="document_type">
+                <option value="Titulo" {% if document and document.document_type=='Titulo' %}selected{% endif %}>Titulo</option>
+                <option value="DNI" {% if document and document.document_type=='DNI' %}selected{% endif %}>DNI
+                </option>
+                <option value="CV" {% if document and document.document_type=='CV' %}selected{% endif %}>CV
+                    </option>
+                <option value="Otro" {% if document and document.document_type=='Otro' %}selected{% endif %}>Otro
+                </option>
+            </select>
+            {% endif %}
         
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
         <!-- Script de Bootstrap -->

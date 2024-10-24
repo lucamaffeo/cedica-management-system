@@ -5,7 +5,11 @@ Listado de Documentos
 {% endblock %}
 
 {% block page_title %}
-Documentos
+<span style="font-size: 0.8em;">Documentos de {{ entity_type|capitalize }} {{entity_id }}</span>
+{% endblock %}
+
+
+{% block page_subtitle %}
 {% endblock %}
 
 {% set show_search=true %}

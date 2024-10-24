@@ -46,7 +46,7 @@ Buscar por Nombre
             <a href="{{ url_for('horses.show', id=horse.id) }}">Ver</a>
             <a href="{{ url_for('horses.edit', id=horse.id) }}">Editar</a>
             <a href="{{ url_for('horses.delete', id=horse.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
-            <a href="{{ url_for('documents.index', entity_type=" horses", entity_id=horse.id) }}">Ver documentos</a>
+            <a href="{{ url_for('documents.index', entity_type="horses", entity_id=horse.id) }}">Ver documentos</a>
 
         </td>
         {% else %}
