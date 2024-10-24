@@ -13,7 +13,7 @@ class Document(db.Model):
     document_type = db.Column(db.Enum('Entrevista', 'Evaluación', 'Planificaciones', 'Evolución', 'Crónicas', 'Documental', 
                                   'Ficha general del caballo', 'Planificación de Entrenamiento', 
                                   'Informe de Evolución', 'Carga de Imágenes', 'Registro veterinario', 
-                                  'Titulo', 'DNI', 'CV', 'Otro',
+                                   'Otro',
                                   name='document_type'))
     
     upload_date = db.Column(db.DateTime, default=datetime.now)

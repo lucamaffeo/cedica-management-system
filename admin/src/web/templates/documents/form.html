@@ -66,11 +66,6 @@
             {% endif %}
             {% if entity_type == 'employees' %}
             <select class="form-select" id="document_type" name="document_type">
-                <option value="Titulo" {% if document and document.document_type=='Titulo' %}selected{% endif %}>Titulo</option>
-                <option value="DNI" {% if document and document.document_type=='DNI' %}selected{% endif %}>DNI
-                </option>
-                <option value="CV" {% if document and document.document_type=='CV' %}selected{% endif %}>CV
-                    </option>
                 <option value="Otro" {% if document and document.document_type=='Otro' %}selected{% endif %}>Otro
                 </option>
             </select>
