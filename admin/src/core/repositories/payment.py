@@ -3,7 +3,7 @@ from src.core.database import db
 from src.core.models.payment import Payment
 from src.core.repositories import employee
 from datetime import datetime
-    
+
 
 def list_payments(start_date=None, end_date=None, payment_type=None, sort_by='alias', direction='asc', page=1, items_per_page=5):
     # Init db query

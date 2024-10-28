@@ -37,7 +37,7 @@ Buscar por email
 {% set sortable_fields = ["email", "inserted_at"] %}
 
 {% block table_rows %}
-    {% for user in pagination %}
+    {% for user in pagination.items %}
     <tr>
         <td>{{ user.alias }}</td>
         <td>{{ user.email }}</td>

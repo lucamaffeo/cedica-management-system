@@ -75,12 +75,19 @@ def run():
     tres = user.create_user(email="rol3@mail.com", password="123456", role_id=3, alias="1")
     cuatro = user.create_user(email="rol4@mail.com", password="123456", role_id=4, alias="2")
     cinco = user.create_user(email="rol5@mail.com", password="123456", role_id=5, alias="3")
-    
+
+    _ = user.create_user(email="test@mail.com", password="123456", role_id=5, alias="3")
+    _ = user.create_user(email="test2@mail.com", password="123456", role_id=5, alias="3")
+    _ = user.create_user(email="tes@mail.com", password="123456", role_id=5, alias="3")
+    _ = user.create_user(email="te@mail.com", password="123456", role_id=5, alias="3")
+    _ = user.create_user(email="t@mail.com", password="123456", role_id=5, alias="3")
+    _ = user.create_user(email="testaa@mail.com", password="123456", role_id=5, alias="3")
+    _ = user.create_user(email="testa@mail.com", password="123456", role_id=5, alias="3")
 
     #EMPLEADOS
     luca = employee.create_employee(name="Luca", surname="Perez", dni="12345679", email="luca1@gmail.com", start_date="2021-01-01",  active=True, job_position = "Conductor")
-    luca2 = employee.create_employee(name="adf", surname="dah", dni="150", email="laa0@gmail.com", start_date="2021-01-01",  active=True, job_position = "Entrenador de Caballos")  
-    
+    luca2 = employee.create_employee(name="adf", surname="dah", dni="150", email="laa0@gmail.com", start_date="2021-01-01",  active=True, job_position = "Entrenador de Caballos")
+
 
     #PAGOS
     pago1 = payment.create_payment(amount=1000, beneficiary_id=1, type="Honorarios", description="Pago de honorarios")

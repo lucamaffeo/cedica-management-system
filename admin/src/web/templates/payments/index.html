@@ -37,7 +37,7 @@
 {% set sortable_fields = ["date"] %}
 
 {% block table_rows %}
-    {% for payment in pagination %}
+    {% for payment in pagination.items %}
     <tr>
 		<td>{{ payment.formatted_date }}</td>
         <td>{{ payment.beneficiary_id if payment.beneficiary_id != None else "N/A"}}</td>
