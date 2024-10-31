@@ -22,7 +22,7 @@ class PasswordStrength(ValidationRule):
         if not any(c.isdigit() for c in value):
             errors.append("La contraseña debe contener al menos un número")
 
-        return " and ".join(errors) if errors else None
+        return ", ".join(errors) if errors else None
 
 class UniqueEmail(ValidationRule):
     def __init__(self, user_model, exclude_id: int = None):
@@ -85,12 +85,3 @@ class UserValidator(Validator):
 
         self.add_rule('alias', Required())
         self.add_rule('alias', MinLength(2))
-
-    def validate_for_update(self, data: dict) -> list:
-        """
-        Special validation for updates that might not include all fields.
-        Removes password validation if not provided.
-        """
-        if 'password' not in data or not data['password']:
-            self.rules.pop('password', None)
-        return self.validate(data)

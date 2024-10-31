@@ -128,9 +128,7 @@ def show(id):
 # Show profile
 @bp.get("/profile")
 def profile():
-    id = session["user"]["id"]
-    print(id)
-    user = auth.get_user(id)
+    user = auth.get_user(session["user"]["id"])
     if not user:
         flash("Usuario no encontrado.", "error")
         return redirect(url_for("home"))
@@ -166,5 +164,5 @@ def index():
 
     if not users.items:
         flash("No se encontraron usuarios.", "info")
-    return render_template("users/index.html", pagination=users)
+    return render_template("users/index.html", pagination=users, roles=role.list_roles())
 

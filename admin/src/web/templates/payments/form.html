@@ -9,7 +9,7 @@
 <!--- TODO change fields -->
 		        <label for="amount" class="form-label">Monto</label>
 		        <input type="text" name="amount" class="form-control" value="{{ payment.amount if is_update else '' }}" placeholder="Monto" required>
-		        <label for="email" class="form-label">Descripción</label>
+		        <label for="description" class="form-label">Descripción</label>
 		        <textarea name="description" class="form-control" rows="3" placeholder="Descripción" required>{{ payment.description if is_update else '' }}</textarea>
 		        <label for="date" class="form-label">Fecha</label>
 		        <input type="date" name="date" class="form-control" value="{{ payment.date if is_update else '' }}" placeholder="Fecha" required>
