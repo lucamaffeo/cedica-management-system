@@ -20,9 +20,8 @@ def index():
     sort_by = request.args.get("sort_by", "name")
     direction = request.args.get("direction", "asc")
     page = int(request.args.get("page", 1))
-    items_per_page = 5
 
-    horses = horse_repository.list_horses(search, assigned_activities_ja, sort_by, direction, page, items_per_page)    
+    horses = horse_repository.list_horses(search, assigned_activities_ja, sort_by, direction, page)
 
     if not horses.items:
         flash("No se encontraron caballos.", "info")

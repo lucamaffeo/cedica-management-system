@@ -1,3 +1,4 @@
+from flask import current_app
 from src.core.database import db
 from src.core.models.rider import Rider
 
@@ -8,7 +9,7 @@ def create_rider(**kwargs):
 
     return rider
 
-def list_riders(search='', sort_by='name', direction='asc', page=1, items_per_page=5):
+def list_riders(search='', sort_by='name', direction='asc', page=1):
     query = Rider.query
 
     if search:
@@ -20,14 +21,15 @@ def list_riders(search='', sort_by='name', direction='asc', page=1, items_per_pa
         )
 
     query = query  # No aplicar filtro, mostrar todos
-    
+
+    items_per_page = current_app.config.get('ITEMS_PER_PAGE')
+
     # Aplicar ordenación
     if sort_by in ['name', 'surname']:
         if direction == 'asc':
             query = query.order_by(getattr(Rider, sort_by).asc())
         else:
             query = query.order_by(getattr(Rider, sort_by).desc())
-    
 
     pagination_riders = query.paginate(page=page, per_page=items_per_page, error_out=False)
 

@@ -9,6 +9,7 @@ class Config(object):
     SESSION_COOKIE_SECURE = True
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = "Lax"
+    ITEMS_PER_PAGE = 5
 
 class ProductionConfig(Config):
     MINIO_SERVER = environ.get("MINIO_SERVER")

@@ -1,3 +1,4 @@
+from flask import current_app
 from src.core.database import db
 from src.core.models.employee import Employee
 
@@ -8,7 +9,7 @@ def create_employee(**kwargs):
 
     return employee
 
-def list_employees(search='', job_position=None, sort_by='name', direction='asc', page=1, items_per_page=5):
+def list_employees(search='', job_position=None, sort_by='name', direction='asc', page=1):
     query = Employee.query
 
     if search:
@@ -22,6 +23,8 @@ def list_employees(search='', job_position=None, sort_by='name', direction='asc'
         query = query.filter(Employee.job_position == job_position)
     else:
         query = query  # No aplicar filtro, mostrar todos
+
+    items_per_page = current_app.config.get('ITEMS_PER_PAGE')
 
     # Aplicar ordenación
     if sort_by in ['name', 'surname', 'start_date']:

@@ -70,7 +70,7 @@ def _upload_file(file: BinaryIO, file_path: str) -> str:
     except Exception as e:
         raise StorageError(f"Failed to upload file: {str(e)}")
 
-def list_documents_by_id(type, id, search='', sort_by='title', direction='asc', page=1, items_per_page=5):
+def list_documents_by_id(type, id, search='', sort_by='title', direction='asc', page=1):
     query =Document.query.filter_by(entity_type=type, entity_id=id)
 
     if search:
@@ -81,6 +81,8 @@ def list_documents_by_id(type, id, search='', sort_by='title', direction='asc', 
         )
 
     query = query  # No aplicar filtro, mostrar todos
+
+    items_per_page = current_app.config.get('ITEMS_PER_PAGE')
 
     # Aplicar ordenación
     if sort_by in ['title', 'upload_date']:

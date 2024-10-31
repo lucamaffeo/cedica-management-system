@@ -1,19 +1,21 @@
 from datetime import timedelta
+
+from flask import current_app
 from src.core.database import db
 from src.core.models.payment import Payment
 from src.core.repositories import employee
 from datetime import datetime
 
 
-def list_payments(start_date=None, end_date=None, payment_type=None, sort_by='alias', direction='asc', page=1, items_per_page=5):
+def list_payments(start_date=None, end_date=None, payment_type=None, sort_by='alias', direction='asc', page=1):
     # Init db query
     query = Payment.query
 
-    
+
     if start_date and end_date:
         end_date = datetime.strptime(end_date, '%Y-%m-%d')  # Convert str to date, so we can add timedelta (to make end_date include that day on results)
         query = query.filter(Payment.date >= start_date, Payment.date < end_date + timedelta(days=1))
-    
+
     # Filter by payment type if provided
     if payment_type:
         query = query.filter(Payment.type == payment_type)
@@ -23,6 +25,8 @@ def list_payments(start_date=None, end_date=None, payment_type=None, sort_by='al
         query = query.order_by(getattr(Payment, sort_by).asc())
     else:
         query = query.order_by(getattr(Payment, sort_by).desc())
+
+    items_per_page = current_app.config.get('ITEMS_PER_PAGE')
 
     paginated_payments = query.paginate(page=page, per_page=items_per_page, error_out=False)
 

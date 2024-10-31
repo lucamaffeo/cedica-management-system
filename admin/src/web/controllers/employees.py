@@ -19,9 +19,8 @@ def index():
     sort_by = request.args.get("sort_by", "name")
     direction = request.args.get("direction", "asc")
     page = int(request.args.get("page", 1))
-    items_per_page = 5
 
-    employees = employee_repository.list_employees(search, job_position_filter, sort_by, direction, page, items_per_page)
+    employees = employee_repository.list_employees(search, job_position_filter, sort_by, direction, page)
 
     if not employees.items:
         flash("No se encontraron empleados.", "info")

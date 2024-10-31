@@ -14,10 +14,9 @@ def index(entity_type, entity_id):
     sort_by = request.args.get("sort_by", "title")
     direction = request.args.get("direction", "asc")
     page = int(request.args.get("page", 1))
-    items_per_page = 5
 
     # Listar documentos por ID del jinete
-    documents = document_repository.list_documents_by_id(entity_type, entity_id, search, sort_by, direction, page, items_per_page)
+    documents = document_repository.list_documents_by_id(entity_type, entity_id, search, sort_by, direction, page)
 
     if not documents.items:
         flash("No se encontraron Documentos.", "info")

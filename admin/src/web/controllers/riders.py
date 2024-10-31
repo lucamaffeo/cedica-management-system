@@ -22,9 +22,8 @@ def index():
     sort_by = request.args.get("sort_by", "name")
     direction = request.args.get("direction", "asc")
     page = int(request.args.get("page", 1))
-    items_per_page = 5
 
-    riders = rider_repository.list_riders(search, sort_by, direction, page, items_per_page)
+    riders = rider_repository.list_riders(search, sort_by, direction, page)
 
     if not riders.items:
         flash("No se encontraron jinetes/amazonas.", "info")

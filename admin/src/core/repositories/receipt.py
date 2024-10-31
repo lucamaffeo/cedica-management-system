@@ -1,19 +1,17 @@
 from datetime import datetime, timedelta
 
-from flask import flash, request
+from flask import current_app, flash, request
 from src.core.database import db
 from src.core.models.receipt import Receipt
 
 
-def list_receipts(start_date=None, end_date=None, payment_method=None, sort_by='id', direction='asc', page=1, items_per_page=5):
+def list_receipts(start_date=None, end_date=None, payment_method=None, sort_by='id', direction='asc', page=1):
     # Iniciar la consulta
     query = Receipt.query
 
      # Obtener las fechas del formulario
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')
-    
-    
 
     # Filtrar por fecha si se proporcionan las fechas de inicio y fin
     if start_date and end_date :
@@ -22,7 +20,7 @@ def list_receipts(start_date=None, end_date=None, payment_method=None, sort_by='
         else:
             end_date = datetime.strptime(end_date, '%Y-%m-%d')  # Convertir str a fecha para poder agregar timedelta
             query = query.filter(Receipt.payment_date >= start_date, Receipt.payment_date < end_date + timedelta(days=1))
-       
+
     # Filtrar por medio de pago si se proporciona
     if payment_method:
         query = query.filter(Receipt.payment_method == payment_method)
@@ -32,6 +30,8 @@ def list_receipts(start_date=None, end_date=None, payment_method=None, sort_by='
         query = query.order_by(getattr(Receipt, sort_by).asc())
     else:
         query = query.order_by(getattr(Receipt, sort_by).desc())
+
+    items_per_page = current_app.config.get('ITEMS_PER_PAGE')
 
     paginated_receipts = query.paginate(page=page, per_page=items_per_page, error_out=False)
 

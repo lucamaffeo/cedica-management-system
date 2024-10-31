@@ -1,9 +1,10 @@
+from flask import current_app
 from src.core.models.employee import Employee
 from src.core.database import db
 from src.core.models.horse import Horse
 
 
-def list_horses(search='', assigned_activities_ja=None, sort_by='name', direction='asc', page=1, items_per_page=5):
+def list_horses(search='', assigned_activities_ja=None, sort_by='name', direction='asc', page=1):
     query = Horse.query
 
     if search:
@@ -14,7 +15,9 @@ def list_horses(search='', assigned_activities_ja=None, sort_by='name', directio
        query = query.filter(Horse.assigned_activities_ja == assigned_activities_ja)
     else:
         query = query
-    
+
+    items_per_page = current_app.config.get('ITEMS_PER_PAGE')
+
     if sort_by in ['name', 'birth_date', 'entry_date']:
         if direction == 'asc':
             query = query.order_by(getattr(Horse, sort_by).asc())
