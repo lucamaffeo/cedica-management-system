@@ -1,4 +1,5 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
+from src.core.models.employee import Employee
 from src.core.repositories import payment
 from src.web.helpers.auth import has_permission
 
@@ -22,7 +23,8 @@ def index():
 @bp.get("/create")
 @has_permission("payment_create")
 def register():
-    return render_template("payments/form.html", is_update=False, title="Registrar Pago")
+    employees = Employee.query.all()
+    return render_template("payments/form.html", is_update=False, title="Registrar Pago",employees=employees)
 
 @bp.post("/create")
 @has_permission("payment_create")
@@ -51,7 +53,8 @@ def edit(id):
     if not p:
         flash("Pago no encontrado.", "error")
         return redirect(url_for("payments.index"))
-    return render_template("payments/form.html", is_update=True, title="Actualizar Pago", payment=p)
+    employees = Employee.query.all()
+    return render_template("payments/form.html", is_update=True, title="Actualizar Pago", payment=p, employees=employees)
 
 @bp.route("/<int:id>/update", methods=["POST", "PATCH"])
 @has_permission("payment_update")

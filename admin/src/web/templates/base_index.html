@@ -101,4 +101,10 @@
       </ul>
     </nav>
   {% endblock %}
+
+  {% block add_new %}
+  <a href="{{ url_for(request.endpoint) }}create"
+    class="btn btn-primary">Crear</a>
+  {% endblock %}
+
 {% endblock %}
