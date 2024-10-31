@@ -72,33 +72,67 @@
     </tbody>
     </table>
 
-  {% block pagination %}
-    <nav aria-label="Page navigation">
-      <ul class="pagination justify-content-center">
+{% block pagination %}
+    {% if pagination %}
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+          {% with %}
+            {# Safely get and validate the current page number #}
+            {% set current_page = request.args.get('page', '1') %}
+            {% set page_num = current_page|int if current_page.isdigit() else 1 %}
 
-        <!-- Previous button -->
-        <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
-          <a class="page-link" href="{{ url_for(request.endpoint, page=pagination.prev_num, **request.view_args) }}" aria-label="Previous">
-            &laquo;
-          </a>
-        </li>
+            {# Ensure page_num is within bounds #}
+            {% if page_num < 1 %}
+              {% set page_num = 1 %}
+            {% endif %}
+            {% if page_num > pagination.pages %}
+              {% set page_num = pagination.pages %}
+            {% endif %}
 
-        {% set start_page = 1 if pagination.page <= 5 else pagination.page - 5 %}
-        {% set end_page = pagination.pages if pagination.page + 4 >= pagination.pages else pagination.page + 4 %} 
+            {# Calculate page range #}
+            {% set start_page = page_num - 2 %}
+            {% if start_page < 1 %}
+              {% set start_page = 1 %}
+            {% endif %}
 
-        {% for page_num in range(start_page, end_page + 1) %}
-          <li class="page-item {% if page_num == pagination.page %}active{% endif %}">
-            <a class="page-link" href="{{ url_for(request.endpoint, page=page_num, **request.view_args) }}">{{ page_num }}</a>
-          </li>
-        {% endfor %}
+            {% set end_page = start_page + 4 %}
+            {% if end_page > pagination.pages %}
+              {% set end_page = pagination.pages %}
+              {% set start_page = end_page - 4 if end_page - 4 > 0 else 1 %}
+            {% endif %}
 
-        <!-- Next button -->
-        <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
-          <a class="page-link" href="{{ url_for(request.endpoint, page=pagination.next_num, **request.view_args) }}" aria-label="Next">
-            &raquo;
-          </a>
-        </li>
-      </ul>
-    </nav>
+            {# Previous button #}
+            <li class="page-item {{ 'disabled' if page_num == 1 }}">
+              <a class="page-link" 
+                 href="{{ url_for(request.endpoint, page=page_num-1, **request.view_args) if page_num > 1 else '#' }}"
+                 aria-label="Previous"
+                 {{ 'tabindex="-1"' if page_num == 1 }}>
+                &laquo;
+              </a>
+            </li>
+
+            {# Page numbers #}
+            {% for p in range(start_page, end_page + 1) %}
+              <li class="page-item {{ 'active' if p == page_num }}">
+                <a class="page-link" 
+                   href="{{ url_for(request.endpoint, page=p, **request.view_args) }}">
+                  {{ p }}
+                </a>
+              </li>
+            {% endfor %}
+
+            {# Next button #}
+            <li class="page-item {{ 'disabled' if page_num == pagination.pages }}">
+              <a class="page-link"
+                 href="{{ url_for(request.endpoint, page=page_num+1, **request.view_args) if page_num < pagination.pages else '#' }}"
+                 aria-label="Next"
+                 {{ 'tabindex="-1"' if page_num == pagination.pages }}>
+                &raquo;
+              </a>
+            </li>
+          {% endwith %}
+        </ul>
+      </nav>
+    {% endif %}
   {% endblock %}
 {% endblock %}
