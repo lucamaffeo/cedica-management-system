@@ -1,7 +1,7 @@
 from src.core.models.role import Role
 from src.core.models.user import User
 from src.core.repositories import user as user_repo, role as role_repo
-from ..validator import MinLength, ValidationRule, Validator, Required
+from ..validator import MinLength, MaxLength, ValidationRule, Validator, Required
 from src.core.validation.rules.email import EmailFormat
 
 class PasswordStrength(ValidationRule):
@@ -71,12 +71,14 @@ class UserValidator(Validator):
 
         # Email validation
         self.add_rule('email', Required())
+        self.add_rule('email', MaxLength(255))
         self.add_rule('email', EmailFormat())
         self.add_rule('email', UniqueEmail(user_model, exclude_id=user_id))
 
         # Password validation (only for new users or password changes)
         if check_password:
             self.add_rule('password', Required())
+            self.add_rule('password', MaxLength(64))
             self.add_rule('password', PasswordStrength(min_length=8))
 
         # Role validation
@@ -84,4 +86,5 @@ class UserValidator(Validator):
         self.add_rule('role_id', ValidRole(role_model))
 
         self.add_rule('alias', Required())
+        self.add_rule('alias', MaxLength(255))
         self.add_rule('alias', MinLength(2))
