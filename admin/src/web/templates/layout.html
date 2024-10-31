@@ -36,49 +36,52 @@
 			</button>
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="navbar-nav me-auto">
-					
-					{% if logged_user and logged_user.has_permission('user_index') %}
+					<li class="nav-item">
+						<a class="nav-link active" href="{{ url_for('home') }}">Home</a>
+					</li>
+				
+					{% if user_id and has_permission(user_id,'user_index') %}
 					<li class="nav-item">
 						<a class="nav-link" href="{{ url_for('users.index') }}">Users</a>
 					</li>
 					{% endif %}
-					{% if logged_user and logged_user.has_permission('employee_index') %}
+					{% if user_id and has_permission(user_id,'employee_index') %}
 					<li class="nav-item">
 						<a class="nav-link" href="{{ url_for('employees.index') }}">Equipo</a>
 					</li>
 					{% endif %}
-					{% if logged_user and logged_user.has_permission('rider_index') %}
+					{% if user_id and has_permission(user_id,'rider_index') %}
 					<li class="nav-item">
 						<a class="nav-link" href="{{ url_for('riders.index') }}">Jinetes</a>
 					</li>
 					{% endif %}
-					{% if logged_user and logged_user.has_permission('horse_index') %}
+					{% if user_id and has_permission(user_id,'horse_index') %}
 					<li class="nav-item">
 						<a class="nav-link" href="{{ url_for('horses.index') }}">Ecuestre</a>
 					</li>
 					{% endif %}
-					{% if logged_user and logged_user.has_permission('receipt_index') %}
+					{% if user_id and has_permission(user_id,'receipt_index') %}
 					<li class="nav-item">
 						<a class="nav-link" href="{{ url_for('receipts.index') }}">Cobros</a>
 					</li>
 					{% endif %}
-					{% if logged_user and logged_user.has_permission('payment_index') %}
+					{% if user_id and has_permission(user_id,'payment_index') %}
 					<li class="nav-item">
 						<a class="nav-link" href="{{ url_for('payments.index') }}">Pagos</a>
 					</li>
 					{% endif %}
 				</ul>
 				<ul class="navbar-nav">
-					{% if not logged_user %}
+					{% if not user_id %}
 					<li class="nav-item">
 						<a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
 					</li>
 					{% endif %}
-					{% if logged_user %}
+					{% if user_id %}
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
 							data-bs-toggle="dropdown" aria-expanded="false">
-							{{ logged_user.email }}
+						  Options
 						</a>
 						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 							<li><a class="dropdown-item" href="{{ url_for('users.profile') }}">Profile</a></li>

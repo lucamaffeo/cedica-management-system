@@ -35,7 +35,7 @@ def find_horse_by_assigned_activities_ja(assigned_activities_ja):
 def get_horse(id):
     horse = Horse.query.filter(Horse.id == id).first()
     return horse
-    
+
 def create_horse(**kwargs):
     horse = Horse(**kwargs)
     db.session.add(horse)

@@ -1,5 +1,8 @@
+from sqlalchemy import and_, exists
 from src.core.database import db
 from src.core.models.user import User
+from src.core.models.role import Role
+from src.core.models.permission import Permission
 
 from werkzeug.security import generate_password_hash
 
@@ -69,3 +72,24 @@ def find_user_by_active():
 
 def find_user_by_role(role_id):
     return User.query.filter(User.role_id == role_id).all()
+
+def has_permission(user_id: int, permission: str) -> bool:
+    """
+    Check if a user has a specific permission using a parameterized query.
+    This is more efficient than loading all permissions into memory.
+
+
+    Args:
+        user_id: The ID of the user to check
+        permission: The permission name to check
+
+    Returns:
+        bool: True if user has the permission, False otherwise
+    """
+    return db.session.query(exists().where(
+        and_(
+            User.id == user_id,
+            User.role_id == Role.id,
+            Role.permissions.any(Permission.name == permission)
+        )
+    )).scalar()

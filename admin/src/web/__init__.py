@@ -2,6 +2,7 @@ from flask import Flask, session
 from flask import render_template 
 from src.core.models.user import User
 from src.core.repositories.riders import has_assignment
+from src.core.repositories.user import has_permission
 from src.web.handlers import error
 from src.web.controllers import register_blueprints
 from src.core import database, seeds
@@ -28,13 +29,13 @@ def create_app(env="development",static_folder="../../static"):
 
     @app.context_processor
     def inject_user():
-        user_dict = session.get('user')  # Retrieve the user dictionary from session
-        if user_dict:
-            user_id = user_dict.get('id')  # Extract the ID from the user dictionary
-            if user_id:
-                logged_user = User.query.get(user_id)  # Query the User object from the DB
-                return {'logged_user': logged_user}
-        return {'logged_user': None}
+        user_id = session.get('user_id')  # Retrieve the user dictionary from session
+        if user_id:
+            return {'user_id': user_id}
+
+    @app.context_processor
+    def inject_has_permission():
+        return dict(has_permission=has_permission)
 
     @app.route("/")
     def home():

@@ -48,7 +48,7 @@ def edit(id):
 @bp.route("/<int:id>/update", methods=["POST", "PATCH"])
 def update(id):
     # Check if the current user has permission to update another user's profile
-    is_update_own = id == session["user"]["id"]
+    is_update_own = id == session["user_id"]
 
     if not is_update_own:
         has_permission("user_update")(lambda: None)()
@@ -102,7 +102,7 @@ def update(id):
 # Edit own profile
 @bp.get("/profile/update")
 def edit_profile():
-    id = session["user"]["id"]
+    id = session["user_id"]
     user = auth.get_user(id)
     if not user:
         flash("Usuario no encontrado.", "error")
@@ -111,7 +111,7 @@ def edit_profile():
 
 @bp.post("/profile/update")
 def update_profile():
-    id = session["user"]["id"]
+    id = session["user_id"]
     update(id)
     return redirect(url_for("users.profile"))
 
@@ -128,7 +128,7 @@ def show(id):
 # Show profile
 @bp.get("/profile")
 def profile():
-    user = auth.get_user(session["user"]["id"])
+    user = auth.get_user(session["user_id"])
     if not user:
         flash("Usuario no encontrado.", "error")
         return redirect(url_for("home"))

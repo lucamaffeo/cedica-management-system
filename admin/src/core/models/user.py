@@ -23,9 +23,6 @@ class User(db.Model):
     def __repr__(self):
         return f"<User {self.email}>"
 
-    def has_permission(self, permission: str):
-        return any(permission == p.name for p in self.role.permissions)
-
     def to_dict(self):
         return {
             "id": self.id,

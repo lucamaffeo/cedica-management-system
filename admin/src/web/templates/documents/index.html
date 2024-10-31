@@ -32,10 +32,10 @@ Buscar por Tipo, Titulo
             <td>{{ document.upload_date.strftime('%d/%m/%Y') }}</td>
             <!-- ver -->
             <td>
-                {% if logged_user and logged_user.has_permission('rider_update') %}
+                {% if user_id and has_permission(user_id,'rider_update') %}
                 <a href="{{ url_for('documents.delete', entity_type=entity_type, entity_id=entity_id, id=document.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
                 {% endif %}
-                {% if logged_user and logged_user.has_permission('rider_show') and document.file %}
+                {% if user_id and has_permission(user_id,'rider_show') and document.file %}
                 <a href="{{ url_for('documents.download', entity_type=entity_type, entity_id=entity_id, id=document.id) }}">Descargar</a>
                 {% endif %}
             </td>
@@ -43,10 +43,10 @@ Buscar por Tipo, Titulo
         </tr>
         {% endfor %}
     {% endblock %}  
-    
+
     {% block add_new %}
-	{% if logged_user and logged_user.has_permission('rider_update') %} <!-- TODO check permissions --!>
+	{% if user_id and has_permission(user_id,'rider_update') %} <!-- TODO check permissions --!>
     <a href="{{ url_for('documents.add', entity_type=entity_type, entity_id=entity_id) }}" class="btn btn-primary">Añadir Documento</a>
     {% endif %}
     {% endblock %}
-    
+

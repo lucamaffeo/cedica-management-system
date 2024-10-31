@@ -141,7 +141,6 @@ def delete_document(id):
     db.session.delete(document)
     db.session.commit()
 
-    
 def update_document(id, **kwargs):
     document = Document.query.filter(Document.id == id).first()
     if not document:

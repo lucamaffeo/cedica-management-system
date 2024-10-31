@@ -22,14 +22,14 @@ def list_employees(search='', job_position=None, sort_by='name', direction='asc'
         query = query.filter(Employee.job_position == job_position)
     else:
         query = query  # No aplicar filtro, mostrar todos
-    
+
     # Aplicar ordenación
     if sort_by in ['name', 'surname', 'start_date']:
         if direction == 'asc':
             query = query.order_by(getattr(Employee, sort_by).asc())
         else:
             query = query.order_by(getattr(Employee, sort_by).desc())
-    
+
 
     pagination_employees = query.paginate(page=page, per_page=items_per_page, error_out=False)
 

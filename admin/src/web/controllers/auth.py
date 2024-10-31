@@ -31,7 +31,7 @@ def authenticate():
         return redirect(url_for("auth.login"))
 
     # Set session for user
-    session["user"] = user.to_dict()
+    session["user_id"] = user.id
     flash("La sesión se inició correctamente.", "success")
 
     return redirect(url_for("home"))

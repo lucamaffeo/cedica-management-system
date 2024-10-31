@@ -77,7 +77,7 @@ def create():
                 horse.association.append(trainer)  # Agrega el entrenador a la relación
             else:
                 flash(f"Entrenador con ID {trainer_id} no encontrado.", "error")
-    
+
 
     # Guardar cambios en la base de datos
     db.session.commit()
