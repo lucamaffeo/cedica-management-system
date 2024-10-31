@@ -34,5 +34,6 @@ class User(db.Model):
             "role": self.role_id,
             "active": self.active,
             "inserted_at": self.inserted_at,
-            "updated_at": self.updated_at
+            "updated_at": self.updated_at,
+            "permissions": [p.name for p in self.role.permissions]
         }

@@ -1,5 +1,6 @@
 from flask import Blueprint, redirect, render_template, request, session, url_for, flash
 from src.core.repositories import user as auth
+from src.core.repositories import role
 from src.web.helpers.auth import has_permission
 
 bp = Blueprint("users", __name__, url_prefix="/users")
@@ -8,7 +9,7 @@ bp = Blueprint("users", __name__, url_prefix="/users")
 @bp.get("/create")
 @has_permission("user_create")
 def register():
-    return render_template("users/form.html", is_update=False, title='Crear Usuario')
+    return render_template("users/form.html", is_update=False, title='Crear Usuario', roles=role.list_roles())
 
 # Create user
 @bp.post("/create")
@@ -18,20 +19,19 @@ def create():
     if not params.get("alias") or not params.get("email") or not params.get("password"):
         flash("Alias, correo electrónico y contraseña son obligatorios.", "error")
         return redirect(url_for("users.create"))
-    
+
     # Validar correo electrónico único
     if auth.find_user_by_email(params["email"]):
         flash("El correo electrónico ya está en uso.", "error")
         return redirect(url_for("users.create"))
 
-    
     auth.create_user(
         alias=params["alias"],
         email=params["email"],
         password=params["password"],  # Make sure to hash the password in the core
         role_id=params["role_id"],
     )
-    
+
     flash("Usuario creado con éxito.", "success")
     return redirect(url_for("users.index"))
 
@@ -43,7 +43,7 @@ def edit(id):
     if not user:
         flash("Usuario no encontrado.", "error")
         return redirect(url_for("users.index"))
-    return render_template("users/form.html", is_update=True, title='Actualizar Usuario', user=user)
+    return render_template("users/form.html", is_update=True, title='Actualizar Usuario', user=user, roles=role.list_roles())
 
 @bp.route("/<int:id>/update", methods=["POST", "PATCH"])
 def update(id):
