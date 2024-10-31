@@ -1,5 +1,5 @@
-from core.models.role import Role
-from core.models.user import User
+from src.core.models.role import Role
+from src.core.models.user import User
 from ..validator import MinLength, ValidationRule, Validator, Required
 from src.core.validation.rules.email import EmailFormat
 
