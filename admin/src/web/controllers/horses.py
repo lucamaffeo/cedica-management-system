@@ -3,6 +3,7 @@ from src.core.models import horse
 from src.core.models.employee import Employee
 from src.core.repositories import horse as horse_repository
 from src.core.repositories import document as document_repository
+from src.core.repositories import employee as employee_repository
 from src.web.helpers.auth import has_permission
 from src.core.repositories.employee import get_employees_by_job_positions
 from src.core.database import db
@@ -71,7 +72,7 @@ def create():
     )
     if trainer_ids:
         for trainer_id in trainer_ids:
-            trainer = Employee.query.get(trainer_id)  # Busca el entrenador por ID
+            trainer = employee_repository.get_employee(trainer_id)  # Busca el entrenador por ID
             if trainer:  # Asegúrate de que el entrenador existe
                 horse.association.append(trainer)  # Agrega el entrenador a la relación
             else:
@@ -140,7 +141,7 @@ def update(id):
     
     if(trainer_ids):
         for trainer_id in trainer_ids:
-            trainer = Employee.query.get(trainer_id)
+            trainer = employee_repository.get_employee(trainer_id)  # Busca el entrenador por ID
             if trainer:
                 horse.association.append(trainer)
             else:
