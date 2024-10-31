@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "grupo10"
-version = "0.1.0"
+version = "0.3.2"
 description = ""
 authors = ["Ulises Britos <ubritos@gmail.com>"]
 #license = "MIT"

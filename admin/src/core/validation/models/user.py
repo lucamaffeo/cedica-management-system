@@ -1,5 +1,6 @@
 from src.core.models.role import Role
 from src.core.models.user import User
+from src.core.repositories import user as user_repo, role as role_repo
 from ..validator import MinLength, ValidationRule, Validator, Required
 from src.core.validation.rules.email import EmailFormat
 
@@ -13,13 +14,13 @@ class PasswordStrength(ValidationRule):
 
         errors = []
         if len(value) < self.min_length:
-            errors.append(f"Password must be at least {self.min_length} characters")
+            errors.append(f"La contraseña debe tener al menos {self.min_length} caracteres")
         if not any(c.isupper() for c in value):
-            errors.append("Password must contain at least one uppercase letter")
+            errors.append("La contraseña debe contener al menos una letra mayúscula")
         if not any(c.islower() for c in value):
-            errors.append("Password must contain at least one lowercase letter")
+            errors.append("La contraseña debe contener al menos una letra minúscula")
         if not any(c.isdigit() for c in value):
-            errors.append("Password must contain at least one number")
+            errors.append("La contraseña debe contener al menos un número")
 
         return " and ".join(errors) if errors else None
 
@@ -32,12 +33,13 @@ class UniqueEmail(ValidationRule):
         if not value:
             return None
 
-        query = self.User.query.filter_by(email=value)
-        if self.exclude_id:
-            query = query.filter(self.User.id != self.exclude_id)
+        user = user_repo.find_user_by_email(value)
 
-        if query.first():
-            return "This email is already registered"
+        if user and self.exclude_id:
+            user = user.filter(self.User.id != self.exclude_id)
+
+        if user:
+            return "Este correo electrónico ya está registrado"
         return None
 
 class ValidRole(ValidationRule):
@@ -48,9 +50,9 @@ class ValidRole(ValidationRule):
         if not value:
             return None
 
-        role = self.Role.query.get(value)
+        role = role_repo.get_role_by_id(value)
         if not role:
-            return "Invalid role selected"
+            return "Rol seleccionado no válido"
         return None
 
 
