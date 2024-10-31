@@ -17,11 +17,9 @@ Buscar por email
     <label for="role_id" class="form-label">Rol</label>
     <select class="form-control" name="role_id" id="role_id">
         <option value="">Todos los roles</option>
-        <option value="1" {% if request.args.get('role_id') == '1' %}selected{% endif %}>System Admin</option>
-        <option value="2" {% if request.args.get('role_id') == '2' %}selected{% endif %}>Administración</option>
-        <option value="3" {% if request.args.get('role_id') == '3' %}selected{% endif %}>Técnica</option>
-        <option value="4" {% if request.args.get('role_id') == '4' %}selected{% endif %}>Voluntariado</option>
-        <option value="5" {% if request.args.get('role_id') == '5' %}selected{% endif %}>Ecuestre</option>
+        {% for role in roles %}
+        <option value="{{ role.id }}" {% if request.args.get('role_id') == role.id %}selected{% endif %}>{{ role.name }}</option>
+        {% endfor %}
     </select>
     <!-- filter by active true/false -->
     <label for="active" class="form-label">Estado</label>

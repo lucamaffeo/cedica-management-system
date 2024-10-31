@@ -1,4 +1,5 @@
 from flask import Blueprint, redirect, render_template, request, session, url_for, flash
+from src.core.validation.models.user import UserValidator
 from src.core.repositories import user as auth
 from src.core.repositories import role
 from src.web.helpers.auth import has_permission
@@ -15,21 +16,20 @@ def register():
 @bp.post("/create")
 @has_permission("user_create")
 def create():
-    params = request.form
-    if not params.get("alias") or not params.get("email") or not params.get("password"):
-        flash("Alias, correo electrónico y contraseña son obligatorios.", "error")
-        return redirect(url_for("users.create"))
+    data = request.form.to_dict()
+    validator = UserValidator()
 
-    # Validar correo electrónico único
-    if auth.find_user_by_email(params["email"]):
-        flash("El correo electrónico ya está en uso.", "error")
+    errors = validator.validate(data)
+    if errors:
+        for error in errors:
+            flash(f"{error.field}: {error.message}", "error")
         return redirect(url_for("users.create"))
 
     auth.create_user(
-        alias=params["alias"],
-        email=params["email"],
-        password=params["password"],  # Make sure to hash the password in the core
-        role_id=params["role_id"],
+        alias=data["alias"],
+        email=data["email"],
+        password=data["password"],
+        role_id=data["role_id"],
     )
 
     flash("Usuario creado con éxito.", "success")
@@ -53,35 +53,47 @@ def update(id):
     if not is_update_own:
         has_permission("user_update")(lambda: None)()
 
-    # Get the current user object
     user = auth.get_user(id)
     if not user:
         flash("Usuario no encontrado.", "error")
         return redirect(url_for("users.index"))
 
-    # Extract the form data
-    params = request.form
-   
+    data = request.form.to_dict()
 
-
-    # If password is being updated, ensure the new passwords match
-    if params.get("password") and params.get("new_password"):
-        if params.get("password") != params.get("new_password"):
+    # Validate password match if being updated
+    if data.get("password") and data.get("new_password"):
+        if data.get("password") != data.get("new_password"):
             flash("Las contraseñas no coinciden.", "error")
             return redirect(url_for("users.update", id=id))
+        data['password'] = data.get("password")  # Use single password field for validator
 
-    # Prepare the parameters for the update
+    # Initialize validator with appropriate settings
+    validator = UserValidator(
+        user_id=id,
+        check_password=bool(data.get('password'))
+    )
+
+    # For own profile updates, remove role validation
+    if is_update_own:
+        validator.rules.pop('role_id', None)
+
+    errors = validator.validate_for_update(data)
+    if errors:
+        for error in errors:
+            flash(f"{error.field}: {error.message}", "error")
+        return redirect(url_for("users.update", id=id))
+
+    # Prepare update data
     update_data = {
-        "alias": params.get("alias"),
-        "password": params.get("password") if params.get("password") and params.get("new_password") else None,
-        "active": 'active' in params if not is_update_own else None,
-        "role_id": params.get("role_id") if not is_update_own else None
+        "alias": data.get("alias"),
+        "password": data.get("password") if data.get("password") else None,
+        "active": 'active' in data if not is_update_own else None,
+        "role_id": data.get("role_id") if not is_update_own else None
     }
 
-    # Remove any None values to prevent overwriting fields unintentionally
+    # Remove None values
     update_data = {k: v for k, v in update_data.items() if v is not None}
 
-    # Call the update_user function from the repository
     auth.update_user(id=id, **update_data)
 
     flash("Usuario actualizado con éxito.", "success")
@@ -116,9 +128,7 @@ def show(id):
 # Show profile
 @bp.get("/profile")
 def profile():
-    id = session["user"]["id"]
-    print(id)
-    user = auth.get_user(id)
+    user = auth.get_user(session["user"]["id"])
     if not user:
         flash("Usuario no encontrado.", "error")
         return redirect(url_for("home"))
@@ -151,8 +161,8 @@ def index():
     page = request.args.get('page', 1, type=int)
 
     users = auth.list_users(search, role_filter, sort_by, direction, active, page)
-    
+
     if not users.items:
         flash("No se encontraron usuarios.", "info")
-    return render_template("users/index.html", pagination=users)
+    return render_template("users/index.html", pagination=users, roles=role.list_roles())
 
