@@ -32,6 +32,7 @@ def create_app(env="development",static_folder="../../static"):
         user_id = session.get('user_id')  # Retrieve the user dictionary from session
         if user_id:
             return {'user_id': user_id}
+        return {}
 
     @app.context_processor
     def inject_has_permission():
