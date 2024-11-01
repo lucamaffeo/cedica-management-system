@@ -23,12 +23,9 @@ class Employee(db.Model):
     condition = db.Column(db.String(50))  # Voluntario o Personal Rentado
     active = db.Column(db.Boolean, default=True, nullable=False)
     documentation = db.Column(JSON)
-    
+
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User', backref='employee', uselist=False)
 
     def __repr__(self):
         return f'<Employee {self.name} {self.surname}>'
-
-def has_permission(self, permission: str):
-    return any(permission == p.name for p in self.role.permissions)
