@@ -11,8 +11,10 @@
 		        <input type="text" name="amount" class="form-control" value="{{ payment.amount if is_update else '' }}" placeholder="Monto" required>
 		        <label for="description" class="form-label">Descripción</label>
 		        <textarea name="description" class="form-control" rows="3" placeholder="Descripción" required>{{ payment.description if is_update else '' }}</textarea>
-		        <label for="date" class="form-label">Fecha</label>
-		        <input type="date" name="date" class="form-control" value="{{ payment.date if is_update else '' }}" placeholder="Fecha" required>
+                <label for="date" class="form-label">Fecha</label>
+                <input type="date" name="date" class="form-control"
+                    value="{{ payment.date.strftime('%Y-%m-%d') if payment.date else '' }}" placeholder="Fecha" required>
+
 
         <label for="type" class="form-label">Tipo</label>
         <select class="form-control" name="type" id="type" required onchange="toggleBeneficiaryField()">

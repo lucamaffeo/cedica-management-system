@@ -1,5 +1,6 @@
 from datetime import datetime
 from flask import Blueprint, flash, redirect, render_template, request, url_for
+from src.core.models.employee import Employee
 from src.core.repositories import receipt,employee as employee_repository, riders as riders_repository
 from src.web.helpers.auth import has_permission
 
@@ -16,8 +17,8 @@ def index():
     page = request.args.get('page', 1, type=int)
 
     receipts = receipt.list_receipts(start_date, end_date, payment_method, sort_by, direction, page)
-
-    return render_template("receipts/index.html", pagination=receipts)
+    received_by = Employee.query.all()
+    return render_template("receipts/index.html", pagination=receipts,received_by=received_by)
 
 @bp.get("/create")
 @has_permission("receipt_create")

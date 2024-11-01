@@ -1,6 +1,7 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from src.core.models.employee import Employee
 from src.core.repositories import payment
+from src.core.repositories import employee 
 from src.core.validation.models.payment import PaymentValidator
 from src.web.helpers.auth import has_permission
 from src.web.helpers.flash import flash_validation_errors
@@ -19,8 +20,10 @@ def index():
     page = request.args.get('page', 1, type=int)
 
     payments = payment.list_payments(start_date, end_date, payment_type, sort_by, direction, page)
+    
+    beneficiaries = Employee.query.all()
 
-    return render_template("payments/index.html", pagination=payments)
+    return render_template("payments/index.html", pagination=payments, beneficiaries=beneficiaries)
 
 @bp.get("/create")
 @has_permission("payment_create")

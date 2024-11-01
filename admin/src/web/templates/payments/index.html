@@ -40,7 +40,12 @@
     {% for payment in pagination.items %}
     <tr>
 		<td>{{ payment.formatted_date }}</td>
-        <td>{{ payment.beneficiary_id if payment.beneficiary_id != None else "N/A"}}</td>
+        <td>{% set beneficiary = beneficiaries | selectattr("id", "==", payment.beneficiary_id) | first %}
+        {% if beneficiary %}
+        {{ beneficiary.name }} {{ beneficiary.surname }}
+        {% else %}
+        N/A
+        {% endif %}</td>
         <td>{{ payment.amount }}</td>
         <td>{{ payment.type }}</td>
         <td>

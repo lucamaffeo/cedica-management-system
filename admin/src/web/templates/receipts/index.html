@@ -50,7 +50,12 @@ Buscar por Nombre o Apellido de quien recibe el dinero
 <tr>
     <td>{{ receipt.payment_date.strftime('%Y-%m-%d') }}</td>
     <td>{{ receipt.payment_method }}</td>
-    <td>{{ receipt.employee_id }}</td>
+    <td>{% set employee = received_by | selectattr("id", "==", receipt.employee_id) | first %}
+    {% if employee %}
+    {{ employee.name }} {{ employee.surname }}
+    {% else %}
+    N/A
+    {% endif %}</td>
     <td>
         <a href="{{ url_for('receipts.show', id=receipt.id) }}">Ver</a>
         <a href="{{ url_for('receipts.edit', id=receipt.id) }}">Editar</a>
