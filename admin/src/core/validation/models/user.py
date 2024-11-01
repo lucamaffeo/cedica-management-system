@@ -1,7 +1,7 @@
 from src.core.models.role import Role
 from src.core.models.user import User
 from src.core.repositories import user as user_repo, role as role_repo
-from ..validator import MinLength, MaxLength, ValidationRule, Validator, Required
+from ..validator import MinLength, MaxLength, ValidationError, ValidationRule, Validator, Required
 from src.core.validation.rules.email import EmailFormat
 
 class PasswordStrength(ValidationRule):
@@ -88,3 +88,15 @@ class UserValidator(Validator):
         self.add_rule('alias', Required())
         self.add_rule('alias', MaxLength(255))
         self.add_rule('alias', MinLength(2))
+
+    def validate_for_update(self, data: dict) -> list[ValidationError]:
+        """
+        Validate user data for updates.
+        Args:
+            data: The user data to validate
+        Returns:
+            A list of validation errors
+        """
+        self.rules.pop('email', Required)
+
+        return self.validate(data)

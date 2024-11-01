@@ -73,7 +73,7 @@ def update(id):
     if is_update_own:
         validator.rules.pop('role_id', None)
 
-    errors = validator.validate(data)
+    errors = validator.validate_for_update(data)
     if errors:
         for error in errors:
             flash(f"{error.field}: {error.message}", "error")
