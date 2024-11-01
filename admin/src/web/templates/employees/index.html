@@ -17,39 +17,39 @@ Buscar por Nombre, Apellido, DNI o Email
 
 
 {% block filters %}
-    <div>
-        <select name="job_position" class="form-control">
-            <option value="">Todos los Puestos Laborales</option>
-            <option value="Administrativo/a" {% if 'Administrativo/a' in request.args.getlist('positions') %}selected{% endif %}>
-                Administrativo/a</option>
-            <option value="Terapeuta" {% if 'Terapeuta' in request.args.getlist('positions') %}selected{% endif %}>Terapeuta
-            </option>
-            <option value="Conductor" {% if 'Conductor' in request.args.getlist('positions') %}selected{% endif %}>Conductor
-            </option>
-            <option value="Auxiliar de pista" {% if 'Auxiliar de pista' in request.args.getlist('positions') %}selected{% endif %}>
-                Auxiliar de pista</option>
-            <option value="Herrero" {% if 'Herrero' in request.args.getlist('positions') %}selected{% endif %}>Herrero</option>
-            <option value="Veterinario/a" {% if 'Veterinario/a' in request.args.getlist('positions') %}selected{% endif %}>
-                Veterinario/a</option>
-            <option value="Entrenador de Caballos" {% if 'Entrenador de Caballos' in request.args.getlist('positions') %}selected{%
-                endif %}>Entrenador de Caballos</option>
-            <option value="Domador" {% if 'Domador' in request.args.getlist('positions') %}selected{% endif %}>Domador</option>
-            <option value="Profesor de Equitación" {% if 'Profesor de Equitación' in request.args.getlist('positions') %}selected{%
-                endif %}>Profesor de Equitación</option>
-            <option value="Docente de Capacitación" {% if 'Docente de Capacitación' in request.args.getlist('positions')
-                %}selected{% endif %}>Docente de Capacitación</option>
-            <option value="Auxiliar de mantenimiento" {% if 'Auxiliar de mantenimiento' in request.args.getlist('positions')
-                %}selected{% endif %}>Auxiliar de mantenimiento</option>
-            <option value="Otro" {% if 'Otro' in request.args.getlist('positions') %}selected{% endif %}>Otro</option>
-
-        </select>
-    </div>
+<div>
+    <select name="job_position" class="form-control">
+        <option value="">Todos los Puestos Laborales</option>
+        <option value="Administrativo/a" {% if job_position_filter=='Administrativo/a' %}selected{% endif %}>
+            Administrativo/a</option>
+        <option value="Terapeuta" {% if job_position_filter=='Terapeuta' %}selected{% endif %}>Terapeuta
+        </option>
+        <option value="Conductor" {% if job_position_filter=='Conductor' %}selected{% endif %}>Conductor
+        </option>
+        <option value="Auxiliar de pista" {% if job_position_filter=='Auxiliar de pista' %}selected{% endif %}>
+            Auxiliar de pista</option>
+        <option value="Herrero" {% if job_position_filter=='Herrero' %}selected{% endif %}>Herrero</option>
+        <option value="Veterinario/a" {% if job_position_filter=='Veterinario/a' %}selected{% endif %}>
+            Veterinario/a</option>
+        <option value="Entrenador de Caballos" {% if job_position_filter=='Entrenador de Caballos' %}selected{% endif
+            %}>Entrenador de Caballos</option>
+        <option value="Domador" {% if job_position_filter=='Domador' %}selected{% endif %}>Domador</option>
+        <option value="Profesor de Equitación" {% if job_position_filter=='Profesor de Equitación' %}selected{% endif
+            %}>Profesor de Equitación</option>
+        <option value="Docente de Capacitación" {% if job_position_filter=='Docente de Capacitación' %}selected{% endif
+            %}>Docente de Capacitación</option>
+        <option value="Auxiliar de mantenimiento" {% if job_position_filter=='Auxiliar de mantenimiento' %}selected{%
+            endif %}>Auxiliar de mantenimiento</option>
+        <option value="Otro" {% if job_position_filter=='Otro' %}selected{% endif %}>Otro</option>
+    </select>
+</div>
 {% endblock %}
 
 
 
+
 <!-- Employee table -->
-    {% set sorting_criteria = [("name", "Nombre"), ("surname", "Apellido"), ("dni", "DNI"),("email","Email"), ("start_date", "Fecha de Ingreso")] %}
+    {% set sorting_criteria = [("name", "Nombre"), ("surname", "Apellido"), ("dni", "DNI"),("email","Email"), ("job_position", "Puesto Laboral"), ("start_date", "Fecha de Ingreso")] %}
     {% set sortable_fields = ["name", "surname", "start_date"] %}
     {% block table_rows %}
         {% for employee in pagination.items %}
@@ -58,6 +58,7 @@ Buscar por Nombre, Apellido, DNI o Email
             <td>{{ employee.surname }}</td>
             <td>{{ employee.dni }}</td>
             <td>{{ employee.email }}</td>
+            <td>{{ employee.job_position }}</td>
             <td>{{ employee.start_date.strftime('%d/%m/%Y')}}</td>
             <td>
                 <a href="{{ url_for('employees.show', id=employee.id) }}">Ver</a>

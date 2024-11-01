@@ -18,7 +18,8 @@ Buscar por email
     <select class="form-control" name="role_id" id="role_id">
         <option value="">Todos los roles</option>
         {% for role in roles %}
-        <option value="{{ role.id }}" {% if request.args.get('role_id') == role.id %}selected{% endif %}>{{ role.name }}</option>
+        <option value="{{ role.id }}" {% if request.args.get('role_id')|int==role.id %}selected{% endif %}>{{ role.name }}
+        </option>
         {% endfor %}
     </select>
     <!-- filter by active true/false -->

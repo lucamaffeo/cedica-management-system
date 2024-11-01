@@ -24,7 +24,8 @@ def index():
 
     if not employees.items:
         flash("No se encontraron empleados.", "info")
-    return render_template("employees/index.html", pagination=employees)
+    print("Job position filter:", job_position_filter)
+    return render_template("employees/index.html", pagination=employees,job_position_filter=job_position_filter)
 
 
 # Register
