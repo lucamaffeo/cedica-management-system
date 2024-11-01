@@ -53,10 +53,6 @@ def update(id):
     if not is_update_own:
         has_permission("user_update")(lambda: None)()
 
-    user = auth.get_user(id)
-    if not user:
-        flash("Usuario no encontrado.", "error")
-        return redirect(url_for("users.index"))
 
     data = request.form.to_dict()
 
@@ -77,7 +73,7 @@ def update(id):
     if is_update_own:
         validator.rules.pop('role_id', None)
 
-    errors = validator.validate_for_update(data)
+    errors = validator.validate(data)
     if errors:
         for error in errors:
             flash(f"{error.field}: {error.message}", "error")
@@ -94,10 +90,12 @@ def update(id):
     # Remove None values
     update_data = {k: v for k, v in update_data.items() if v is not None}
 
-    auth.update_user(id=id, **update_data)
-
-    flash("Usuario actualizado con éxito.", "success")
-    return redirect(url_for("users.index"))
+    if auth.update_user(id=id, **update_data):
+        flash("Usuario actualizado con éxito.", "success")
+        return redirect(url_for("users.index"))
+    else:
+        flash("Usuario no encontrado.", "error")
+        return redirect(url_for("users.index"))
 
 # Edit own profile
 @bp.get("/profile/update")
@@ -139,15 +137,12 @@ def profile():
 @bp.get("/<int:id>/delete")
 @has_permission("user_destroy")
 def delete(id):
-    user = auth.get_user(id)
-    if not user:
+    if auth.delete_user(id):
+        flash("Usuario eliminado con éxito.", "info")
+        return redirect(url_for("users.index"))
+    else:
         flash("Usuario no encontrado.", "error")
         return redirect(url_for("users.index"))
-
-    auth.delete_user(id)
-    flash("Usuario eliminado con éxito.", "info")
-    return redirect(url_for("users.index"))
-
 
 # List users
 @bp.get("/")

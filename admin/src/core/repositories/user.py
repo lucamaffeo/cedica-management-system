@@ -47,6 +47,8 @@ def create_user(**kwargs):
 
 def update_user(id, **kwargs):
     user = User.query.filter(User.id == id).first()
+    if not user:
+        return False
     if 'password' in kwargs and kwargs['password'] is not None:
         kwargs['password'] = generate_password_hash(kwargs['password'])
     else:
@@ -54,12 +56,15 @@ def update_user(id, **kwargs):
     for key, value in kwargs.items():
         setattr(user, key, value)
     db.session.commit()
-    return user
+    return True
 
 def delete_user(id):
     user = User.query.filter(User.id == id).first()
-    db.session.delete(user)
-    db.session.commit()
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+        return True
+    return False
 
 def get_user(id) -> User | None:
     user = User.query.filter(User.id == id).first()

@@ -45,36 +45,36 @@ def create():
         if field not in params:
             flash(f"El campo {field} es requerido.", "error")
             return redirect(url_for("employees.register"))
-    
+
     # Validar telefono (solo números + o espacios)
     if not re.match(r'^[\d +]+$', params['telephone']):
         flash("El teléfono solo puede contener números + o espacios.", "error")
         return redirect(url_for("employees.register"))
-    
+
     # Validar el DNI (solo números y puntos)
     if not re.match(r'^[\d.]+$', params['dni']):
         flash("El DNI solo puede contener números y puntos.", "error")
         return redirect(url_for("employees.register"))
-    
+
     # Validar si el DNI ya existe
     existing_employee_dni = employee_repository.find_employee_by_dni(params['dni'])
     if existing_employee_dni:
         flash("El DNI ya está registrado.", "error")
         return redirect(url_for("employees.register"))
-    
+
     # Validar si el email ya existe
     existing_employee_email = employee_repository.get_by_email(params['email'])
     if existing_employee_email:
         flash("El correo electrónico ya está registrado.", "error")
         return redirect(url_for("employees.register"))
-    
+
     #validar numero de asociado es unico
     existing_associate_number = employee_repository.find_employee_by_associate_number(params['associate_number'])
     if existing_associate_number:
         flash("El número de asociado ya está registrado.", "error")
         return redirect(url_for("employees.register"))
-    
-        
+
+
     employee_repository.create_employee(
         name = params['name'],
         surname = params['surname'],
@@ -120,11 +120,6 @@ def edit(id):
 @bp.post("/<int:id>/update")
 @has_permission("employee_update")
 def update(id):
-    
-    employee = employee_repository.get_employee(id)
-    if not employee:
-        flash("Empleado no encontrado.", "error")
-        return redirect(url_for("employees.index"))
 
     params = request.form
     termination_date = params.get("termination_date")
@@ -141,9 +136,11 @@ def update(id):
         flash("El DNI solo puede contener números y puntos.", "error")
         return redirect(url_for("employees.edit", id=id))
 
+    # TODO proper validation, decide if these fields should be modifiable
+
     # Validar si el DNI fue modificado y si el nuevo DNI ya está registrado
     new_dni = params.get("dni")
-    if new_dni and new_dni != employee.dni:
+    if new_dni: #and new_dni != employee.dni:
         existing_employee_dni = employee_repository.find_employee_by_dni(new_dni)
         if existing_employee_dni:
             flash("El DNI ya está registrado por otro empleado.", "error")
@@ -151,22 +148,22 @@ def update(id):
 
     # Validar si el email fue modificado y si el nuevo email ya está registrado
     new_email = params.get("email")
-    if new_email and new_email != employee.email:
+    if new_email: #and new_email != employee.email:
         existing_employee_email = employee_repository.get_by_email(new_email)
         if existing_employee_email:
             flash("El correo electrónico ya está registrado por otro empleado.", "error")
             return redirect(url_for("employees.edit", id=id))
-    
+
     #validar numero de asociado fue modificado y si el nuevo numero de asociado ya esta registrado
     associate_number = params.get("associate_number")
-    if associate_number and associate_number != employee.associate_number:
+    if associate_number: #and associate_number != employee.associate_number:
         existing_associate_number = employee_repository.find_employee_by_associate_number(associate_number)
         if existing_associate_number:
             flash("El número de asociado ya está registrado por otro empleado.", "error")
             return redirect(url_for("employees.edit", id=id))
 
     # Actualizar el empleado
-    employee_repository.update_employee(
+    if employee_repository.update_employee(
         id=id,
         name=params.get("name"),
         surname=params.get("surname"),
@@ -185,21 +182,20 @@ def update(id):
         condition=params.get("condition"),
         active= 'active' in params
 
-    )
-    
-
-    flash("Empleado actualizado con éxito.", "success")
-    return redirect(url_for("employees.index"))
+        ):
+        flash("Empleado actualizado con éxito.", "success")
+        return redirect(url_for("employees.index"))
+    else:
+        flash("Empleado no encontrado.", "error")
+        return redirect(url_for("employees.index"))
 
 # destroy employee
 @bp.get("/<int:id>/delete")
 @has_permission("employee_destroy")
 def delete(id):
-    employee = employee_repository.get_employee(id)
-    if not employee:
+    if employee_repository.delete_employee(id):
+        flash("Empleado eliminado con éxito.", "info")
+        return redirect(url_for("employees.index"))
+    else:
         flash("Empleado no encontrado.", "error")
         return redirect(url_for("employees.index"))
-
-    employee_repository.delete_employee(id)
-    flash("Empleado eliminado con éxito.", "info")
-    return redirect(url_for("employees.index"))

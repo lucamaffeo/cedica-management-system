@@ -60,15 +60,20 @@ def find_employee_by_profession(profession):
 
 def update_employee(id, **kwargs):
     employee = Employee.query.filter(Employee.id == id).first()
+    if not employee:
+        return False
     for key, value in kwargs.items():
         setattr(employee, key, value)
     db.session.commit()
-    return employee
+    return True
 
 def delete_employee(id):
     employee = Employee.query.filter(Employee.id == id).first()
-    db.session.delete(employee)
-    db.session.commit()
+    if employee:
+        db.session.delete(employee)
+        db.session.commit()
+        return True
+    return False
 
 def get_employees_by_job_positions(job_positions):
     return db.session.query(Employee).filter(Employee.job_position.in_(job_positions)).all()
