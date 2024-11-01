@@ -8,11 +8,11 @@
 {% block form_fields %}
 <input type="text" name="alias" class="form-control" value="{{ user.alias if user else '' }}" placeholder="Nombre"
 	required>
-{% if not user %}
+
 <input type="email" name="email" class="form-control" value="{{ user.email if user else '' }}" placeholder="a@a.com"
-	required>
+	{% if user %}disabled{% endif %} required>
 
-
+{% if not user %}
 <input class="form-control" type="password" name="password" placeholder="Contraseña" required>
 {% endif %}
 
