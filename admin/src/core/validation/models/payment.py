@@ -30,21 +30,3 @@ class PaymentValidator(Validator):
         Additional validations specific to updates can be added here
         """
         return self.validate(data)
-
-# Example usage:
-"""
-validator = PaymentValidator()
-
-# Example data
-payment_data = {
-    'amount': '1000.50',
-    'type': 'Honorarios',
-    'description': 'Pago mensual',
-}
-
-# Validate
-errors = validator.validate_create(payment_data)
-if errors:
-    for error in errors:
-        print(f"{error.field}: {error.message}")
-"""

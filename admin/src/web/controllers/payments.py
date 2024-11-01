@@ -1,7 +1,9 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from src.core.models.employee import Employee
 from src.core.repositories import payment
+from src.core.validation.models.payment import PaymentValidator
 from src.web.helpers.auth import has_permission
+from src.web.helpers.flash import flash_validation_errors
 
 bp = Blueprint("payments", __name__, url_prefix="/payments")
 
@@ -29,12 +31,22 @@ def register():
 @bp.post("/create")
 @has_permission("payment_create")
 def create():
-    params = request.form
+    params = request.form.to_dict()
+
+    validator = PaymentValidator()
+    errors = validator.validate_create(params)
+
+    if errors:
+        flash_validation_errors(errors)
+        return redirect(url_for('payments.register'))
+
     try:
         p = payment.create_payment(**params)
+        flash("Pago registrado con éxito.", "success")
     except ValueError as e:
         flash(str(e), 'error')
         return redirect(url_for('payments.register'))
+
     return redirect(url_for('payments.index'))
 
 @bp.get("/<int:id>/show")
@@ -59,12 +71,22 @@ def edit(id):
 @bp.route("/<int:id>/update", methods=["POST", "PATCH"])
 @has_permission("payment_update")
 def update(id):
-    params = request.form
+    params = request.form.to_dict()
+
+    validator = PaymentValidator()
+    errors = validator.validate_update(params, id)
+
+    if errors:
+        flash_validation_errors(errors)
+        return redirect(url_for("payments.edit", id=id))
+
     try:
         p = payment.update_payment(id, **params)
+        flash("Pago actualizado con éxito.", "success")
     except ValueError as e:
         flash(str(e), 'error')
-        return redirect(url_for("payments.index"))
+        return redirect(url_for("payments.edit", id=id))
+
     return redirect(url_for("payments.index"))
 
 @bp.get("/<int:id>/delete")

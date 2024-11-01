@@ -3,6 +3,7 @@ from src.core.validation.models.user import UserValidator
 from src.core.repositories import user as auth
 from src.core.repositories import role
 from src.web.helpers.auth import has_permission
+from src.web.helpers.flash import flash_validation_errors
 
 bp = Blueprint("users", __name__, url_prefix="/users")
 
@@ -21,8 +22,7 @@ def create():
 
     errors = validator.validate(data)
     if errors:
-        for error in errors:
-            flash(f"{error.field}: {error.message}", "error")
+        flash_validation_errors(errors)
         return redirect(url_for("users.create"))
 
     auth.create_user(
@@ -75,8 +75,7 @@ def update(id):
 
     errors = validator.validate_for_update(data)
     if errors:
-        for error in errors:
-            flash(f"{error.field}: {error.message}", "error")
+        flash_validation_errors(errors)
         return redirect(url_for("users.update", id=id))
 
     # Prepare update data
