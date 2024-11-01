@@ -73,8 +73,11 @@ def update_payment(id, **kwargs):
 
 def delete_payment(id):
     payment = Payment.query.filter(Payment.id == id).first()
-    db.session.delete(payment)
-    db.session.commit()
+    if payment:
+        db.session.delete(payment)
+        db.session.commit()
+        return True
+    return False
 
 def get_payment(id) -> Payment | None:
     payment = Payment.query.filter(Payment.id == id).first()

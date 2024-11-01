@@ -15,7 +15,7 @@ def index():
     sort_by = request.args.get('sort_by', 'date')
     direction = request.args.get('direction', 'asc')
     page = request.args.get('page', 1, type=int)
-    
+
     payments = payment.list_payments(start_date, end_date, payment_type, sort_by, direction, page)
 
     return render_template("payments/index.html", pagination=payments)
@@ -70,11 +70,9 @@ def update(id):
 @bp.get("/<int:id>/delete")
 @has_permission("payment_destroy")
 def delete(id):
-    p = payment.get_payment(id)
-    if not p:
+    if payment.delete_payment(id):
+        flash("Pago eliminado con éxito.", "info")
+        return redirect(url_for("payments.index"))
+    else:
         flash("Pago no encontrado.", "error")
         return redirect(url_for("payments.index"))
-
-    payment.delete_payment(id)
-    flash("Pago eliminado con éxito.", "info")
-    return redirect(url_for("payments.index"))
