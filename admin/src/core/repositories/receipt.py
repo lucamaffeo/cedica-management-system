@@ -43,22 +43,13 @@ def create_receipt(**kwargs):
     db.session.commit()
     return receipt
 
-def update_receipt(id, **kwargs):
-    receipt = Receipt.query.filter(Receipt.id == id).first()
-    if not receipt:
-        raise ValueError('Recibo no encontrado.')
-
+def update_receipt(receipt: Receipt, **kwargs):
     for key, value in kwargs.items():
         setattr(receipt, key, value)
-
     db.session.commit()
     return receipt
 
-def delete_receipt(id):
-    receipt = Receipt.query.filter(Receipt.id == id).first()
-    if not receipt:
-        raise ValueError('Recibo no encontrado.')
-    
+def delete_receipt(receipt: Receipt):
     db.session.delete(receipt)
     db.session.commit()
 

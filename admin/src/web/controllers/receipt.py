@@ -89,9 +89,16 @@ def update(id):
     if not employee_id and not ja_id:
         flash("Debe seleccionar un empleado y J&A", "error") 
         return redirect(url_for('receipts.update', id=id))   
-    
+
+    # Obtener el recibo
+    receipt_obj = receipt.get_receipt(id)
+    if not receipt_obj:
+        flash("Recibo no encontrado.", "error")
+        return redirect(url_for("receipts.index"))
+
+    # Actualizar el recibo pasando el objeto
     receipt.update_receipt(
-        id=id,
+        receipt_obj,
         employee_id=employee_id,
         ja_id=ja_id,
         payment_date=params['payment_date'] or None,
@@ -100,18 +107,20 @@ def update(id):
         remarks=params.get('remarks') or None,
         up_to_date=params.get('up_to_date') == "on",
     )
-    
+
     flash("Recibo actualizado con éxito.", "success")
     return redirect(url_for("receipts.index"))
 
 @bp.get("/<int:id>/delete")
 @has_permission("receipt_destroy")
 def delete(id):
-    r = receipt.get_receipt(id)
-    if not r:
+    # Obtener el recibo una sola vez
+    receipt_obj = receipt.get_receipt(id)
+    if not receipt_obj:
         flash("Recibo no encontrado.", "error")
         return redirect(url_for("receipts.index"))
 
-    receipt.delete_receipt(id)
+    # Eliminar el recibo pasando el objeto obtenido
+    receipt.delete_receipt(receipt_obj)
     flash("Recibo eliminado con éxito.", "info")
     return redirect(url_for("receipts.index"))
