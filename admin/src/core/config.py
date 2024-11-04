@@ -9,6 +9,7 @@ class Config(object):
     SESSION_COOKIE_SECURE = True
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = "Lax"
+    PERMANENT_SESSION_LIFETIME = 3600 # 1 hour
     ITEMS_PER_PAGE = 5
 
 class ProductionConfig(Config):

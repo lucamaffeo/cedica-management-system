@@ -31,6 +31,7 @@ def authenticate():
         return redirect(url_for("auth.login"))
 
     # Set session for user
+    session.permanent = True
     session["user_id"] = user.id
     flash("La sesión se inició correctamente.", "success")
 

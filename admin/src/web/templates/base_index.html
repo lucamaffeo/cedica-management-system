@@ -4,6 +4,11 @@
     <h1>{% block page_title %}Listado{% endblock %}</h1>
 
     <!-- Formulario de búsqueda y filtros -->
+	<button class="btn btn-secondary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#filters" aria-expanded="false" aria-controls="filters">
+	  Filtros
+	</button>
+	
+	<div class="collapse mb-3" id="filters">
     <form method="GET" action="{{ request.path }}" class="form-inline mb-3">
    {% if show_search is not defined or show_search %}
         {% block search %}
@@ -20,9 +25,10 @@
     {% endif %}
 
       <!-- Filtros adicionales definidos en la plantilla hija -->
-      {% block filters %}{% endblock %}
+  {% block filters %}{% endblock %}
 
       <button type="submit" class="btn btn-primary">Buscar</button>
+	</div>
     </form>
 
     <table class="table table-striped">
