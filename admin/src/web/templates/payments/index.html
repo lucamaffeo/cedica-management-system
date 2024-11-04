@@ -15,9 +15,10 @@
         <label for="type">Tipo</label>
         <select class="form-control" id="type" name="type">
             <option value="">Todos los tipos</option>
-            <option value="Honorarios" {% if request.args.get('type') == 'Honorarios' %}selected{% endif %}>Honorarios</option>
-            <option value="Proveedor" {% if request.args.get('type') == 'Proveedor' %}selected{% endif %}>Proveedor</option>
-            <option value="Gastos varios" {% if request.args.get('type') == 'Gastos varios' %}selected{% endif %}>Gastos varios</option>
+            {% set payment_types = ["Honorarios", "Proveedor", "Gastos varios"] %}
+            {% for type in payment_types %}
+            <option value="{{ type }}" {% if request.args.get('type') == type %}selected{% endif %}>{{ type }}</option>
+            {% endfor %}
         </select>
     </div>
     <div class="form-group row">
