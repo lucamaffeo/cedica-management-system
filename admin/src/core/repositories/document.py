@@ -70,6 +70,25 @@ def _upload_file(file: BinaryIO, file_path: str) -> str:
     except Exception as e:
         raise StorageError(f"Failed to upload file: {str(e)}")
 
+def download_file(file_path: str) -> tuple:
+    """
+    Downloads a file from Minio storage.
+
+    Args:
+        file_path (str): The path of the file in storage
+
+    Returns:
+        tuple: A tuple containing the file stream and the file name
+    """
+    storage_client = _get_storage_client()
+    bucket_name = "grupo10"
+
+    try:
+        response = storage_client.get_object(bucket_name, file_path)
+        return response, file_path.split('/')[-1]
+    except Exception as e:
+        raise StorageError(f"Failed to download file: {str(e)}")
+
 def list_documents_by_id(type, id, search='', sort_by='title', direction='asc', page=1):
     query =Document.query.filter_by(entity_type=type, entity_id=id)
 

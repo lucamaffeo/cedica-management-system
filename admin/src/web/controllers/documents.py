@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request, url_for, flash
+from flask import Blueprint, redirect, render_template, request, url_for, flash, send_file
 from src.web.helpers.documentation import clean_entity_type
 from src.core.repositories import document as document_repository
 from src.web.helpers.auth import has_permission
@@ -44,8 +44,8 @@ def download(entity_type, entity_id, id):
         flash("Documento no encontrado.", "error")
         return redirect(request.referrer)
     else:
-        document_repository.download_file(document.file)
-        return redirect(url_for("documents.index", entity_type=document.entity_type, entity_id=document.entity_id))
+        file_stream, file_name = document_repository.download_file(document.file)
+        return send_file(file_stream, as_attachment=True, download_name=file_name)
 
 # add document
 @bp.get("/<string:entity_type>/<int:entity_id>/create")
