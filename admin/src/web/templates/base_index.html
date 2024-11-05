@@ -9,7 +9,7 @@
 	</button>
 	
 	<div class="collapse mb-3" id="filters">
-    <form method="GET" action="{{ request.path }}" class="form-inline mb-3">
+    <form method="GET" action="{{ url_for(request.endpoint, entity_type=entity_type, entity_id=entity_id) }}" class="form-inline mb-3">
    {% if show_search is not defined or show_search %}
         {% block search %}
                    <label for="search-input" class="form-label">Buscar</label>
@@ -48,7 +48,7 @@
               {% endif %}
 
               {% set args = request.args.to_dict() %}
-              {% set args = args | merge({'sort_by': field, 'direction': next_direction}) %}
+              {% set args = args | merge({'sort_by': field, 'direction': next_direction, 'entity_type': entity_type, 'entity_id': entity_id}) %}
 
               <a href="{{ url_for(request.endpoint, **args) }}">
                   {{ display_name }}
@@ -110,7 +110,7 @@
             {# Previous button #}
             <li class="page-item {{ 'disabled' if page_num == 1 }}">
               <a class="page-link" 
-                 href="{{ url_for(request.endpoint, page=page_num-1, **request.view_args) if page_num > 1 else '#' }}"
+                 href="{{ url_for(request.endpoint, page=page_num-1, entity_type=entity_type, entity_id=entity_id) if page_num > 1 else '#' }}"
                  aria-label="Previous"
                  {{ 'tabindex="-1"' if page_num == 1 }}>
                 &laquo;
@@ -121,7 +121,7 @@
             {% for p in range(start_page, end_page + 1) %}
               <li class="page-item {{ 'active' if p == page_num }}">
                 <a class="page-link" 
-                   href="{{ url_for(request.endpoint, page=p, **request.view_args) }}">
+                   href="{{ url_for(request.endpoint, page=p, entity_type=entity_type, entity_id=entity_id) }}">
                   {{ p }}
                 </a>
               </li>
@@ -130,7 +130,7 @@
             {# Next button #}
             <li class="page-item {{ 'disabled' if page_num == pagination.pages }}">
               <a class="page-link"
-                 href="{{ url_for(request.endpoint, page=page_num+1, **request.view_args) if page_num < pagination.pages else '#' }}"
+                 href="{{ url_for(request.endpoint, page=page_num+1, entity_type=entity_type, entity_id=entity_id) if page_num < pagination.pages else '#' }}"
                  aria-label="Next"
                  {{ 'tabindex="-1"' if page_num == pagination.pages }}>
                 &raquo;
@@ -143,7 +143,7 @@
   {% endblock %}
 
   {% block add_new %}
-  <a href="{{ url_for(request.endpoint) }}create"
+  <a href="{{ url_for(request.endpoint, entity_type=entity_type, entity_id=entity_id) }}create"
     class="btn btn-primary">Crear</a>
   {% endblock %}
 

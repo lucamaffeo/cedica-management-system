@@ -26,18 +26,10 @@ Buscar por Nombre, Apellido, DNI o Profesionales que lo atienden
             <td>{{ rider.dni }}</td>
             <td>{{ rider.professionals }}</td>
             <td>
-                {% if user_id and has_permission(user_id,'rider_show') %}
                 <a href="{{ url_for('riders.show', id=rider.id) }}">Ver</a>
-                {% endif %}
-                {% if user_id and has_permission(user_id,'rider_update') %}
                 <a href="{{ url_for('riders.edit', id=rider.id) }}">Editar</a>
-                {% endif %}
-                {% if user_id and has_permission(user_id,'rider_destroy') %}
                 <a href="{{ url_for('riders.delete', id=rider.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
-                {% endif %}
-                {% if user_id and has_permission(user_id,'rider_show') %}
                 <a href="{{ url_for('documents.index', entity_type="riders", entity_id=rider.id) }}">Ver documentos</a>
-                {% endif %}
             </td>
         </tr>
         {% endfor %}

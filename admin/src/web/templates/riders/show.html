@@ -99,13 +99,7 @@
 
 </div>
 
-{% if user_id and has_permission(user_id,'rider_update') %}
 <a href="{{ url_for('riders.edit', id=rider.id) }}">Editar</a>
-{% endif %}
-{% if user_id and has_permission(user_id,'rider_index') %}
 <a href="{{ url_for('riders.index') }}">Volver a la lista</a>
-{% endif %}
-{% if user_id and has_permission(user_id,'rider_show') %}
-<a href="{{ url_for('riders.index_documents', id=rider.id) }}">Ver documentos</a>
-{% endif %}
+<a href="{{ url_for('documents.index', entity_type="riders", entity_id=rider.id) }}">Ver documentos</a>
 {% endblock %}

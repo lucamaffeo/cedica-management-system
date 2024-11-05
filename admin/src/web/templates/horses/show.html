@@ -31,5 +31,6 @@ Perfil de {{ horse.name }}
 
 <a href="{{ url_for('horses.edit', id=horse.id) }}">Editar</a>
 <a href="{{ url_for('horses.index') }}">Volver a la lista</a>
+<a href="{{ url_for('documents.index', entity_type="horses", entity_id=horse.id) }}">Ver documentos</a>
 
 {% endblock %}

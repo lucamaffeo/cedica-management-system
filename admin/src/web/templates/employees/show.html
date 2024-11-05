@@ -23,4 +23,5 @@
 
 <a href="{{ url_for('employees.edit', id=employee.id) }}">Editar</a>
 <a href="{{ url_for('employees.index') }}">Volver a la lista</a>
+<a href="{{ url_for('documents.index', entity_type="employees", entity_id=employee.id) }}">Ver documentos</a>
 {% endblock %}

@@ -8,7 +8,6 @@ Listado de Documentos
 <span style="font-size: 0.8em;">Documentos de {{ entity_type|capitalize }} {{entity_id }}</span>
 {% endblock %}
 
-
 {% block page_subtitle %}
 {% endblock %}
 
@@ -32,21 +31,14 @@ Buscar por Tipo, Titulo
             <td>{{ document.upload_date.strftime('%d/%m/%Y') }}</td>
             <!-- ver -->
             <td>
-                {% if user_id and has_permission(user_id,'rider_update') %}
                 <a href="{{ url_for('documents.delete', entity_type=entity_type, entity_id=entity_id, id=document.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
-                {% endif %}
-                {% if user_id and has_permission(user_id,'rider_show') and document.file %}
                 <a href="{{ url_for('documents.download', entity_type=entity_type, entity_id=entity_id, id=document.id) }}">Descargar</a>
-                {% endif %}
             </td>
-
         </tr>
         {% endfor %}
     {% endblock %}  
 
     {% block add_new %}
-	{% if user_id and has_permission(user_id,'rider_update') %} <!-- TODO check permissions --!>
     <a href="{{ url_for('documents.add', entity_type=entity_type, entity_id=entity_id) }}" class="btn btn-primary">Añadir Documento</a>
-    {% endif %}
     {% endblock %}
 
