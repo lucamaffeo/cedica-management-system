@@ -13,9 +13,9 @@
 
         <label class="form-label" for="gender">Sexo:</label>
         <select class="form-control" name="gender" required>
-
-            <option value="Macho" {{ 'selected' if horse and horse.gender=='Macho' else '' }}>Macho</option>
-            <option value="Hembra" {{ 'selected' if horse and horse.gender=='Hembra' else '' }}>Hembra</option>
+            {% for gender in ['Macho', 'Hembra'] %}
+            <option value="{{ gender }}" {{ 'selected' if horse and horse.gender == gender else '' }}>{{ gender }}</option>
+        {% endfor %}
         </select>
  
 
@@ -27,8 +27,9 @@
 
         <label class="form-label" for="purchase_donation">Compra/Donación:</label>
         <select class="form-control" name="purchase_donation" required>
-            <option value="Compra" {{ 'selected' if horse and horse.purchase_donation=='Compra' else '' }}>Compra</option>
-            <option value="Donacion" {{ 'selected' if horse and horse.purchase_donation=='Donacion' else '' }}>Donación</option>
+            {% for option in ['Compra', 'Donacion'] %}
+            <option value="{{ option }}" {{ 'selected' if horse and horse.purchase_donation == option else '' }}>{{ option }}</option>
+        {% endfor %}
         </select>
 
         <label class="form-label"  for="entry_date">Fecha de Ingreso:</label>
@@ -57,14 +58,9 @@
 
         <label class="form-label" for="assigned_activities_ja">Tipo de J&A Asignados:</label>
         <select class="form-control" name="assigned_activities_ja" required>
-            <option value="Hipoterapia" {{ 'selected' if horse and horse.assigned_activities_ja =="Hipoterapia" else '' }}>Hipoterapia
-            </option>
-            <option value="Monta Terapeutica" {{ 'selected' if horse and horse.assigned_activities_ja =="Monta Terapeutica" else '' }}>
-                Monta Terapéutica</option>
-            <option value="Deporte Ecuestre Adaptado" {{ 'selected' if horse and horse.assigned_activities_ja =="Deporte Ecuestre Adaptado" else '' }}>Deporte Ecuestre Adaptado</option>
-            <option value="Actividades Recreativas" {{ 'selected' if horse and horse.assigned_activities_ja =="Actividades Recreativas" else '' }}>Actividades Recreativas</option>
-            <option value="Equitacion" {{ 'selected' if horse and horse.assigned_activities_ja =="Equitacion" else '' }}>Equitación
-            </option>
+            {% for activity in ['Hipoterapia', 'Monta Terapeutica', 'Deporte Ecuestre Adaptado', 'Actividades Recreativas', 'Equitacion'] %}
+            <option value="{{ activity }}" {{ 'selected' if horse and horse.assigned_activities_ja == activity else '' }}>{{ activity }}</option>
+        {% endfor %}
         </select>
 
 {% endblock %}

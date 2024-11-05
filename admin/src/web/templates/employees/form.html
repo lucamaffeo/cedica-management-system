@@ -76,11 +76,12 @@
 
 <label class="form-label" for="condition">Condición:</label>
 <select class="form-control" id="condition" name="condition" required>
-    <option value="Voluntario" {{ 'selected' if employee and employee.condition=='Voluntario' else '' }}>Voluntario
+    {% set conditions = ['Voluntario', 'Personal Rentado'] %}
+    {% for condition in conditions %}
+    <option value="{{ condition }}" {{ 'selected' if employee and employee.condition == condition else '' }}>
+        {{ condition }}
     </option>
-    <option value="Personal Rentado" {{ 'selected' if employee and employee.condition=='Personal Rentado' else '' }}>
-        Personal
-        Rentado</option>
+    {% endfor %}
 </select>
 {% if is_update %}
 <label class="form-check-label" for="active">Activo</label>

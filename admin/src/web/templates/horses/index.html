@@ -14,20 +14,13 @@ Buscar por Nombre
 {% endblock %}
 
 {% block filters %}
-
-    <select class="form-control" name="assigned_activities_ja" >
+    <select class="form-control" name="assigned_activities_ja">
         <option value="">Todos los tipos de J&A</option>
-        <option value="Hipoterapia" {% if request.args.get('assigned_activities_ja')=='Hipoterapia' %}selected{% endif %}>
-            Hipoterapia</option>
-        <option value="Monta Terapeutica" {% if request.args.get('assigned_activities_ja')=='Monta Terapeutica' %}selected{%
-            endif %}>Monta Terapéutica</option>
-        <option value="Deporte Ecuestre Adaptado" {% if
-            request.args.get('assigned_activities_ja')=='Deporte Ecuestre Adaptado' %}selected{% endif %}>Deporte Ecuestre
-            Adaptado</option>
-        <option value="Actividades Recreativas" {% if request.args.get('assigned_activities_ja')=='Actividades Recreativas'
-            %}selected{% endif %}>Actividades Recreativas</option>
-        <option value="Equitacion" {% if request.args.get('assigned_activities_ja')=='Equitación' %}selected{% endif %}>
-            Equitación</option>
+        {% set activities = ["Hipoterapia", "Monta Terapeutica", "Deporte Ecuestre Adaptado", "Actividades Recreativas", "Equitación"] %}
+        {% for activity in activities %}
+            <option value="{{ activity }}" {% if request.args.get('assigned_activities_ja') == activity %}selected{% endif %}>
+                {{ activity }}</option>
+        {% endfor %}
     </select>
 {% endblock %}
 
