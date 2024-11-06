@@ -1,5 +1,6 @@
 import io
-from src.core.repositories import user, employee, role, permission, horse, assignment, tutor, day, document, receipt, payment, riders, contact
+from src.core.repositories import user, employee, role, permission, horse, assignment, tutor, day, document, receipt, payment, riders, contact,content
+
 def run():
 
     # Permissions
@@ -46,6 +47,7 @@ def run():
     receipt_create = permission.create_permission(name="receipt_create")
     receipt_destroy = permission.create_permission(name="receipt_destroy")
 
+<<<<<<< admin/src/core/seeds.py
     #Contact: index, show, update, create, destroy
     contact_index = permission.create_permission(name="contact_index")
     contact_show = permission.create_permission(name="contact_show")
@@ -56,6 +58,19 @@ def run():
     # Roles
     _ = role.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy, payment_index, payment_show, payment_update, payment_create, payment_destroy,employee_create, employee_destroy, employee_index, employee_show, employee_update, receipt_index, receipt_show, receipt_update, receipt_create, receipt_destroy, horse_create, horse_destroy, horse_index, horse_show, horse_update, rider_show, rider_index, rider_update, rider_destroy, rider_create, contact_index, contact_show, contact_update, contact_create, contact_destroy])
     _ = role.create_role(name="administracion", permissions=[receipt_index, receipt_show, receipt_update, receipt_create, receipt_destroy , payment_index, payment_show, payment_update, payment_create, payment_destroy, employee_create, employee_destroy, employee_index, employee_show, employee_update, horse_index, horse_show, rider_show, rider_index, rider_update, rider_destroy, rider_create, contact_index, contact_show, contact_update, contact_create, contact_destroy])
+=======
+    #Content: index, show, update, create, destroy
+    content_index = permission.create_permission(name="content_index")
+    content_show = permission.create_permission(name="content_show")
+    content_update = permission.create_permission(name="content_update")
+    content_create = permission.create_permission(name="content_create")
+    content_destroy = permission.create_permission(name="content_destroy")     
+    
+
+    # Roles
+    _ = role.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy, payment_index, payment_show, payment_update, payment_create, payment_destroy,employee_create, employee_destroy, employee_index, employee_show, employee_update, receipt_index, receipt_show, receipt_update, receipt_create, receipt_destroy, horse_create, horse_destroy, horse_index, horse_show, horse_update, rider_show, rider_index, rider_update, rider_destroy, rider_create, content_index, content_show, content_update, content_create, content_destroy])
+    _ = role.create_role(name="administracion", permissions=[receipt_index, receipt_show, receipt_update, receipt_create, receipt_destroy , payment_index, payment_show, payment_update, payment_create, payment_destroy, employee_create, employee_destroy, employee_index, employee_show, employee_update, horse_index, horse_show, rider_show, rider_index, rider_update, rider_destroy, rider_create])
+>>>>>>> admin/src/core/seeds.py
     _ = role.create_role(name="tecnica",permissions=[horse_index, horse_show, receipt_index, receipt_show, rider_index, rider_create, rider_destroy, rider_show, rider_update])
     _ = role.create_role(name="voluntariado")
     _ = role.create_role(name="ecuestre", permissions=[horse_index, horse_show, horse_update, horse_create, horse_destroy, rider_index, rider_show])
@@ -119,11 +134,16 @@ def run():
 
     #DOCUMENTOS
 
+<<<<<<< admin/src/core/seeds.py
 
     # Etapa 2
     # CONTACTO
     # ESTADOS
     _ = contact.create_status(name="pendiente")
     _ = contact.create_status(name="resuelto")
+=======
+    #Contenidos
+    contenido1 = content.create_content(title="Titulo1", summary="Resumen1", content="Contenido1", author_id=1, status="Publicado")
+>>>>>>> admin/src/core/seeds.py
 
     print("Seed ejecutado correctamente")
