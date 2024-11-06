@@ -1,0 +1,46 @@
+{% extends "base_index.html" %}
+
+{% block title %}
+    Contactos
+{% endblock %}
+
+{% block page_title %}
+    Contactos
+{% endblock %}
+
+{% set show_search = false %}
+
+{% block filters %}
+    <label for="status" class="form-label">Estado</label>
+    <select class="form-control" name="status" id="status">
+        <option value="">Todos los estados</option>
+        {% for status in statuses %}
+        <option value="{{ status.id }}" {% if request.args.get('status')|int==status.id %}selected{% endif %}>{{ status.name }}
+        </option>
+        {% endfor %}
+    </select>
+{% endblock %}
+
+{% set sorting_criteria = [("name", "Nombre"), ("email", "Email"), ("status", "Estado"), ("inserted_at", "Creación")] %}
+
+{% set sortable_fields = ["inserted_at"] %}
+
+{% block table_rows %}
+    {% for contact in pagination.items %}
+    <tr>
+        <td>{{ contact.name }}</td>
+        <td>{{ contact.email }}</td>
+        <td>{{ contact.status.name }}</td>
+        <td>{{ contact.formatted_inserted_at }}</td>
+        <td>
+		<a href="{{ url_for('contacts.show', id=contact.id) }}">Ver</a><br>
+		<a href="{{ url_for('contacts.update', id=contact.id) }}">Editar</a><br>
+		<a href="{{ url_for('contacts.delete', id=contact.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
+        </td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="5">No se encontraron contactos.</td>
+    </tr>
+    {% endfor %}
+{% endblock %}
