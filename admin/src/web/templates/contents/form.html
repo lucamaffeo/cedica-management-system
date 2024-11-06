@@ -1,0 +1,27 @@
+{% extends "base_form.html" %}
+
+{% block form_action %}
+{{ url_for('contents.update', id=content.id) if content else url_for('contents.create') }}
+{% endblock %}
+
+{% block form_fields %}
+<label class="form-label" for="title">Título:</label>
+<input type="text" id="title" name="title" required class="form-control" value="{{ content.title if content else '' }}">
+
+<label class="form-label" for="summary">Resumen:</label>
+<input type="text" id="summary" name="summary" required class="form-control" value="{{ content.summary if content else '' }}">
+
+<label class="form-label" for="content">Contenido:</label>
+<textarea id="content" name="content" required class="form-control">{{ content.content if content else '' }}</textarea>
+
+
+<label class="form-label" for="status">Estado:</label>
+<select id="status" name="status" required class="form-control">
+    {% set statuses = ['Borrador', 'Publicado', 'Archivado'] %}
+    {% for status in statuses %}
+    <option value="{{ status }}" {{ 'selected' if content and content.status == status else '' }}>
+        {{ status }}
+    </option>
+    {% endfor %}
+</select>
+{% endblock %}

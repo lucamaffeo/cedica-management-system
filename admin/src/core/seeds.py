@@ -1,5 +1,5 @@
 import io
-from src.core.repositories import user, employee, role, permission, horse, assignment, tutor, day, document, receipt, payment, riders
+from src.core.repositories import user, employee, role, permission, horse, assignment, tutor, day, document, receipt, payment, riders, content
 def run():
 
     # Permissions
@@ -46,9 +46,16 @@ def run():
     receipt_create = permission.create_permission(name="receipt_create")
     receipt_destroy = permission.create_permission(name="receipt_destroy")
 
+    #Content: index, show, update, create, destroy
+    content_index = permission.create_permission(name="content_index")
+    content_show = permission.create_permission(name="content_show")
+    content_update = permission.create_permission(name="content_update")
+    content_create = permission.create_permission(name="content_create")
+    content_destroy = permission.create_permission(name="content_destroy")     
+    
 
     # Roles
-    _ = role.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy, payment_index, payment_show, payment_update, payment_create, payment_destroy,employee_create, employee_destroy, employee_index, employee_show, employee_update, receipt_index, receipt_show, receipt_update, receipt_create, receipt_destroy, horse_create, horse_destroy, horse_index, horse_show, horse_update, rider_show, rider_index, rider_update, rider_destroy, rider_create])
+    _ = role.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy, payment_index, payment_show, payment_update, payment_create, payment_destroy,employee_create, employee_destroy, employee_index, employee_show, employee_update, receipt_index, receipt_show, receipt_update, receipt_create, receipt_destroy, horse_create, horse_destroy, horse_index, horse_show, horse_update, rider_show, rider_index, rider_update, rider_destroy, rider_create, content_index, content_show, content_update, content_create, content_destroy])
     _ = role.create_role(name="administracion", permissions=[receipt_index, receipt_show, receipt_update, receipt_create, receipt_destroy , payment_index, payment_show, payment_update, payment_create, payment_destroy, employee_create, employee_destroy, employee_index, employee_show, employee_update, horse_index, horse_show, rider_show, rider_index, rider_update, rider_destroy, rider_create])
     _ = role.create_role(name="tecnica",permissions=[horse_index, horse_show, receipt_index, receipt_show, rider_index, rider_create, rider_destroy, rider_show, rider_update])
     _ = role.create_role(name="voluntariado")
@@ -112,5 +119,8 @@ def run():
     recibo = receipt.create_receipt(ja_id=1, quantity=1000, payment_method="Efectivo", employee_id=profesor.id, remarks="Sin observaciones")
 
     #DOCUMENTOS
+
+    #Contenidos
+    contenido1 = content.create_content(title="Titulo1", summary="Resumen1", content="Contenido1", author_id=1, status="Publicado")
 
     print("Seed ejecutado correctamente")

@@ -1,0 +1,17 @@
+{% extends "base_show.html" %}
+{% block content %}
+
+<h1>Detalles del Contenido</h1>
+<div>
+    <p><strong>Título:</strong> {{ content.title }}</p>
+    <p><strong>Resumen:</strong> {{ content.summary }}</p>
+    <p><strong>Contenido:</strong> {{ content.content }}</p>
+    <p><strong>Fecha de Creación:</strong> {{ content.creation_date.strftime('%d/%m/%Y') }}</p>
+    <p><strong>Fecha de Publicación:</strong> {{ content.publication_date.strftime('%d/%m/%Y') if content.publication_date else '-' }}</p>
+    <p><strong>Estado:</strong> {{ content.status }}</p>
+</div>
+
+<a href="{{ url_for('contents.edit', id=content.id) }}">Editar</a>
+<a href="{{ url_for('contents.index') }}">Volver a la lista</a>
+</div>
+{% endblock %}
