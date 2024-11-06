@@ -54,6 +54,7 @@ def update(id):
     if contact_repo.update_contact(
         id=id,
         status_id=data["status"],
+        comment=data["comment"],
     ):
         flash("Contacto actualizado con éxito.", "success")
         return redirect(url_for("contacts.index"))

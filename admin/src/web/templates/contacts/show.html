@@ -13,7 +13,9 @@
         <p><strong>Mensaje:</strong> {{ contact.body }}</p>
         <p><strong>Estado:</strong> {{ contact.status.name }}</p>
     </div>
-
+    <div>
+		<p><strong>Comentario:</strong> {{ contact.comment if contact.comment != None else '' }}</p>
+    </div>
     <div>
         <a href="{{ url_for('contacts.edit', id=contact.id) }}">Editar</a>
         <a href="{{ url_for('contacts.index') }}">Volver a la lista</a>
