@@ -90,7 +90,7 @@ def run():
     tres = user.create_user(email="rol3@mail.com", password="123456", role_id=3, alias="1")
     cuatro = user.create_user(email="rol4@mail.com", password="123456", role_id=4, alias="2")
     cinco = user.create_user(email="rol5@mail.com", password="123456", role_id=5, alias="3")
-    seis = user.create_user(email="rol6@mail.com", password="123456", role_id=6, alias="Editor")
+    seis = user.create_user(email="rol6@mail.com", password="123456", role_id=6, alias="4")
 
     _ = user.create_user(email="test@mail.com", password="123456", role_id=5, alias="3")
     _ = user.create_user(email="test2@mail.com", password="123456", role_id=5, alias="3")
