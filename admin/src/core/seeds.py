@@ -90,7 +90,7 @@ def run():
     tres = user.create_user(email="rol3@mail.com", password="123456", role_id=3, alias="1")
     cuatro = user.create_user(email="rol4@mail.com", password="123456", role_id=4, alias="2")
     cinco = user.create_user(email="rol5@mail.com", password="123456", role_id=5, alias="3")
-    seis = user.create_user(email="rol6@mail.com", password="123456", role_id=6, alias="4")
+    seis = user.create_user(email="rol6@mail.com", password="123456", role_id=6, alias="Editor")
 
     _ = user.create_user(email="test@mail.com", password="123456", role_id=5, alias="3")
     _ = user.create_user(email="test2@mail.com", password="123456", role_id=5, alias="3")
@@ -135,8 +135,6 @@ def run():
     _ = contact.create_status(name="pendiente")
     _ = contact.create_status(name="resuelto")
 
-
-
     #Contenidos
     contenido1 = content.create_content(title="Titulo1", summary="Resumen1", content="Contenido1", author_id=1)
     contenido2 = content.create_content(title="Titulo2", summary="Resumen2", content="Contenido2", author_id=1)
@@ -151,6 +149,6 @@ def run():
     contenido11 = content.create_content(title="Titulo11", summary="Resumen11", content="Contenido11", author_id=6)
     contenido12 = content.create_content(title="Titulo12", summary="Resumen12", content="Contenido12", author_id=6)
     contenido13 = content.create_content(title="Titulo13", summary="Resumen13", content="Contenido13", author_id=6)
-    
+
 
     print("Seed ejecutado correctamente")
