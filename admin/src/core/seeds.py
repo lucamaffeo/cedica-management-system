@@ -60,7 +60,7 @@ def run():
     _ = role.create_role(name="tecnica",permissions=[horse_index, horse_show, receipt_index, receipt_show, rider_index, rider_create, rider_destroy, rider_show, rider_update])
     _ = role.create_role(name="voluntariado")
     _ = role.create_role(name="ecuestre", permissions=[horse_index, horse_show, horse_update, horse_create, horse_destroy, rider_index, rider_show])
-
+    _ = role.create_role(name="editor", permissions=[content_index, content_show, content_update, content_create])
     # Asignaciones
     assignment1 = assignment.create_assignment(name="Asignación Universal por hijo")
     assignment2 = assignment.create_assignment(name="Asignación Universal por hijo con Discapacidad")
@@ -82,6 +82,7 @@ def run():
     tres = user.create_user(email="rol3@mail.com", password="123456", role_id=3, alias="1")
     cuatro = user.create_user(email="rol4@mail.com", password="123456", role_id=4, alias="2")
     cinco = user.create_user(email="rol5@mail.com", password="123456", role_id=5, alias="3")
+    seis = user.create_user(email="rol6@mail.com", password="123456", role_id=6, alias="4")
 
     _ = user.create_user(email="test@mail.com", password="123456", role_id=5, alias="3")
     _ = user.create_user(email="test2@mail.com", password="123456", role_id=5, alias="3")
@@ -121,6 +122,6 @@ def run():
     #DOCUMENTOS
 
     #Contenidos
-    contenido1 = content.create_content(title="Titulo1", summary="Resumen1", content="Contenido1", author_id=1, status="Publicado")
+    contenido1 = content.create_content(title="Titulo1", summary="Resumen1", content="Contenido1", author_id=1, status="Borrador")
 
     print("Seed ejecutado correctamente")

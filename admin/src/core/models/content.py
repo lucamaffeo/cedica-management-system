@@ -10,9 +10,9 @@ class Content(db.Model):
     creation_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     update_date = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
     title = db.Column(db.String(255), nullable=False)
-    summary = db.Column(db.String(255), nullable=False)
+    summary = db.Column(db.Text, nullable=False)
     content = db.Column(db.Text, nullable=False)
-    status = db.Column(db.Enum('Borrador', 'Publicado', 'Archivado', name="status"), nullable=False, default='Borrador')
+    status = db.Column(db.Enum('Borrador', 'Publicado', 'Archivado', name="status"), default='Borrador')
 
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     author = db.relationship('User', backref='contents', uselist=False)  
@@ -23,6 +23,11 @@ class Content(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
+            'title': self.title,
+            'creation_date': self.creation_date,
+            'publication_date': self.publication_date,
+            'status': self.status,
+            'author': self.author.name if self.author else None
         }
     
     def publish(self):
