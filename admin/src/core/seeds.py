@@ -82,7 +82,7 @@ def run():
     tres = user.create_user(email="rol3@mail.com", password="123456", role_id=3, alias="1")
     cuatro = user.create_user(email="rol4@mail.com", password="123456", role_id=4, alias="2")
     cinco = user.create_user(email="rol5@mail.com", password="123456", role_id=5, alias="3")
-    seis = user.create_user(email="rol6@mail.com", password="123456", role_id=6, alias="4")
+    seis = user.create_user(email="rol6@mail.com", password="123456", role_id=6, alias="Editor")
 
     _ = user.create_user(email="test@mail.com", password="123456", role_id=5, alias="3")
     _ = user.create_user(email="test2@mail.com", password="123456", role_id=5, alias="3")
@@ -122,6 +122,19 @@ def run():
     #DOCUMENTOS
 
     #Contenidos
-    contenido1 = content.create_content(title="Titulo1", summary="Resumen1", content="Contenido1", author_id=1, status="Borrador")
+    contenido1 = content.create_content(title="Titulo1", summary="Resumen1", content="Contenido1", author_id=1)
+    contenido2 = content.create_content(title="Titulo2", summary="Resumen2", content="Contenido2", author_id=1)
+    contenido3 = content.create_content(title="Titulo3", summary="Resumen3", content="Contenido3", author_id=1)
+    contenido4 = content.create_content(title="Titulo4", summary="Resumen4", content="Contenido4", author_id=1)
+    contenido5 = content.create_content(title="Titulo5", summary="Resumen5", content="Contenido5", author_id=1)
+    contenido6 = content.create_content(title="Titulo6", summary="Resumen6", content="Contenido6", author_id=1)
+    contenido7 = content.create_content(title="Titulo7", summary="Resumen7", content="Contenido7", author_id=1)
+    contenido8 = content.create_content(title="Titulo8", summary="Resumen8", content="Contenido8", author_id=1)
+    contenido9 = content.create_content(title="Titulo9", summary="Resumen9", content="Contenido9", author_id=1)
+    contenido10 = content.create_content(title="Titulo10", summary="Resumen10", content="Contenido10", author_id=6)
+    contenido11 = content.create_content(title="Titulo11", summary="Resumen11", content="Contenido11", author_id=6)
+    contenido12 = content.create_content(title="Titulo12", summary="Resumen12", content="Contenido12", author_id=6)
+    contenido13 = content.create_content(title="Titulo13", summary="Resumen13", content="Contenido13", author_id=6)
+    
 
     print("Seed ejecutado correctamente")

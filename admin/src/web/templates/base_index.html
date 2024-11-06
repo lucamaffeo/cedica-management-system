@@ -4,6 +4,7 @@
     <h1>{% block page_title %}Listado{% endblock %}</h1>
 
     <!-- Formulario de búsqueda y filtros -->
+    {% if not request.path.startswith('/contents/') %}
 	<button class="btn btn-secondary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#filters" aria-expanded="false" aria-controls="filters">
 	  Filtros
 	</button>
@@ -30,6 +31,7 @@
       <button type="submit" class="btn btn-primary">Buscar</button>
 	</div>
     </form>
+    {% endif %}
 
     <table class="table table-striped">
       <thead class="thead-dark">
