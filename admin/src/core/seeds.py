@@ -1,5 +1,5 @@
 import io
-from src.core.repositories import user, employee, role, permission, horse, assignment, tutor, day, document, receipt, payment, riders
+from src.core.repositories import user, employee, role, permission, horse, assignment, tutor, day, document, receipt, payment, riders, contact
 def run():
 
     # Permissions
@@ -38,7 +38,7 @@ def run():
     rider_update = permission.create_permission(name="rider_update")
     rider_create = permission.create_permission(name="rider_create")
     rider_destroy = permission.create_permission(name="rider_destroy") 
-    
+
     #Receipt: index, show, update, create, destroy
     receipt_index = permission.create_permission(name="receipt_index")
     receipt_show = permission.create_permission(name="receipt_show")
@@ -46,10 +46,16 @@ def run():
     receipt_create = permission.create_permission(name="receipt_create")
     receipt_destroy = permission.create_permission(name="receipt_destroy")
 
+    #Contact: index, show, update, create, destroy
+    contact_index = permission.create_permission(name="contact_index")
+    contact_show = permission.create_permission(name="contact_show")
+    contact_update = permission.create_permission(name="contact_update")
+    contact_create = permission.create_permission(name="contact_create")
+    contact_destroy = permission.create_permission(name="contact_destroy")
 
     # Roles
-    _ = role.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy, payment_index, payment_show, payment_update, payment_create, payment_destroy,employee_create, employee_destroy, employee_index, employee_show, employee_update, receipt_index, receipt_show, receipt_update, receipt_create, receipt_destroy, horse_create, horse_destroy, horse_index, horse_show, horse_update, rider_show, rider_index, rider_update, rider_destroy, rider_create])
-    _ = role.create_role(name="administracion", permissions=[receipt_index, receipt_show, receipt_update, receipt_create, receipt_destroy , payment_index, payment_show, payment_update, payment_create, payment_destroy, employee_create, employee_destroy, employee_index, employee_show, employee_update, horse_index, horse_show, rider_show, rider_index, rider_update, rider_destroy, rider_create])
+    _ = role.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy, payment_index, payment_show, payment_update, payment_create, payment_destroy,employee_create, employee_destroy, employee_index, employee_show, employee_update, receipt_index, receipt_show, receipt_update, receipt_create, receipt_destroy, horse_create, horse_destroy, horse_index, horse_show, horse_update, rider_show, rider_index, rider_update, rider_destroy, rider_create, contact_index, contact_show, contact_update, contact_create, contact_destroy])
+    _ = role.create_role(name="administracion", permissions=[receipt_index, receipt_show, receipt_update, receipt_create, receipt_destroy , payment_index, payment_show, payment_update, payment_create, payment_destroy, employee_create, employee_destroy, employee_index, employee_show, employee_update, horse_index, horse_show, rider_show, rider_index, rider_update, rider_destroy, rider_create, contact_index, contact_show, contact_update, contact_create, contact_destroy])
     _ = role.create_role(name="tecnica",permissions=[horse_index, horse_show, receipt_index, receipt_show, rider_index, rider_create, rider_destroy, rider_show, rider_update])
     _ = role.create_role(name="voluntariado")
     _ = role.create_role(name="ecuestre", permissions=[horse_index, horse_show, horse_update, horse_create, horse_destroy, rider_index, rider_show])
@@ -112,5 +118,12 @@ def run():
     recibo = receipt.create_receipt(ja_id=1, quantity=1000, payment_method="Efectivo", employee_id=profesor.id, remarks="Sin observaciones")
 
     #DOCUMENTOS
+
+
+    # Etapa 2
+    # CONTACTO
+    # ESTADOS
+    _ = contact.create_status(name="pendiente")
+    _ = contact.create_status(name="resuelto")
 
     print("Seed ejecutado correctamente")

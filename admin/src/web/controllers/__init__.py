@@ -1,3 +1,4 @@
+from .contacts import bp as contacts
 from .documents import bp as documents
 from .auth import bp as auth
 from .users import bp as users
@@ -17,3 +18,4 @@ def register_blueprints(app):
     app.register_blueprint(documents)
     app.register_blueprint(horses)
     app.register_blueprint(receipt)
+    app.register_blueprint(contacts)

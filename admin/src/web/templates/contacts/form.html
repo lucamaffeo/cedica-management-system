@@ -1,0 +1,30 @@
+{% extends "base_form.html" %}
+
+<!-- Use (if contact) to check for is_update or is_update_own (edit profile) -->
+{% block form_action %}
+{{ url_for('contacts.update', id=contact.id) if contact else url_for('contacts.create') }}
+{% endblock %}
+
+{% block form_fields %}
+<input type="text" name="name" class="form-control" value="{{ contact.name if contact else '' }}" placeholder="Nombre"
+	{% if contact %}disabled{% endif %} required>
+
+<input type="email" name="email" class="form-control" value="{{ contact.email if contact else '' }}" placeholder="a@a.com"
+	{% if contact %}disabled{% endif %} required>
+
+<input class="form-control" type="text" name="body" placeholder="Consulta" {% if contact %}disabled{% endif %} required>
+
+{% if is_update %}
+<div class="d-flex justify-content-center">
+
+<select class="form-control" name="status" required>
+	<option value="" disabled {{ 'selected' if not contact }}>Seleccione un estado</option>
+	{% for status in statuses %}
+	<option value="{{ status.id }}" {{ 'selected' if contact and contact.status_id == status.id }}>{{ status.name }}</option>
+	{% endfor %}
+</select>
+
+</div>
+{% endif %}
+
+{% endblock %}

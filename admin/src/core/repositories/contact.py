@@ -1,18 +1,14 @@
 from flask import current_app
 from src.core.database import db
-from src.core.models.contact import Contact
+from src.core.models.contact import Contact, ContactStatus
 
-def list_contacts(search='', sort_by='email', direction='asc', active=None, page=1):
+def list_contacts(sort_by='email', direction='asc', status_id=None, page=1):
     query = Contact.query
 
-    if search:
-        query = query.filter(Contact.email.ilike(f'%{search}%'))
+    if status_id:
+        query = query.filter(Contact.status_id == status_id)
 
     items_per_page = current_app.config.get('ITEMS_PER_PAGE')
-
-    if active is not None and active != '':
-        active_value = active == 'true'
-        query = query.filter_by(active=active_value)
 
     if direction == 'asc':
         query = query.order_by(getattr(Contact, sort_by).asc())
@@ -23,12 +19,22 @@ def list_contacts(search='', sort_by='email', direction='asc', active=None, page
 
     return paginated_contacts
 
+def list_statuses():
+    contact_status = ContactStatus.query.all()
+    return contact_status
+
 def create_contact(**kwargs):
     contact = Contact(**kwargs)
     db.session.add(contact)
     db.session.commit()
 
     return contact
+
+def create_status(**kwargs):
+    status = ContactStatus(**kwargs)
+    db.session.add(status)
+    db.session.commit()
+    return status
 
 def update_contact(id, **kwargs):
     contact = Contact.query.filter(Contact.id == id).first()

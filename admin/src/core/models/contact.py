@@ -1,5 +1,12 @@
 from datetime import datetime
+from enum import unique
 from src.core.database import db
+
+class ContactStatus(db.Model):
+    __tablename__ = 'contact_statuses'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), unique=True, nullable=False)
 
 class Contact(db.Model):
     __tablename__ = 'contacts'
@@ -8,26 +15,32 @@ class Contact(db.Model):
     name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False)
     body = db.Column(db.Text, nullable=False)
-    status = db.Column(db.String(50), default='pending')
     comment = db.Column(db.Text, nullable=True)
     inserted_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
+
+    status_id = db.Column(db.Integer, db.ForeignKey('contact_statuses.id'), nullable=False, default=1)
+    status = db.relationship('ContactStatus', backref='contacts_status', lazy=True)
 
     @property
     def formatted_inserted_at(self):
         return self.inserted_at.strftime('%Y-%m-%d %H:%M')
 
+    @property
+    def formated_updated_at(self):
+        return self.updated_at.strftime('%Y-%m-%d %H:%M')
+
     def __repr__(self):
-        return f"<Contact {self.email}>"
+        return f"<Contact #{self.id} by {self.email}>"
 
     def to_dict(self):
         return {
-            "id": self.id,
-            "fullname": self.name,
-            "email": self.email,
-            "body": self.body,
-            "status": self.status,
-            "comment": self.comment,
-            "inserted_at": self.inserted_at,
-            "updated_at": self.updated_at
-        }
+                "id": self.id,
+                "name": self.name,
+                "email": self.email,
+                "body": self.body,
+                "status": self.status.name,
+                "comment": self.comment,
+                "inserted_at": self.inserted_at,
+                "updated_at": self.updated_at
+                }

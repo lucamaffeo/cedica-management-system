@@ -1,0 +1,21 @@
+{% extends "base_show.html" %}
+
+{% block title %}
+    Consulta #{{ contact.id }}
+{% endblock %}
+
+
+	{% block content %}
+	<h1>Consulta #{{ contact.id }} de {{ contact.name }}</h1>
+    <div>
+        <p><strong>Nombre:</strong> {{ contact.name }}</p>
+        <p><strong>Email:</strong> {{ contact.email }}</p>
+        <p><strong>Mensaje:</strong> {{ contact.body }}</p>
+        <p><strong>Estado:</strong> {{ contact.status.name }}</p>
+    </div>
+
+    <div>
+        <a href="{{ url_for('contacts.edit', id=contact.id) }}">Editar</a>
+        <a href="{{ url_for('contacts.index') }}">Volver a la lista</a>
+    </div>
+	{% endblock %}
