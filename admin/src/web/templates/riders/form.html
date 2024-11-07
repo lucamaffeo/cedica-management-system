@@ -180,7 +180,7 @@
         <h2>DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s</h2>
         {% for i in range(2) %}
             <h3>Familiar o tutor responsable</h3>
-            <label class="form-label" for="tutor_ni_{{ i }}">Nombre:</label>
+            <label class="form-label" for="tutor_name_{{ i }}">Nombre:</label>
             <input type="text" id="tutor_name_{{ i }}" name="tutor_name_{{ i }}" class="form-control"
                 value="{{ tutors[i][0].name if tutors and i < tutor_cant else '' }}">
 

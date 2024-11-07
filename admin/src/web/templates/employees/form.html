@@ -62,7 +62,7 @@
     value="{{ employee.termination_date.strftime('%Y-%m-%d') if employee and employee.termination_date else '' }}">
 
 
-<label class="form-label" for="emergency_contact">Contacto de Emergencia:</label>
+<label class="form-label" for="emergency_contact_info">Contacto de Emergencia:</label>
 <input placeholder="Indicar nombre y telefono" class="form-control" type="text" id="emergency_contact_info"
     name="emergency_contact_info" required value="{{ employee.emergency_contact_info if employee else '' }}">
 
