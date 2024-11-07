@@ -32,6 +32,9 @@ def list_payments(start_date=None, end_date=None, payment_type=None, sort_by='al
 
     return paginated_payments
 
+def get_payment_types():
+    return Payment.type.property.columns[0].type.enums
+
 def create_payment(**kwargs):
     # Check the type and beneficiary_id for validation
     if kwargs.get('type') == 'Honorarios':

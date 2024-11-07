@@ -15,7 +15,6 @@
         <label for="type">Tipo</label>
         <select class="form-control" id="type" name="type">
             <option value="">Todos los tipos</option>
-            {% set payment_types = ["Honorarios", "Proveedor", "Gastos varios"] %}
             {% for type in payment_types %}
             <option value="{{ type }}" {% if request.args.get('type') == type %}selected{% endif %}>{{ type }}</option>
             {% endfor %}
