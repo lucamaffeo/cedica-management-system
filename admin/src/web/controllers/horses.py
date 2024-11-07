@@ -1,6 +1,4 @@
 from flask import Blueprint, redirect, render_template, request, url_for, flash
-from src.core.models import horse
-from src.core.models.employee import Employee
 from src.core.repositories import horse as horse_repository
 from src.core.repositories import document as document_repository
 from src.core.repositories import employee as employee_repository
@@ -23,9 +21,11 @@ def index():
 
     horses = horse_repository.list_horses(search, assigned_activities_ja, sort_by, direction, page)
 
+    activities = horse_repository.get_activities()
+
     if not horses.items:
         flash("No se encontraron caballos.", "info")
-    return render_template("horses/index.html", pagination=horses)
+    return render_template("horses/index.html", pagination=horses, activities=activities)
 
 #register horse
 @bp.get("/create")
@@ -33,7 +33,11 @@ def index():
 def register():
     job_positions =["Conductor", "Entrenador de Caballos"]
     trainers = get_employees_by_job_positions(job_positions)
-    return render_template("horses/form.html", is_update=False, title='Crear Caballo', trainers=trainers)
+    activities = horse_repository.get_activities()
+    genders = horse_repository.get_genders()
+    purchase_donation = horse_repository.get_purchase_donation()
+
+    return render_template("horses/form.html", is_update=False, title='Crear Caballo', trainers=trainers, activities=activities, genders=genders, purchase_donation=purchase_donation)
 
 # Create horse
 @bp.post("/create")
@@ -90,11 +94,17 @@ def edit(id):
     horse = horse_repository.get_horse(id)
     job_positions =["Conductor", "Entrenador de Caballos"]
     trainers = get_employees_by_job_positions(job_positions)
-    associated_trainer_ids = [trainer.id for trainer in horse.association]
+    activities = horse_repository.get_activities()
+    genders = horse_repository.get_genders()
+    purchase_donation = horse_repository.get_purchase_donation()
+
     if not horse:
         flash("Caballo no encontrado.", "error")
         return redirect(url_for("horses.index"))
-    return render_template("horses/form.html", is_update=True, title='Editar Caballo', horse=horse, trainers=trainers,associated_trainer_ids=associated_trainer_ids)
+
+    associated_trainer_ids = [trainer.id for trainer in horse.association]
+
+    return render_template("horses/form.html", is_update=True, title='Editar Caballo', horse=horse, trainers=trainers,associated_trainer_ids=associated_trainer_ids, activities=activities, genders=genders, purchase_donation=purchase_donation)
 
 #update horse
 @bp.post("/<int:id>/update")

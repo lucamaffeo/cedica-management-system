@@ -25,6 +25,15 @@ def list_horses(search='', assigned_activities_ja=None, sort_by='name', directio
 
     return pagination_horses
 
+def get_activities():
+    return Horse.assigned_activities_ja.property.columns[0].type.enums
+
+def get_genders():
+    return Horse.gender.property.columns[0].type.enums
+
+def get_purchase_donation():
+    return Horse.purchase_donation.property.columns[0].type.enums
+
 def find_horse_by_name(name):
     horse = Horse.query.filter(Horse.name == name).first()
     return horse
