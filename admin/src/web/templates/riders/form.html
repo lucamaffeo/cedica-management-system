@@ -5,225 +5,211 @@
 {% endblock %}
 
 {% block form_fields %}
-        {% extends "base_form.html" %}
+{% set text_fields = [
+('name', 'Nombre'),
+('surname', 'Apellido'),
+('dni', 'DNI'),
+('birth_place', 'Lugar de Nacimiento'),
+('address', 'Domicilio'),
+('professionals', 'Profesionales que lo atienden'),
+('health_insurance', 'Obra Social'),
+('affiliate_number', 'Número de Afiliado'),
+('school_institution', 'Institución Escolar'),
+('institution_address', 'Dirección de la Institución'),
+('grade', 'Grado'),
+('other', 'Otro')
+] %}
 
-        {% block form_action %}
-        {{ url_for('riders.update', id=rider.id) if rider else url_for('riders.create') }}
-        {% endblock %}
+{% set phone_fields = [
+('phone', 'Teléfono actual'),
+('emergency_contact_phone_number', 'Teléfono de contacto'),
+('institution_phone', 'Teléfono de la Institución')
+] %}
 
-        {% block form_fields %}
-                {% set text_fields = [
-                    ('name', 'Nombre'),
-                    ('surname', 'Apellido'),
-                    ('dni', 'DNI'),
-                    ('birth_place', 'Lugar de Nacimiento'),
-                    ('address', 'Domicilio'),
-                    ('professionals', 'Profesionales que lo atienden'),
-                    ('health_insurance', 'Obra Social'),
-                    ('affiliate_number', 'Número de Afiliado'),
-                    ('school_institution', 'Institución Escolar'),
-                    ('institution_address', 'Dirección de la Institución'),
-                    ('grade', 'Grado'),
-                    ('other', 'Otro')
-                ] %}
+{% set number_fields = [
+('edad', 'Edad', 'age'),
+('scholarship_percentage', 'Porcentaje de Beca', 'scholarship_percentage')
+] %}
 
-                {% set phone_fields = [
-                    ('phone', 'Teléfono actual'),
-                    ('emergency_contact_phone_number', 'Teléfono de contacto'),
-                    ('institution_phone', 'Teléfono de la Institución')
-                ] %}
+{% set checkbox_fields = [
+('scholarship', 'Becado'),
+('disability_certificate', '¿Posee Certificado de Discapacidad?'),
+('family_assignment', '¿Percibe alguna asignación familiar?'),
+('guardianship', 'Curatela')
+] %}
 
-                {% set number_fields = [
-                    ('edad', 'Edad', 'age'),
-                    ('scholarship_percentage', 'Porcentaje de Beca', 'scholarship_percentage')
-                ] %}
+{% for id, label in text_fields %}
+<label class="form-label" for="{{ id }}">{{ label }}:</label>
+<input type="text" id="{{ id }}" name="{{ id }}" required class="form-control" value="{{ rider[id] if rider else '' }}">
+{% endfor %}
 
-                {% set checkbox_fields = [
-                    ('scholarship', 'Becado'),
-                    ('disability_certificate', '¿Posee Certificado de Discapacidad?'),
-                    ('family_assignment', '¿Percibe alguna asignación familiar?'),
-                    ('guardianship', 'Curatela')
-                ] %}
+{% for id, label in phone_fields %}
+<label class="form-label" for="{{ id }}">{{ label }}:</label>
+<input type="tel" id="{{ id }}" name="{{ id }}" required class="form-control" value="{{ rider[id] if rider else '' }}">
+{% endfor %}
 
-                {% for id, label in text_fields %}
-                <label class="form-label" for="{{ id }}">{{ label }}:</label>
-                <input type="text" id="{{ id }}" name="{{ id }}" required class="form-control"
-                    value="{{ rider[id] if rider else '' }}">
-                {% endfor %}
+{% for id, label, name in number_fields %}
+<label class="form-label" for="{{ id }}">{{ label }}:</label>
+<input type="number" id="{{ id }}" name="{{ name }}" required class="form-control" value="{{ rider[name] if rider else '' }}">
+{% endfor %}
 
-                {% for id, label in phone_fields %}
-                <label class="form-label" for="{{ id }}">{{ label }}:</label>
-                <input type="tel" id="{{ id }}" name="{{ id }}" required class="form-control"
-                    value="{{ rider[id] if rider else '' }}">
-                {% endfor %}
+<label class="form-label" for="fecha_nacimiento">Fecha de Nacimiento:</label>
+<input class="form-control" type="date" id="fecha_nacimiento" name="birthdate" required value="{{ rider.birthdate.strftime('%Y-%m-%d') if rider else '' }}">   
 
-                {% for id, label, name in number_fields %}
-                <label class="form-label" for="{{ id }}">{{ label }}:</label>
-                <input type="number" id="{{ id }}" name="{{ name }}" required class="form-control"
-                    value="{{ rider[name] if rider else '' }}">
-                {% endfor %}
+<label class="form-label" for="emergency_contact">Contacto de Emergencia:</label>
+<input type="text" id="emergency_contact" name="emergency_contact" required class="form-control"
+																			value="{{ rider.emergency_contact if rider else '' }}">
 
-                <label class="form-label" for="fecha_nacimiento">Fecha de Nacimiento:</label>
-                <input class="form-control" type="date" id="fecha_nacimiento" name="birthdate" required
-                    value="{{ rider.birthdate.strftime('%Y-%m-%d') if rider else '' }}">   
+{% for id, label in checkbox_fields %}
+<label class="form-label" for="{{ id }}">{{ label }}:</label>
+<input type="checkbox" id="{{ id }}" name="{{ id }}" class="form-check-input"
+													 {% if rider and rider[id] %}checked{% endif %}>
+<br>
+{% endfor %}
 
-                <label class="form-label" for="emergency_contact">Contacto de Emergencia:</label>
-                <input type="text" id="emergency_contact" name="emergency_contact" required class="form-control"
-                        value="{{ rider.emergency_contact if rider else '' }}">
+<label class="form-label" for="diagnosis">Diagnóstico:</label>
+<select id="diagnosis" name="diagnosis" class="form-control">
+  <option value="None" {% if not rider or not rider.diagnosis %}selected{% endif %}>-</option>
+  {% set diagnoses = [
+  'ECNE', 'Lesión post-traumática', 'Mielomeningocele', 'Esclerosis Múltiple',
+  'Escoliosis Leve', 'Secuelas de ACV', 'Discapacidad Intelectual',
+  'Trastorno del Espectro Autista', 'Trastorno del Aprendizaje',
+  'Trastorno por Déficit de Atención/Hiperactividad', 'Trastorno de la Comunicación',
+  'Trastorno de Ansiedad', 'Síndrome de Down', 'Retraso Madurativo', 'Psicosis',
+  'Trastorno de Conducta', 'Trastornos del ánimo y afectivos',
+  'Trastorno Alimentario', 'OTRO'
+  ] %}
+  {% for diagnosis in diagnoses %}
+  <option value="{{ diagnosis }}" {% if rider and rider.diagnosis == diagnosis %}selected{% endif %}>{{ diagnosis }}</option>
+  {% endfor %}
+</select>
 
-                {% for id, label in checkbox_fields %}
-                <label class="form-label" for="{{ id }}">{{ label }}:</label>
-                <input type="checkbox" id="{{ id }}" name="{{ id }}" class="form-check-input"
-                    {% if rider and rider[id] %}checked{% endif %}>
-                <br>
-                {% endfor %}
+<label class="form-label" for="disability_type">Tipo de Discapacidad:</label>
+<select id="disability_type" name="disability_type" class="form-control">
+  {% set disability_types = [
+  ('None', 'Ninguna'),
+  ('Mental', 'Mental'),
+  ('Motora', 'Motora'),
+  ('Sensorial', 'Sensorial'),
+  ('Viceral', 'Viceral')
+  ] %}
+  {% for value, label in disability_types %}
+  <option value="{{ value }}" {% if rider and rider.disability_type == value %}selected{% endif %}>{{ label }}</option>
+  {% endfor %}
+</select>
 
-                <label class="form-label" for="diagnosis">Diagnóstico:</label>
-                <select id="diagnosis" name="diagnosis" class="form-control">
-                    <option value="None" {% if not rider or not rider.diagnosis %}selected{% endif %}>-</option>
-                    {% set diagnoses = [
-                        'ECNE', 'Lesión post-traumática', 'Mielomeningocele', 'Esclerosis Múltiple',
-                        'Escoliosis Leve', 'Secuelas de ACV', 'Discapacidad Intelectual',
-                        'Trastorno del Espectro Autista', 'Trastorno del Aprendizaje',
-                        'Trastorno por Déficit de Atención/Hiperactividad', 'Trastorno de la Comunicación',
-                        'Trastorno de Ansiedad', 'Síndrome de Down', 'Retraso Madurativo', 'Psicosis',
-                        'Trastorno de Conducta', 'Trastornos del ánimo y afectivos',
-                        'Trastorno Alimentario', 'OTRO'
-                    ] %}
-                    {% for diagnosis in diagnoses %}
-                    <option value="{{ diagnosis }}" {% if rider and rider.diagnosis == diagnosis %}selected{% endif %}>{{ diagnosis }}</option>
-                    {% endfor %}
-                </select>
+<label class="form-label" for="assignments">Asignaciones:</label>
+{% set assignments = [
+('assignment_universal', 'Asignación Universal por hijo'),
+('assignment_disability', 'Asignación Universal por hijo con Discapacidad'),
+('assignment_school', 'Asignación por ayuda escolar anual')
+] %}
+{% for id, label in assignments %}
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" id="{{ id }}" name="assignments" value="{{ label }}" {% if rider and has_assignment(rider, label) %}checked{% endif %}>
+  <label class="form-check-label" for="{{ id }}">
+	{{ label }}
+  </label>
+</div>
+{% endfor %}
 
-                <label class="form-label" for="disability_type">Tipo de Discapacidad:</label>
-                <select id="disability_type" name="disability_type" class="form-control">
-                    {% set disability_types = [
-                        ('None', 'Ninguna'),
-                        ('Mental', 'Mental'),
-                        ('Motora', 'Motora'),
-                        ('Sensorial', 'Sensorial'),
-                        ('Viceral', 'Viceral')
-                    ] %}
-                    {% for value, label in disability_types %}
-                    <option value="{{ value }}" {% if rider and rider.disability_type == value %}selected{% endif %}>{{ label }}</option>
-                    {% endfor %}
-                </select>
+<br>
+<label class="form-label" for="pension">¿Es beneficiario de alguna pensión?:</label>
+<select id="pension" name="pension" class="form-control" value="No">
+  {% set pension_types = [
+  ('Provincial', 'Provincial'),
+  ('Nacional', 'Nacional'),
+  ('No', 'No')
+  ] %}
+  {% for value, label in pension_types %}
+  <option value="{{ value }}" {% if rider and rider.pension == value %}selected{% endif %}>{{ label }}</option>
+  {% endfor %}
+</select>
 
-                <label class="form-label" for="assignments">Asignaciones:</label>
-                {% set assignments = [
-                    ('assignment_universal', 'Asignación Universal por hijo'),
-                    ('assignment_disability', 'Asignación Universal por hijo con Discapacidad'),
-                    ('assignment_school', 'Asignación por ayuda escolar anual')
-                ] %}
-                {% for id, label in assignments %}
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="{{ id }}" name="assignments" value="{{ label }}"
-                        {% if rider and has_assignment(rider, label) %}checked{% endif %}>
-                    <label class="form-check-label" for="{{ id }}">
-                        {{ label }}
-                    </label>
-                </div>
-                {% endfor %}
+<h2>SITUACIÓN PREVISIONAL</h2>
 
-                <br>
-                <label class="form-label" for="pension">¿Es beneficiario de alguna pensión?:</label>
-                <select id="pension" name="pension" class="form-control" value="No">
-                    {% set pension_types = [
-                        ('Provincial', 'Provincial'),
-                        ('Nacional', 'Nacional'),
-                        ('No', 'No')
-                    ] %}
-                    {% for value, label in pension_types %}
-                    <option value="{{ value }}" {% if rider and rider.pension == value %}selected{% endif %}>{{ label }}</option>
-                    {% endfor %}
-                </select>
+{% for i in range(2) %}
+<h3>Familiar o tutor responsable</h3>
+{% set tutor_fields = [
+('name', 'Nombre'),
+('surname', 'Apellido'),
+('dni', 'DNI'),
+('relationship', 'Parentesco'),
+('address', 'Domicilio'),
+('cellphone', 'Telefono'),
+('email', 'Email'),
+('occupation', 'Actividad u ocupación')
+] %}
+{% for field, label in tutor_fields %}
+<label class="form-label" for="tutor_{{ field }}_{{ i }}">{{ label }}:</label>
+<input type="{{ 'email' if field == 'email' else 'tel' if field == 'cellphone' else 'text' }}" 
+	   id="tutor_{{ field }}_{{ i }}" 
+	   name="tutor_{{ field }}_{{ i }}" 
+	   class="form-control"
+	   value="{{ tutors[i][0][field] if tutors and i < tutor_cant else '' }}">
+{% endfor %}
 
-                <h2>SITUACIÓN PREVISIONAL</h2>
+<label class="form-label" for="tutor_educational_level_{{ i }}">Nivel de escolaridad:</label>
+<select id="tutor_educational_level_{{ i }}" name="tutor_educational_level_{{ i }}" class="form-control">
+  {% set education_levels = ['Primario', 'Secundario', 'Terciario', 'Universitario'] %}
+  {% for level in education_levels %}
+  <option value="{{ level }}" {% if tutors and i < tutor_cant and tutors[i][0].educational_level == level %}selected{% endif %}>{{ level }}</option>
+  {% endfor %}
+</select>
+<br>
+{% endfor %}
 
-                {% for i in range(2) %}
-                    <h3>Familiar o tutor responsable</h3>
-                    {% set tutor_fields = [
-                        ('name', 'Nombre'),
-                        ('surname', 'Apellido'),
-                        ('dni', 'DNI'),
-                        ('relationship', 'Parentesco'),
-                        ('address', 'Domicilio'),
-                        ('cellphone', 'Telefono'),
-                        ('email', 'Email'),
-                        ('occupation', 'Actividad u ocupación')
-                    ] %}
-                    {% for field, label in tutor_fields %}
-                        <label class="form-label" for="tutor_{{ field }}_{{ i }}">{{ label }}:</label>
-                        <input type="{{ 'email' if field == 'email' else 'tel' if field == 'cellphone' else 'text' }}" 
-                               id="tutor_{{ field }}_{{ i }}" 
-                               name="tutor_{{ field }}_{{ i }}" 
-                               class="form-control"
-                               value="{{ tutors[i][0][field] if tutors and i < tutor_cant else '' }}">
-                    {% endfor %}
+<h2>TRABAJO EN NUESTRA INSTITUCIÓN</h2>
+{% set select_fields = [
+('work_proposal', 'Propuesta de Trabajo', [
+'Hipoterapia', 'Monta Terapéutica', 'Deporte Ecuestre Adaptado', 
+'Actividades Recreativas', 'Equitación'
+]),
+('condition', 'Condición', ['Regular', 'De Baja']),
+('headquarters', 'Sede', ['CASJ', 'HLP', 'OTRO'])
+] %}
 
-                    <label class="form-label" for="tutor_educational_level_{{ i }}">Nivel de escolaridad:</label>
-                    <select id="tutor_educational_level_{{ i }}" name="tutor_educational_level_{{ i }}" class="form-control">
-                        {% set education_levels = ['Primario', 'Secundario', 'Terciario', 'Universitario'] %}
-                        {% for level in education_levels %}
-                        <option value="{{ level }}" {% if tutors and i < tutor_cant and tutors[i][0].educational_level == level %}selected{% endif %}>{{ level }}</option>
-                        {% endfor %}
-                    </select>
-                    <br>
-                {% endfor %}
+{% for id, label, options in select_fields %}
+<label class="form-label" for="{{ id }}">{{ label }}:</label>
+<select id="{{ id }}" name="{{ id }}" class="form-control" required>
+  {% for option in options %}
+  <option value="{{ option }}" {% if rider and rider[id] == option %}selected{% endif %}>{{ option }}</option>
+  {% endfor %}
+</select>
+{% endfor %}
 
-                <h2>TRABAJO EN NUESTRA INSTITUCIÓN</h2>
-                {% set select_fields = [
-                    ('work_proposal', 'Propuesta de Trabajo', [
-                        'Hipoterapia', 'Monta Terapéutica', 'Deporte Ecuestre Adaptado', 
-                        'Actividades Recreativas', 'Equitación'
-                    ]),
-                    ('condition', 'Condición', ['Regular', 'De Baja']),
-                    ('headquarters', 'Sede', ['CASJ', 'HLP', 'OTRO'])
-                ] %}
+<label class="form-label" for="days">Días:</label>
+{% for day in all_days %}
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" id="{{ day.id }}" name="days" value="{{ day.id }}"
+																				{% if rider and day in rider.days %}checked{% endif %}>
+  <label class="form-check-label" for="{{ day.id }}">
+	{{ day.name }}
+  </label>
+</div>
+{% endfor %}
 
-                {% for id, label, options in select_fields %}
-                <label class="form-label" for="{{ id }}">{{ label }}:</label>
-                <select id="{{ id }}" name="{{ id }}" class="form-control" required>
-                    {% for option in options %}
-                    <option value="{{ option }}" {% if rider and rider[id] == option %}selected{% endif %}>{{ option }}</option>
-                    {% endfor %}
-                </select>
-                {% endfor %}
+{% set staff_fields = [
+('therapist_teacher_id', 'Profesor/a o Terapeuta', profesor_therapist),
+('horse_conductor_id', 'Conductor/a del caballo', conductor),
+('track_assistant_id', 'Auxiliar de Pista', auxiliar_pista)
+] %}
 
-                <label class="form-label" for="days">Días:</label>
-                {% for day in all_days %}
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="{{ day.id }}" name="days" value="{{ day.id }}"
-                    {% if rider and day in rider.days %}checked{% endif %}>
-                    <label class="form-check-label" for="{{ day.id }}">
-                        {{ day.name }}
-                    </label>
-                </div>
-                {% endfor %}
+{% for id, label, staff_list in staff_fields %}
+<label class="form-label" for="{{ id }}">{{ label }}:</label>
+<select id="{{ id }}" name="{{ id }}" class="form-control">
+  <option value="None" {% if not rider or not rider[id.replace('_id', '')] %}selected{% endif %}>-</option>
+  {% for employee in staff_list %}
+  <option value="{{ employee.id }}" {% if rider and rider[id.replace('_id', '')] and rider[id.replace('_id', '')].id == employee.id %}selected{% endif %}>{{ employee.name }}</option>
+  {% endfor %}
+</select>
+{% endfor %}
 
-                {% set staff_fields = [
-                    ('therapist_teacher_id', 'Profesor/a o Terapeuta', profesor_therapist),
-                    ('horse_conductor_id', 'Conductor/a del caballo', conductor),
-                    ('track_assistant_id', 'Auxiliar de Pista', auxiliar_pista)
-                ] %}
-
-                {% for id, label, staff_list in staff_fields %}
-                <label class="form-label" for="{{ id }}">{{ label }}:</label>
-                <select id="{{ id }}" name="{{ id }}" class="form-control">
-                    <option value="None" {% if not rider or not rider[id.replace('_id', '')] %}selected{% endif %}>-</option>
-                    {% for employee in staff_list %}
-                        <option value="{{ employee.id }}" {% if rider and rider[id.replace('_id', '')] and rider[id.replace('_id', '')].id == employee.id %}selected{% endif %}>{{ employee.name }}</option>
-                    {% endfor %}
-                </select>
-                {% endfor %}
-
-                <label class="form-label" for="horse_id">Caballo:</label>
-                <select id="horse_id" name="horse_id" class="form-control">
-                    <option value="None" {% if not rider or not rider.horse %}selected{% endif %}>-</option>
-                    {% for horse in all_horses %}
-                        <option value="{{ horse.id }}" {% if rider and rider.horse and rider.horse.id == horse.id %}selected{% endif %}>{{ horse.name }}</option>
-                    {% endfor %}
-                </select>
-        {% endblock %}
-
+<label class="form-label" for="horse_id">Caballo:</label>
+<select id="horse_id" name="horse_id" class="form-control">
+  <option value="None" {% if not rider or not rider.horse %}selected{% endif %}>-</option>
+  {% for horse in all_horses %}
+  <option value="{{ horse.id }}" {% if rider and rider.horse and rider.horse.id == horse.id %}selected{% endif %}>{{ horse.name }}</option>
+  {% endfor %}
+</select>
 {% endblock %}
