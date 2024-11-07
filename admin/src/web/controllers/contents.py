@@ -1,4 +1,3 @@
-import re
 from flask import Blueprint, redirect, render_template, request, url_for, flash
 from src.core.repositories import content as content_repository
 from src.web.helpers.auth import has_permission

@@ -68,6 +68,16 @@
 						<a class="nav-link" href="{{ url_for('payments.index') }}">Pagos</a>
 					</li>
 					{% endif %}
+					{% if user_id and has_permission(user_id,'contact_index') %}
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('contacts.index') }}">Contactos</a>
+					</li>
+					{% endif %}
+					{% if user_id and has_permission(user_id,'content_index') %}
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('contents.index') }}">Contenidos</a>
+					</li>
+					{% endif %}
 				</ul>
 				<ul class="navbar-nav">
 					{% if not user_id %}
