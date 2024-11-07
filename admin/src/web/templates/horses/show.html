@@ -13,7 +13,7 @@ Perfil de {{ horse.name }}
 <p><strong>Fecha de Ingreso:</strong> {{ horse.entry_date.strftime('%Y-%m-%d') }}</p>
 <p><strong>Sede Asignada:</strong> {{ horse.assigned_location or 'No especificado' }}</p>
 <p><strong>Actividades Asignadas:</strong> {{ horse.assigned_activities_ja }}</p>
-<h3>Empleados Asociados:</h3>
+<h2>Empleados Asociados:</h2>
 {% if horse.association %}
 {% if horse.association|list %}
 <ul>
