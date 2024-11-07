@@ -13,8 +13,6 @@ def list_horses(search='', assigned_activities_ja=None, sort_by='name', directio
         )
     if assigned_activities_ja:
        query = query.filter(Horse.assigned_activities_ja == assigned_activities_ja)
-    else:
-        query = query
 
     items_per_page = current_app.config.get('ITEMS_PER_PAGE')
 
