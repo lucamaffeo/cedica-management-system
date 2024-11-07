@@ -10,7 +10,7 @@ employee_association = db.Table(
 
 class Horse(db.Model):
     __tablename__ = 'horses'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     birth_date = db.Column(db.DateTime)
@@ -23,11 +23,11 @@ class Horse(db.Model):
     assigned_activities_ja = db.Column(db.Enum('Hipoterapia', 'Monta Terapeutica', 'Deporte Ecuestre Adaptado', 'Actividades Recreativas', 'Equitación', name='assigned_activities'))
     documentacion = db.Column(JSON)
     association = db.relationship('Employee', secondary='employee_association', backref='horses', lazy='dynamic')
-    
+
 
     def __repr__(self):
         return f'<Horse {self.name}>'
-    
+
 
 def has_permission(self, permission: str):
     return any(permission == p.name for p in self.role.permissions)
