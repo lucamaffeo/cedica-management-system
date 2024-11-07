@@ -1,5 +1,5 @@
 from flask import current_app
-from src.core.models.employee import Employee
+from src.core.repositories import employee as employee_repo
 from src.core.database import db
 from src.core.models.horse import Horse
 
@@ -40,21 +40,43 @@ def get_horse(id):
     return horse
 
 def create_horse(**kwargs):
+    trainer_ids = kwargs.pop('trainer_ids', [])
+
     horse = Horse(**kwargs)
     db.session.add(horse)
+
+    for trainer_id in trainer_ids:
+        trainer = employee_repo.get_employee(trainer_id)
+        if trainer:
+            horse.association.append(trainer)
+
     db.session.commit()
     return horse
 
 def update_horse(horse_id, **kwargs):
     horse = Horse.query.filter(Horse.id == horse_id).first()
+    if not horse:
+        return False
+
+    trainer_ids = kwargs.pop('trainer_ids', [])
+
     for key, value in kwargs.items():
         setattr(horse, key, value)
+
+    horse.association = []
+    for trainer_id in trainer_ids:
+        trainer = employee_repo.get_employee(trainer_id)
+        if trainer:
+            horse.association.append(trainer)
+
     db.session.commit()
-    return horse
+    return True
 
 def delete_horse(horse_id):
     horse = Horse.query.filter(Horse.id == horse_id).first()
-    db.session.delete(horse)
-    db.session.commit()
-    return horse
+    if horse:
+        db.session.delete(horse)
+        db.session.commit()
+        return True
+    return False
 

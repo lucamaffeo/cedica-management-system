@@ -55,9 +55,9 @@ def create():
         if field not in params:
             flash(f"El campo {field} es requerido.", "error")
             return redirect(url_for("horses.register"))
-    
+
     trainer_ids = request.form.getlist('trainer_id')
-    
+
     horse = horse_repository.create_horse(
         name = params['name'],
         birth_date = params['birth_date']  or None,
@@ -68,18 +68,8 @@ def create():
         entry_date = params['entry_date'],
         assigned_location = params['assigned_location'],
         assigned_activities_ja = params['assigned_activities_ja'],
+        trainer_ids=trainer_ids
     )
-    if trainer_ids:
-        for trainer_id in trainer_ids:
-            trainer = employee_repository.get_employee(trainer_id)  # Busca el entrenador por ID
-            if trainer:  # Asegúrate de que el entrenador existe
-                horse.association.append(trainer)  # Agrega el entrenador a la relación
-            else:
-                flash(f"Entrenador con ID {trainer_id} no encontrado.", "error")
-
-
-    # Guardar cambios en la base de datos
-    db.session.commit()
     flash("Caballo creado con éxito.", "success")
     return redirect(url_for("horses.index"))
 
@@ -110,18 +100,14 @@ def edit(id):
 @bp.post("/<int:id>/update")
 @has_permission("horse_update")
 def update(id):
-    horse = horse_repository.get_horse(id)
-    if not horse:
-        flash("Caballo no encontrado.", "error")
-        return redirect(url_for("horses.index"))
-    
+
     params = request.form
-    
+
     # Obtener los nuevos IDs de entrenadores seleccionados desde el formulario
     trainer_ids = request.form.getlist('trainer_id')
-    
-    
-    horse_repository.update_horse(
+
+
+    if horse_repository.update_horse(
         horse_id=id,
         name = params['name'],
         birth_date = params['birth_date'],
@@ -132,34 +118,22 @@ def update(id):
         entry_date = params['entry_date'],
         assigned_location = params['assigned_location'],
         assigned_activities_ja = params['assigned_activities_ja'],
-    
-    )
-    # Limpia las asociaciones actuales de entrenadores
-    for trainer in horse.association[:]:  # Usar copia para evitar problemas al eliminar
-        horse.association.remove(trainer)
-    
-    if(trainer_ids):
-        for trainer_id in trainer_ids:
-            trainer = employee_repository.get_employee(trainer_id)  # Busca el entrenador por ID
-            if trainer:
-                horse.association.append(trainer)
-            else:
-                flash(f"Entrenador con ID {trainer_id} no encontrado.", "error")
+        trainer_ids=trainer_ids
+        ):
+        flash("Caballo actualizado con éxito.", "info")
+        return redirect(url_for("horses.index"))
+    else:
+        flash("Caballo no encontrado.", "error")
+        return redirect(url_for("horses.index"))
 
-    db.session.commit()
-
-
-    flash("Caballo actualizado con éxito.", "info")
-    return redirect(url_for("horses.index"))
 
 #delete horse
 @bp.get("/<int:id>/delete")
 @has_permission("horse_destroy")
 def delete(id):
-    horse = horse_repository.get_horse(id)
-    if not horse:
+    if horse_repository.delete_horse(id):
+        flash("Caballo eliminado con éxito.", "info")
+        return redirect(url_for("horses.index"))
+    else:
         flash("Caballo no encontrado.", "error")
         return redirect(url_for("horses.index"))
-    horse_repository.delete_horse(id)
-    flash("Caballo eliminado con éxito.", "info")
-    return redirect(url_for("horses.index"))
