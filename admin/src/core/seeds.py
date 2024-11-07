@@ -121,6 +121,9 @@ def run():
     #DOCUMENTOS
 
     #Contenidos
-    contenido1 = content.create_content(title="Titulo1", summary="Resumen1", content="Contenido1", author_id=1, status="Publicado")
+    contenido1 = content.create_content(title="Titulo1", summary="Resumen1", content="Contenido1", author_id=1, status="Publicado", publication_date="2021-01-01")
+    contenido2 = content.create_content(title="Titulo2", summary="Resumen2", content="Contenido2", author_id=1, status="Borrador")
+    contenido3 = content.create_content(title="Titulo3", summary="Resumen3", content="Contenido3", author_id=2, status="Publicado", publication_date="2022-02-02")
+
 
     print("Seed ejecutado correctamente")
