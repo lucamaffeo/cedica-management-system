@@ -1,35 +1,16 @@
 {% extends "base_index.html" %}
 
 {% block title %}
-Contenidos
+Administracion de contenidos
 {% endblock %}
 
 {% block page_title %}
-Contenidos
-{% endblock %}
-
-{% set show_search=true %}
-
-{% block search_placeholder %}
-Buscar por Título, Resumen o Contenido
-{% endblock %}
-
-{% block filters %}
-<div>
-    <select name="status" class="form-control">
-        {% set statuses = ['Borrador', 'Publicado', 'Archivado'] %}
-        {% for status in statuses %}
-        <option value="{{ status }}" {{ 'selected' if request.args.get('status') == status else '' }}>
-            {{ status }}
-        </option>
-        {% endfor %}
-    </select>
-</div>
+Administracion de contenidos
 {% endblock %}
 
 <!-- Content table -->
-{% set sorting_criteria = [("title", "Título"), ("creation_date", "Fecha de Creación"), ("publication_date", "Fecha de Publicación")] %}
-{% set sortable_fields = ["title", "creation_date", "publication_date"] %}
+{% set sorting_criteria = [("title", "Título"), ("creation_date", "Fecha de Creación"), ("publication_date", "Fecha de Publicación"), ("status", "Estado"),("summary", "Resumen"), ("author", "Autor")] %}
+{% set sortable_fields = ["title"] %}
 {% block table_rows %}
     {% for content in pagination.items %}
     <tr>
@@ -37,6 +18,8 @@ Buscar por Título, Resumen o Contenido
         <td>{{ content.creation_date.strftime('%d/%m/%Y') }}</td>
         <td>{{ content.publication_date.strftime('%d/%m/%Y') if content.publication_date else '-' }}</td>
         <td>{{ content.status }}</td>
+        <td>{{ content.summary }} </td>
+        <td>{{ content.author.alias }}</td>
         <td>
             <a href="{{ url_for('contents.show', id=content.id) }}">Ver</a>
             <a href="{{ url_for('contents.edit', id=content.id) }}">Editar</a>
