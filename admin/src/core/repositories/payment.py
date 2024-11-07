@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from flask import current_app
+from flask import current_app, flash
 from src.core.database import db
 from src.core.models.payment import Payment
 from src.core.repositories import employee
@@ -8,13 +8,22 @@ from datetime import datetime
 
 
 def list_payments(start_date=None, end_date=None, payment_type=None, sort_by='alias', direction='asc', page=1):
-    # Init db query
+
     query = Payment.query
 
+    if start_date:
+        try:
+            start_date = datetime.strptime(start_date, '%Y-%m-%d')
+            query = query.filter(Payment.date >= start_date)
+        except ValueError:
+            flash("La fecha de inicio es inválida.", "error")
 
-    if start_date and end_date:
-        end_date = datetime.strptime(end_date, '%Y-%m-%d')  # Convert str to date, so we can add timedelta (to make end_date include that day on results)
-        query = query.filter(Payment.date >= start_date, Payment.date < end_date + timedelta(days=1))
+    if end_date:
+        try:
+            end_date = datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1)
+            query = query.filter(Payment.date < end_date)
+        except ValueError:
+            flash("La fecha de fin es inválida.", "error")
 
     # Filter by payment type if provided
     if payment_type:
