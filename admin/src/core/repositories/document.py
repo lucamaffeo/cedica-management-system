@@ -161,6 +161,18 @@ def get_document(id):
 
 def delete_document(id):
     document = Document.query.filter(Document.id == id).first()
+    if not document:
+        raise StorageError("Document not found")
+
+    # Eliminar el archivo de Minio
+    storage_client = _get_storage_client()
+    bucket_name = "grupo10"
+    try:
+        storage_client.remove_object(bucket_name, document.file)
+    except Exception as e:
+        raise StorageError(f"Failed to delete file from Minio: {str(e)}")
+
+    # Eliminar el documento de la base de datos
     db.session.delete(document)
     db.session.commit()
 
