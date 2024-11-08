@@ -30,6 +30,14 @@ def index():
 @bp.get("/create")
 @has_permission("rider_create")
 def register():
+
+    diagnoses = rider_repository.get_diagnoses()
+    work_proposals = rider_repository.get_work_proposals()
+    disability_types = rider_repository.get_disability_types()
+    pension_types = rider_repository.get_pensions()
+    headquarters = rider_repository.get_headquarters()
+    conditions = rider_repository.get_conditions()
+
     all_days = day_repository.list_days()
     jb = ['Profesor de Equitación', 'Terapeuta']
 
@@ -39,7 +47,9 @@ def register():
     auxiliar_pista = employee_repository.get_employees_by_job_positions('Auxiliar de pista')
     all_horses = horse_repository.list_horses()
 
-    return render_template("riders/form.html", is_update=False, title='Crear Jinete/Amazona', all_days=all_days, all_horses=all_horses, tutor_cant=0, tutors=[], profesor_therapist=profesor_therapist, conductor=conductor, auxiliar_pista=auxiliar_pista)
+    diagnoses = rider_repository.get_diagnoses()
+
+    return render_template("riders/form.html", is_update=False, title='Crear Jinete/Amazona', all_days=all_days, all_horses=all_horses, tutor_cant=0, tutors=[], profesor_therapist=profesor_therapist, conductor=conductor, auxiliar_pista=auxiliar_pista, diagnoses=diagnoses, work_proposals=work_proposals, disability_types=disability_types, pension_types=pension_types, headquarters=headquarters, conditions=conditions)
 
 # Create rider
 @bp.post("/create")
@@ -154,6 +164,13 @@ def show(id):
 @bp.get("/<int:id>/update")
 @has_permission("rider_update")
 def edit(id):
+    diagnoses = rider_repository.get_diagnoses()
+    work_proposals = rider_repository.get_work_proposals()
+    disability_types = rider_repository.get_disability_types()
+    pension_types = rider_repository.get_pensions()
+    headquarters = rider_repository.get_headquarters()
+    conditions = rider_repository.get_conditions()
+
     all_days = day_repository.list_days()
     jb = ['Profesor de Equitación', 'Terapeuta']
 
@@ -169,7 +186,7 @@ def edit(id):
         return redirect(url_for("riders.index"))
     tutor_cant = len(rider.tutors)
     tutors = tutor_repository.get_tutors_with_relationships(id)
-    return render_template("riders/form.html", is_update=True, title='Actualizar Jinete/Amazona', rider=rider, all_days=all_days, all_horses=all_horses, tutor_cant=tutor_cant, tutors=tutors, profesor_therapist=profesor_therapist, conductor=conductor, auxiliar_pista=auxiliar_pista)
+    return render_template("riders/form.html", is_update=True, title='Actualizar Jinete/Amazona', rider=rider, all_days=all_days, all_horses=all_horses, tutor_cant=tutor_cant, tutors=tutors, profesor_therapist=profesor_therapist, conductor=conductor, auxiliar_pista=auxiliar_pista, diagnoses=diagnoses, work_proposals=work_proposals, disability_types=disability_types, pension_types=pension_types, headquarters=headquarters, conditions=conditions)
 
 @bp.post("/<int:id>/update")
 @has_permission("rider_update")

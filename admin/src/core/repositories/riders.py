@@ -22,6 +22,24 @@ def create_rider(**kwargs):
         db.session.rollback()
         return None
 
+def get_diagnoses():
+    return Rider.diagnosis.property.columns[0].type.enums
+
+def get_work_proposals():
+    return Rider.work_proposal.property.columns[0].type.enums
+
+def get_disability_types():
+    return Rider.disability_type.property.columns[0].type.enums
+
+def get_pensions():
+    return Rider.pension.property.columns[0].type.enums
+
+def get_headquarters():
+    return Rider.headquarter.property.columns[0].type.enums
+
+def get_conditions():
+    return Rider.condition.property.columns[0].type.enums
+
 def list_riders(search='', sort_by='name', direction='asc', page=1):
     query = Rider.query
 

@@ -57,28 +57,17 @@
 <input class="form-control" type="date" id="fecha_nacimiento" name="birthdate" required value="{{ rider.birthdate.strftime('%Y-%m-%d') if rider else '' }}">   
 
 <label class="form-label" for="emergency_contact">Contacto de Emergencia:</label>
-<input type="text" id="emergency_contact" name="emergency_contact" required class="form-control"
-																			value="{{ rider.emergency_contact if rider else '' }}">
+<input type="text" id="emergency_contact" name="emergency_contact" required class="form-control" value="{{ rider.emergency_contact if rider else '' }}">
 
 {% for id, label in checkbox_fields %}
 <label class="form-label" for="{{ id }}">{{ label }}:</label>
-<input type="checkbox" id="{{ id }}" name="{{ id }}" class="form-check-input"
-													 {% if rider and rider[id] %}checked{% endif %}>
+<input type="checkbox" id="{{ id }}" name="{{ id }}" class="form-check-input" {% if rider and rider[id] %}checked{% endif %}>
 <br>
 {% endfor %}
 
 <label class="form-label" for="diagnosis">Diagnóstico:</label>
 <select id="diagnosis" name="diagnosis" class="form-control">
   <option value="None" {% if not rider or not rider.diagnosis %}selected{% endif %}>-</option>
-  {% set diagnoses = [
-  'ECNE', 'Lesión post-traumática', 'Mielomeningocele', 'Esclerosis Múltiple',
-  'Escoliosis Leve', 'Secuelas de ACV', 'Discapacidad Intelectual',
-  'Trastorno del Espectro Autista', 'Trastorno del Aprendizaje',
-  'Trastorno por Déficit de Atención/Hiperactividad', 'Trastorno de la Comunicación',
-  'Trastorno de Ansiedad', 'Síndrome de Down', 'Retraso Madurativo', 'Psicosis',
-  'Trastorno de Conducta', 'Trastornos del ánimo y afectivos',
-  'Trastorno Alimentario', 'OTRO'
-  ] %}
   {% for diagnosis in diagnoses %}
   <option value="{{ diagnosis }}" {% if rider and rider.diagnosis == diagnosis %}selected{% endif %}>{{ diagnosis }}</option>
   {% endfor %}
@@ -86,13 +75,6 @@
 
 <label class="form-label" for="disability_type">Tipo de Discapacidad:</label>
 <select id="disability_type" name="disability_type" class="form-control">
-  {% set disability_types = [
-  ('None', 'Ninguna'),
-  ('Mental', 'Mental'),
-  ('Motora', 'Motora'),
-  ('Sensorial', 'Sensorial'),
-  ('Viceral', 'Viceral')
-  ] %}
   {% for value, label in disability_types %}
   <option value="{{ value }}" {% if rider and rider.disability_type == value %}selected{% endif %}>{{ label }}</option>
   {% endfor %}
@@ -116,13 +98,8 @@
 <br>
 <label class="form-label" for="pension">¿Es beneficiario de alguna pensión?:</label>
 <select id="pension" name="pension" class="form-control" value="No">
-  {% set pension_types = [
-  ('Provincial', 'Provincial'),
-  ('Nacional', 'Nacional'),
-  ('No', 'No')
-  ] %}
-  {% for value, label in pension_types %}
-  <option value="{{ value }}" {% if rider and rider.pension == value %}selected{% endif %}>{{ label }}</option>
+  {% for value in pension_types %}
+  <option value="{{ value }}" {% if rider and rider.pension == value %}selected{% endif %}>{{ value }}</option>
   {% endfor %}
 </select>
 
@@ -161,12 +138,9 @@
 
 <h2>TRABAJO EN NUESTRA INSTITUCIÓN</h2>
 {% set select_fields = [
-('work_proposal', 'Propuesta de Trabajo', [
-'Hipoterapia', 'Monta Terapéutica', 'Deporte Ecuestre Adaptado', 
-'Actividades Recreativas', 'Equitación'
-]),
-('condition', 'Condición', ['Regular', 'De Baja']),
-('headquarters', 'Sede', ['CASJ', 'HLP', 'OTRO'])
+('work_proposal', 'Propuesta de Trabajo', work_proposals),
+('condition', 'Condición', conditions),
+('headquarters', 'Sede', headquarters)
 ] %}
 
 {% for id, label, options in select_fields %}
