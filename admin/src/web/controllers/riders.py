@@ -264,7 +264,7 @@ def update(id):
         institution_observations=params['institution_observations'],
         work_proposal=params['work_proposal'],
         condition=params['condition'],
-        headquarters=params['headquarters']
+        headquarters=params['headquarters'],
         therapist_teacher_id = params['therapist_teacher_id'],
         horse_conductor_id = params['horse_conductor_id'],
         horse_id = params['horse_id'],
