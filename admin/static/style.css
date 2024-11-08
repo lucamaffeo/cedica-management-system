@@ -74,7 +74,7 @@ a {
   text-decoration: none;
   transition: color 0.3s ease, border-bottom 0.3s ease; /* Transición suave */
   border-bottom: 2px solid transparent; /* Línea inferior transparente por defecto */
-  padding: 5px;
+  padding: 3px;
 }
 
 a:hover {
