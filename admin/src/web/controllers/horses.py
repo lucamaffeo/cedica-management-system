@@ -5,6 +5,7 @@ from src.core.repositories import employee as employee_repository
 from src.web.helpers.auth import has_permission
 from src.core.repositories.employee import get_employees_by_job_positions
 from src.core.database import db
+from src.core.validation.models.horse import HorseValidator
 
 
 bp = Blueprint("horses", __name__, url_prefix="/horses")
@@ -44,21 +45,12 @@ def register():
 @has_permission("horse_create")
 def create():
     params = request.form
-    required_fields = [
-        'name',
-        'birth_date',
-        'gender',
-        'breed',
-        'coat',
-        'purchase_donation',
-        'entry_date',
-        'assigned_location',
-        'assigned_activities_ja'
-    ]
-    for field in required_fields:
-        if field not in params:
-            flash(f"El campo {field} es requerido.", "error")
-            return redirect(url_for("horses.register"))
+    validator = HorseValidator()
+    errors = validator.validate_create(params)
+    if errors:
+        for error in errors:
+            flash(f"{error.field}: {error.message}", "error")
+        return redirect(url_for("horses.register"))
 
     trainer_ids = request.form.getlist('trainer_id')
 
@@ -112,6 +104,12 @@ def edit(id):
 def update(id):
 
     params = request.form
+    validator = HorseValidator()
+    errors = validator.validate_update(params, id)
+    if errors:
+        for error in errors:
+            flash(f"{error.field}: {error.message}", "error")
+        return redirect(url_for("horses.edit", id=id))
 
     # Obtener los nuevos IDs de entrenadores seleccionados desde el formulario
     trainer_ids = request.form.getlist('trainer_id')
