@@ -114,7 +114,7 @@
             {# Previous button #}
             <li class="page-item {{ 'disabled' if page_num == 1 }}">
               <a class="page-link" 
-                 href="{{ url_for(request.endpoint, page=page_num-1, entity_type=entity_type, entity_id=entity_id) if page_num > 1 else '#' }}"
+                 href="{{ url_for(request.endpoint, page=page_num-1) if page_num > 1 else '#' }}"
                  aria-label="Previous"
                  {{ 'tabindex="-1"' if page_num == 1 }}>
                 &laquo;
@@ -125,7 +125,7 @@
             {% for p in range(start_page, end_page + 1) %}
               <li class="page-item {{ 'active' if p == page_num }}">
                 <a class="page-link" 
-                  href="{{ url_for(request.endpoint, page=p, entity_type=entity_type, entity_id=entity_id) }}">                  {{ p }}
+                  href="{{ url_for(request.endpoint, page=p) }}">                  {{ p }}
                 </a>
               </li>
             {% endfor %}
@@ -133,7 +133,7 @@
             {# Next button #}
             <li class="page-item {{ 'disabled' if page_num == pagination.pages }}">
               <a class="page-link"
-                  href="{{ url_for(request.endpoint, page=page_num+1, entity_type=entity_type, entity_id=entity_id) if page_num < pagination.pages else '#' }}"                 aria-label="Next"
+                  href="{{ url_for(request.endpoint, page=page_num+1) if page_num < pagination.pages else '#' }}"                 aria-label="Next"
                  {{ 'tabindex="-1"' if page_num == pagination.pages }}>
                 &raquo;
               </a>
