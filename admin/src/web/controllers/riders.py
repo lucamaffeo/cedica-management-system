@@ -1,17 +1,11 @@
 import re
-from flask import Blueprint, redirect, render_template, request, session, url_for, flash
+from flask import Blueprint, redirect, render_template, request, url_for, flash
 from src.core.repositories import riders as rider_repository
 from src.core.repositories import employee as employee_repository
 from src.core.repositories import horse as horse_repository
 from src.core.repositories import day as day_repository
-from src.core.repositories import assignment as assignment_repository
-from src.core.models.assignment import Assignment
-from src.core.models.tutor import Tutor
-from src.core.models.day import Day
-from src.core.models.rider import rider_tutor
-from src.core.repositories.assignment import get_assignment_ids_by_names
+from src.core.repositories import tutor as tutor_repository
 from src.web.helpers.auth import has_permission
-from src.core.database import db
 
 
 bp = Blueprint("riders", __name__, url_prefix="/riders")
@@ -153,13 +147,7 @@ def show(id):
     if not rider:
         flash("Jinete/Amazona no encontrado.", "error")
         return redirect(url_for("riders.index"))
-    tutors_with_relationship = db.session.query(
-        Tutor, rider_tutor.c.relationship
-    ).join(
-        rider_tutor, Tutor.id == rider_tutor.c.tutor_id
-    ).filter(
-        rider_tutor.c.rider_id == id
-    ).all()
+    tutors_with_relationship = tutor_repository.get_tutors_with_relationships(id)
     return render_template("riders/show.html", rider=rider, tutors_with_relationship=tutors_with_relationship)
 
 # Editar jinete/amazona
@@ -180,13 +168,7 @@ def edit(id):
         flash("Jinete/Amazona no encontrado.", "error")
         return redirect(url_for("riders.index"))
     tutor_cant = len(rider.tutors)
-    tutors = db.session.query(
-        Tutor, rider_tutor.c.relationship
-    ).join(
-        rider_tutor, Tutor.id == rider_tutor.c.tutor_id
-    ).filter(
-        rider_tutor.c.rider_id == id
-    ).all()
+    tutors = tutor_repository.get_tutors_with_relationships(id)
     return render_template("riders/form.html", is_update=True, title='Actualizar Jinete/Amazona', rider=rider, all_days=all_days, all_horses=all_horses, tutor_cant=tutor_cant, tutors=tutors, profesor_therapist=profesor_therapist, conductor=conductor, auxiliar_pista=auxiliar_pista)
 
 @bp.post("/<int:id>/update")
