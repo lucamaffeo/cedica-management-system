@@ -2,7 +2,6 @@ from flask import Blueprint, redirect, render_template, request, url_for, flash,
 from src.web.helpers.documentation import clean_entity_type
 from src.core.repositories import document as document_repository
 from src.web.helpers.auth import has_permission
-from src.core.database import db
 
 bp = Blueprint("documents", __name__, url_prefix="/documents")
 
@@ -83,10 +82,8 @@ def create(entity_type, entity_id):
             entity_type=entity_type,
             entity_id=entity_id
         )
-        db.session.commit()
         flash("Documento agregado con éxito.", "success")
         return redirect(url_for("documents.index", entity_type=document.entity_type, entity_id=document.entity_id))
     except Exception as e:
-        db.session.rollback()
         flash(f"Error al agregar el documento: {str(e)}", "error")
         return redirect(url_for("documents.add", entity_type=entity_type, entity_id=entity_id))
