@@ -51,12 +51,7 @@ def download(entity_type, entity_id, id):
 @bp.get("/<string:entity_type>/<int:entity_id>/create")
 @clean_entity_type
 def add(entity_type, entity_id):
-    """translations = {
-        'riders': 'Jinete',
-        'horses': 'Caballo',
-        'employees': 'Empleado'}
-    entity_type_translated = translations.get(entity_type, entity_type)"""
-    return render_template("documents/form.html", entity_type=entity_type, entity_id=entity_id,title="Agregar documento") #title=f'Agregar Documento a {entity_type_translated.capitalize()} 
+    return render_template("documents/form.html", entity_type=entity_type, entity_id=entity_id,title="Agregar documento")
 
 # Create document
 @bp.post("/<string:entity_type>/<int:entity_id>/create")
