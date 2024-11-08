@@ -178,8 +178,8 @@ def update(id):
     params = request.form.to_dict()
     params['days'] = request.form.getlist('days')
 
-    validator = RiderValidator()
-    errors = validator.validate_update(params, id)
+    validator = RiderValidator(id)
+    errors = validator.validate_update(params)
 
     if errors:
         flash_validation_errors(errors)

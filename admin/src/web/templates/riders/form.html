@@ -6,7 +6,6 @@
 
 {% block form_fields %}
 
-
 <h2>FICHA DE DATOS PERSONALES</h2>
 <h3>DATOS PERSONALES DEL JINETE O AMAZONA</h3>
 
@@ -42,6 +41,9 @@
 
 <label class="form-label" for="scholarship">BECADO: <strong>Si/No</strong></label>
 <input type="checkbox" id="scholarship" name="scholarship" class="form-check-input" {% if rider and rider.scholarship %}checked{% endif %}>
+<br>
+<label class="form-label" for="scholarship_percentage">Porcentaje de beca:</label>
+<input type="number" id="scholarship_percentage" name="scholarship_percentage" class="form-control" min="0" max="100" step="0.01" value="{{ rider.scholarship_percentage if rider else '0' }}" {% if rider and rider.scholarship %}required{% endif %}>
 <br>
 <label class="form-label" for="observations">Observaciones:</label>
 <textarea id="observations" name="observations" class="form-control">{{ rider.observations if rider else '' }}</textarea>
@@ -174,8 +176,7 @@
 <label class="form-label" for="days">DÍA:</label>
 {% for day in all_days %}
 <div class="form-check">
-  <input class="form-check-input" type="checkbox" id="{{ day.id }}" name="days" value="{{ day.id }}"
-																				{% if rider and day in rider.days %}checked{% endif %}>
+  <input class="form-check-input" type="checkbox" id="{{ day.id }}" name="days" value="{{ day.id }}" {% if rider and day in rider.days %}checked{% endif %}>
   <label class="form-check-label" for="{{ day.id }}">
 	{{ day.name }}
   </label>

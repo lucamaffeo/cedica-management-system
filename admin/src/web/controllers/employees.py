@@ -96,8 +96,8 @@ def edit(id):
 def update(id):
     params = request.form.to_dict()
 
-    validator = EmployeeValidator()
-    errors = validator.validate_update(params, id)
+    validator = EmployeeValidator(id)
+    errors = validator.validate_update(params)
 
     if errors:
         flash_validation_errors(errors)

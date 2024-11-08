@@ -1,5 +1,4 @@
 from datetime import datetime
-from time import strftime
 from src.core.database import db
 
 
