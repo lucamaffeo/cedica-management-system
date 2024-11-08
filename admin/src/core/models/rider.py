@@ -38,9 +38,9 @@ class Rider(db.Model):
     scholarship_percentage = db.Column(db.Numeric(5, 2))
     professionals = db.Column(db.Text)  # Campo libre para listar los profesionales
     disability_certificate = db.Column(db.Boolean, default=False)
-    diagnosis = db.Column(db.Enum('None', 'ECNE', 'Lesión post-traumática', 'Mielomeningocele', 'Esclerosis Múltiple', 'Escoliosis Leve', 'Secuelas de ACV', 'Discapacidad Intelectual', 'Trastorno del Espectro Autista', 'Trastorno del Aprendizaje', 'Trastorno por Déficit de Atención/Hiperactividad',     'Trastorno de la Comunicación', 'Trastorno de Ansiedad', 'Síndrome de Down', 'Retraso Madurativo', 'Psicosis', 'Trastorno de Conducta', 'Trastornos del ánimo y afectivos', 'Trastorno Alimentario', 'OTRO', name='diagnosis'))
+    diagnosis = db.Column(db.Enum('Ninguno', 'ECNE', 'Lesión post-traumática', 'Mielomeningocele', 'Esclerosis Múltiple', 'Escoliosis Leve', 'Secuelas de ACV', 'Discapacidad Intelectual', 'Trastorno del Espectro Autista', 'Trastorno del Aprendizaje', 'Trastorno por Déficit de Atención/Hiperactividad',     'Trastorno de la Comunicación', 'Trastorno de Ansiedad', 'Síndrome de Down', 'Retraso Madurativo', 'Psicosis', 'Trastorno de Conducta', 'Trastornos del ánimo y afectivos', 'Trastorno Alimentario', 'OTRO', name='diagnosis'))
     other = db.Column(db.String(100), default=None)
-    disability_type = db.Column(db.Enum('None', 'Mental', 'Motora', 'Sensorial', 'Viceral', name='disability_type'))
+    disability_type = db.Column(db.Enum('Ninguno', 'Mental', 'Motora', 'Sensorial', 'Viceral', name='disability_type'))
     family_assignment = db.Column(db.Boolean, default=False)
     assignments = db.relationship('Assignment', secondary='rider_assignment', backref='riders')
     pension = db.Column(db.Enum('No', 'Provincial', 'Nacional', name='pension'))

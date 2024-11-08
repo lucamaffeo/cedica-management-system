@@ -1,6 +1,6 @@
 
 from src.core.validation.validator import Validator, Required, MaxLength
-from src.core.validation.rules.onlyletters import onlyLetters
+from src.core.validation.rules.letters import OnlyLetters
 
 class HorseValidator(Validator):
     def __init__(self):
@@ -8,21 +8,21 @@ class HorseValidator(Validator):
 
         self.add_rule('name', Required())
         self.add_rule('name', MaxLength(100))
-        self.add_rule('name', onlyLetters())
+        self.add_rule('name', OnlyLetters())
 
         self.add_rule('birth_date', Required())
 
         self.add_rule('gender', Required())
         self.add_rule('gender', MaxLength(50))
-        self.add_rule('gender', onlyLetters())
+        self.add_rule('gender', OnlyLetters())
 
         self.add_rule('breed', Required())
         self.add_rule('breed', MaxLength(50))
-        self.add_rule('breed', onlyLetters())
+        self.add_rule('breed', OnlyLetters())
 
         self.add_rule('coat', Required())
         self.add_rule('coat', MaxLength(50))
-        self.add_rule('coat', onlyLetters())
+        self.add_rule('coat', OnlyLetters())
 
         self.add_rule('purchase_donation', Required())
         self.add_rule('purchase_donation', MaxLength(50))

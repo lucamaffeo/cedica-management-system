@@ -6,6 +6,8 @@ from src.core.repositories import horse as horse_repository
 from src.core.repositories import day as day_repository
 from src.core.repositories import tutor as tutor_repository
 from src.web.helpers.auth import has_permission
+from src.core.validation.models.rider import RiderValidator
+from src.web.helpers.flash import flash_validation_errors
 
 
 bp = Blueprint("riders", __name__, url_prefix="/riders")
@@ -55,23 +57,20 @@ def register():
 @bp.post("/create")
 @has_permission("rider_create")
 def create():
+    params = request.form.to_dict()
+    params['days'] = request.form.getlist('days')
+
+    validator = RiderValidator()
+    errors = validator.validate_create(params)
+
+    if errors:
+        flash_validation_errors(errors)
+        return redirect(url_for("riders.register"))
 
     scholarship = 'scholarship' in request.form
     guardianship = 'guardianship' in request.form
     family_assignment = 'family_assignment' in request.form
     disability_certificate = 'disability_certificate' in request.form
-    params = request.form
-    required_fields = ['name', 'surname', 'dni', 'age', 'birthdate', 'birth_place', 'address',
-                       'phone', 'emergency_contact', 'emergency_contact_phone_number',
-                        'professionals', 'health_insurance', 'affiliate_number', 'observations', 
-                        'school_institution', 'institution_address', 'grade', 'institution_phone',
-                        'institution_observations', 'work_proposal', 'condition', 'headquarters'
-                       ]
-    for field in required_fields:
-        if field not in params:
-            flash(f"El campo {field} es requerido.", "error")
-            return redirect(url_for("riders.register"))
-
     other = None
 
     if 'diagnosis' in params:
@@ -90,21 +89,6 @@ def create():
         pension = params['pension']
     else:
         pension = 'No'
-
-    days = request.form.getlist('days')
-
-
-    # Validar el DNI (solo números y puntos)
-    if not re.match(r'^[\d.]+$', params['dni']):
-        flash("El DNI solo puede contener números y puntos.", "error")
-        return redirect(url_for("riders.register"))
-
-    # Validar si el DNI ya está registrado
-    dni = params['dni']
-    existing_rider_dni = rider_repository.find_rider_by_dni(dni)
-    if existing_rider_dni:
-        flash("El DNI ya está registrado por otro jinete o amazona.", "error")
-        return redirect(url_for("riders.index"))
 
     rider = rider_repository.create_rider(
         name = params['name'],
@@ -142,7 +126,7 @@ def create():
         horse_conductor_id = params['horse_conductor_id'],
         horse_id = params['horse_id'],
         track_assistant_id = params['track_assistant_id'],
-        days = days,
+        days = params['days'],
         tutors = []
     )
 
@@ -191,8 +175,16 @@ def edit(id):
 @bp.post("/<int:id>/update")
 @has_permission("rider_update")
 def update(id):
+    params = request.form.to_dict()
+    params['days'] = request.form.getlist('days')
 
-    params = request.form
+    validator = RiderValidator()
+    errors = validator.validate_update(params, id)
+
+    if errors:
+        flash_validation_errors(errors)
+        return redirect(url_for("riders.edit", id=id))
+
     scholarship = 'scholarship' in request.form
     guardianship = 'guardianship' in request.form
     family_assignment = 'family_assignment' in request.form
@@ -215,21 +207,6 @@ def update(id):
         pension = params['pension']
     else:
         pension = 'No'
-
-    days = request.form.getlist('days')
-
-    # Validar el DNI (solo números y puntos)
-    if not re.match(r'^[\d.]+$', params['dni']):
-        flash("El DNI solo puede contener números y puntos.", "error")
-        return redirect(url_for("riders.register"))
-
-     # Validar si el DNI ya está registrado por otro jinete/amazona
-    dni = params['dni']
-    if dni and dni != rider.dni:
-        existing_rider_dni = rider_repository.find_rider_by_dni(dni)
-        if existing_rider_dni:
-            flash("El DNI ya está registrado por otro jinete o amazona.", "error")
-            return redirect(url_for("riders.edit", id=id))
 
     if rider_repository.update_rider(
         id=id,
