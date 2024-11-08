@@ -23,7 +23,9 @@ body {
 nav.navbar {
   background-color: #1c1c1e;
   max-width: 1000px; /* Igual que el body */
-  padding: 1rem 2rem; /* Ajustar el padding para que coincida con el body */
+  padding-left: 0;
+  padding-top: 12px;
+  padding-bottom: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
 }
 
@@ -70,6 +72,14 @@ p {
 a {
   color: #007acc;
   text-decoration: none;
+  transition: color 0.3s ease, border-bottom 0.3s ease; /* Transición suave */
+  border-bottom: 2px solid transparent; /* Línea inferior transparente por defecto */
+  padding: 5px;
+}
+
+a:hover {
+  color: lightblue; /* Color al pasar el mouse */
+ 
 }
 
 
@@ -170,6 +180,7 @@ th {
   text-transform: uppercase; /* Texto en mayúsculas */
   font-weight: bold; /* Negrita para destacar */
   border-bottom: 2px solid #555; /* Línea inferior más gruesa */
+  font-display: underline;
 }
 
 td {
