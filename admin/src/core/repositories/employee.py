@@ -76,6 +76,8 @@ def delete_employee(id):
     return False
 
 def get_employees_by_job_positions(job_positions):
+    if isinstance(job_positions, str):
+        job_positions = [job_positions]
     return db.session.query(Employee).filter(Employee.job_position.in_(job_positions)).all()
 
 def get_employee(id):
