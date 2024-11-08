@@ -35,7 +35,7 @@ def get_pensions():
     return Rider.pension.property.columns[0].type.enums
 
 def get_headquarters():
-    return Rider.headquarter.property.columns[0].type.enums
+    return Rider.headquarters.property.columns[0].type.enums
 
 def get_conditions():
     return Rider.condition.property.columns[0].type.enums

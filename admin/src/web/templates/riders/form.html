@@ -75,8 +75,8 @@
 
 <label class="form-label" for="disability_type">Tipo de Discapacidad:</label>
 <select id="disability_type" name="disability_type" class="form-control">
-  {% for value, label in disability_types %}
-  <option value="{{ value }}" {% if rider and rider.disability_type == value %}selected{% endif %}>{{ label }}</option>
+  {% for value in disability_types %}
+  <option value="{{ value }}" {% if rider and rider.disability_type == value %}selected{% endif %}>{{ value }}</option>
   {% endfor %}
 </select>
 
