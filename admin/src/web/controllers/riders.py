@@ -68,7 +68,8 @@ def create():
             flash(f"El campo {field} es requerido.", "error")
             return redirect(url_for("riders.register"))
 
-    other = None    
+    other = None
+
     if 'diagnosis' in params:
         diagnosis = params['diagnosis']
         if diagnosis == 'OTRO':
@@ -133,73 +134,14 @@ def create():
         work_proposal = params['work_proposal'],
         condition = params['condition'],
         headquarters = params['headquarters'],
-    )  
+        therapist_teacher_id = params['therapist_teacher_id'],
+        horse_conductor_id = params['horse_conductor_id'],
+        horse_id = params['horse_id'],
+        track_assistant_id = params['track_assistant_id'],
+        days = days,
+        tutors = []
+    )
 
-    if params['therapist_teacher_id'] != None and params['therapist_teacher_id'] != 'None':
-        rider.therapist_teacher_id = params['therapist_teacher_id']
-    
-    if params['horse_conductor_id'] != None and params['horse_conductor_id'] != 'None':
-        rider.horse_conductor_id = params['horse_conductor_id']
-
-    if params['horse_id'] != None and params['horse_id'] != 'None':
-        rider.horse_id = params['horse_id']
-
-    if params['track_assistant_id'] != None and params['track_assistant_id'] != 'None':
-        rider.track_assistant_id = params['track_assistant_id']
-
-
-    if family_assignment == True:
-        assignments = request.form.getlist('assignments')
-        assignment_ids = get_assignment_ids_by_names(assignments)
-        rider.assignments = Assignment.query.filter(Assignment.id.in_(assignment_ids)).all()
-
-    if days != None:
-        for day_id in days:
-            day = day_repository.get_day(day_id)
-            if day: 
-                rider.days.append(day)  
-            else:
-                flash(f"Día con ID {day_id} no encontrado.", "error")
-
-    tutors = []
-    for i in range(2):
-        name = request.form.get(f'tutor_name_{i}')
-        surname = request.form.get(f'tutor_surname_{i}')
-        dni = request.form.get(f'tutor_dni_{i}')
-        relationship = request.form.get(f'tutor_relationship_{i}')
-        address = request.form.get(f'tutor_address_{i}')
-        cellphone = request.form.get(f'tutor_cellphone_{i}')
-        email = request.form.get(f'tutor_email_{i}')
-        educational_level = request.form.get(f'tutor_educational_level_{i}')
-        occupation = request.form.get(f'tutor_occupation_{i}')
-
-        if name and surname and dni:
-            tutor = Tutor.query.filter_by(dni=dni).first()
-            if not tutor:
-                tutor = Tutor(name=name, surname=surname, dni=dni, address=address, cellphone=cellphone, email=email, educational_level=educational_level, occupation=occupation)
-            else:
-                tutor.name = name
-                tutor.surname = surname
-                tutor.address = address
-                tutor.cellphone = cellphone
-                tutor.email = email
-                tutor.educational_level = educational_level
-                tutor.occupation = occupation
-            tutors.append((tutor, relationship))
-
-    db.session.add(rider)
-    # Asegura que el jinete obtenga un id
-    db.session.flush() 
-
-    for tutor, relationship in tutors:
-            if tutor.id is None:
-                db.session.add(tutor)
-                db.session.flush()  # Ensure the tutor gets an ID
-            db.session.execute(rider_tutor.insert().values(rider_id=rider.id, tutor_id=tutor.id, relationship=relationship))
-
-
-    # Guardar cambios en la base de datos -- NO SE SI ES NECESARIO !!! VER
-    db.session.commit()
     flash("Jinete/Amazona creado con éxito.", "info")
     return redirect(url_for("riders.index"))
 
@@ -323,9 +265,15 @@ def update(id):
         work_proposal=params['work_proposal'],
         condition=params['condition'],
         headquarters=params['headquarters']
+        therapist_teacher_id = params['therapist_teacher_id'],
+        horse_conductor_id = params['horse_conductor_id'],
+        horse_id = params['horse_id'],
+        track_assistant_id = params['track_assistant_id'],
+        days = params['days'],
+        tutors = params['tutors']
         ):
-            flash("Jinete/Amazona actualizado con éxito.", "success")
-            return redirect(url_for("riders.index"))
+        flash("Jinete/Amazona actualizado con éxito.", "success")
+        return redirect(url_for("riders.index"))
     else:
         flash("Jinete/Amazona no encontrado.", "error")
         return redirect(url_for("riders.index"))

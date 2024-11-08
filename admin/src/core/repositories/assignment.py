@@ -16,6 +16,6 @@ def get_assignment_ids_by_names(names):
     assignments = Assignment.query.filter(Assignment.name.in_(names)).all()
     return [assignment.id for assignment in assignments]
 
-def get_assignments(id):
-    assignments = Assignment.query.filter(Assignment.id == id).all()
+def get_assignments(ids):
+    assignments = Assignment.query.filter(Assignment.id.in_(ids)).all()
     return assignments

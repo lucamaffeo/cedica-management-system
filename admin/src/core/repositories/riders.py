@@ -7,10 +7,20 @@ from src.core.repositories import tutor as tutor_repository
 
 def create_rider(**kwargs):
     rider = Rider(**kwargs)
-    db.session.add(rider)
-    db.session.commit()
+    try:
+        with db.session.begin_nested():
+            db.session.add(rider)
+            _update_professional_assignments(rider, kwargs)
+            _update_family_assignments(rider, kwargs)
+            _update_days(rider, kwargs)
+            _update_tutors(rider, kwargs)
+            _update_basic_fields(rider, kwargs)
 
-    return rider
+        db.session.commit()
+        return rider
+    except Exception as e:
+        db.session.rollback()
+        return None
 
 def list_riders(search='', sort_by='name', direction='asc', page=1):
     query = Rider.query
