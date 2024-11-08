@@ -28,8 +28,10 @@ Buscar por Tipo, Titulo
             <td>{{ document.title }}</td>
             <td>{{ document.upload_date.strftime('%d/%m/%Y') }}</td>
             <td>
-                <a href="{{ url_for('documents.delete', id=document.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
-                <a href="{{ url_for('documents.download', id=document.id) }}">Descargar</a>
+                <a href="{{ url_for('documents.delete', entity_type=entity_type, entity_id=entity_id, id=document.id) }}"
+                    onclick="return confirm('¿Está seguro?')">Eliminar</a>
+                <a
+                    href="{{ url_for('documents.download', entity_type=entity_type, entity_id=entity_id, id=document.id) }}">Descargar</a>
             </td>
         </tr>
         {% endfor %}
