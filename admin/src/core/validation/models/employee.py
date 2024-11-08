@@ -46,5 +46,5 @@ class EmployeeValidator(Validator):
     def validate_create(self, data):
         return self.validate(data)
 
-    def validate_update(self, data, employee_id):
+    def validate_update(self, data):
         return self.validate(data)

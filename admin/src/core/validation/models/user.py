@@ -57,7 +57,7 @@ class ValidRole(ValidationRule):
 
 
 class UserValidator(Validator):
-    def __init__(self, user_model=User, role_model=Role, user_id: int = None, check_password: bool = True):
+    def __init__(self, user_model=User, role_model=Role, user_id: int = None, check_password: bool = True, is_update_own: bool = False):
         """
         Initialize the user validator.
 
@@ -82,8 +82,10 @@ class UserValidator(Validator):
             self.add_rule('password', PasswordStrength(min_length=8))
 
         # Role validation
-        self.add_rule('role_id', Required())
-        self.add_rule('role_id', ValidRole(role_model))
+    # For own profile updates, remove role validation
+        if not is_update_own:
+            self.add_rule('role_id', Required())
+            self.add_rule('role_id', ValidRole(role_model))
 
         self.add_rule('alias', Required())
         self.add_rule('alias', MaxLength(255))

@@ -67,11 +67,8 @@ def update(id):
     validator = UserValidator(
         user_id=id,
         check_password=bool(data.get('password'))
+        is_update_own=is_update_own
     )
-
-    # For own profile updates, remove role validation
-    if is_update_own:
-        validator.rules.pop('role_id', None)
 
     errors = validator.validate_for_update(data)
     if errors:
