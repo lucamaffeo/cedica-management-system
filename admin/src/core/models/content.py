@@ -30,9 +30,4 @@ class Content(db.Model):
             'author': self.author.name if self.author else None
         }
     
-    def publish(self):
-        self.publication_date = datetime.now()
-        self.status = 'Publicado'
-
-    def archive(self):
-        self.status = 'Archivado'
+   

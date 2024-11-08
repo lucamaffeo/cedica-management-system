@@ -3,6 +3,7 @@ from src.core.repositories import user as user_repository
 from src.core.repositories import content as content_repository
 from src.web.helpers.auth import has_permission
 from flask import current_app, session
+from datetime import datetime
 
 
 bp = Blueprint("contents", __name__, url_prefix="/contents")
@@ -80,17 +81,26 @@ def update(id):
         flash("Todos los campos son obligatorios.", "error")
         return redirect(url_for("contents.edit", id=id))
 
-    content_repository.update_content(
-        id,
-        title=title,
-        summary=summary,
-        content=content,
-        status=status
-    )
+    if status == 'Publicado':
+        content_repository.update_content(
+            id,
+            title=title,
+            summary=summary,
+            content=content,
+            status=status,
+            publication_date=datetime.now()
+        )
+    else:
+        content_repository.update_content(
+            id,
+            title=title,
+            summary=summary,
+            content=content,
+            status=status
+        )
 
     flash("Contenido actualizado con éxito.", "info")
     return redirect(url_for("contents.index"))
-
 
 # Delete content
 @bp.get("/<int:id>/delete")
