@@ -123,35 +123,37 @@ def create_document(file, entity_type, entity_id,document_type, **kwargs):
         entity_type: table of the entity (e.g. employees, riders, horses)
         entity_id: the ID of the entity (e.g. employee_id, rider_id, horse_id)
     """
+    try:
+        # Generar un UUID
+        unique_id = str(uuid.uuid4())
 
-    
+        # Crear un hash SHA-1 y tomar solo los primeros 8 caracteres
+        short_uid = hashlib.sha1(unique_id.encode()).hexdigest()[:8]
 
-    # Generar un UUID
-    unique_id = str(uuid.uuid4())
+        # Generar el nombre del archivo con el hash corto y el nombre original
+        file_name = f"{short_uid}-{file.filename}"
 
-    # Crear un hash SHA-1 y tomar solo los primeros 8 caracteres
-    short_uid = hashlib.sha1(unique_id.encode()).hexdigest()[:8]
+        # Construct the Minio path as {module}/{id}/{filename}
+        file_path = f"{entity_type}/{entity_id}/{document_type}/{file_name}"
+        # upload file
+        _upload_file(file, file_path)
 
-    # Generar el nombre del archivo con el hash corto y el nombre original
-    file_name = f"{short_uid}-{file.filename}"
+        # Add the file path to kwargs to store in the database
+        kwargs['file'] = file_path
+        kwargs['entity_type'] = entity_type
+        kwargs['entity_id'] = entity_id
+        kwargs['document_type'] = document_type
 
-    # Construct the Minio path as {module}/{id}/{filename}
-    file_path = f"{entity_type}/{entity_id}/{document_type}/{file_name}"
-    # upload file
-    _upload_file(file, file_path)
+        # Create the document in the database
+        document = Document(**kwargs)
+        db.session.add(document)
+        db.session.commit()
 
-    # Add the file path to kwargs to store in the database
-    kwargs['file'] = file_path
-    kwargs['entity_type'] = entity_type
-    kwargs['entity_id'] = entity_id
-    kwargs['document_type'] = document_type
+        return document
 
-    # Create the document in the database
-    document = Document(**kwargs)
-    db.session.add(document)
-    db.session.commit()
-
-    return document
+    except Exception as e:
+        db.session.rollback()
+        raise StorageError(f"Failed to create document: {str(e)}")
 
 def get_document(id):
     document = Document.query.filter(Document.id == id).first()
