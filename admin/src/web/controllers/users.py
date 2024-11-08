@@ -66,7 +66,7 @@ def update(id):
     # Initialize validator with appropriate settings
     validator = UserValidator(
         user_id=id,
-        check_password=bool(data.get('password'))
+        check_password=bool(data.get('password')),
         is_update_own=is_update_own
     )
 
