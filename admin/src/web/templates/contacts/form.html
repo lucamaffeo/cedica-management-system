@@ -6,16 +6,24 @@
 {% endblock %}
 
 {% block form_fields %}
-<input type="text" name="name" class="form-control" value="{{ contact.name if contact else '' }}" placeholder="Nombre"
+<label class="form-label" for="title">Título:</label>
+<input type="text" name="title" class="form-control" value="{{ contact.title if contact else '' }}" placeholder="Título"
 	{% if contact %}disabled{% endif %} required>
 
+<label class="form-label" for="name">Nombre del usuario:</label>
+<input type="text" name="name" class="form-control" value="{{ contact.name if contact else '' }}" placeholder="Nombre del usuario"
+	{% if contact %}disabled{% endif %} required>
+
+<label class="form-label" for="email">Email:</label>
 <input type="email" name="email" class="form-control" value="{{ contact.email if contact else '' }}" placeholder="a@a.com"
 	{% if contact %}disabled{% endif %} required>
 
-<input class="form-control" type="text" name="body" placeholder="Consulta" {% if contact %}disabled{% endif %} required>
+<label class="form-label" for="description">Descripción:</label>
+<input class="form-control" type="text" name="description" placeholder="Consulta" value="{{ contact.description if contact else '' }}" {% if contact %}disabled{% endif %} required>
 
 {% if is_update %}
 
+<label class="form-label" for="status">Estado:</label>
 <select class="form-control" name="status" required>
 	<option value="" disabled {{ 'selected' if not contact }}>Seleccione un estado</option>
 	{% for status in statuses %}
@@ -23,6 +31,7 @@
 	{% endfor %}
 </select>
 
+<label class="form-label" for="comment">Comentario:</label>
 <textarea name="comment" class="form-control" placeholder="Comentario" rows="3">{{ contact.comment if contact.comment != None else '' }}</textarea>
 {% endif %}
 

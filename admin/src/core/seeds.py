@@ -125,7 +125,7 @@ def run():
     jinete2 = riders.create_rider(name="Pedro", surname="Gonzalez", dni=98765432, age=30, birthdate="1991-01-01", birth_place="CABA", address="Calle Falsa 456", phone="987654321", emergency_contact="Ana", emergency_contact_phone_number="987654321", scholarship=False, scholarship_percentage=0, professionals="Dr. Pedro Gonzalez", tutors=[], disability_certificate=False, diagnosis="ECNE", other="Otro", disability_type="Mental", family_assignment=True, assignments=[assignment1, assignment2], pension="Provincial", health_insurance="OSDE", affiliate_number="654321", guardianship=False, observations="Sin observaciones", school_institution="Escuela 456", institution_address="Calle Falsa 456", grade="Segundo", institution_phone="987654321", institution_observations="Sin observaciones", days=[lunes, martes], horse_id=caballo1.id, horse_conductor_id=conductor.id, track_assistant_id=auxiliar_pista.id, therapist_teacher_id=terapeuta.id, work_proposal="Hipoterapia", condition="Regular", headquarters="CASJ")
 
     #RECIBOS
-    recibo = receipt.create_receipt(ja_id=1, quantity=1000, payment_method="Efectivo", employee_id=profesor.id, remarks="Sin observaciones")
+    #recibo = receipt.create_receipt(ja_id=1, quantity=1000, payment_method="Efectivo", employee_id=profesor.id, remarks="Sin observaciones")
 
     #DOCUMENTOS
 
@@ -136,8 +136,8 @@ def run():
     _ = contact.create_status(name="resuelto")
 
     #Contenidos
-    contenido1 = content.create_content(title="Titulo1", summary="Resumen1", content="Contenido1", author_id=1)
-    contenido2 = content.create_content(title="Titulo2", summary="Resumen2", content="Contenido2", author_id=1)
+    contenido1 = content.create_content(title="Titulo1", summary="Resumen1", content="Contenido1", author_id=1, status="Publicado", publication_date="2021-01-01")
+    contenido2 = content.create_content(title="Titulo2", summary="Resumen2", content="Contenido2", author_id=1, status="Borrador")
     contenido3 = content.create_content(title="Titulo3", summary="Resumen3", content="Contenido3", author_id=1)
     contenido4 = content.create_content(title="Titulo4", summary="Resumen4", content="Contenido4", author_id=1)
     contenido5 = content.create_content(title="Titulo5", summary="Resumen5", content="Contenido5", author_id=1)
@@ -145,10 +145,9 @@ def run():
     contenido7 = content.create_content(title="Titulo7", summary="Resumen7", content="Contenido7", author_id=1)
     contenido8 = content.create_content(title="Titulo8", summary="Resumen8", content="Contenido8", author_id=1)
     contenido9 = content.create_content(title="Titulo9", summary="Resumen9", content="Contenido9", author_id=1)
-    contenido10 = content.create_content(title="Titulo10", summary="Resumen10", content="Contenido10", author_id=6)
+    contenido10 = content.create_content(title="Titulo10", summary="Resumen10", content="Contenido10", author_id=6, status="Publicado", publication_date="2022-02-02")
     contenido11 = content.create_content(title="Titulo11", summary="Resumen11", content="Contenido11", author_id=6)
     contenido12 = content.create_content(title="Titulo12", summary="Resumen12", content="Contenido12", author_id=6)
     contenido13 = content.create_content(title="Titulo13", summary="Resumen13", content="Contenido13", author_id=6)
-
 
     print("Seed ejecutado correctamente")

@@ -5,6 +5,7 @@ from src.core.repositories.riders import has_assignment
 from src.core.repositories.user import has_permission
 from src.web.handlers import error
 from src.web.controllers import register_blueprints
+from src.web.api import register_api_blueprints
 from src.core import database, seeds
 from src.core.config import config
 import logging
@@ -42,11 +43,8 @@ def create_app(env="development",static_folder="../../static"):
     def home():
         return render_template("home.html")
 
-    @app.route("/about")
-    def about():
-        return render_template("about.html")
-
     register_blueprints(app)
+    register_api_blueprints(app)
 
     app.register_error_handler(404, error.error_not_found)
 

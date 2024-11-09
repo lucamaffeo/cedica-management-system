@@ -1,6 +1,11 @@
 from flask import current_app
 from src.core.database import db
 from src.core.models.content import Content
+from src.core.models.user import User
+from sqlalchemy.orm import joinedload
+from datetime import datetime
+from datetime import timedelta
+from flask import jsonify
 
 def create_content(**kwargs):
     content = Content(**kwargs)
@@ -8,6 +13,31 @@ def create_content(**kwargs):
     db.session.commit()
 
     return content
+
+def total_contents():
+    total = Content.query.count()
+    return total
+
+def list_contents_api(author=None, published_from=None, published_to=None, page=1, per_page=10):
+    # Aplicar filtro por alias del autor
+    if author:
+        query = Content.query.options(joinedload(Content.author))
+        query = query.join(User).filter(User.alias.ilike(f'%{author}%'))
+    else:
+        query = Content.query
+
+    # Si no manda las dos, no se aplica el filtro !
+    if published_from and published_to:
+        print(published_from)
+        published_from = datetime.fromisoformat(published_from.replace("Z", "+00:00"))
+        print(published_from)
+        print(published_to)
+        published_to = datetime.fromisoformat(published_to.replace("Z", "+00:00"))  # Convert str to date, so we can add timedelta (to make end_date include that day on results)
+        print(published_to)
+        query = query.filter(Content.publication_date >= published_from, Content.publication_date < published_to + timedelta(days=1))
+
+    articles = query.paginate(page=page, per_page=per_page, error_out=False)
+    return articles
 
 def list_contents(search='', status=None, sort_by='title', direction='asc', page=1):
     query = Content.query
