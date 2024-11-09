@@ -17,8 +17,6 @@ Listado de Documentos
 Buscar por Tipo, Titulo
 {% endblock %}
 
-<!-- cambiar -->
-
 <!-- Documents table -->
     {% set sorting_criteria = [("document_type", "Tipo"), ("title", "Título"), ("upload_date", "Fecha de subida")] %}
     {% set sortable_fields = ["title", "upload_date"] %}
@@ -29,16 +27,16 @@ Buscar por Tipo, Titulo
             <td>{{ document.document_type }}</td>
             <td>{{ document.title }}</td>
             <td>{{ document.upload_date.strftime('%d/%m/%Y') }}</td>
-            <!-- ver -->
             <td>
-                <a href="{{ url_for('documents.delete', entity_type=entity_type, entity_id=entity_id, id=document.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
-                <a href="{{ url_for('documents.download', entity_type=entity_type, entity_id=entity_id, id=document.id) }}">Descargar</a>
+                <a href="{{ url_for('documents.delete', entity_type=entity_type, entity_id=entity_id, id=document.id) }}"
+                    onclick="return confirm('¿Está seguro?')">Eliminar</a>
+                <a
+                    href="{{ url_for('documents.download', entity_type=entity_type, entity_id=entity_id, id=document.id) }}">Descargar</a>
             </td>
         </tr>
         {% endfor %}
-    {% endblock %}  
+	{% endblock %}
 
     {% block add_new %}
     <a href="{{ url_for('documents.add', entity_type=entity_type, entity_id=entity_id) }}" class="btn btn-primary">Añadir Documento</a>
     {% endblock %}
-

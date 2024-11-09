@@ -29,4 +29,9 @@ class Storage:
     def client(self, value):
         self._client = value
 
+    def delete_file(self, bucket_name, file_path):
+        if not self._client:
+            raise ValueError("Minio client not initialized")
+        self._client.remove_object(bucket_name, file_path)
+
 storage = Storage()

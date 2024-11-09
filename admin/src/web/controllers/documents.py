@@ -2,7 +2,6 @@ from flask import Blueprint, redirect, render_template, request, url_for, flash,
 from src.web.helpers.documentation import clean_entity_type
 from src.core.repositories import document as document_repository
 from src.web.helpers.auth import has_permission
-from src.core.database import db
 
 bp = Blueprint("documents", __name__, url_prefix="/documents")
 
@@ -51,12 +50,7 @@ def download(entity_type, entity_id, id):
 @bp.get("/<string:entity_type>/<int:entity_id>/create")
 @clean_entity_type
 def add(entity_type, entity_id):
-    """translations = {
-        'riders': 'Jinete',
-        'horses': 'Caballo',
-        'employees': 'Empleado'}
-    entity_type_translated = translations.get(entity_type, entity_type)"""
-    return render_template("documents/form.html", entity_type=entity_type, entity_id=entity_id,title="Agregar documento") #title=f'Agregar Documento a {entity_type_translated.capitalize()} 
+    return render_template("documents/form.html", entity_type=entity_type, entity_id=entity_id,title="Agregar documento")
 
 # Create document
 @bp.post("/<string:entity_type>/<int:entity_id>/create")
@@ -88,10 +82,8 @@ def create(entity_type, entity_id):
             entity_type=entity_type,
             entity_id=entity_id
         )
-        db.session.commit()
         flash("Documento agregado con éxito.", "success")
         return redirect(url_for("documents.index", entity_type=document.entity_type, entity_id=document.entity_id))
     except Exception as e:
-        db.session.rollback()
         flash(f"Error al agregar el documento: {str(e)}", "error")
         return redirect(url_for("documents.add", entity_type=entity_type, entity_id=entity_id))

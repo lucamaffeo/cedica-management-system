@@ -14,15 +14,17 @@
 
 
 <label class="form-label" for="dni">DNI:</label>
-<input type="text" id="dni" name="dni" required class="form-control" value="{{ employee.dni if employee else '' }}">
+<input type="text" id="dni" name="dni" required class="form-control" value="{{ employee.dni if employee else '' }}"
+    {% if is_update %}disabled{% endif %}>
 
 <label class="form-label" for="address">Domicilio:</label>
 <input type="text" id="address" name="address" required class="form-control"
     value="{{ employee.address if employee else '' }}">
 
+    
 <label class="form-label" for="email">Email:</label>
 <input type="email" id="email" name="email" required class="form-control"
-    value="{{ employee.email if employee else '' }}">
+    value="{{ employee.email if employee else '' }}" {% if is_update %}disabled{% endif %}>
 
 
 <label class="form-label" for="city">Localidad:</label>
@@ -62,7 +64,7 @@
     value="{{ employee.termination_date.strftime('%Y-%m-%d') if employee and employee.termination_date else '' }}">
 
 
-<label class="form-label" for="emergency_contact">Contacto de Emergencia:</label>
+<label class="form-label" for="emergency_contact_info">Contacto de Emergencia:</label>
 <input placeholder="Indicar nombre y telefono" class="form-control" type="text" id="emergency_contact_info"
     name="emergency_contact_info" required value="{{ employee.emergency_contact_info if employee else '' }}">
 
@@ -72,7 +74,7 @@
 
 <label class="form-label" for="associate_number">N° de Afiliado:</label>
 <input class="form-control" type="text" id="associate_number" name="associate_number"
-    value="{{ employee.associate_number if employee else '' }}" required>
+    value="{{ employee.associate_number if employee else '' }}" required {% if is_update %}disabled{% endif %}>
 
 <label class="form-label" for="condition">Condición:</label>
 <select class="form-control" id="condition" name="condition" required>
@@ -84,8 +86,10 @@
     {% endfor %}
 </select>
 {% if is_update %}
-<label class="form-check-label" for="active">Activo</label>
+<div>
+<label class="form-label" for="active">Activo</label>
 <input class="form-check-input" type="checkbox" name="active" value="true" {% if employee.active %}checked{% endif %}>
+</div>
 {% endif %}
 
 {% endblock %}

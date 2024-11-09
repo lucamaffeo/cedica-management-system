@@ -14,8 +14,35 @@ body {
   background-color: #121212;
   color: #e0e0e0;
   padding: 2rem;
-  max-width: 800px;
+  max-width: 1000px;
   margin: auto;
+  
+}
+
+/* Navbar */
+nav.navbar {
+  background-color: #1c1c1e;
+  max-width: 1000px; /* Igual que el body */
+  padding-left: 0;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
+}
+
+nav.navbar-nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.navbar-brand,
+.nav-link {
+  color: #e0e0e0;
+  font-weight: bold; /* Negrita para destacar */
+}
+
+.nav-link:hover {
+  color: #007acc; /* Color de enlace al pasar el mouse */
 }
 
 /* Typography */
@@ -29,6 +56,15 @@ h6 {
   font-weight: 600;
 }
 
+h2 {
+  font-size: 1.8rem;
+  text-decoration: underline;
+}
+
+h3 {
+  font-size: 1.3rem;
+}
+
 p {
   margin-bottom: 1rem;
 }
@@ -36,17 +72,23 @@ p {
 a {
   color: #007acc;
   text-decoration: none;
+  transition: color 0.3s ease, border-bottom 0.3s ease; /* Transición suave */
+  border-bottom: 2px solid transparent; /* Línea inferior transparente por defecto */
+  padding: 3px;
 }
 
 a:hover {
-  text-decoration: underline;
+  color: lightblue; /* Color al pasar el mouse */
+ 
 }
+
 
 /* Forms */
 input,
 textarea,
 select,
-button {
+button,
+.btn {
   font: inherit;
   padding: 0.5rem;
   margin-bottom: 1rem;
@@ -63,15 +105,63 @@ button:focus {
   border-color: #007acc;
 }
 
-button {
+button,
+.btn {
   background-color: #007acc;
   color: #fff;
   border: none;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease; 
+  padding: 0.5rem 1rem; 
+  border-radius: 0.25rem; /* Bordes redondeados */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
 }
 
-button:hover {
+button:hover,
+.btn:hover {
   background-color: #005f99;
+  transform: translateY(-2px); /* Efecto de elevación al pasar el mouse */
+}
+
+button:active,
+.btn:active {
+  background-color: #004f80;
+  transform: translateY(0); /* Efecto de presionado */
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+.btn-secondary:active {
+  background-color: #4e555b;
+}
+
+.btn-primary {
+  background-color: #005f99; 
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Transición suave */
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem; /* Bordes redondeados */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
+  width: auto; /* Ajustar el ancho */
+}
+
+.btn-primary:hover {
+  background-color: #004f80; /* Color al pasar el mouse */
+  transform: translateY(-2px); /* Efecto de elevación al pasar el mouse */
+}
+
+.btn-primary:active {
+  background-color: #003f66; /* Color al presionar */
+  transform: translateY(0); /* Efecto de presionado */
 }
 
 /* Tables */
@@ -80,15 +170,17 @@ table {
   border-collapse: collapse;
   margin-bottom: 1rem;
   border: 1px solid #555; /* Borde alrededor de la tabla */
+  border-radius: 0.5rem; /* Bordes redondeados */
+  overflow: hidden; /* Para que los bordes redondeados se apliquen correctamente */
 }
 
-/* Ajustes para el encabezado de la tabla */
 th {
   background-color: #333; /* Fondo oscuro consistente con la página */
   color: #ffffff; /* Texto blanco para contraste */
   text-transform: uppercase; /* Texto en mayúsculas */
   font-weight: bold; /* Negrita para destacar */
   border-bottom: 2px solid #555; /* Línea inferior más gruesa */
+  font-display: underline;
 }
 
 td {
@@ -125,26 +217,41 @@ ol li {
   text-align: center;
 }
 
-nav.navbar {
-  background-color: #1c1c1e;
-}
-.navbar-brand,
-.nav-link {
-  color: #e0e0e0;
-}
 .dropdown-menu {
+  position: absolute; /* Posición absoluta para alinearlo con el botón */
+  top: 100%; /* Alinearlo justo debajo del botón */
+  left: 0; /* Alinear a la izquierda del botón */
+  transform: translateX(43px);
   background-color: #333;
+  border-radius: 0.5rem; /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
+  display: none; /* Ocultar por defecto */
+  min-width: 10rem; /* Ancho mínimo */
+  z-index: 1000; /* Asegurar que esté por encima de otros elementos */
 }
+
 .dropdown-item {
   color: #e0e0e0;
+  padding: 0.5rem 1rem; /* Espaciado interno */
+  cursor: pointer; /* Cursor de mano */
 }
-.dropdown-item:hover {
-  background-color: #444;
+
+.dropdown-item:hover,
+.dropdown-item.active {
+  background-color: white; /* Resaltar al pasar el mouse o cuando esté activo */
+  color: black;
+  border-radius: 5px;
 }
+
+
 footer {
   background-color: #1c1c1e;
   color: #e0e0e0;
+  padding: 1rem 2rem; /* Espaciado interno */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
+  text-align: center; /* Centrar el texto */
 }
+
 .bg-secondary {
   background-color: #2c2c2e !important;
   color: #e0e0e0;
@@ -155,9 +262,8 @@ footer {
   width: 100%;
   z-index: 1050; /* Above the navbar and other elements */
   margin-bottom: 0.25rem;
-}
+ }
 
-/* Optional: Add some margin to prevent overlap with navbar */
 .navbar + .flash-container {
   margin-top: 0; /* Adjust based on navbar height */
 }
@@ -166,4 +272,8 @@ footer {
 .alert {
   margin: 0;
   border-radius: 0.25rem;
+  padding: 1rem; /* Espaciado interno */
+  background-color: #555; /* Fondo oscuro */
+  color: #e0e0e0; /* Texto claro */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
 }

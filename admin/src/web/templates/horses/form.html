@@ -13,7 +13,7 @@
 
         <label class="form-label" for="gender">Sexo:</label>
         <select class="form-control" name="gender" required>
-            {% for gender in ['Macho', 'Hembra'] %}
+            {% for gender in genders %}
             <option value="{{ gender }}" {{ 'selected' if horse and horse.gender == gender else '' }}>{{ gender }}</option>
         {% endfor %}
         </select>
@@ -27,7 +27,7 @@
 
         <label class="form-label" for="purchase_donation">Compra/Donación:</label>
         <select class="form-control" name="purchase_donation" required>
-            {% for option in ['Compra', 'Donacion'] %}
+            {% for option in purchase_donation %}
             <option value="{{ option }}" {{ 'selected' if horse and horse.purchase_donation == option else '' }}>{{ option }}</option>
         {% endfor %}
         </select>
@@ -58,7 +58,7 @@
 
         <label class="form-label" for="assigned_activities_ja">Tipo de J&A Asignados:</label>
         <select class="form-control" name="assigned_activities_ja" required>
-            {% for activity in ['Hipoterapia', 'Monta Terapeutica', 'Deporte Ecuestre Adaptado', 'Actividades Recreativas', 'Equitacion'] %}
+            {% for activity in activities %}
             <option value="{{ activity }}" {{ 'selected' if horse and horse.assigned_activities_ja == activity else '' }}>{{ activity }}</option>
         {% endfor %}
         </select>

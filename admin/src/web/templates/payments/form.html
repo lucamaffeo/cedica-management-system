@@ -1,14 +1,12 @@
 {% extends "base_form.html" %}
 
-<!-- Use (if is_update) to check for is_update or is_update_own (edit profile) -->
 {% block form_action %}
 {{ url_for('payments.update', id=payment.id) if is_update else url_for('payments.create') }}
 {% endblock %}
 
 {% block form_fields %}
-<!--- TODO change fields -->
 		        <label for="amount" class="form-label">Monto</label>
-		        <input type="text" name="amount" class="form-control" value="{{ payment.amount if is_update else '' }}" placeholder="Monto" required>
+		        <input type="number" name="amount" class="form-control" value="{{ payment.amount if is_update else '' }}" placeholder="Monto" required step="0.01" min="0" max="99999999.99">
 		        <label for="description" class="form-label">Descripción</label>
 		        <textarea name="description" class="form-control" rows="3" placeholder="Descripción" required>{{ payment.description if is_update else '' }}</textarea>
                 <label for="date" class="form-label">Fecha</label>
@@ -18,7 +16,6 @@
         <label for="type" class="form-label">Tipo</label>
         <select class="form-control" name="type" id="type" required onchange="toggleBeneficiaryField()">
             <option value="" disabled {{ 'selected' if not is_update }}>Seleccione un tipo</option>
-            {% set payment_types = ["Honorarios", "Proveedor", "Gastos varios"] %}
             {% for type in payment_types %}
             <option value="{{ type }}" {{ 'selected' if is_update and payment.type == type }}>{{ type }}</option>
             {% endfor %}

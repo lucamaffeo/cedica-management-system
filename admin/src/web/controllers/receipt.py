@@ -3,6 +3,7 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 from src.core.models.employee import Employee
 from src.core.repositories import receipt,employee as employee_repository, riders as riders_repository
 from src.web.helpers.auth import has_permission
+from src.core.validation.models.receipt import ReceiptValidator
 
 bp = Blueprint("receipts", __name__, url_prefix="/receipts")
 
@@ -31,6 +32,14 @@ def register():
 @has_permission("receipt_create")
 def create():
     params = request.form
+    validator = ReceiptValidator()
+    errors = validator.validate_create(params)
+
+    if errors:
+        for error in errors:
+            flash(f"{error.field}: {error.message}", "error")
+        return redirect(url_for("receipts.create"))
+
     employee_id = params.get('employee_id')
     ja_id = params.get('ja_id')
 
@@ -80,6 +89,14 @@ def edit(id):
 @has_permission("receipt_update")
 def update(id):
     params = request.form
+    validator = ReceiptValidator()
+    errors = validator.validate_update(params, id)
+
+    if errors:
+        for error in errors:
+            flash(f"{error.field}: {error.message}", "error")
+        return redirect(url_for('receipts.update', id=id))
+
     employee_id = params.get('employee_id')
     ja_id = params.get('ja_id')
     quantity = params.get('quantity')
