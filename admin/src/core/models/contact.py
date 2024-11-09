@@ -13,8 +13,9 @@ class Contact(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
+    title = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False)
-    body = db.Column(db.Text, nullable=False)
+    description = db.Column(db.Text, nullable=False)
     comment = db.Column(db.Text, nullable=True)
     inserted_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)

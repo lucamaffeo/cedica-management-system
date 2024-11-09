@@ -53,7 +53,11 @@
               {% set args = request.args.to_dict() %}
         {% set args = args | merge({'sort_by': field, 'direction': next_direction}) %}
 
+        {% if entity_type is defined and entity_id is defined %}
         <a href="{{ url_for(request.endpoint, entity_type=entity_type, entity_id=entity_id, **args) }}">
+        {% else %}
+            <a href="{{ url_for(request.endpoint, **args) }}">
+        {% endif %}
 
                   {{ display_name }}
                   {% if current_sort == field %}
@@ -113,30 +117,53 @@
 
             {# Previous button #}
             <li class="page-item {{ 'disabled' if page_num == 1 }}">
+              {% if entity_type is defined and entity_id is defined %}
+              <a class="page-link" 
+                href="{{ url_for(request.endpoint, entity_type=entity_type, entity_id=entity_id, page=page_num-1) if page_num > 1 else '#' }}"
+                aria-label="Previous"
+                {{ 'tabindex="-1"' if page_num == 1 }}>
+                &laquo;
+              </a>
+              {% else %}    
               <a class="page-link" 
                  href="{{ url_for(request.endpoint, page=page_num-1) if page_num > 1 else '#' }}"
                  aria-label="Previous"
                  {{ 'tabindex="-1"' if page_num == 1 }}>
                 &laquo;
               </a>
+              {% endif %}
             </li>
 
             {# Page numbers #}
             {% for p in range(start_page, end_page + 1) %}
               <li class="page-item {{ 'active' if p == page_num }}">
+                {% if entity_type is defined and entity_id is defined %}
+                <a class="page-link" 
+                  href="{{ url_for(request.endpoint, entity_type=entity_type, entity_id=entity_id, page=p) }}">                  {{ p }}
+                </a>
+                {% else %}    
                 <a class="page-link" 
                   href="{{ url_for(request.endpoint, page=p) }}">                  {{ p }}
                 </a>
+                {% endif %}
               </li>
             {% endfor %}
 
             {# Next button #}
             <li class="page-item {{ 'disabled' if page_num == pagination.pages }}">
+              {% if entity_type is defined and entity_id is defined %}    
+              <a class="page-link"
+                  href="{{ url_for(request.endpoint, entity_type=entity_type, entity_id=entity_id, page=page_num+1) if page_num < pagination.pages else '#' }}"                 aria-label="Next"
+                 {{ 'tabindex="-1"' if page_num == pagination.pages }}>
+                &raquo;
+              </a>
+              {% else %}    
               <a class="page-link"
                   href="{{ url_for(request.endpoint, page=page_num+1) if page_num < pagination.pages else '#' }}"                 aria-label="Next"
                  {{ 'tabindex="-1"' if page_num == pagination.pages }}>
                 &raquo;
               </a>
+              {% endif %}
             </li>
           {% endwith %}
         </ul>

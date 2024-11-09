@@ -26,12 +26,16 @@ class ContactValidator(Validator):
         self.add_rule('name', MaxLength(255))
         self.add_rule('name', MinLength(2))
 
+        self.add_rule('title', Required())
+        self.add_rule('title', MaxLength(255))
+        self.add_rule('title', MinLength(2))
+
         self.add_rule('email', Required())
         self.add_rule('email', MaxLength(255))
         self.add_rule('email', EmailFormat())
 
-        self.add_rule('body', MaxLength(20))
-        self.add_rule('body', Required())
+        self.add_rule('description', MaxLength(20))
+        self.add_rule('description', Required())
         return self.validate(data)
 
     def validate_for_update(self, data: dict) -> list[ValidationError]:

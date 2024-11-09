@@ -21,14 +21,14 @@
     </select>
 {% endblock %}
 
-{% set sorting_criteria = [("name", "Nombre"), ("email", "Email"), ("status", "Estado"), ("inserted_at", "Creación")] %}
+{% set sorting_criteria = [("title", "Titulo"), ("email", "Email"), ("status", "Estado"), ("inserted_at", "Creación")] %}
 
 {% set sortable_fields = ["inserted_at"] %}
 
 {% block table_rows %}
     {% for contact in pagination.items %}
     <tr>
-        <td>{{ contact.name }}</td>
+        <td>{{ contact.title }}</td>
         <td>{{ contact.email }}</td>
         <td>{{ contact.status.name }}</td>
         <td>{{ contact.formatted_inserted_at }}</td>

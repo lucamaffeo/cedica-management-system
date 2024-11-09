@@ -24,8 +24,9 @@ def store():
 
     contact_repo.create_contact(
         name=data["name"],
+        title=data["title"],
         email=data["email"],
-        body=data["body"],
+        description=data["description"],
     )
 
     flash("Contacto creado con éxito.", "success")
@@ -84,7 +85,7 @@ def delete(id):
 @bp.get("/")
 @has_permission("contact_index")
 def index():
-    sort_by = request.args.get('sort_by', 'name')
+    sort_by = request.args.get('sort_by', 'title')
     direction = request.args.get('direction', 'asc')
     page = request.args.get('page', 1, type=int)
     status_id = request.args.get('status', None, type=int)
