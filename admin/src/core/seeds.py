@@ -125,7 +125,7 @@ def run():
     jinete2 = riders.create_rider(name="Pedro", surname="Gonzalez", dni=98765432, age=30, birthdate="1991-01-01", birth_place="CABA", address="Calle Falsa 456", phone="987654321", emergency_contact="Ana", emergency_contact_phone_number="987654321", scholarship=False, scholarship_percentage=0, professionals="Dr. Pedro Gonzalez", tutors=[], disability_certificate=False, diagnosis="ECNE", other="Otro", disability_type="Mental", family_assignment=True, assignments=[assignment1, assignment2], pension="Provincial", health_insurance="OSDE", affiliate_number="654321", guardianship=False, observations="Sin observaciones", school_institution="Escuela 456", institution_address="Calle Falsa 456", grade="Segundo", institution_phone="987654321", institution_observations="Sin observaciones", days=[lunes, martes], horse_id=caballo1.id, horse_conductor_id=conductor.id, track_assistant_id=auxiliar_pista.id, therapist_teacher_id=terapeuta.id, work_proposal="Hipoterapia", condition="Regular", headquarters="CASJ")
 
     #RECIBOS
-    recibo = receipt.create_receipt(ja_id=1, quantity=1000, payment_method="Efectivo", employee_id=profesor.id, remarks="Sin observaciones")
+    #recibo = receipt.create_receipt(ja_id=1, quantity=1000, payment_method="Efectivo", employee_id=profesor.id, remarks="Sin observaciones")
 
     #DOCUMENTOS
 
