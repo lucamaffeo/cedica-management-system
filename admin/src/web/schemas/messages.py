@@ -3,7 +3,6 @@ from marshmallow import fields
 from src.web.schemas.contactStatus import contact_status_schema
 
 class MessageSchema(Schema):
-    id = fields.Int(dump_only=True)
     name = fields.Str(required=True)
     email = fields.Email(required=True)
     body = fields.Str(required=True)

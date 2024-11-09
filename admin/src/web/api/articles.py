@@ -20,4 +20,4 @@ def index():
     total = content.total_contents()
     data = articles_schema.dump(articles.items)
     
-    return {"data": data, "page": page, "per_page":per_page, "total": total}, 200
+    return jsonify({"data": data, "page": page, "per_page": per_page, "total": total}), 200
