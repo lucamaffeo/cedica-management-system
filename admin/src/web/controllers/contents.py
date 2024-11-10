@@ -16,8 +16,10 @@ def index():
     sort_by = request.args.get('sort_by', 'title')
     direction = request.args.get('direction', 'asc')
     page = request.args.get('page', 1, type=int)
-
     contents = content_repository.list_contents(search, status, sort_by, direction, page)
+
+    if not contents.items:
+        flash("No se encontraron contenidos.", "info")
     return render_template("contents/index.html", pagination=contents)
 
 @bp.get("/create")
