@@ -8,7 +8,7 @@ class Content(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     publication_date = db.Column(db.DateTime, nullable=True)
     creation_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
-    update_date = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
+    update_date = db.Column(db.DateTime, nullable=True)
     title = db.Column(db.String(255), nullable=False)
     summary = db.Column(db.Text, nullable=False)
     content = db.Column(db.Text, nullable=False)
@@ -26,8 +26,8 @@ class Content(db.Model):
             'title': self.title,
             'creation_date': self.creation_date,
             'publication_date': self.publication_date,
+            'update_date': self.update_date,
             'status': self.status,
             'author': self.author.name if self.author else None
         }
-    
-   
+

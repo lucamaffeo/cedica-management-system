@@ -1,12 +1,19 @@
-from flask import Blueprint, redirect, render_template, request, url_for, flash
-from src.core.repositories import user as user_repository
-from src.core.repositories import content as content_repository
-from src.web.helpers.auth import has_permission
-from flask import current_app, session
+from flask import Blueprint, redirect, render_template, request, url_for, flash, current_app, session
 from datetime import datetime
-
+from src.core.repositories import user as user_repository, content as content_repository
+from src.web.helpers.auth import has_permission
 
 bp = Blueprint("contents", __name__, url_prefix="/contents")
+
+def validate_content_form(params):
+    title = params.get('title')
+    summary = params.get('summary')
+    content = params.get('content')
+    status = params.get('status')
+    if not title or not summary or not content or not status:
+        flash("Todos los campos son obligatorios.", "error")
+        return False
+    return True
 
 @bp.get("/")
 @has_permission("content_index")
@@ -31,22 +38,15 @@ def register():
 @has_permission("content_create")
 def create():
     params = request.form
-    title = params.get('title')
-    summary = params.get('summary')
-    content = params.get('content')
-    author_id = session.get('user_id')
-    status = params.get('status')
-
-    if not title or not summary or not content or not status:
-        flash("Todos los campos son obligatorios.", "error")
+    if not validate_content_form(params):
         return redirect(url_for("contents.register"))
 
     content_repository.create_content(
-        title=title,
-        summary=summary,
-        content=content,
-        author_id=author_id,
-        status=status
+        title=params.get('title'),
+        summary=params.get('summary'),
+        content=params.get('content'),
+        author_id=session.get('user_id'),
+        status=params.get('status')
     )
 
     flash("Contenido creado con éxito.", "info")
@@ -59,6 +59,9 @@ def show(id):
     if not content:
         flash("Contenido no encontrado.", "error")
         return redirect(url_for("contents.index"))
+    # Asegúrate de que las fechas no sean None
+    content.update_date = content.update_date or datetime.min
+    content.publication_date = content.publication_date or datetime.min
     return render_template("contents/show.html", content=content)
 
 @bp.get("/<int:id>/update")
@@ -74,43 +77,29 @@ def edit(id):
 @has_permission("content_update")
 def update(id):
     params = request.form
-    title = params.get('title')
-    summary = params.get('summary')
-    content = params.get('content')
-    status = params.get('status')
-
-    if not title or not summary or not content or not status:
-        flash("Todos los campos son obligatorios.", "error")
+    if not validate_content_form(params):
         return redirect(url_for("contents.edit", id=id))
 
-    if status == 'Publicado':
-        content_repository.update_content(
-            id,
-            title=title,
-            summary=summary,
-            content=content,
-            status=status,
-            publication_date=datetime.now()
-        )
-    else:
-        content_repository.update_content(
-            id,
-            title=title,
-            summary=summary,
-            content=content,
-            status=status
-        )
+    update_data = {
+        'title': params.get('title'),
+        'summary': params.get('summary'),
+        'content': params.get('content'),
+        'status': params.get('status'),
+        'update_date': datetime.now()
+    }
+    if params.get('status') == 'Publicado':
+        update_data['publication_date'] = datetime.now()
+
+    content_repository.update_content(id, **update_data)
 
     flash("Contenido actualizado con éxito.", "info")
     return redirect(url_for("contents.index"))
 
-# Delete content
 @bp.get("/<int:id>/delete")
 @has_permission("content_destroy")
 def delete(id):
     if content_repository.delete_content(id):
         flash("Contenido eliminado con éxito.", "info")
-        return redirect(url_for("contents.index"))
     else:
         flash("Contenido no encontrado.", "error")
-        return redirect(url_for("contents.index"))
+    return redirect(url_for("contents.index"))
