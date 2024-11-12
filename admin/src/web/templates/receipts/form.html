@@ -25,20 +25,15 @@
 <input class="form-control" type="number" id="quantity" name="quantity" required step="0.01"
     value="{{ receipt.quantity if receipt else '' }}">
 
-<label class="form-label" for="payment_method">Método de Pago:</label>
-<select class="form-control" id="payment_method" name="payment_method" required>
-    <option value="Efectivo" {{ 'selected' if receipt and receipt.payment_method=='Efectivo' else '' }}>Efectivo
-    </option>
-    <option value="Transferencia" {{ 'selected' if receipt and receipt.payment_method=='Transferencia' else '' }}>
-        Transferencia</option>
-    <option value="Tarjeta de Crédito" {{ 'selected' if receipt and receipt.payment_method=='Tarjeta de Crédito' else ''
-        }}>
-        Tarjeta de Crédito</option>
-    <option value="Tarjeta de Débito" {{ 'selected' if receipt and receipt.payment_method=='Tarjeta de Débito' else ''
-        }}>
-        Tarjeta de Débito</option>
-    <option value="Otro" {{ 'selected' if receipt and receipt.payment_method=='Otro' else '' }}>Otro</option>
-</select>
+    <label class="form-label" for="payment_method">Método de Pago:</label>
+    <select class="form-control" id="payment_method" name="payment_method" required>
+        {% set payment_methods = ['Efectivo', 'Transferencia', 'Tarjeta de Crédito', 'Tarjeta de Débito', 'Otro'] %}
+        {% for method in payment_methods %}
+        <option value="{{ method }}" {{ 'selected' if receipt and receipt.payment_method == method else '' }}>
+            {{ method }}
+        </option>
+        {% endfor %}
+    </select>
 
 <label for="empleado" class="form-label">Recibido por (Empleado):</label>
 <select name="employee_id" id="empleado" class="form-control">

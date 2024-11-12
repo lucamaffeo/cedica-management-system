@@ -1,0 +1,31 @@
+{% extends "base_index.html" %}
+
+{% block title %}
+Administracion de contenidos
+{% endblock %}
+
+{% block page_title %}
+Administracion de contenidos
+{% endblock %}
+
+<!-- Content table -->
+{% set sorting_criteria = [("title", "Título"), ("creation_date", "Fecha Creación"), ("publication_date", "Fecha Publicación"),("update_date", "Fecha Actualización"), ("status", "Estado"),("summary", "Resumen"), ("author", "Autor")] %}
+{% set sortable_fields = ["title", "update_date"] %}
+{% block table_rows %}
+    {% for content in pagination.items %}
+    <tr>
+        <td>{{ content.title }}</td>
+        <td>{{ content.creation_date.strftime('%d/%m/%Y') }}</td>
+        <td>{{ content.publication_date.strftime('%d/%m/%Y') if content.publication_date else 'No publicado' }}</td>
+        <td>{{ content.update_date.strftime('%d/%m/%Y %H:%M') if content.update_date else 'No Actualizado' }}</td>
+        <td>{{ content.status.name }}</td>
+        <td>{{ content.summary }} </td>
+        <td>{{ content.author.alias }}</td>
+        <td>
+            <a href="{{ url_for('contents.show', id=content.id) }}">Ver</a>
+            <a href="{{ url_for('contents.edit', id=content.id) }}">Editar</a>
+            <a href="{{ url_for('contents.delete', id=content.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
+        </td>
+    </tr>
+    {% endfor %}
+{% endblock %}

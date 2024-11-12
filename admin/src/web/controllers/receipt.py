@@ -1,7 +1,9 @@
 from datetime import datetime
 from flask import Blueprint, flash, redirect, render_template, request, url_for
+from src.core.models.employee import Employee
 from src.core.repositories import receipt,employee as employee_repository, riders as riders_repository
 from src.web.helpers.auth import has_permission
+from src.core.validation.models.receipt import ReceiptValidator
 
 bp = Blueprint("receipts", __name__, url_prefix="/receipts")
 
@@ -14,11 +16,10 @@ def index():
     sort_by = request.args.get('sort_by', 'id')
     direction = request.args.get('direction', 'asc')
     page = request.args.get('page', 1, type=int)
-    items_per_page = request.args.get('items_per_page', 5, type=int)
-    
-    receipts = receipt.list_receipts(start_date, end_date, payment_method, sort_by, direction, page, items_per_page)
-    
-    return render_template("receipts/index.html", pagination=receipts)
+
+    receipts = receipt.list_receipts(start_date, end_date, payment_method, sort_by, direction, page)
+    received_by = Employee.query.all()
+    return render_template("receipts/index.html", pagination=receipts,received_by=received_by)
 
 @bp.get("/create")
 @has_permission("receipt_create")
@@ -31,6 +32,14 @@ def register():
 @has_permission("receipt_create")
 def create():
     params = request.form
+    validator = ReceiptValidator()
+    errors = validator.validate_create(params)
+
+    if errors:
+        for error in errors:
+            flash(f"{error.field}: {error.message}", "error")
+        return redirect(url_for("receipts.create"))
+
     employee_id = params.get('employee_id')
     ja_id = params.get('ja_id')
 
@@ -80,6 +89,14 @@ def edit(id):
 @has_permission("receipt_update")
 def update(id):
     params = request.form
+    validator = ReceiptValidator()
+    errors = validator.validate_update(params, id)
+
+    if errors:
+        for error in errors:
+            flash(f"{error.field}: {error.message}", "error")
+        return redirect(url_for('receipts.update', id=id))
+
     employee_id = params.get('employee_id')
     ja_id = params.get('ja_id')
     quantity = params.get('quantity')
@@ -89,9 +106,16 @@ def update(id):
     if not employee_id and not ja_id:
         flash("Debe seleccionar un empleado y J&A", "error") 
         return redirect(url_for('receipts.update', id=id))   
-    
+
+    # Obtener el recibo
+    receipt_obj = receipt.get_receipt(id)
+    if not receipt_obj:
+        flash("Recibo no encontrado.", "error")
+        return redirect(url_for("receipts.index"))
+
+    # Actualizar el recibo pasando el objeto
     receipt.update_receipt(
-        id=id,
+        receipt_obj,
         employee_id=employee_id,
         ja_id=ja_id,
         payment_date=params['payment_date'] or None,
@@ -100,18 +124,20 @@ def update(id):
         remarks=params.get('remarks') or None,
         up_to_date=params.get('up_to_date') == "on",
     )
-    
+
     flash("Recibo actualizado con éxito.", "success")
     return redirect(url_for("receipts.index"))
 
 @bp.get("/<int:id>/delete")
 @has_permission("receipt_destroy")
 def delete(id):
-    r = receipt.get_receipt(id)
-    if not r:
+    # Obtener el recibo una sola vez
+    receipt_obj = receipt.get_receipt(id)
+    if not receipt_obj:
         flash("Recibo no encontrado.", "error")
         return redirect(url_for("receipts.index"))
 
-    receipt.delete_receipt(id)
+    # Eliminar el recibo pasando el objeto obtenido
+    receipt.delete_receipt(receipt_obj)
     flash("Recibo eliminado con éxito.", "info")
     return redirect(url_for("receipts.index"))

@@ -1,7 +1,7 @@
 {% extends "base_index.html" %}
 
 {% block title %}
-Listado de Empleados
+Empleados
 {% endblock %}
 
 {% block page_title %}
@@ -17,34 +17,18 @@ Buscar por Nombre, Apellido, DNI o Email
 
 
 {% block filters %}
-    <div>
-        <select name="job_position" class="form-control">
-            <option value="">Todos los Puestos Laborales</option>
-            <option value="Administrativo/a" {% if 'Administrativo/a' in request.args.getlist('positions') %}selected{% endif %}>
-                Administrativo/a</option>
-            <option value="Terapeuta" {% if 'Terapeuta' in request.args.getlist('positions') %}selected{% endif %}>Terapeuta
-            </option>
-            <option value="Conductor" {% if 'Conductor' in request.args.getlist('positions') %}selected{% endif %}>Conductor
-            </option>
-            <option value="Auxiliar de pista" {% if 'Auxiliar de pista' in request.args.getlist('positions') %}selected{% endif %}>
-                Auxiliar de pista</option>
-            <option value="Herrero" {% if 'Herrero' in request.args.getlist('positions') %}selected{% endif %}>Herrero</option>
-            <option value="Veterinario/a" {% if 'Veterinario/a' in request.args.getlist('positions') %}selected{% endif %}>
-                Veterinario/a</option>
-            <option value="Entrenador de Caballos" {% if 'Entrenador de Caballos' in request.args.getlist('positions') %}selected{%
-                endif %}>Entrenador de Caballos</option>
-            <option value="Domador" {% if 'Domador' in request.args.getlist('positions') %}selected{% endif %}>Domador</option>
-            <option value="Profesor de Equitación" {% if 'Profesor de Equitación' in request.args.getlist('positions') %}selected{%
-                endif %}>Profesor de Equitación</option>
-            <option value="Docente de Capacitación" {% if 'Docente de Capacitación' in request.args.getlist('positions')
-                %}selected{% endif %}>Docente de Capacitación</option>
-            <option value="Auxiliar de mantenimiento" {% if 'Auxiliar de mantenimiento' in request.args.getlist('positions')
-                %}selected{% endif %}>Auxiliar de mantenimiento</option>
-            <option value="Otro" {% if 'Otro' in request.args.getlist('positions') %}selected{% endif %}>Otro</option>
-
-        </select>
-    </div>
+<div>
+    <select name="job_position" class="form-control">
+        {% set job_positions = ['Administrativo/a', 'Terapeuta', 'Conductor', 'Auxiliar de pista', 'Herrero', 'Veterinario', 'Entrenador de Caballos', 'Domador', 'Profesor de Equitación', 'Docente de Capacitación', 'Auxiliar de mantenimiento', 'Otro'] %}
+    {% for position in job_positions %}
+    <option value="{{ position }}" {{ 'selected' if employee and employee.job_position == position else '' }}>
+        {{ position }}
+    </option>
+    {% endfor %}
+    </select>
+</div>
 {% endblock %}
+
 
 
 
@@ -64,6 +48,8 @@ Buscar por Nombre, Apellido, DNI o Email
                 <a href="{{ url_for('employees.show', id=employee.id) }}">Ver</a>
                 <a href="{{ url_for('employees.edit', id=employee.id) }}">Editar</a>
                 <a href="{{ url_for('employees.delete', id=employee.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
+                <a href="{{ url_for('documents.index', entity_type="employees", entity_id=employee.id) }}">Ver documentos</a>
+
             </td>
         </tr>
         {% endfor %}

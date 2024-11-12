@@ -13,7 +13,7 @@ Perfil de {{ horse.name }}
 <p><strong>Fecha de Ingreso:</strong> {{ horse.entry_date.strftime('%Y-%m-%d') }}</p>
 <p><strong>Sede Asignada:</strong> {{ horse.assigned_location or 'No especificado' }}</p>
 <p><strong>Actividades Asignadas:</strong> {{ horse.assigned_activities_ja }}</p>
-<h3>Empleados Asociados:</h3>
+<h2>Empleados Asociados:</h2>
 {% if horse.association %}
 {% if horse.association|list %}
 <ul>
@@ -31,5 +31,6 @@ Perfil de {{ horse.name }}
 
 <a href="{{ url_for('horses.edit', id=horse.id) }}">Editar</a>
 <a href="{{ url_for('horses.index') }}">Volver a la lista</a>
+<a href="{{ url_for('documents.index', entity_type="horses", entity_id=horse.id) }}">Ver documentos</a>
 
 {% endblock %}

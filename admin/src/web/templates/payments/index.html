@@ -1,7 +1,7 @@
 {% extends "base_index.html" %}
 
 {% block title %}
-    Listado de Pagos
+    Pagos
 {% endblock %}
 
 {% block page_title %}
@@ -15,9 +15,9 @@
         <label for="type">Tipo</label>
         <select class="form-control" id="type" name="type">
             <option value="">Todos los tipos</option>
-            <option value="Honorarios" {% if request.args.get('type') == 'Honorarios' %}selected{% endif %}>Honorarios</option>
-            <option value="Proveedor" {% if request.args.get('type') == 'Proveedor' %}selected{% endif %}>Proveedor</option>
-            <option value="Gastos varios" {% if request.args.get('type') == 'Gastos varios' %}selected{% endif %}>Gastos varios</option>
+            {% for type in payment_types %}
+            <option value="{{ type }}" {% if request.args.get('type') == type %}selected{% endif %}>{{ type }}</option>
+            {% endfor %}
         </select>
     </div>
     <div class="form-group row">
@@ -37,10 +37,15 @@
 {% set sortable_fields = ["date"] %}
 
 {% block table_rows %}
-    {% for payment in pagination %}
+    {% for payment in pagination.items %}
     <tr>
 		<td>{{ payment.formatted_date }}</td>
-        <td>{{ payment.beneficiary_id if payment.beneficiary_id != None else "N/A"}}</td>
+        <td>{% set beneficiary = beneficiaries | selectattr("id", "==", payment.beneficiary_id) | first %}
+        {% if beneficiary %}
+        {{ beneficiary.name }} {{ beneficiary.surname }}
+        {% else %}
+        N/A
+        {% endif %}</td>
         <td>{{ payment.amount }}</td>
         <td>{{ payment.type }}</td>
         <td>

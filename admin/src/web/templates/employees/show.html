@@ -19,8 +19,12 @@
     <p><strong>N° de Afiliado:</strong> {{ employee.associate_number }}</p>
     <p><strong>Condicion:</strong> {{ employee.condition }}</p>
     <p><strong>Activo:</strong> {{ 'Sí' if employee.active else 'No' }}</p>
+    {% if employee.user %}
+        <p><strong>Alias de Usuario:</strong> {{ employee.user.alias }}</p>
+    {% endif %}
 </div>
 
 <a href="{{ url_for('employees.edit', id=employee.id) }}">Editar</a>
 <a href="{{ url_for('employees.index') }}">Volver a la lista</a>
+<a href="{{ url_for('documents.index', entity_type="employees", entity_id=employee.id) }}">Ver documentos</a>
 {% endblock %}

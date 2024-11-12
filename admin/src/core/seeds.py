@@ -1,4 +1,6 @@
-from src.core.repositories import user, employee, role, permission, horse, assignment, tutor, day, document, receipt, payment, riders
+import io
+from src.core.repositories import user, employee, role, permission, horse, assignment, tutor, day, document, receipt, payment, riders, contact,content
+
 def run():
 
     # Permissions
@@ -37,7 +39,7 @@ def run():
     rider_update = permission.create_permission(name="rider_update")
     rider_create = permission.create_permission(name="rider_create")
     rider_destroy = permission.create_permission(name="rider_destroy") 
-    
+
     #Receipt: index, show, update, create, destroy
     receipt_index = permission.create_permission(name="receipt_index")
     receipt_show = permission.create_permission(name="receipt_show")
@@ -45,14 +47,28 @@ def run():
     receipt_create = permission.create_permission(name="receipt_create")
     receipt_destroy = permission.create_permission(name="receipt_destroy")
 
+    #Contact: index, show, update, create, destroy
+    contact_index = permission.create_permission(name="contact_index")
+    contact_show = permission.create_permission(name="contact_show")
+    contact_update = permission.create_permission(name="contact_update")
+    contact_create = permission.create_permission(name="contact_create")
+    contact_destroy = permission.create_permission(name="contact_destroy")
 
+    #Content: index, show, update, create, destroy
+    content_index = permission.create_permission(name="content_index")
+    content_show = permission.create_permission(name="content_show")
+    content_update = permission.create_permission(name="content_update")
+    content_create = permission.create_permission(name="content_create")
+    content_destroy = permission.create_permission(name="content_destroy")     
+    
     # Roles
-    _ = role.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy, payment_index, payment_show, payment_update, payment_create, payment_destroy,employee_create, employee_destroy, employee_index, employee_show, employee_update, receipt_index, receipt_show, receipt_update, receipt_create, receipt_destroy, horse_create, horse_destroy, horse_index, horse_show, horse_update, rider_show, rider_index, rider_update, rider_destroy, rider_create])
-    _ = role.create_role(name="administracion", permissions=[receipt_index, receipt_show, receipt_update, receipt_create, receipt_destroy , payment_index, payment_show, payment_update, payment_create, payment_destroy, employee_create, employee_destroy, employee_index, employee_show, employee_update, horse_index, horse_show, rider_show, rider_index, rider_update, rider_destroy, rider_create])
+    _ = role.create_role(name="system_admin", permissions=[user_index, user_show, user_update, user_create, user_destroy, payment_index, payment_show, payment_update, payment_create, payment_destroy,employee_create, employee_destroy, employee_index, employee_show, employee_update, receipt_index, receipt_show, receipt_update, receipt_create, receipt_destroy, horse_create, horse_destroy, horse_index, horse_show, horse_update, rider_show, rider_index, rider_update, rider_destroy, rider_create, contact_index, contact_show, contact_update, contact_create, contact_destroy, content_index, content_show, content_update, content_create, content_destroy])
+    _ = role.create_role(name="administracion", permissions=[receipt_index, receipt_show, receipt_update, receipt_create, receipt_destroy , payment_index, payment_show, payment_update, payment_create, payment_destroy, employee_create, employee_destroy, employee_index, employee_show, employee_update, horse_index, horse_show, rider_show, rider_index, rider_update, rider_destroy, rider_create, contact_index, contact_show, contact_update, contact_create, contact_destroy])
+
     _ = role.create_role(name="tecnica",permissions=[horse_index, horse_show, receipt_index, receipt_show, rider_index, rider_create, rider_destroy, rider_show, rider_update])
     _ = role.create_role(name="voluntariado")
     _ = role.create_role(name="ecuestre", permissions=[horse_index, horse_show, horse_update, horse_create, horse_destroy, rider_index, rider_show])
-
+    _ = role.create_role(name="editor", permissions=[content_index, content_show, content_update, content_create])
     # Asignaciones
     assignment1 = assignment.create_assignment(name="Asignación Universal por hijo")
     assignment2 = assignment.create_assignment(name="Asignación Universal por hijo con Discapacidad")
@@ -74,31 +90,72 @@ def run():
     tres = user.create_user(email="rol3@mail.com", password="123456", role_id=3, alias="1")
     cuatro = user.create_user(email="rol4@mail.com", password="123456", role_id=4, alias="2")
     cinco = user.create_user(email="rol5@mail.com", password="123456", role_id=5, alias="3")
-    
+    seis = user.create_user(email="rol6@mail.com", password="123456", role_id=6, alias="Editor")
+
+    _ = user.create_user(email="test@mail.com", password="123456", role_id=5, alias="3")
+    _ = user.create_user(email="test2@mail.com", password="123456", role_id=5, alias="3")
+    _ = user.create_user(email="tes@mail.com", password="123456", role_id=5, alias="3")
+    _ = user.create_user(email="te@mail.com", password="123456", role_id=5, alias="3")
+    _ = user.create_user(email="t@mail.com", password="123456", role_id=5, alias="3")
+    _ = user.create_user(email="testaa@mail.com", password="123456", role_id=5, alias="3")
+    _ = user.create_user(email="testa@mail.com", password="123456", role_id=5, alias="3")
 
     #EMPLEADOS
-    luca = employee.create_employee(name="Luca", surname="Perez", dni="12345679", email="luca1@gmail.com", start_date="2021-01-01",  active=True, job_position = "Conductor")
-    luca2 = employee.create_employee(name="adf", surname="dah", dni="150", email="laa0@gmail.com", start_date="2021-01-01",  active=True, job_position = "Entrenador de Caballos")  
-    
+    luca2 = employee.create_employee(name="adf", surname="dah", dni="150", email="laa0@gmail.com", start_date="2021-01-01",  active=True, job_position = "Entrenador de Caballos")
+    profesor = employee.create_employee(name="Carlos", surname="Gomez", dni="12345678", email="carlos@gmail.com", start_date="2021-01-01", active=True, job_position="Profesor", address="Calle Falsa 123", city="Ciudad", telephone="123456789", profession="Psicólogo/a", emergency_contact_info="Maria Gomez - 123456789", social_work="OSDE", associate_number="123456", condition="Personal Rentado", documentation={"doc1": "value1"})
+    terapeuta = employee.create_employee(name="Ana", surname="Lopez", dni="87654321", email="ana@gmail.com", start_date="2021-02-01", active=True, job_position="Terapeuta", address="Calle Verdadera 456", city="Ciudad", telephone="987654321", profession="Médico/a", emergency_contact_info="Juan Lopez - 987654321", social_work="Swiss Medical", associate_number="654321", condition="Personal Rentado", documentation={"doc2": "value2"})
+    conductor = employee.create_employee(name="Luis", surname="Martinez", dni="11223344", email="luis@gmail.com", start_date="2021-03-01", active=True, job_position="Conductor", address="Avenida Siempre Viva 789", city="Ciudad", telephone="1122334455", profession="Psicomotricista", emergency_contact_info="Pedro Martinez - 1122334455", social_work="Galeno", associate_number="112233", condition="Voluntario", documentation={"doc3": "value3"})
+    auxiliar_pista = employee.create_employee(name="Pedro", surname="Fernandez", dni="55667788", email="pedro@gmail.com", start_date="2021-04-01", active=True, job_position="Auxiliar de pista", address="Calle Real 101", city="Ciudad", telephone="5566778899", profession="Docente", emergency_contact_info="Laura Fernandez - 5566778899", social_work="Medicus", associate_number="556677", condition="Voluntario", documentation={"doc4": "value4"})
+    entrenador = employee.create_employee(name="Jorge", surname="Perez", dni="99887766", email="jorge@gmail.com", start_date="2021-05-01", active=True, job_position="Entrenador", address="Calle Principal 202", city="Ciudad", telephone="9988776655", profession="Otro", emergency_contact_info="Sofia Perez - 9988776655", social_work="OSDE", associate_number="998877", condition="Personal Rentado", documentation={"doc5": "value5"})
 
     #PAGOS
-    pago1 = payment.create_payment(amount=1000, beneficiary_id=1, type="Honorarios", description="Pago de honorarios")
+    pago_honorarios = payment.create_payment(amount=2000, beneficiary_id=profesor.id, type="Honorarios", description="Pago de honorarios")
+    pago_proveedor = payment.create_payment(amount=1500, beneficiary_id=None, type="Proveedor", description="Pago a proveedor")
+    pago_gastos_varios = payment.create_payment(amount=500, beneficiary_id=None, type="Gastos varios", description="Gastos varios")
 
     #TUTOR
     tutor1 = tutor.create_tutor(name="Maria", surname="Gomez", dni="12345678", email="emailtutor@mail.com", address="Av. Siempre Viva 123", cellphone="123456789", educational_level="Universitario", occupation="Profesora")
 
     #CABALLOS
-    caballo1 = horse.create_horse(name="Caballo1", birth_date="2020-01-01",purchase_donation="Compra",gender = "Macho", assigned_activities_ja="Hipoterapia")
+    caballo1 = horse.create_horse(name="Caballo1", birth_date="2020-01-01",purchase_donation="Compra",gender = "Macho", assigned_activities_ja="Hipoterapia", association=[entrenador, conductor])
+
     #JINETES/AMAZONAS
-    jinete1 = riders.create_rider(name="Juan", surname="Perez", dni=51321513, age=25, birthdate="1996-01-01", birth_place="CABA", address="Av. Siempre Viva 123", phone="123456789", emergency_contact="Maria", emergency_contact_phone_number="123456789", scholarship=False, scholarship_percentage=0, professionals="Dr. Juan Perez", tutors=[tutor1], disability_certificate=False, diagnosis="ECNE", other="Otro", disability_type="Mental", family_assignment=True, assignments=[assignment1, assignment2], pension="Provincial", health_insurance="OSDE", affiliate_number="123456", guardianship=False, observations="Sin observaciones", school_institution="Escuela 123", institution_address="Av. Siempre Viva 123", grade="Primero", institution_phone="123456789", institution_observations="Sin observaciones", days=[lunes, martes], horse_id=caballo1.id, horse_conductor_id=luca.id, track_assistant_id=luca2.id, therapist_teacher_id=luca.id, work_proposal="Hipoterapia", condition="Regular", headquarters="CASJ")
-    jinete2 = riders.create_rider(name="Juan", surname="Perez", dni=1, age=25, birthdate="1996-01-01", birth_place="CABA", address="Av. Siempre Viva 123", phone="123456789", emergency_contact="Maria", emergency_contact_phone_number="123456789", scholarship=False, scholarship_percentage=0, professionals="Dr. Juan Perez", tutors=[tutor1], disability_certificate=False, diagnosis="ECNE", other="Otro", disability_type="Mental", family_assignment=True, assignments=[assignment1, assignment2], pension="Provincial", health_insurance="OSDE", affiliate_number="123456", guardianship=False, observations="Sin observaciones", school_institution="Escuela 123", institution_address="Av. Siempre Viva 123", grade="Primero", institution_phone="123456789", institution_observations="Sin observaciones", days=[lunes, martes], horse_id=caballo1.id, horse_conductor_id=luca.id, track_assistant_id=luca2.id, therapist_teacher_id=luca.id, work_proposal="Hipoterapia", condition="Regular", headquarters="CASJ")
+    jinete1 = riders.create_rider(name="Juan", surname="Perez", dni=51321513, age=25, birthdate="1996-01-01", birth_place="CABA", address="Av. Siempre Viva 123", phone="123456789", emergency_contact="Maria", emergency_contact_phone_number="123456789", scholarship=False, scholarship_percentage=0, professionals="Dr. Juan Perez", tutors=[tutor1], disability_certificate=False, diagnosis="ECNE", other="Otro", disability_type="Mental", family_assignment=True, assignments=[assignment1, assignment2], pension="Provincial", health_insurance="OSDE", affiliate_number="123456", guardianship=False, observations="Sin observaciones", school_institution="Escuela 123", institution_address="Av. Siempre Viva 123", grade="Primero", institution_phone="123456789", institution_observations="Sin observaciones", days=[lunes, martes], horse_id=caballo1.id, horse_conductor_id=conductor.id, track_assistant_id=auxiliar_pista.id, therapist_teacher_id=terapeuta.id, work_proposal="Hipoterapia", condition="Regular", headquarters="CASJ")
+    jinete2 = riders.create_rider(name="Jose", surname="Lopez", dni=1, age=25, birthdate="1996-01-01", birth_place="CABA", address="Av. Siempre Viva 123", phone="123456789", emergency_contact="Maria", emergency_contact_phone_number="123456789", scholarship=False, scholarship_percentage=0, professionals="Dr. Jose Lopez", tutors=[tutor1], disability_certificate=False, diagnosis="ECNE", other="Otro", disability_type="Mental", family_assignment=True, assignments=[assignment1, assignment2], pension="Provincial", health_insurance="OSDE", affiliate_number="123456", guardianship=False, observations="Sin observaciones", school_institution="Escuela 123", institution_address="Av. Siempre Viva 123", grade="Primero", institution_phone="123456789", institution_observations="Sin observaciones", days=[lunes, martes], horse_id=caballo1.id, horse_conductor_id=conductor.id, track_assistant_id=auxiliar_pista.id, therapist_teacher_id=terapeuta.id, work_proposal="Hipoterapia", condition="Regular", headquarters="CASJ")
+    jinete2 = riders.create_rider(name="Pedro", surname="Gonzalez", dni=98765432, age=30, birthdate="1991-01-01", birth_place="CABA", address="Calle Falsa 456", phone="987654321", emergency_contact="Ana", emergency_contact_phone_number="987654321", scholarship=False, scholarship_percentage=0, professionals="Dr. Pedro Gonzalez", tutors=[], disability_certificate=False, diagnosis="ECNE", other="Otro", disability_type="Mental", family_assignment=True, assignments=[assignment1, assignment2], pension="Provincial", health_insurance="OSDE", affiliate_number="654321", guardianship=False, observations="Sin observaciones", school_institution="Escuela 456", institution_address="Calle Falsa 456", grade="Segundo", institution_phone="987654321", institution_observations="Sin observaciones", days=[lunes, martes], horse_id=caballo1.id, horse_conductor_id=conductor.id, track_assistant_id=auxiliar_pista.id, therapist_teacher_id=terapeuta.id, work_proposal="Hipoterapia", condition="Regular", headquarters="CASJ")
+
     #RECIBOS
-    recibo = receipt.create_receipt(ja_id=jinete1.id, quantity=1000, payment_method="Efectivo", employee_id=luca.id, remarks="Sin observaciones") 
+    #recibo = receipt.create_receipt(ja_id=1, quantity=1000, payment_method="Efectivo", employee_id=profesor.id, remarks="Sin observaciones")
+
     #DOCUMENTOS
-    documento1 = document.create_document(file="Documento1", title="Titulo del documento 1", document_type="Entrevista", rider_id=jinete1.id)
-    documento2 = document.create_document(link="http://google.com/", title="Titulo del documento 2", document_type="Evaluación", rider_id=jinete1.id)
-    documento3 = document.create_document(file="Documento3", title="Titulo del documento 3", document_type="Entrevista", rider_id=jinete1.id)
-    documento4 = document.create_document(link="http://example.com/document.pdf", title="Titulo del documento 4", document_type="Planificaciones", rider_id=jinete2.id)
-    documento5 = document.create_document(file="Documento5", title="Titulo del documento 5", document_type="Evolución", rider_id=jinete2.id)
+
+    # Etapa 2
+    # CONTACTO
+    # ESTADOS
+    _ = contact.create_status(name="Nuevo")
+    _ = contact.create_status(name="En progreso")
+    _ = contact.create_status(name="Finalizado")
+
+
+    # CONTENIDOS
+    # ESTADOS
+    _ = content.create_status(name="Borrador")  
+    _ = content.create_status(name="Publicado")
+    _ = content.create_status(name="Archivado")
+
+    #Contenidos
+    contenido1 = content.create_content(title="Titulo1", summary="Resumen1", content="Contenido1", author_id=1)
+    contenido2 = content.create_content(title="Titulo2", summary="Resumen2", content="Contenido2", author_id=1)
+    contenido3 = content.create_content(title="Titulo3", summary="Resumen3", content="Contenido3", author_id=1)
+    contenido4 = content.create_content(title="Titulo4", summary="Resumen4", content="Contenido4", author_id=1)
+    contenido5 = content.create_content(title="Titulo5", summary="Resumen5", content="Contenido5", author_id=1)
+    contenido6 = content.create_content(title="Titulo6", summary="Resumen6", content="Contenido6", author_id=1)
+    contenido7 = content.create_content(title="Titulo7", summary="Resumen7", content="Contenido7", author_id=1)
+    contenido8 = content.create_content(title="Titulo8", summary="Resumen8", content="Contenido8", author_id=1)
+    contenido9 = content.create_content(title="Titulo9", summary="Resumen9", content="Contenido9", author_id=1)
+    contenido10 = content.create_content(title="Titulo10", summary="Resumen10", content="Contenido10", author_id=6)
+    contenido11 = content.create_content(title="Titulo11", summary="Resumen11", content="Contenido11", author_id=6)
+    contenido12 = content.create_content(title="Titulo12", summary="Resumen12", content="Contenido12", author_id=6)
+    contenido13 = content.create_content(title="Titulo13", summary="Resumen13", content="Contenido13", author_id=6)
 
     print("Seed ejecutado correctamente")

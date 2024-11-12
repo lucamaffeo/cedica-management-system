@@ -12,4 +12,6 @@ def create_role(**kwargs):
 
     return role
 
-
+def get_role_by_id(role_id):
+    role = Role.query.get(role_id)
+    return role

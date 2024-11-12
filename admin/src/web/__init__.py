@@ -2,8 +2,10 @@ from flask import Flask, session
 from flask import render_template 
 from src.core.models.user import User
 from src.core.repositories.riders import has_assignment
+from src.core.repositories.user import has_permission
 from src.web.handlers import error
 from src.web.controllers import register_blueprints
+from src.web.api import register_api_blueprints
 from src.core import database, seeds
 from src.core.config import config
 import logging
@@ -12,10 +14,8 @@ from src.web.storage import storage
 logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
-
-
 def create_app(env="development",static_folder="../../static"):
-    app = Flask(__name__, static_folder=static_folder)   
+    app = Flask(__name__, static_folder=static_folder)
 
     app.config.from_object(config[env])
     database.init_app(app)
@@ -30,23 +30,21 @@ def create_app(env="development",static_folder="../../static"):
 
     @app.context_processor
     def inject_user():
-        user_dict = session.get('user')  # Retrieve the user dictionary from session
-        if user_dict:
-            user_id = user_dict.get('id')  # Extract the ID from the user dictionary
-            if user_id:
-                logged_user = User.query.get(user_id)  # Query the User object from the DB
-                return {'logged_user': logged_user}
-        return {'logged_user': None}
+        user_id = session.get('user_id')  # Retrieve the user dictionary from session
+        if user_id:
+            return {'user_id': user_id}
+        return {}
+
+    @app.context_processor
+    def inject_has_permission():
+        return dict(has_permission=has_permission)
 
     @app.route("/")
     def home():
         return render_template("home.html")
 
-    @app.route("/about")
-    def about():
-        return render_template("about.html")
-
     register_blueprints(app)
+    register_api_blueprints(app)
 
     app.register_error_handler(404, error.error_not_found)
 

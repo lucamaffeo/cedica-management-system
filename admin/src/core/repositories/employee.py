@@ -1,3 +1,4 @@
+from flask import current_app
 from src.core.database import db
 from src.core.models.employee import Employee
 
@@ -8,7 +9,7 @@ def create_employee(**kwargs):
 
     return employee
 
-def list_employees(search='', job_position=None, sort_by='name', direction='asc', page=1, items_per_page=5):
+def list_employees(search='', job_position=None, sort_by='name', direction='asc', page=1):
     query = Employee.query
 
     if search:
@@ -19,17 +20,19 @@ def list_employees(search='', job_position=None, sort_by='name', direction='asc'
             (Employee.email.ilike(f'%{search}%'))
         )
     if job_position:
-        query = query.filter(Employee.profession == job_position)
+        query = query.filter(Employee.job_position == job_position)
     else:
         query = query  # No aplicar filtro, mostrar todos
-    
+
+    items_per_page = current_app.config.get('ITEMS_PER_PAGE')
+
     # Aplicar ordenación
     if sort_by in ['name', 'surname', 'start_date']:
         if direction == 'asc':
             query = query.order_by(getattr(Employee, sort_by).asc())
         else:
             query = query.order_by(getattr(Employee, sort_by).desc())
-    
+
 
     pagination_employees = query.paginate(page=page, per_page=items_per_page, error_out=False)
 
@@ -57,17 +60,24 @@ def find_employee_by_profession(profession):
 
 def update_employee(id, **kwargs):
     employee = Employee.query.filter(Employee.id == id).first()
+    if not employee:
+        return False
     for key, value in kwargs.items():
         setattr(employee, key, value)
     db.session.commit()
-    return employee
+    return True
 
 def delete_employee(id):
     employee = Employee.query.filter(Employee.id == id).first()
-    db.session.delete(employee)
-    db.session.commit()
+    if employee:
+        db.session.delete(employee)
+        db.session.commit()
+        return True
+    return False
 
 def get_employees_by_job_positions(job_positions):
+    if isinstance(job_positions, str):
+        job_positions = [job_positions]
     return db.session.query(Employee).filter(Employee.job_position.in_(job_positions)).all()
 
 def get_employee(id):

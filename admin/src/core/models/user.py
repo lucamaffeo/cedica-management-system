@@ -1,5 +1,4 @@
 from datetime import datetime
-from time import strftime
 from src.core.database import db
 
 
@@ -23,9 +22,6 @@ class User(db.Model):
     def __repr__(self):
         return f"<User {self.email}>"
 
-    def has_permission(self, permission: str):
-        return any(permission == p.name for p in self.role.permissions)
-
     def to_dict(self):
         return {
             "id": self.id,
@@ -34,5 +30,6 @@ class User(db.Model):
             "role": self.role_id,
             "active": self.active,
             "inserted_at": self.inserted_at,
-            "updated_at": self.updated_at
+            "updated_at": self.updated_at,
+            "permissions": [p.name for p in self.role.permissions]
         }

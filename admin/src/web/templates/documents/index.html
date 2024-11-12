@@ -1,0 +1,42 @@
+{% extends "base_index.html" %}
+
+{% block title %}
+Listado de Documentos
+{% endblock %}
+
+{% block page_title %}
+<span style="font-size: 0.8em;">Documentos de {{ entity_type|capitalize }} {{entity_id }}</span>
+{% endblock %}
+
+{% block page_subtitle %}
+{% endblock %}
+
+{% set show_search=true %}
+
+{% block search_placeholder %}
+Buscar por Tipo, Titulo
+{% endblock %}
+
+<!-- Documents table -->
+    {% set sorting_criteria = [("document_type", "Tipo"), ("title", "Título"), ("upload_date", "Fecha de subida")] %}
+    {% set sortable_fields = ["title", "upload_date"] %}
+
+    {% block table_rows %}
+        {% for document in pagination.items %}
+        <tr>
+            <td>{{ document.document_type }}</td>
+            <td>{{ document.title }}</td>
+            <td>{{ document.upload_date.strftime('%d/%m/%Y') }}</td>
+            <td>
+                <a href="{{ url_for('documents.delete', entity_type=entity_type, entity_id=entity_id, id=document.id) }}"
+                    onclick="return confirm('¿Está seguro?')">Eliminar</a>
+                <a
+                    href="{{ url_for('documents.download', entity_type=entity_type, entity_id=entity_id, id=document.id) }}">Descargar</a>
+            </td>
+        </tr>
+        {% endfor %}
+	{% endblock %}
+
+    {% block add_new %}
+    <a href="{{ url_for('documents.add', entity_type=entity_type, entity_id=entity_id) }}" class="btn btn-primary">Añadir Documento</a>
+    {% endblock %}

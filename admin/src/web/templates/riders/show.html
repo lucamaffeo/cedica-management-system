@@ -33,22 +33,22 @@
     <br>
     <p><strong>Pensión:</strong> {% if rider.pension %} {{ rider.pension }} {% else %} Ninguna {% endif %}</p>
 
-    <h4>SITUACIÓN PREVISIONAL</h4>
+    <h2>SITUACIÓN PREVISIONAL</h2>
     <p><strong>Obra Social:</strong> {{ rider.health_insurance }}</p>
     <p><strong>Número de Afiliado:</strong> {{ rider.affiliate_number }}</p>
     <p><strong>Curatela:</strong> {% if rider.guardianship == True %} Si {% else %} No {% endif %}</p>
     <p><strong>Observaciones:</strong> {{ rider.observations }}</p>
 
-    <h4>INSTITUCIÓN ESCOLAR a la que CONCURRE ACTUALMENTE</h4>
+    <h2>INSTITUCIÓN ESCOLAR a la que CONCURRE ACTUALMENTE</h2>
     <p><strong>Institución Escolar:</strong> {{ rider.school_institution }}</p>
     <p><strong>Dirección de la Institución:</strong> {{ rider.institution_address }}</p>
     <p><strong>Grado:</strong> {{ rider.grade }}</p>
     <p><strong>Teléfono de la Institución:</strong> {{ rider.institution_phone }}</p>
     <p><strong>Observaciones:</strong> {{ rider.institution_observations }}</p>
 
-    <h4>DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s</h4>
+    <h2>DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s</h2>
     {% for tutor, relationship in tutors_with_relationship %}
-        <h6>Familiar o tutor responsable</h6>
+        <h3>Familiar o tutor responsable</h3>
         <p><strong>Nombre:</strong> {{ tutor.name }}</p>
         <p><strong>Apellido:</strong> {{ tutor.surname }}</p>
         <p><strong>DNI:</strong> {{ tutor.dni }}</p>
@@ -61,7 +61,7 @@
         <br>
     {% endfor %}
 
-    <h4>TRABAJO EN NUESTRA INSTITUCIÓN</h4>
+    <h2>TRABAJO EN NUESTRA INSTITUCIÓN</h2>
     <p><strong>Propuesta de Trabajo:</strong> {{ rider.work_proposal }}</p>
     <p><strong>Condición:</strong> {{ rider.condition }}</p>
     <p><strong>Sede:</strong> {{ rider.headquarters }}</p>
@@ -99,13 +99,7 @@
 
 </div>
 
-{% if logged_user and logged_user.has_permission('rider_update') %}
 <a href="{{ url_for('riders.edit', id=rider.id) }}">Editar</a>
-{% endif %}
-{% if logged_user and logged_user.has_permission('rider_index') %}
 <a href="{{ url_for('riders.index') }}">Volver a la lista</a>
-{% endif %}
-{% if logged_user and logged_user.has_permission('rider_show') %}
-<a href="{{ url_for('riders.index_documents', id=rider.id) }}">Ver documentos</a>
-{% endif %}
+<a href="{{ url_for('documents.index', entity_type="riders", entity_id=rider.id) }}">Ver documentos</a>
 {% endblock %}

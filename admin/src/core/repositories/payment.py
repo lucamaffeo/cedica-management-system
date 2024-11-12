@@ -1,19 +1,30 @@
 from datetime import timedelta
+
+from flask import current_app, flash
 from src.core.database import db
 from src.core.models.payment import Payment
 from src.core.repositories import employee
 from datetime import datetime
-    
 
-def list_payments(start_date=None, end_date=None, payment_type=None, sort_by='alias', direction='asc', page=1, items_per_page=5):
-    # Init db query
+
+def list_payments(start_date=None, end_date=None, payment_type=None, sort_by='alias', direction='asc', page=1):
+
     query = Payment.query
 
-    
-    if start_date and end_date:
-        end_date = datetime.strptime(end_date, '%Y-%m-%d')  # Convert str to date, so we can add timedelta (to make end_date include that day on results)
-        query = query.filter(Payment.date >= start_date, Payment.date < end_date + timedelta(days=1))
-    
+    if start_date:
+        try:
+            start_date = datetime.strptime(start_date, '%Y-%m-%d')
+            query = query.filter(Payment.date >= start_date)
+        except ValueError:
+            flash("La fecha de inicio es inválida.", "error")
+
+    if end_date:
+        try:
+            end_date = datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1)
+            query = query.filter(Payment.date < end_date)
+        except ValueError:
+            flash("La fecha de fin es inválida.", "error")
+
     # Filter by payment type if provided
     if payment_type:
         query = query.filter(Payment.type == payment_type)
@@ -24,9 +35,14 @@ def list_payments(start_date=None, end_date=None, payment_type=None, sort_by='al
     else:
         query = query.order_by(getattr(Payment, sort_by).desc())
 
+    items_per_page = current_app.config.get('ITEMS_PER_PAGE')
+
     paginated_payments = query.paginate(page=page, per_page=items_per_page, error_out=False)
 
     return paginated_payments
+
+def get_payment_types():
+    return Payment.type.property.columns[0].type.enums
 
 def create_payment(**kwargs):
     # Check the type and beneficiary_id for validation
@@ -69,8 +85,11 @@ def update_payment(id, **kwargs):
 
 def delete_payment(id):
     payment = Payment.query.filter(Payment.id == id).first()
-    db.session.delete(payment)
-    db.session.commit()
+    if payment:
+        db.session.delete(payment)
+        db.session.commit()
+        return True
+    return False
 
 def get_payment(id) -> Payment | None:
     payment = Payment.query.filter(Payment.id == id).first()

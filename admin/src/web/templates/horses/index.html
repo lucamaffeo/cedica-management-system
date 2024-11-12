@@ -1,7 +1,7 @@
 {% extends "base_index.html" %}
 
 {% block title %}
-Listado de Caballos
+Caballos
 {% endblock %}
 
 {% block page_title %}
@@ -14,20 +14,12 @@ Buscar por Nombre
 {% endblock %}
 
 {% block filters %}
-
-    <select class="form-control" name="assigned_activities_ja" >
+    <select class="form-control" name="assigned_activities_ja">
         <option value="">Todos los tipos de J&A</option>
-        <option value="Hipoterapia" {% if request.args.get('assigned_activities_ja')=='Hipoterapia' %}selected{% endif %}>
-            Hipoterapia</option>
-        <option value="Monta Terapeutica" {% if request.args.get('assigned_activities_ja')=='Monta Terapeutica' %}selected{%
-            endif %}>Monta Terapéutica</option>
-        <option value="Deporte Ecuestre Adaptado" {% if
-            request.args.get('assigned_activities_ja')=='Deporte Ecuestre Adaptado' %}selected{% endif %}>Deporte Ecuestre
-            Adaptado</option>
-        <option value="Actividades Recreativas" {% if request.args.get('assigned_activities_ja')=='Actividades Recreativas'
-            %}selected{% endif %}>Actividades Recreativas</option>
-        <option value="Equitacion" {% if request.args.get('assigned_activities_ja')=='Equitación' %}selected{% endif %}>
-            Equitación</option>
+        {% for activity in activities %}
+            <option value="{{ activity }}" {% if request.args.get('assigned_activities_ja') == activity %}selected{% endif %}>
+                {{ activity }}</option>
+        {% endfor %}
     </select>
 {% endblock %}
 
@@ -41,11 +33,13 @@ Buscar por Nombre
         <td>{{ horse.birth_date.strftime('%d/%m/%Y') if horse.birth_date else 'N/A' }}</td>
         <td>{{ horse.gender }}</td>
         <td>{{horse.assigned_activities_ja}}</td>
-        
+
         <td>
             <a href="{{ url_for('horses.show', id=horse.id) }}">Ver</a>
             <a href="{{ url_for('horses.edit', id=horse.id) }}">Editar</a>
             <a href="{{ url_for('horses.delete', id=horse.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
+            <a href="{{ url_for('documents.index', entity_type="horses", entity_id=horse.id) }}">Ver documentos</a>
+
         </td>
         {% else %}
         <tr>

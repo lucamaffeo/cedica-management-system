@@ -3,11 +3,11 @@
 {% extends "base_index.html" %}
 
 {% block title %}
-Listado de Recibos
+Cobros
 {% endblock %}
 
 {% block page_title %}
-Recibos
+Cobros
 {% endblock %}
 {% block search_placeholder %}
 Buscar por Nombre o Apellido de quien recibe el dinero
@@ -27,16 +27,15 @@ Buscar por Nombre o Apellido de quien recibe el dinero
     <input class="form-control" type="date" name="end_date" id="end_date" value="{{ request.args.get('end_date') }}">
 </div>
 <div class="form-group">
-    <label class="form-label" for="payment_method">Medio de Pago</label>
-    <select name="payment_method" id="payment_method" class="form-control">
-        <option value="">Todos</option>
-        <option value="Efectivo" {% if request.args.get('payment_method')=='Efectivo' %}selected{% endif %}>Efectivo
-        </option>
-        <option value="Tarjeta de Crédito" {% if request.args.get('payment_method')=='Tarjeta de Crédito' %}selected{%
-            endif %}>Tarjeta de Crédito</option>
-        <option value="Tarjeta de Débito" {% if request.args.get('payment_method')=='Tarjeta de Débito' %}selected{%
-            endif %}>Tarjeta de Débito</option>
-    </select>
+    <label class="form-label" for="payment_method">Método de Pago:</label>
+<select class="form-control" id="payment_method" name="payment_method" required>
+    {% set payment_methods = ['Efectivo', 'Transferencia', 'Tarjeta de Crédito', 'Tarjeta de Débito', 'Otro'] %}
+    {% for method in payment_methods %}
+    <option value="{{ method }}" {{ 'selected' if receipt and receipt.payment_method == method else '' }}>
+        {{ method }}
+    </option>
+    {% endfor %}
+</select>
 </div>
 
 {% endblock %}
@@ -50,7 +49,12 @@ Buscar por Nombre o Apellido de quien recibe el dinero
 <tr>
     <td>{{ receipt.payment_date.strftime('%Y-%m-%d') }}</td>
     <td>{{ receipt.payment_method }}</td>
-    <td>{{ receipt.employee_id }}</td>
+    <td>{% set employee = received_by | selectattr("id", "==", receipt.employee_id) | first %}
+    {% if employee %}
+    {{ employee.name }} {{ employee.surname }}
+    {% else %}
+    N/A
+    {% endif %}</td>
     <td>
         <a href="{{ url_for('receipts.show', id=receipt.id) }}">Ver</a>
         <a href="{{ url_for('receipts.edit', id=receipt.id) }}">Editar</a>

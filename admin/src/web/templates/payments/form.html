@@ -1,31 +1,41 @@
 {% extends "base_form.html" %}
 
-<!-- Use (if is_update) to check for is_update or is_update_own (edit profile) -->
 {% block form_action %}
 {{ url_for('payments.update', id=payment.id) if is_update else url_for('payments.create') }}
 {% endblock %}
 
 {% block form_fields %}
-<!--- TODO change fields -->
 		        <label for="amount" class="form-label">Monto</label>
-		        <input type="text" name="amount" class="form-control" value="{{ payment.amount if is_update else '' }}" placeholder="Monto" required>
-		        <label for="email" class="form-label">Descripción</label>
+		        <input type="number" name="amount" class="form-control" value="{{ payment.amount if is_update else '' }}" placeholder="Monto" required step="0.01" min="0" max="99999999.99">
+		        <label for="description" class="form-label">Descripción</label>
 		        <textarea name="description" class="form-control" rows="3" placeholder="Descripción" required>{{ payment.description if is_update else '' }}</textarea>
-		        <label for="date" class="form-label">Fecha</label>
-		        <input type="date" name="date" class="form-control" value="{{ payment.date if is_update else '' }}" placeholder="Fecha" required>
+                <label for="date" class="form-label">Fecha</label>
+                <input type="date" name="date" class="form-control"
+                    value="{{ payment.date.strftime('%Y-%m-%d') if is_update and payment.date else '' }}" placeholder="Fecha" required>
 
         <label for="type" class="form-label">Tipo</label>
         <select class="form-control" name="type" id="type" required onchange="toggleBeneficiaryField()">
             <option value="" disabled {{ 'selected' if not is_update }}>Seleccione un tipo</option>
-            <option value="Honorarios" {{ 'selected' if is_update and payment.type == "Honorarios" }}>Honorarios</option>
-            <option value="Proveedor" {{ 'selected' if is_update and payment.type == "Proveedor" }}>Proveedor</option>
-            <option value="Gastos varios" {{ 'selected' if is_update and payment.type == "Gastos varios" }}>Gastos varios</option>
+            {% for type in payment_types %}
+            <option value="{{ type }}" {{ 'selected' if is_update and payment.type == type }}>{{ type }}</option>
+            {% endfor %}
         </select>
 
-	        <div id="beneficiary-field" style="display: {% if type == 'Honorarios' or (is_update and payment.type == 'Honorarios') %}block{% else %}none{% endif %};">
-	            <label for="beneficiary_id" class="form-label">ID Beneficiario</label>
-	            <input type="text" name="beneficiary_id" class="form-control" value="{{ payment.beneficiary_id if is_update else '' }}" placeholder="Beneficiary ID" {% if type == 'Honorarios' or (is_update and payment.type == 'Honorarios') %}required{% endif %}>
-	        </div>
+    <div id="beneficiary-field"
+        style="display: {% if type == 'Honorarios' or (is_update and payment.type == 'Honorarios') %}block{% else %}none{% endif %};">
+        <label for="beneficiary_id" class="form-label">Beneficiario</label>
+        <select name="beneficiary_id" class="form-control" {% if type=='Honorarios' or (is_update and
+            payment.type=='Honorarios' ) %}required{% endif %}>
+            <option value="">Selecciona un Beneficiario</option>
+            {% for employee in employees %}
+            <option value="{{ employee.id }}" {% if is_update and payment.beneficiary_id==employee.id %}selected{% endif %}>
+                {{ employee.name }} {{ employee.surname }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+
 
 <script>
     function toggleBeneficiaryField() {

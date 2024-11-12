@@ -2,7 +2,7 @@
 head %} {{ super() }} {% endblock %} {% block content %}
 <section>
   <h1>{{ title }}</h1>
-  <form action="{{ form_action }}" method="POST">
+  <form action="{{ form_action }}" method="POST" enctype="multipart/form-data">
     {% block form_fields %}
     <!-- Los campos específicos se definen en la plantilla que hereda -->
     {% endblock %}
