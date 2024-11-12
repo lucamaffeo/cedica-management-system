@@ -75,7 +75,6 @@ class EmployeeValidator(Validator):
         self.add_rule('email', UniqueEmail(empl_id))  # Agregar regla de unicidad
 
         self.add_rule('city', MaxLength(100))
-        self.add_rule('city', OnlyLetters())
 
         self.add_rule('telephone', MaxLength(50))
         self.add_rule('telephone', PhoneNumberFormat())

@@ -1,7 +1,7 @@
 import re
 from flask import Blueprint, redirect, render_template, request, url_for, flash
 from src.core.repositories import employee as employee_repository
-from src.core.repositories import document as document_repository
+from src.core.repositories import user as user_repository
 from src.web.helpers.auth import has_permission
 from werkzeug.utils import secure_filename
 from os import fstat
@@ -49,6 +49,9 @@ def create():
         flash_validation_errors(errors)
         return redirect(url_for("employees.register"))
 
+    user = user_repository.find_user_by_email(params['email'])
+    user_id = user.id if user else None
+
     employee_repository.create_employee(
         name=params['name'],
         surname=params['surname'],
@@ -66,6 +69,7 @@ def create():
         associate_number=params.get('associate_number'),
         condition=params['condition'],
         active=True,
+        user_id=user_id,
     )
 
     flash("Empleado creado con éxito.", "info")
