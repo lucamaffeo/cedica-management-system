@@ -136,9 +136,16 @@ def run():
     _ = contact.create_status(name="En progreso")
     _ = contact.create_status(name="Finalizado")
 
+
+    # CONTENIDOS
+    # ESTADOS
+    _ = content.create_status(name="Borrador")  
+    _ = content.create_status(name="Publicado")
+    _ = content.create_status(name="Archivado")
+
     #Contenidos
-    contenido1 = content.create_content(title="Titulo1", summary="Resumen1", content="Contenido1", author_id=1, status="Publicado", publication_date="2021-01-01")
-    contenido2 = content.create_content(title="Titulo2", summary="Resumen2", content="Contenido2", author_id=1, status="Borrador")
+    contenido1 = content.create_content(title="Titulo1", summary="Resumen1", content="Contenido1", author_id=1)
+    contenido2 = content.create_content(title="Titulo2", summary="Resumen2", content="Contenido2", author_id=1)
     contenido3 = content.create_content(title="Titulo3", summary="Resumen3", content="Contenido3", author_id=1)
     contenido4 = content.create_content(title="Titulo4", summary="Resumen4", content="Contenido4", author_id=1)
     contenido5 = content.create_content(title="Titulo5", summary="Resumen5", content="Contenido5", author_id=1)
@@ -146,7 +153,7 @@ def run():
     contenido7 = content.create_content(title="Titulo7", summary="Resumen7", content="Contenido7", author_id=1)
     contenido8 = content.create_content(title="Titulo8", summary="Resumen8", content="Contenido8", author_id=1)
     contenido9 = content.create_content(title="Titulo9", summary="Resumen9", content="Contenido9", author_id=1)
-    contenido10 = content.create_content(title="Titulo10", summary="Resumen10", content="Contenido10", author_id=6, status="Publicado", publication_date="2022-02-02")
+    contenido10 = content.create_content(title="Titulo10", summary="Resumen10", content="Contenido10", author_id=6)
     contenido11 = content.create_content(title="Titulo11", summary="Resumen11", content="Contenido11", author_id=6)
     contenido12 = content.create_content(title="Titulo12", summary="Resumen12", content="Contenido12", author_id=6)
     contenido13 = content.create_content(title="Titulo13", summary="Resumen13", content="Contenido13", author_id=6)

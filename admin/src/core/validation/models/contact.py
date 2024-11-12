@@ -54,7 +54,6 @@ class ContactValidator(Validator):
         Returns:
             A list of validation errors
         """
-        self.add_rule('name', Required())
         self.add_rule('name', MaxLength(255))
         self.add_rule('name', MinLength(2))
 

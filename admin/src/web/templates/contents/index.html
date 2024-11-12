@@ -18,7 +18,7 @@ Administracion de contenidos
         <td>{{ content.creation_date.strftime('%d/%m/%Y') }}</td>
         <td>{{ content.publication_date.strftime('%d/%m/%Y') if content.publication_date else 'No publicado' }}</td>
         <td>{{ content.update_date.strftime('%d/%m/%Y') if content.update_date else 'No Actualizado' }}</td>
-        <td>{{ content.status }}</td>
+        <td>{{ content.status.name }}</td>
         <td>{{ content.summary }} </td>
         <td>{{ content.author.alias }}</td>
         <td>

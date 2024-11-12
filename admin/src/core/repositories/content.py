@@ -1,6 +1,6 @@
 from flask import current_app
 from src.core.database import db
-from src.core.models.content import Content
+from src.core.models.content import Content, ContentStatus
 from src.core.models.user import User
 from sqlalchemy.orm import joinedload
 from datetime import datetime
@@ -39,7 +39,7 @@ def list_contents_api(author=None, published_from=None, published_to=None, page=
     articles = query.paginate(page=page, per_page=per_page, error_out=False)
     return articles
 
-def list_contents(search='', status=None, sort_by='title', direction='asc', page=1):
+def list_contents(search='', status_id=None, sort_by='title', direction='asc', page=1):
     query = Content.query
 
     if search:
@@ -48,8 +48,8 @@ def list_contents(search='', status=None, sort_by='title', direction='asc', page
             (Content.summary.ilike(f'%{search}%')) |
             (Content.content.ilike(f'%{search}%'))
         )
-    if status:
-        query = query.filter(Content.status == status)
+    if status_id:
+        query = query.filter(Content.status_id == status_id)
     else:
         query = query  # No aplicar filtro, mostrar todos
 
@@ -86,3 +86,12 @@ def delete_content(id):
         db.session.commit()
         return True
     return False
+
+def list_statuses():
+    return ContentStatus.query.all()
+
+def create_status(name):
+    status = ContentStatus(name=name)
+    db.session.add(status)
+    db.session.commit()
+    return status

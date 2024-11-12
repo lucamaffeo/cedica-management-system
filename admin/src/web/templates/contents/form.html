@@ -14,14 +14,18 @@
 <label class="form-label" for="content">Contenido:</label>
 <textarea id="content" name="content" required class="form-control">{{ content.content if content else '' }}</textarea>
 
-
-<label class="form-label" for="status">Estado:</label>
-<select id="status" name="status" required class="form-control">
-    {% set statuses = ['Borrador', 'Publicado', 'Archivado'] %}
-    {% for status in statuses %}
-    <option value="{{ status }}" {{ 'selected' if content and content.status == status else '' }}>
-        {{ status }}
-    </option>
-    {% endfor %}
-</select>
+{% if is_update %}
+<input type="hidden" name="updated_by" value="{{ user_id }}">
+<div class="status-container">
+    <p>Estado actual: <span
+            class="badge badge-{{ 'primary' if content.status_id == 1 else 'warning' if content.status_id == 2 else 'success' }}">{{
+            statuses[content.status_id - 1].name }}</span></p>
+    {% if content.status_id < 3 %} <select name="status" class="form-select">
+        <option value="">Cambiar estado a...</option>
+        <option value="{{ content.status_id + 1 }}">{{ statuses[content.status_id].name }}</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Actualizar estado</button>
+        {% endif %}
+</div>
+{% endif %}
 {% endblock %}

@@ -2,6 +2,12 @@ from sqlalchemy import JSON
 from src.core.database import db
 from datetime import datetime
 
+class ContentStatus(db.Model):
+    __tablename__ = 'content_statuses'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), unique=True, nullable=False)
+
 class Content(db.Model):
     __tablename__ = 'contents'
     
@@ -12,7 +18,8 @@ class Content(db.Model):
     title = db.Column(db.String(255), nullable=False)
     summary = db.Column(db.Text, nullable=False)
     content = db.Column(db.Text, nullable=False)
-    status = db.Column(db.Enum('Borrador', 'Publicado', 'Archivado', name="status"), default='Borrador')
+    status_id = db.Column(db.Integer, db.ForeignKey('content_statuses.id'), nullable=False, default=1)
+    status = db.relationship('ContentStatus', backref='contents_status', lazy=True)
 
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     author = db.relationship('User', backref='contents', uselist=False)  
@@ -27,7 +34,7 @@ class Content(db.Model):
             'creation_date': self.creation_date,
             'publication_date': self.publication_date,
             'update_date': self.update_date,
-            'status': self.status,
+            'status': self.status.name,
             'author': self.author.name if self.author else None
         }
 
