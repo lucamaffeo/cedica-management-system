@@ -10,10 +10,6 @@
 <input type="text" name="title" class="form-control" value="{{ contact.title if contact else '' }}" placeholder="Título"
 	{% if contact %}disabled{% endif %} required>
 
-<label class="form-label" for="name">Nombre del usuario:</label>
-<input type="text" name="name" class="form-control" value="{{ contact.name if contact else '' }}" placeholder="Nombre del usuario"
-	{% if contact %}disabled{% endif %} required>
-
 <label class="form-label" for="email">Email:</label>
 <input type="email" name="email" class="form-control" value="{{ contact.email if contact else '' }}" placeholder="a@a.com"
 	{% if contact %}disabled{% endif %} required>
@@ -23,13 +19,19 @@
 
 {% if is_update %}
 
-<label class="form-label" for="status">Estado:</label>
-<select class="form-control" name="status" required>
-	<option value="" disabled {{ 'selected' if not contact }}>Seleccione un estado</option>
-	{% for status in statuses %}
-	<option value="{{ status.id }}" {{ 'selected' if contact and contact.status_id == status.id }}>{{ status.name }}</option>
-	{% endfor %}
-</select>
+{% if is_update %}
+<input type="hidden" name="updated_by" value="{{ user_id }}">
+<div class="status-container">
+    <p>Estado actual: <span class="badge badge-{{ 'primary' if contact.status_id == 1 else 'warning' if contact.status_id == 2 else 'success' }}">{{ statuses[contact.status_id - 1].name }}</span></p>
+    {% if contact.status_id < 3 %}
+        <select name="status" class="form-select">
+            <option value="">Cambiar estado a...</option>
+            <option value="{{ contact.status_id + 1 }}">{{ statuses[contact.status_id].name }}</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Actualizar estado</button>
+    {% endif %}
+</div>
+{% endif %}
 
 <label class="form-label" for="comment">Comentario:</label>
 <textarea name="comment" class="form-control" placeholder="Comentario" rows="3">{{ contact.comment if contact.comment != None else '' }}</textarea>

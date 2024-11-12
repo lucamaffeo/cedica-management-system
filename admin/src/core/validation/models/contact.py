@@ -3,6 +3,37 @@ from src.core.repositories import contact as contact_repo
 from ..validator import MinLength, MaxLength, ValidationError, ValidationRule, Validator, Required
 from src.core.validation.rules.email import EmailFormat
 
+class StatusTransitionRule(ValidationRule):
+    def __init__(self, contact_id: int):
+        self.contact_id = contact_id
+
+    def validate(self, value) -> list[ValidationError]:
+        errors = []
+        try:
+            new_status = int(value)
+            # Get current contact to check its status
+            current_contact = contact_repo.get_contact(self.contact_id)
+
+            if current_contact is None:
+                errors.append('Contacto inválido')
+                return errors
+
+            current_status = current_contact.status_id
+
+            # Check if status is within valid range
+            if new_status > 3:
+                errors.append('El estado no puede ser mayor que 3')
+                return errors
+
+            # Check if status increment is exactly 1
+            if new_status != current_status + 1:
+                errors.append('El estado solo puede incrementarse en 1')
+        except (ValueError, TypeError):
+            errors.append('El estado debe ser un número válido')
+
+        return errors
+
+
 class ContactValidator(Validator):
     def __init__(self, contact_id: int = None):
         """
@@ -12,6 +43,7 @@ class ContactValidator(Validator):
             contact_id: The ID of the contact being updated (None for new contacts)
         """
         super().__init__()
+        self.contact_id = contact_id
 
 
     def validate_for_create(self, data: dict) -> list[ValidationError]:
@@ -46,7 +78,7 @@ class ContactValidator(Validator):
         Returns:
             A list of validation errors
         """
-        self.add_rule('status', Required())
-        self.add_rule('status', Required())
+        if self.contact_id and 'status' in data:
+            self.add_rule('status', StatusTransitionRule(self.contact_id))
 
         return self.validate(data)

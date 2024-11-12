@@ -23,7 +23,6 @@ def store():
         return redirect(url_for("contacts.create"))
 
     contact_repo.create_contact(
-        name=data["name"],
         title=data["title"],
         email=data["email"],
         description=data["description"],
@@ -45,22 +44,27 @@ def edit(id):
 @has_permission("contact_update")
 def update(id):
     data = request.form.to_dict()
+    # remove status if empty
+    if data.get('status') == '':
+        data.pop('status')
+
     validator = ContactValidator(contact_id=id)
 
     errors = validator.validate_for_update(data)
     if errors:
         flash_validation_errors(errors)
-        return redirect(url_for("contacts.update", id=id))
+        return redirect(url_for("contacts.edit", id=id))
 
     if contact_repo.update_contact(
         id=id,
-        status_id=data["status"],
-        comment=data["comment"],
+        status_id=data.get("status"),
+        comment=data.get("comment"),
+        updated_by=data.get("updated_by"),
     ):
         flash("Contacto actualizado con éxito.", "success")
         return redirect(url_for("contacts.index"))
     else:
-        flash("Contacto no encontrado.", "error")
+        flash("Contacto no encontrado o estado invalido.", "error")
         return redirect(url_for("contacts.index"))
 
 @bp.get("/<int:id>/show")

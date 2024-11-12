@@ -132,8 +132,9 @@ def run():
     # Etapa 2
     # CONTACTO
     # ESTADOS
-    _ = contact.create_status(name="pendiente")
-    _ = contact.create_status(name="resuelto")
+    _ = contact.create_status(name="Nuevo")
+    _ = contact.create_status(name="En progreso")
+    _ = contact.create_status(name="Finalizado")
 
     #Contenidos
     contenido1 = content.create_content(title="Titulo1", summary="Resumen1", content="Contenido1", author_id=1, status="Publicado", publication_date="2021-01-01")

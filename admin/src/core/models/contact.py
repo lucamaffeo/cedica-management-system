@@ -1,5 +1,4 @@
 from datetime import datetime
-from enum import unique
 from src.core.database import db
 
 class ContactStatus(db.Model):
@@ -12,13 +11,13 @@ class Contact(db.Model):
     __tablename__ = 'contacts'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255), nullable=False)
     title = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=False)
     comment = db.Column(db.Text, nullable=True)
     inserted_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
+    updated_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
 
     status_id = db.Column(db.Integer, db.ForeignKey('contact_statuses.id'), nullable=False, default=1)
     status = db.relationship('ContactStatus', backref='contacts_status', lazy=True)
@@ -37,9 +36,8 @@ class Contact(db.Model):
     def to_dict(self):
         return {
                 "id": self.id,
-                "name": self.name,
                 "email": self.email,
-                "body": self.body,
+                "body": self.description,
                 "status": self.status.name,
                 "comment": self.comment,
                 "inserted_at": self.inserted_at,
