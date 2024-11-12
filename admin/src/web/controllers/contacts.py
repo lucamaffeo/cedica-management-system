@@ -54,10 +54,11 @@ def update(id):
     if errors:
         flash_validation_errors(errors)
         return redirect(url_for("contacts.edit", id=id))
-
+    
+    contact = contact_repo.get_contact(id)
     if contact_repo.update_contact(
         id=id,
-        status_id=data.get("status"),
+        status_id=data.get("status") or contact.status_id,
         comment=data.get("comment"),
         updated_by=data.get("updated_by"),
     ):
