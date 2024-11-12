@@ -20,10 +20,74 @@
     <form method="GET" action="{{ url_for('auth.google_login') }}" class="google-login-form">
         <input type="email" name="email" placeholder="Ingrese su correo electrónico" required>
         <button type="submit" class="btn btn-google">
-            <img src="{{ url_for('static', filename='img/google-icon.svg') }}" alt="Google Icon">
+            <img src="{{ url_for('static', filename='images/google-icon.svg') }}" alt="Google Icon">
             Continuar con Google
         </button>
     </form>
 
-</section>
+<style>
+.login-container {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #333;
+    color: #fff;
+}
+
+.separator {
+    text-align: center;
+    margin: 1.5rem 0;
+    position: relative;
+}
+
+.separator::before,
+.separator::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 45%;
+    height: 1px;
+    background-color: #555;
+}
+
+.separator::before {
+    left: 0;
+}
+
+.separator::after {
+    right: 0;
+}
+
+.separator span {
+    background-color: #333;
+    padding: 0 10px;
+    color: #ccc;
+}
+
+.btn-google {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 16px;
+    background-color: #444;
+    border: 1px solid #555;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    color: #fff;
+}
+
+.btn-google:hover {
+    background-color: #555;
+}
+
+.btn-google img {
+    width: 18px;
+    height: 18px;
+}
+</style>
 {% endblock %}
