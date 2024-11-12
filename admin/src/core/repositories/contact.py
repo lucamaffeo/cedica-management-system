@@ -41,6 +41,8 @@ def update_contact(id, **kwargs):
     if not contact:
         return False
     for key, value in kwargs.items():
+        if key == 'status_id' and value is None:
+            continue
         setattr(contact, key, value)
     db.session.commit()
     return True
