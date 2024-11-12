@@ -56,7 +56,7 @@ def list_contents(search='', status_id=None, sort_by='title', direction='asc', p
     items_per_page = current_app.config.get('ITEMS_PER_PAGE')
 
     # Aplicar ordenación
-    if sort_by in ['title', 'publication_date', 'creation_date']:
+    if sort_by in ['title', 'update_date']:
         if direction == 'asc':
             query = query.order_by(getattr(Content, sort_by).asc())
         else:

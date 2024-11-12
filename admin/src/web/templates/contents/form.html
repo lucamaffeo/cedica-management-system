@@ -21,7 +21,7 @@
             class="badge badge-{{ 'primary' if content.status_id == 1 else 'warning' if content.status_id == 2 else 'success' }}">{{
             statuses[content.status_id - 1].name }}</span></p>
     {% if content.status_id < 3 %} <select name="status" class="form-select">
-        <option value="">Cambiar estado a...</option>
+        <option value="">Mantener estado actual</option>
         <option value="{{ content.status_id + 1 }}">{{ statuses[content.status_id].name }}</option>
         </select>
         <button type="submit" class="btn btn-primary">Actualizar estado</button>

@@ -2,17 +2,9 @@ from flask import Blueprint, redirect, render_template, request, url_for, flash,
 from datetime import datetime
 from src.core.repositories import user as user_repository, content as content_repository
 from src.web.helpers.auth import has_permission
+from src.core.validation.models.content import ContentValidator
 
 bp = Blueprint("contents", __name__, url_prefix="/contents")
-
-def validate_content_form(params):
-    title = params.get('title')
-    summary = params.get('summary')
-    content = params.get('content')
-    if not title or not summary or not content:
-        flash("Todos los campos son obligatorios.", "error")
-        return False
-    return True
 
 @bp.get("/")
 @has_permission("content_index")
@@ -36,8 +28,12 @@ def register():
 @bp.post("/create")
 @has_permission("content_create")
 def create():
-    params = request.form
-    if not validate_content_form(params):
+    params = request.form.to_dict()
+    validator = ContentValidator()
+    errors = validator.validate_for_create(params)
+    if errors:
+        for error in errors:
+            flash(f"{error.field}: {error.message}", "error")
         return redirect(url_for("contents.register"))
 
     content_repository.create_content(
@@ -73,21 +69,29 @@ def edit(id):
 @bp.route("/<int:id>/update", methods=["POST", "PATCH"])
 @has_permission("content_update")
 def update(id):
-    params = request.form
-    if not validate_content_form(params):
+    params = request.form.to_dict()
+    validator = ContentValidator(content_id=id)
+    errors = validator.validate_for_update(params)
+    if errors:
+        for error in errors:
+            flash(f"{error.field}: {error.message}", "error")
         return redirect(url_for("contents.edit", id=id))
-    data = request.form.to_dict()
-    if data.get('status') == '':
-        data.pop('status')
-
+    
+    content = content_repository.get_content(id)
     update_data = {
         'title': params.get('title'),
         'summary': params.get('summary'),
         'content': params.get('content'),
-        'status_id': params.get('status'),
         'update_date': datetime.now()
     }
-    
+
+    if params.get('status'):
+        update_data['status_id'] = params.get('status')
+        if params.get('status') == '2': 
+            update_data['publication_date'] = datetime.now()
+    else:
+        update_data['status_id'] = content.status_id
+
     content_repository.update_content(id, **update_data)
 
     flash("Contenido actualizado con éxito.", "info")
