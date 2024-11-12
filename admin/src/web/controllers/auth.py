@@ -2,7 +2,7 @@ from flask import Blueprint, current_app, flash, redirect, render_template, requ
 from src.core.models.user import User
 from werkzeug.security import check_password_hash
 from src.core.repositories import user as auth
-from google.oauth2 import id_token
+from google.oauth2.id_token import verify_oauth2_token
 from google.auth.transport import requests
 from google_auth_oauthlib.flow import Flow
 
@@ -59,8 +59,8 @@ class GoogleOAuth:
     def fetch_token(self, authorization_response):
         self.flow.fetch_token(authorization_response=authorization_response)
 
-    def verify_id_token(self, id_token):
-        return id_token.verify_oauth2_token(
+    def verify_id_token(self):
+        return verify_oauth2_token(
                 self.flow.credentials.id_token,
                 requests.Request(),
                 self.flow.client_config['client_id']
@@ -116,7 +116,7 @@ def google_callback():
         google_oauth.fetch_token(authorization_response=request.url)
 
         # Get the credentials and ID token
-        id_info = google_oauth.verify_id_token(google_oauth.flow.credentials.id_token)
+        id_info = google_oauth.verify_id_token()
 
         # Get email from Google response
         google_email = id_info.get('email')
