@@ -1,23 +1,24 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import ContactForm from './components/ContactForm.vue'
 </script>
 
 <template>
   <header>
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
+      <HelloWorld msg="Bienvenidos!" />
       <nav>
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/contact">Contacto</RouterLink>
+        <RouterLink to="/news">Noticias</RouterLink>
       </nav>
     </div>
   </header>
-
-  <RouterView />
+  <main>
+    <ContactForm />
+  </main>
 </template>
 
 <style scoped>
@@ -39,7 +40,8 @@ nav {
 }
 
 nav a.router-link-exact-active {
-  color: var(--color-text);
+  color: #42b983;
+  font-weight: bold;
 }
 
 nav a.router-link-exact-active:hover {
@@ -54,6 +56,11 @@ nav a {
 
 nav a:first-of-type {
   border: 0;
+}
+
+nav a:hover {
+  color: #42b983;
+  text-decoration: underline;
 }
 
 @media (min-width: 1024px) {
@@ -77,7 +84,6 @@ nav a:first-of-type {
     text-align: left;
     margin-left: -1rem;
     font-size: 1rem;
-
     padding: 1rem 0;
     margin-top: 1rem;
   }
