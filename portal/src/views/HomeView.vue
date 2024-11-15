@@ -1,28 +1,10 @@
 <script setup>
 import TheWelcome from '../components/TheWelcome.vue'
-import ContactForm from '../components/ContactForm.vue'
-import NewsList from '../components/NewsList.vue'
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-    <section>
-      <h2>Información de la Institución</h2>
-      <!-- Información básica de la Institución -->
-    </section>
-    <section>
-      <h2>Tareas que Desarrolla</h2>
-      <!-- Tareas que desarrolla la Institución -->
-    </section>
-    <section>
-      <h2>Contacto</h2>
-      <ContactForm />
-    </section>
-    <section>
-      <h2>Noticias</h2>
-      <NewsList />
-    </section>
+  <main> 
+    <TheWelcome msg="Bienvenidos!" />
   </main>
 </template>
 
@@ -44,5 +26,4 @@ h2 {
   color: #333;
   margin-bottom: 1rem;
 }
-
 </style>

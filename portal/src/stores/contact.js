@@ -3,15 +3,24 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 
 export const useContactStore = defineStore('contact', {
+  state: () => ({
+    contacts: [],
+    loading: false,
+    error:  null,
+  }),
   actions: {
-    async sendMessage(payload) {
+    async fetchContacts() {
       try {
-        await axios.post('/api/messages', payload)
-        alert('Mensaje enviado con éxito')
-      } catch (error) {
-        console.error(error)
-        alert('Error al enviar el mensaje')
+        this.loading = true
+        this.error = null
+        const response = await axios.get('http://localhost:5000/api/messages')
+        this.contacts = response.data
+      }catch{
+        this.error = 'Error'
       }
-    }
-  }
+      finally {
+        this.loading = false
+      }
+    },
+  },
 })
