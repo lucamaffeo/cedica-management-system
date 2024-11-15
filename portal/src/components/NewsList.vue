@@ -10,6 +10,7 @@
           <th>#</th>
           <th>Título</th>
           <th>Resumen</th>
+          <th>Contenido</th>
           <th>Fecha de Publicación</th>
         </tr>
       </thead>
@@ -18,7 +19,8 @@
           <td>{{ index + 1 }}</td>
           <td>{{ item.title }}</td>
           <td>{{ item.summary }}</td>
-          <td>{{ item.publication_date }}</td>
+          <td>{{ item.content }}</td>
+          <td>{{ formatDate(item.publication_date) || 'No disponible'}}</td>
         </tr>
       </tbody>
     </table>
@@ -41,4 +43,14 @@ const fetchNews = async () => {
 onMounted(() => {
   fetchNews();
 });
+
+const formatDate = (dateString) => {
+  if (!dateString) return null;
+  const date = new Date(dateString);
+  return date.toLocaleString([], { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+};
 </script>
+
+<style scoped>
+@import '../assets/style.css';
+</style>

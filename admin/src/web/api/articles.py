@@ -12,11 +12,12 @@ def index():
     author = request.args.get('author')
     published_from = request.args.get('published_from')
     published_to = request.args.get('published_to')
+    status = request.args.get('status')
     page = int(request.args.get('page', 1))
     per_page = int(request.args.get('per_page', 10))
 
 
-    articles = content.list_contents_api(author=author, published_from=published_from, published_to=published_to, page=page, per_page=per_page)
+    articles = content.list_contents_api(author=author, published_from=published_from, published_to=published_to, status=status, page=page, per_page=per_page)
     total = content.total_contents()
     data = articles_schema.dump(articles.items)
     
