@@ -5,29 +5,27 @@ export const useContactStore = defineStore('contact', {
   state: () => ({
     loading: false,
     error: null,
+    success: null, // Nueva propiedad para manejar mensajes de éxito
   }),
   actions: {
     async sendMessage(message) {
       this.loading = true;
-      this.error = null; // Reinicia cualquier error previo
+      this.error = null;
+      this.success = null;
 
       try {
-        // Realiza la solicitud al backend
         const response = await axios.post('http://localhost:5000/api/messages/', message);
 
         if (response.status === 201) {
-          // La solicitud fue exitosa, limpia cualquier error
-          this.error = null;
+          this.success = 'Mensaje enviado correctamente.';
         }
       } catch (err) {
-        // Manejo de errores detallado
         if (err.response?.data?.errors) {
           this.error = err.response.data.errors;
         } else {
           this.error = 'Error desconocido al enviar el mensaje.';
         }
       } finally {
-        // Finaliza el estado de carga
         this.loading = false;
       }
     },

@@ -5,9 +5,9 @@ import { useContactStore } from '@/stores/contact';
 import { storeToRefs } from 'pinia';
 
 // Variables
-const name = ref('');
+const title = ref('');
 const email = ref('');
-const message = ref('');
+const description = ref('');
 const contactStore = useContactStore();
 const { loading, error } = storeToRefs(contactStore);
 
@@ -20,7 +20,7 @@ const submitForm = async () => {
     try {
       // Verificar si `grecaptcha` está disponible
       if (typeof grecaptcha === 'undefined') {
-        alert('El script de reCAPTCHA no se cargó correctamente.');
+        setError('El script de reCAPTCHA no se cargó correctamente.');
         return;
       }
 
@@ -28,27 +28,28 @@ const submitForm = async () => {
       const recaptchaToken = grecaptcha.getResponse();
 
       if (!recaptchaToken) {
-        alert('Por favor, verifica que no eres un robot.');
+        setError('Por favor, verifica que no eres un robot.');
         return;
       }
 
-      // Enviar mensaje al servidor
-      await contactStore.sendMessage({
-        name: name.value,
+      const messageData = {
+        title: title.value,
         email: email.value,
-        message: message.value,
+        description: description.value,
         captcha: recaptchaToken
-      });
+      };
 
-      if (error.value) {
-        alert(error.value);
-      } else {
-        alert('Formulario enviado correctamente.');
+console.log('Datos del mensaje:', messageData); // Verificar los datos antes de enviarlos
+
+await contactStore.sendMessage(messageData);
+
+      if (!error.value) {
+        setSuccess('Formulario enviado correctamente.');
         resetForm();
       }
     } catch (err) {
       console.error('Error al enviar el formulario:', err);
-      alert('Ocurrió un error, intenta de nuevo.');
+      setError('Ocurrió un error, intenta de nuevo.');
     }
   }
 };
@@ -69,16 +70,16 @@ const loadRecaptchaScript = () => {
 
 // Función para validar el formulario
 const validateForm = () => {
-  if (!name.value.trim()) {
-    alert('El nombre es obligatorio.');
+  if (!title.value.trim()) {
+    setError('El titulo es obligatorio.');
     return false;
   }
   if (!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
-    alert('Introduce un correo válido.');
+    setError('Introduce un correo válido.');
     return false;
   }
-  if (!message.value.trim()) {
-    alert('El mensaje no puede estar vacío.');
+  if (!description.value.trim()) {
+    setError('La descripcion no puede estar vacío.');
     return false;
   }
   return true;
@@ -86,10 +87,22 @@ const validateForm = () => {
 
 // Función para resetear el formulario
 const resetForm = () => {
-  name.value = '';
+  title.value = '';
   email.value = '';
-  message.value = '';
+  description.value = '';
   grecaptcha.reset();
+  setError(null);
+  setSuccess(null);
+};
+
+// Función para establecer un mensaje de error
+const setError = (msg) => {
+  contactStore.error = msg;
+};
+
+// Función para establecer un mensaje de éxito
+const setSuccess = (msg) => {
+  contactStore.success = msg;
 };
 
 // Cargar el script de reCAPTCHA al montar el componente
@@ -100,29 +113,26 @@ onMounted(() => {
 
 <template>
   <form @submit.prevent="submitForm">
+    <div></div>
     <div>
-      <label for="name">Nombre completo</label>
-      <input type="text" id="name" v-model="name" required />
+      <label for="title">Titulo</label>
+      <input type="text" id="title" v-model="title" required />
     </div>
     <div>
       <label for="email">Dirección de correo electrónico</label>
       <input type="email" id="email" v-model="email" required />
     </div>
     <div>
-      <label for="message">Cuerpo del mensaje</label>
-      <textarea id="message" v-model="message" required></textarea>
+      <label for="description">Cuerpo del mensaje</label>
+      <textarea id="description" v-model="description" required></textarea>
     </div>
     <div id="recaptcha-container"></div>
     <button type="submit" :disabled="loading">{{ loading ? 'Enviando...' : 'Enviar' }}</button>
     <p v-if="loading">Enviando...</p>
-    <p v-if="error">{{ error }}</p>
+    <p v-if="error" class="error">{{ error }}</p>
+    <p v-if="contactStore.success" class="success">{{ contactStore.success }}</p>
   </form>
 </template>
-
-
-
-
-
 
 <style scoped>
 form {
@@ -171,6 +181,14 @@ button:hover {
 }
 
 p {
-  color: #000;
+  font-size: 1rem;
+}
+
+.error {
+  color: red;
+}
+
+.success {
+  color: green;
 }
 </style>

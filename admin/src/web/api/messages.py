@@ -5,6 +5,18 @@ from src.web.schemas.messages import message_schema
 
 bp = Blueprint("messages_api", __name__, url_prefix="/api/messages")
 
+def validate_captcha(captcha_response):
+    secret_key = "6Lf0IoEqAAAAAOjZMQVfQVU5vYjaDXKRviS1QAoY"
+    verify_url = "https://www.google.com/recaptcha/api/siteverify"
+    payload = {"secret": secret_key, "response": captcha_response}
+    
+    try:
+        response = requests.post(verify_url, data=payload)
+        result = response.json()
+    except requests.exceptions.RequestException as e:
+        return False
+
+    return result.get("success", False)
 
 @bp.route("/", methods=["GET", "POST"])
 def handle_messages():
@@ -19,6 +31,8 @@ def handle_messages():
         # Validar el token de reCAPTCHA
         if not validate_captcha(attributes.get("captcha")):
             return jsonify({"errors": {"captcha": ["Captcha inválido"]}}), 400
+        
+        attributes.pop("captcha", None)  # Elimina el campo 'captcha' si existe
 
         # Crear el mensaje en la base de datos
         kwargs = message_schema.load(attributes)
@@ -30,16 +44,3 @@ def handle_messages():
         # Obtener todos los mensajes
         messages = contact.list_contacts()
         return jsonify([message.to_dict() for message in messages]), 200
-
-
-def validate_captcha(captcha_response):
-    secret_key = "6Lf0IoEqAAAAAOjZMQVfQVU5vYjaDXKRviS1QAoY"
-    verify_url = "https://www.google.com/recaptcha/api/siteverify"
-
-    # Verificar el token en el servicio de reCAPTCHA
-    payload = {"secret": secret_key, "response": captcha_response}
-    response = requests.post(verify_url, data=payload)
-    result = response.json()
-
-    # Validar el éxito y un puntaje mínimo (para reCAPTCHA v3)
-    return result.get("success", False) and result.get("score", 0) >= 0.5
