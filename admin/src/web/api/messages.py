@@ -1,20 +1,45 @@
-from flask import Blueprint
+from flask import Blueprint, request, jsonify
+import requests
 from src.core.repositories import contact
 from src.web.schemas.messages import message_schema
-from flask import request
-from flask import jsonify
 
 bp = Blueprint("messages_api", __name__, url_prefix="/api/messages")
 
-@bp.post("/")
-def create():
-    atributes = request.get_json()
-    errors = message_schema.validate(atributes)
-    if errors:
-        return {"errors": errors}, 400
-    else:
-        kwars = message_schema.load(atributes)
-        # Pueden ocurrir errores al insertar en la base de datos!
-        new_message = contact.create_contact(**kwars)
+
+@bp.route("/", methods=["GET", "POST"])
+def handle_messages():
+    if request.method == "POST":
+        attributes = request.get_json()
+
+        # Validar datos del formulario
+        errors = message_schema.validate(attributes)
+        if errors:
+            return jsonify({"errors": errors}), 400
+
+        # Validar el token de reCAPTCHA
+        if not validate_captcha(attributes.get("captcha")):
+            return jsonify({"errors": {"captcha": ["Captcha inválido"]}}), 400
+
+        # Crear el mensaje en la base de datos
+        kwargs = message_schema.load(attributes)
+        new_message = contact.create_contact(**kwargs)
         data = message_schema.dump(new_message)
         return jsonify(data), 201
+
+    elif request.method == "GET":
+        # Obtener todos los mensajes
+        messages = contact.list_contacts()
+        return jsonify([message.to_dict() for message in messages]), 200
+
+
+def validate_captcha(captcha_response):
+    secret_key = "6Lf0IoEqAAAAAOjZMQVfQVU5vYjaDXKRviS1QAoY"
+    verify_url = "https://www.google.com/recaptcha/api/siteverify"
+
+    # Verificar el token en el servicio de reCAPTCHA
+    payload = {"secret": secret_key, "response": captcha_response}
+    response = requests.post(verify_url, data=payload)
+    result = response.json()
+
+    # Validar el éxito y un puntaje mínimo (para reCAPTCHA v3)
+    return result.get("success", False) and result.get("score", 0) >= 0.5
