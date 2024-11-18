@@ -12,7 +12,7 @@ export const useNewsStore = defineStore('news', {
   try {
     this.loading = true;
     this.error = null;
-    const response = await axios.get('http://localhost:5000/api/articles/', {
+    const response = await axios.get('http://localhost:5000/api/articles', {
       params: { status: 2 }
     });
     this.news = response.data.data; // Asegúrate de acceder a 'data'

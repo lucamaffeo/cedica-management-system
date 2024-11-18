@@ -1,102 +1,136 @@
-<template>
-  <form @submit.prevent="submitForm">
-    <div>
-      <label for="name">Nombre completo</label>
-      <input id="name" v-model="name" required />
-    </div>
-    <div>
-      <label for="email">Correo electrónico</label>
-      <input id="email" v-model="email" type="email" required />
-    </div>
-    <div>
-      <label for="message">Mensaje</label>
-      <textarea id="message" v-model="message" required></textarea>
-    </div>
-    <button type="submit">Enviar</button>
-  </form>
-</template>
-
 <script setup>
-import { ref } from 'vue'
-import { useContactStore } from '@/stores/contact'
+/* global recaptcha */
+import { ref, onMounted } from 'vue';
+import { useContactStore } from '@/stores/contact';
+import { storeToRefs } from 'pinia';
+import { RecaptchaV2 } from "vue3-recaptcha-v2";
 
-const store = useContactStore()
+const handleWidgetId = (widgetId) => {
+  console.log("Widget ID: ", widgetId);
+};
+const handleErrorCallback = () => {
+  console.log("Error callback");
+};
+const handleExpiredCallback = () => {
+  console.log("Expired callback");
+};
+const handleLoadCallback = (response) => {
+  console.log("Load callback", response);
+};
 
-const name = ref('')
-const email = ref('')
-const message = ref('')
+// Variables
+const title = ref('');
+const email = ref('');
+const description = ref('');
+const contactStore = useContactStore();
+const { loading, error } = storeToRefs(contactStore);
 
+// Función para enviar el formulario
 const submitForm = async () => {
   if (validateForm()) {
     try {
-      await store.sendMessage({ name: name.value, email: email.value, message: message.value })
-      alert('Mensaje enviado con éxito')
-      resetForm()
-    } catch (error) {
-      console.error(error)
-      alert('Error al enviar el mensaje')
+      // Verificar si `grecaptcha` está disponible
+      if (typeof grecaptcha === 'undefined') {
+        setError('El script de reCAPTCHA no se cargó correctamente.');
+        return;
+      }
+
+      // Obtener el token de reCAPTCHA
+      const recaptchaToken = grecaptcha.getResponse();
+
+      if (!recaptchaToken) {
+        setError('Por favor, verifica que no eres un robot.');
+        return;
+      }
+
+      const messageData = {
+        title: title.value,
+        email: email.value,
+        description: description.value,
+        captcha: recaptchaToken
+      };
+
+console.log('Datos del mensaje:', messageData); // Verificar los datos antes de enviarlos
+
+await contactStore.sendMessage(messageData);
+
+      if (!error.value) {
+        setSuccess('Formulario enviado correctamente.');
+        resetForm();
+      }
+    } catch (err) {
+      console.error('Error al enviar el formulario:', err);
+      setError('Ocurrió un error, intenta de nuevo.');
     }
   }
-}
+};
 
+// Función para validar el formulario
 const validateForm = () => {
-  return name.value && email.value && message.value && validateEmail(email.value)
-}
+  if (!title.value.trim()) {
+    setError('El titulo es obligatorio.');
+    return false;
+  }
+  if (!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+    setError('Introduce un correo válido.');
+    return false;
+  }
+  if (!description.value.trim()) {
+    setError('La descripcion no puede estar vacío.');
+    return false;
+  }
+  return true;
+};
 
-const validateEmail = (email) => {
-  const re = /\S+@\S+\.\S+/
-  return re.test(email)
-}
-
+// Función para resetear el formulario
 const resetForm = () => {
-  name.value = ''
-  email.value = ''
-  message.value = ''
-}
+  title.value = '';
+  email.value = '';
+  description.value = '';
+  grecaptcha.reset();
+  setError(null);
+  setSuccess(null);
+};
+
+// Función para establecer un mensaje de error
+const setError = (msg) => {
+  contactStore.error = msg;
+};
+
+// Función para establecer un mensaje de éxito
+const setSuccess = (msg) => {
+  contactStore.success = msg;
+};
+
 </script>
 
-<style scoped>
-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-form div {
-  margin-bottom: 1rem;
-}
-
-label {
-  font-weight: 500;
-  font-size: 1.2rem;
-}
-
-input, textarea {
-  width: 100%;
-  max-width: 400px;
-  padding: 0.5rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-button {
-  padding: 0.7rem 1.5rem;
-  font-size: 1rem;
-  color: #fff;
-  background-color: #42b983;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #38a169;
-}
-
-@media (min-width: 1024px) {
-  form {
-    align-items: flex-start;
-  }
-}
-</style>
+<template>
+  <div class="max-w-md mx-auto bg-gray-100 p-8 rounded-lg shadow-md">
+    <form @submit.prevent="submitForm" class="space-y-6">
+      <div>
+        <label for="title" class="block text-sm font-medium text-gray-700">Titulo</label>
+        <input type="text" id="title" v-model="title" required class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+      </div>
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Dirección de correo electrónico</label>
+        <input type="email" id="email" v-model="email" required class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+      </div>
+      <div>
+        <label for="description" class="block text-sm font-medium text-gray-700">Cuerpo del mensaje</label>
+        <textarea id="description" v-model="description" required class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></textarea>
+      </div>
+      <RecaptchaV2
+        @widget-id="handleWidgetId"
+        @error-callback="handleErrorCallback"
+        @expired-callback="handleExpiredCallback"
+        @load-callback="handleLoadCallback"
+      />
+      <button type="submit" :disabled="loading" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        {{ loading ? 'Enviando...' : 'Enviar' }}
+      </button>
+      <p v-if="loading" class="text-sm text-gray-500">Enviando...</p>
+      <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
+      <p v-if="contactStore.success" class="text-sm text-green-600">{{ contactStore.success }}</p>
+    </form>
+  </div>
+</template>
