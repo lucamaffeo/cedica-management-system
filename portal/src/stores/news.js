@@ -9,19 +9,19 @@ export const useNewsStore = defineStore('news', {
   }),
   actions: {
     async fetchNews() {
-  try {
-    this.loading = true;
-    this.error = null;
-    const response = await axios.get('http://localhost:5000/api/articles', {
-      params: { status: 2 }
-    });
-    this.news = response.data.data; // Asegúrate de acceder a 'data'
-  } catch  {
-    this.error = 'Error al obtener las noticias';
-  } finally {
-    this.loading = false;
-   }
-  }
+      try {
+        this.loading = true;
+        this.error = null;
+        const response = await axios.get('/api/articles', {
+          params: { status: 2 }
+        });
+        this.news = response.data.data; // Asegúrate de acceder a 'data'
+      } catch {
+        this.error = 'Error al obtener las noticias';
+      } finally {
+        this.loading = false;
+      }
+    }
 
   },
 })
