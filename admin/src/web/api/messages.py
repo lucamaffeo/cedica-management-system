@@ -18,7 +18,7 @@ def validate_captcha(captcha_response):
 
     return result.get("success", False)
 
-@bp.route("/", methods=["GET", "POST"])
+@bp.route("", methods=["GET", "POST"])
 def handle_messages():
     if request.method == "POST":
         attributes = request.get_json()
