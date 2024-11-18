@@ -10,10 +10,6 @@ defineProps({
 <template>
   <div class="greetings">
     <h1 class="green">{{ msg }}</h1>
-    <h3>
-      Visítanos en
-      <a href="https://www.facebook.com/cedica.equitacionparatodos/?locale=es_LA" target="_blank" rel="noopener">Facebook</a>
-    </h3>
   </div>
 </template>
 
