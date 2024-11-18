@@ -6,7 +6,7 @@ from flask import jsonify
 
 bp = Blueprint("articles_api", __name__, url_prefix="/api/articles")
 
-@bp.get("/")
+@bp.get("")
 def index():
     #Agregar validadores de fecha
     author = request.args.get('author')

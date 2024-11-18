@@ -1,26 +1,33 @@
-
-import { defineStore } from 'pinia'
-import axios from 'axios'
+import { defineStore } from 'pinia';
+import axios from 'axios';
 
 export const useContactStore = defineStore('contact', {
   state: () => ({
-    contacts: [],
     loading: false,
-    error:  null,
+    error: null,
+    success: null, // Nueva propiedad para manejar mensajes de éxito
   }),
   actions: {
-    async fetchContacts() {
+    async sendMessage(message) {
+      this.loading = true;
+      this.error = null;
+      this.success = null;
+
       try {
-        this.loading = true
-        this.error = null
-        const response = await axios.get('http://localhost:5000/api/messages/')
-        this.contacts = response.data
-      }catch{
-        this.error = 'Error'
-      }
-      finally {
-        this.loading = false
+        const response = await axios.post('http://localhost:5000/api/messages/', message);
+
+        if (response.status === 201) {
+          this.success = 'Mensaje enviado correctamente.';
+        }
+      } catch (err) {
+        if (err.response?.data?.errors) {
+          this.error = err.response.data.errors;
+        } else {
+          this.error = 'Error desconocido al enviar el mensaje.';
+        }
+      } finally {
+        this.loading = false;
       }
     },
   },
-})
+});
