@@ -15,101 +15,37 @@ const scrollToSection = (sectionId) => {
 </script>
 
 <template>
-  <header>
+  <header class="flex flex-col items-center py-4 bg-black text-white">
     <img alt="Vue logo" class="logo" src="@/assets/logo-cedica.png" width="250" height="125" />
     <HelloWorld msg="Bienvenidos a Cedica!" />
     <!-- Navbar -->
-    <nav>
-      <a href="#about" @click.prevent="scrollToSection('about')">INFORMACIÓN DE LA INSTITUCIÓN</a>
-      <a href="#task" @click.prevent="scrollToSection('task')">TAREAS QUE DESARROLLA</a>
-      <a href="#news" @click.prevent="scrollToSection('news')">NOTICIAS</a>
-      <a href="#contact" @click.prevent="scrollToSection('contact')">CONTACTO</a>
+    <nav class="mt-4 flex justify-center flex-wrap gap-4 lg:gap-8">
+      <a href="#about" @click.prevent="scrollToSection('about')" class="text-green-500 font-bold hover:underline">INFORMACIÓN DE LA INSTITUCIÓN</a>
+      <a href="#task" @click.prevent="scrollToSection('task')" class="text-green-500 font-bold hover:underline">TAREAS QUE DESARROLLA</a>
+      <a href="#news" @click.prevent="scrollToSection('news')" class="text-green-500 font-bold hover:underline">NOTICIAS</a>
+      <a href="#contact" @click.prevent="scrollToSection('contact')" class="text-green-500 font-bold hover:underline">CONTACTO</a>
     </nav>
   </header>
 
-  <main>
-    <section id="about">
-      <h2>Sobre Nosotros</h2>
+  <main class="p-8 flex flex-col gap-12">
+    <section id="about" class="w-full max-w-2xl mx-auto text-center lg:text-left p-8 border-b border-gray-300">
+      <h2 class="text-2xl mb-4 text-teal-700">Sobre Nosotros</h2>
       <AboutView />
     </section>
 
-    <section id="task">
-      <h2>Tareas</h2>
+    <section id="task" class="w-full max-w-2xl mx-auto text-center lg:text-left p-8 border-b border-gray-300">
+      <h2 class="text-2xl mb-4 text-teal-700">Tareas</h2>
       <TasksView />
     </section>
 
-    <section id="news">
-      <h2>Noticias</h2>
+    <section id="news" class="w-full max-w-2xl mx-auto text-center lg:text-left p-8 border-b border-gray-300">
+      <h2 class="text-2xl mb-4 text-teal-700">Noticias</h2>
       <NewsView />
     </section>
 
-    <section id="contact">
-      <h2>Contacto</h2>
+    <section id="contact" class="w-full max-w-2xl mx-auto text-center lg:text-left p-8 border-b border-gray-300">
+      <h2 class="text-2xl mb-4 text-teal-700">Contacto</h2>
       <ContactView />
     </section>
   </main>
 </template>
-
-<style scoped>
-/* Header */
-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 1rem 0;
-  background-color: #000; /* Fondo negro */
-  color: #fff; /* Texto blanco */
-}
-
-/* Navbar */
-nav {
-  margin-top: 1rem;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-nav a {
-  color: #42b983;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-nav a:hover {
-  text-decoration: underline;
-}
-
-/* Main content */
-main {
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 3rem; /* Espacio entre secciones */
-}
-
-section {
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: center;
-  padding: 2rem;
-  border-bottom: 1px solid #ddd;
-}
-
-section h2 {
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
-  color: #00796b;
-}
-
-@media (min-width: 1024px) {
-  nav {
-    gap: 2rem;
-  }
-
-  section {
-    text-align: left;
-  }
-}
-</style>
