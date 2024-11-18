@@ -14,17 +14,13 @@ def create_content(**kwargs):
 
     return content
 
-def total_contents():
-    total = Content.query.count()
-    return total
-
-def list_contents_api(author=None, published_from=None, published_to=None, status=None, page=1, per_page=10):
+def list_contents_api(author=None, published_from=None, published_to=None, page=1, per_page=10):
     # Aplicar filtro por alias del autor
+    query = Content.query.join(ContentStatus).filter(ContentStatus.name == "Publicado")
+
     if author:
-        query = Content.query.options(joinedload(Content.author))
+        query = query.options(joinedload(Content.author))
         query = query.join(User).filter(User.alias.ilike(f'%{author}%'))
-    else:
-        query = Content.query
 
     # Si no manda las dos, no se aplica el filtro !
     if published_from and published_to:
@@ -35,9 +31,6 @@ def list_contents_api(author=None, published_from=None, published_to=None, statu
         published_to = datetime.fromisoformat(published_to.replace("Z", "+00:00"))  # Convert str to date, so we can add timedelta (to make end_date include that day on results)
         print(published_to)
         query = query.filter(Content.publication_date >= published_from, Content.publication_date < published_to + timedelta(days=1))
-
-    if status:
-        query = query.filter(Content.status_id == status)
 
     articles = query.paginate(page=page, per_page=per_page, error_out=False)
     return articles
