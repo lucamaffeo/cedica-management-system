@@ -34,7 +34,8 @@ def index():
 @bp.get("/create")
 @has_permission("employee_create")
 def register():
-    return render_template("employees/form.html", is_update=False, title='Crear Empleado')
+    users = user_repository.list_unassociated_users()
+    return render_template("employees/form.html", is_update=False, title='Crear Empleado', users=users)
 
 # Create employee
 @bp.post("/create")
@@ -49,8 +50,7 @@ def create():
         flash_validation_errors(errors)
         return redirect(url_for("employees.register"))
 
-    user = user_repository.find_user_by_email(params['email'])
-    user_id = user.id if user else None
+    user_id = params.get('user_id')
 
     employee_repository.create_employee(
         name=params['name'],
@@ -93,7 +93,8 @@ def edit(id):
     if not employee:
         flash("Empleado no encontrado.", "error")
         return redirect(url_for("employees.index"))
-    return render_template("employees/form.html", is_update=True, title='Actualizar Empleado', employee=employee)
+    users = user_repository.list_unassociated_users()
+    return render_template("employees/form.html", is_update=True, title='Actualizar Empleado', employee=employee, users=users)
 
 @bp.post("/<int:id>/update")
 @has_permission("employee_update")
@@ -117,6 +118,7 @@ def update(id):
         flash("Empleado no encontrado.", "error")
         return redirect(url_for("employees.index"))
 
+    user_id = params.get('user_id')
 
     # Actualizar el empleado
     if employee_repository.update_employee(
@@ -136,7 +138,8 @@ def update(id):
         social_work=params.get("social_work"),
         associate_number=employee.associate_number,
         condition=params.get("condition"),
-        active='active' in params
+        active='active' in params,
+        user_id=user_id,
     ):
         flash("Empleado actualizado con éxito.", "success")
         return redirect(url_for("employees.index"))

@@ -1,6 +1,5 @@
 <template>
     <div class="task">
-        <h1>Tareas que Desarrolla la Institución</h1>
         <p>La institución realiza diversas actividades centradas en la rehabilitación, el deporte adaptado y la educación. Entre las tareas principales que desarrolla, se incluyen:</p>
         <ul>
             <li><strong>Hipoterapia:</strong> Terapia que utiliza los movimientos de los caballos para mejorar la movilidad y el bienestar emocional de las personas con discapacidad.</li>
