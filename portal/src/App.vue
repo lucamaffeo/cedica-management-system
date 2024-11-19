@@ -21,7 +21,7 @@ const scrollToSection = (sectionId) => {
     <!-- Navbar -->
     <nav class="mt-4 flex justify-center flex-wrap gap-4 lg:gap-8">
       <a href="#about" @click.prevent="scrollToSection('about')" class="text-green-500 font-bold hover:underline">INFORMACIÓN DE LA INSTITUCIÓN</a>
-      <a href="#task" @click.prevent="scrollToSection('task')" class="text-green-500 font-bold hover:underline">TAREAS QUE DESARROLLA</a>
+      <a href="#task" @click.prevent="scrollToSection('task')" class="text-green-500 font-bold hover:underline">TAREAS QUE DESARROLLA LA INSTITUCIÓN</a>
       <a href="#news" @click.prevent="scrollToSection('news')" class="text-green-500 font-bold hover:underline">NOTICIAS</a>
       <a href="#contact" @click.prevent="scrollToSection('contact')" class="text-green-500 font-bold hover:underline">CONTACTO</a>
     </nav>
@@ -34,7 +34,7 @@ const scrollToSection = (sectionId) => {
     </section>
 
     <section id="task" class="w-full max-w-2xl mx-auto text-center lg:text-left p-8 border-b border-gray-300">
-      <h2 class="text-2xl mb-4 text-teal-700">Tareas</h2>
+      <h2 class="text-2xl mb-4 text-teal-700">Tareas que desarrolla la institución</h2>
       <TasksView />
     </section>
 

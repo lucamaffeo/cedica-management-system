@@ -19,6 +19,7 @@ Buscar por Nombre, Apellido, DNI o Email
 {% block filters %}
 <div>
     <select name="job_position" class="form-control">
+        <option value="">Todos los puestos</option>
         {% set job_positions = ['Administrativo/a', 'Terapeuta', 'Conductor', 'Auxiliar de pista', 'Herrero', 'Veterinario', 'Entrenador de Caballos', 'Domador', 'Profesor de Equitación', 'Docente de Capacitación', 'Auxiliar de mantenimiento', 'Otro'] %}
     {% for position in job_positions %}
     <option value="{{ position }}" {{ 'selected' if employee and employee.job_position == position else '' }}>
@@ -53,5 +54,5 @@ Buscar por Nombre, Apellido, DNI o Email
             </td>
         </tr>
         {% endfor %}
-        {% endblock %}  
+        {% endblock %}
 

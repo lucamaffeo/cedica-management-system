@@ -1,3 +1,4 @@
+from src.core.validation.rules.dni import DNIFormat
 from src.core.models.rider import Rider
 from src.core.validation.validator import ValidationRule, Validator, Required, MaxLength, MinLength
 from src.core.validation.rules.email import EmailFormat
@@ -38,6 +39,7 @@ class RiderValidator(Validator):
 
         self.add_rule('dni', Required())
         self.add_rule('dni', MaxLength(20))
+        self.add_rule('dni', DNIFormat())
         self.add_rule('dni', UniqueDni(rider_id))
 
         self.add_rule('age', Required())
@@ -57,7 +59,7 @@ class RiderValidator(Validator):
         self.add_rule('phone', MaxLength(50))
 
         self.add_rule('emergency_contact', Required())
-        self.add_rule('emergency_contact', PhoneNumberFormat())
+        self.add_rule('emergency_contact', OnlyLetters())
         self.add_rule('emergency_contact', MaxLength(100))
 
         self.add_rule('emergency_contact_phone_number', Required())
@@ -107,6 +109,7 @@ class RiderValidator(Validator):
         self.add_rule('tutor_name', MaxLength(100))
         self.add_rule('tutor_surname', MaxLength(100))
         self.add_rule('tutor_dni', MaxLength(20))
+        self.add_rule('tutor_dni', DNIFormat())
         self.add_rule('tutor_address', MaxLength(255))
         self.add_rule('tutor_cellphone', PhoneNumberFormat())
         self.add_rule('tutor_cellphone', MaxLength(50))

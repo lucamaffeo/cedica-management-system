@@ -63,6 +63,15 @@
 <input class="form-control" type="date" id="termination_date" name="termination_date"
     value="{{ employee.termination_date.strftime('%Y-%m-%d') if employee and employee.termination_date else '' }}">
 
+<label class="form-label" for="user_id">Usuario:</label>
+<select id="user_id" name="user_id" class="form-control">
+    <option value="">Seleccione un usuario</option>
+    {% for user in users %}
+    <option value="{{ user.id }}" {{ 'selected' if employee and employee.user_id == user.id else '' }}>
+        {{ user.email }}
+    </option>
+    {% endfor %}
+</select>
 
 <label class="form-label" for="emergency_contact_info">Contacto de Emergencia:</label>
 <input placeholder="Indicar nombre y telefono" class="form-control" type="text" id="emergency_contact_info"

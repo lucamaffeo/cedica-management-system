@@ -1,7 +1,15 @@
 
-from typing import Dict, Any, List
-from src.core.validation.validator import ValidationError, Validator, Required, MaxLength
-from src.core.validation.rules.payment import ValidAmount, ValidPaymentType
+import datetime
+from typing import Dict, Any, List, Optional
+from src.core.validation.validator import ValidationError, ValidationRule, Validator, Required, MaxLength
+from src.core.validation.rules.payment import ValidAmount
+
+class DateNotInFuture(ValidationRule):
+    """Validates that a date is not in the future"""
+    def validate(self, value: Any) -> Optional[str]:
+        if value > datetime.date.today():
+            return "La fecha no puede ser futura"
+        return None
 
 class ReceiptValidator(Validator):
     def __init__(self):
@@ -15,6 +23,7 @@ class ReceiptValidator(Validator):
 
         # Payment date validation
         self.add_rule('payment_date', Required())
+        self.add_rule('payment_date', DateNotInFuture())
 
         # Amount validation
         self.add_rule('quantity', Required())

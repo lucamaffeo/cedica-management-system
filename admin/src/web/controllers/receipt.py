@@ -26,7 +26,8 @@ def index():
 def register():
     employees = employee_repository.list_employees()
     riders = riders_repository.list_riders()
-    return render_template("receipts/form.html", is_update=False, title="Registrar Recibo",employees=employees,riders=riders)
+    current_date = datetime.now().strftime('%Y-%m-%d')
+    return render_template("receipts/form.html", is_update=False, title="Registrar Recibo", employees=employees, riders=riders, current_date=current_date)
 
 @bp.post("/create")
 @has_permission("receipt_create")
@@ -83,7 +84,8 @@ def edit(id):
         return redirect(url_for("receipts.index"))
     employees = employee_repository.list_employees()
     riders = riders_repository.list_riders()
-    return render_template("receipts/form.html", is_update=True, title="Actualizar Recibo", receipt=r, employees=employees,riders=riders)
+    current_date = datetime.now().strftime('%Y-%m-%d')
+    return render_template("receipts/form.html", is_update=True, title="Actualizar Recibo", receipt=r, employees=employees,riders=riders, current_date=current_date)
 
 @bp.route("/<int:id>/update", methods=["POST", "PATCH"])
 @has_permission("receipt_update")

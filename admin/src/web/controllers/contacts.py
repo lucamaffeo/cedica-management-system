@@ -6,11 +6,6 @@ from src.web.helpers.auth import has_permission
 
 bp = Blueprint("contacts", __name__, url_prefix="/contacts")
 
-@bp.get("/create")
-@has_permission("contact_create")
-def create():
-    return render_template("contacts/form.html", is_update=False, title='Crear Contacto')
-
 @bp.post("/create")
 @has_permission("contact_create")
 def store():

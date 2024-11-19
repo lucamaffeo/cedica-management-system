@@ -101,3 +101,6 @@ def has_permission(user_id: int, permission: str) -> bool:
             Role.permissions.any(Permission.name == permission)
         )
     )).scalar()
+
+def list_unassociated_users():
+    return User.query.filter(~User.employee.any()).all()

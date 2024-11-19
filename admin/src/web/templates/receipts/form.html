@@ -18,7 +18,7 @@
 </select>
 
 <label class="form-label" for="payment_date">Fecha de Pago:</label>
-<input class="form-control" type="date" id="payment_date" name="payment_date" required
+<input class="form-control" type="date" id="payment_date" name="payment_date" required max="{{ current_date }}"
     value="{{ receipt.payment_date.strftime('%Y-%m-%d') if receipt and receipt.payment_date else '' }}">
 
 <label class="form-label" for="quantity">Monto:</label>

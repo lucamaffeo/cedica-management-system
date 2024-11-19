@@ -12,7 +12,7 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      '/api': 'http://localhost:5000',  // Proxy de las solicitudes API a Flask
+      '/api': 'https://admin-grupo10.proyecto2024.linti.unlp.edu.ar',  // Proxy de las solicitudes API a Flask
     },
   },
   resolve: {
