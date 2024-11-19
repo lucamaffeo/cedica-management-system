@@ -1,6 +1,7 @@
 from marshmallow import Schema
 from marshmallow import fields, validate
 from src.web.schemas.user import user_schema
+from src.web.schemas.contactStatus import contact_status_schema
 
 class ArticleSchema(Schema):
     id = fields.Int(dump_only=True)
@@ -9,9 +10,8 @@ class ArticleSchema(Schema):
     content = fields.Str(required=True)
     publication_date = fields.DateTime()
     update_date = fields.DateTime(dump_only=True)
-    # Autor: autor.name
     author = fields.Nested(user_schema, dump_only=True)
-    status = fields.Str(required=True, validate=validate.OneOf(["Borrador", "Publicado", "Archivado"]))
+    status = fields.Nested(contact_status_schema, dump_only=True)
 
 article_schema = ArticleSchema()
 articles_schema = ArticleSchema(many=True)
