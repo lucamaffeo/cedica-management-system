@@ -11,7 +11,7 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(install, {
-  sitekey: '6Lf0EqAAAAAAfIpO43s09xFnVzywmnYpowpP69',
+  sitekey: '6Lf0IoEqAAAAAAfIpO43s09xFnVzywmnYpowpP69',
   language: 'es-419',
   theme: 'dark',
   callback: () => {

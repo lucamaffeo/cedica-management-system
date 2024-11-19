@@ -47,7 +47,6 @@ const submitForm = async () => {
         title: title.value,
         email: email.value,
         description: description.value,
-        captcha: recaptchaToken
       };
 
 console.log('Datos del mensaje:', messageData); // Verificar los datos antes de enviarlos
