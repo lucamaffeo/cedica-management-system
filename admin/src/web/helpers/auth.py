@@ -6,6 +6,7 @@ from src.core.repositories import user as auth
 
 logger = logging.getLogger(__name__)
 
+
 def is_authenticated(session):
     return session.get("user_id") != None
 
@@ -18,6 +19,7 @@ def login_required(f):
         return f(*args, **kwargs)
 
     return decorated_function
+
 
 def has_permission(permission):
     def decorator(f):

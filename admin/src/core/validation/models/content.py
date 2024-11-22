@@ -1,5 +1,7 @@
 from src.core.validation.validator import MinLength, MaxLength, ValidationError, ValidationRule, Validator, Required
 from src.core.repositories import content as content_repo
+
+
 class StatusTransitionRule(ValidationRule):
     def __init__(self, content_id: int):
         self.content_id = content_id
@@ -29,6 +31,7 @@ class StatusTransitionRule(ValidationRule):
             errors.append('El estado debe ser un número válido')
 
         return errors
+
 
 class ContentValidator(Validator):
     def __init__(self, content_id: int = None):

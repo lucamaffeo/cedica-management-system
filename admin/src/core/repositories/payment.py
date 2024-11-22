@@ -20,7 +20,8 @@ def list_payments(start_date=None, end_date=None, payment_type=None, sort_by='al
 
     if end_date:
         try:
-            end_date = datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1)
+            end_date = datetime.strptime(
+                end_date, '%Y-%m-%d') + timedelta(days=1)
             query = query.filter(Payment.date < end_date)
         except ValueError:
             flash("La fecha de fin es inválida.", "error")
@@ -37,18 +38,22 @@ def list_payments(start_date=None, end_date=None, payment_type=None, sort_by='al
 
     items_per_page = current_app.config.get('ITEMS_PER_PAGE')
 
-    paginated_payments = query.paginate(page=page, per_page=items_per_page, error_out=False)
+    paginated_payments = query.paginate(
+        page=page, per_page=items_per_page, error_out=False)
 
     return paginated_payments
 
+
 def get_payment_types():
     return Payment.type.property.columns[0].type.enums
+
 
 def create_payment(**kwargs):
     # Check the type and beneficiary_id for validation
     if kwargs.get('type') == 'Honorarios':
         if not kwargs.get('beneficiary_id'):
-            raise ValueError('Beneficiary ID is required when the type is Honorarios.')
+            raise ValueError(
+                'Beneficiary ID is required when the type is Honorarios.')
         else:
             beneficiary = employee.get_employee(kwargs.get('beneficiary_id'))
             if not beneficiary:
@@ -61,6 +66,7 @@ def create_payment(**kwargs):
     db.session.commit()
     return payment
 
+
 def update_payment(id, **kwargs):
     payment = Payment.query.filter(Payment.id == id).first()
     if not payment:
@@ -69,12 +75,13 @@ def update_payment(id, **kwargs):
     # Check the type and beneficiary_id for validation
     new_type = kwargs.get('type')
     if new_type == 'Honorarios':
-            if not kwargs.get('beneficiary_id'):
-                raise ValueError('Beneficiary ID is required when the type is Honorarios.')
-            else:
-                beneficiary = employee.get_employee(kwargs.get('beneficiary_id'))
-                if not beneficiary:
-                    raise ValueError('Beneficiary ID does not exist.')
+        if not kwargs.get('beneficiary_id'):
+            raise ValueError(
+                'Beneficiary ID is required when the type is Honorarios.')
+        else:
+            beneficiary = employee.get_employee(kwargs.get('beneficiary_id'))
+            if not beneficiary:
+                raise ValueError('Beneficiary ID does not exist.')
     else:
         kwargs['beneficiary_id'] = None
 
@@ -83,6 +90,7 @@ def update_payment(id, **kwargs):
     db.session.commit()
     return payment
 
+
 def delete_payment(id):
     payment = Payment.query.filter(Payment.id == id).first()
     if payment:
@@ -90,6 +98,7 @@ def delete_payment(id):
         db.session.commit()
         return True
     return False
+
 
 def get_payment(id) -> Payment | None:
     payment = Payment.query.filter(Payment.id == id).first()

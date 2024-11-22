@@ -7,6 +7,7 @@ from datetime import datetime
 from datetime import timedelta
 from flask import jsonify
 
+
 def create_content(**kwargs):
     content = Content(**kwargs)
     db.session.add(content)
@@ -14,9 +15,11 @@ def create_content(**kwargs):
 
     return content
 
+
 def list_contents_api(author=None, published_from=None, published_to=None, page=1, per_page=10):
     # Aplicar filtro por alias del autor
-    query = Content.query.join(ContentStatus).filter(ContentStatus.name == "Publicado")
+    query = Content.query.join(ContentStatus).filter(
+        ContentStatus.name == "Publicado")
 
     if author:
         query = query.options(joinedload(Content.author))
@@ -24,16 +27,19 @@ def list_contents_api(author=None, published_from=None, published_to=None, page=
 
     # Si no manda las dos, no se aplica el filtro !
     if published_from and published_to:
-        print(published_from)
-        published_from = datetime.fromisoformat(published_from.replace("Z", "+00:00"))
-        print(published_from)
-        print(published_to)
-        published_to = datetime.fromisoformat(published_to.replace("Z", "+00:00"))  # Convert str to date, so we can add timedelta (to make end_date include that day on results)
-        print(published_to)
-        query = query.filter(Content.publication_date >= published_from, Content.publication_date < published_to + timedelta(days=1))
+        published_from = datetime.fromisoformat(
+            published_from.replace("Z", "+00:00"))
+        # Convert str to date, so we can add timedelta (to make end_date include that day on results)
+        published_to = datetime.fromisoformat(
+            published_to.replace("Z", "+00:00"))
+        query = query.filter(Content.publication_date >= published_from,
+                             Content.publication_date < published_to + timedelta(days=1))
+
+    query = query.order_by(Content.publication_date.desc())
 
     articles = query.paginate(page=page, per_page=per_page, error_out=False)
     return articles
+
 
 def list_contents(search='', status_id=None, sort_by='title', direction='asc', page=1):
     query = Content.query
@@ -58,13 +64,16 @@ def list_contents(search='', status_id=None, sort_by='title', direction='asc', p
         else:
             query = query.order_by(getattr(Content, sort_by).desc())
 
-    pagination_contents = query.paginate(page=page, per_page=items_per_page, error_out=False)
+    pagination_contents = query.paginate(
+        page=page, per_page=items_per_page, error_out=False)
 
     return pagination_contents
+
 
 def get_content(id):
     content = Content.query.filter(Content.id == id).first()
     return content
+
 
 def update_content(id, **kwargs):
     content = Content.query.filter(Content.id == id).first()
@@ -75,6 +84,7 @@ def update_content(id, **kwargs):
     db.session.commit()
     return True
 
+
 def delete_content(id):
     content = Content.query.filter(Content.id == id).first()
     if content:
@@ -83,8 +93,10 @@ def delete_content(id):
         return True
     return False
 
+
 def list_statuses():
     return ContentStatus.query.all()
+
 
 def create_status(name):
     status = ContentStatus(name=name)

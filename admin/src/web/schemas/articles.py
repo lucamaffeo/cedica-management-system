@@ -3,6 +3,7 @@ from marshmallow import fields, validate
 from src.web.schemas.user import user_schema
 from src.web.schemas.articleStatus import article_status_schema
 
+
 class ArticleSchema(Schema):
     id = fields.Int(dump_only=True)
     title = fields.Str(required=True)
@@ -13,6 +14,6 @@ class ArticleSchema(Schema):
     author = fields.Nested(user_schema, dump_only=True)
     status = fields.Nested(article_status_schema, dump_only=True)
 
+
 article_schema = ArticleSchema()
 articles_schema = ArticleSchema(many=True)
-

@@ -7,6 +7,7 @@ from src.core.models.permission import Permission
 
 from werkzeug.security import generate_password_hash
 
+
 def list_users(search='', role_id=None, sort_by='alias', direction='asc', active=None, page=1):
     # Inicializar la consulta de base de datos
     query = User.query
@@ -32,9 +33,11 @@ def list_users(search='', role_id=None, sort_by='alias', direction='asc', active
     else:
         query = query.order_by(getattr(User, sort_by).desc())
 
-    paginated_users = query.paginate(page=page, per_page=items_per_page, error_out=False)
+    paginated_users = query.paginate(
+        page=page, per_page=items_per_page, error_out=False)
 
     return paginated_users
+
 
 def create_user(**kwargs):
     if 'password' in kwargs:
@@ -44,6 +47,7 @@ def create_user(**kwargs):
     db.session.commit()
 
     return user
+
 
 def update_user(id, **kwargs):
     user = User.query.filter(User.id == id).first()
@@ -58,6 +62,7 @@ def update_user(id, **kwargs):
     db.session.commit()
     return True
 
+
 def delete_user(id):
     user = User.query.filter(User.id == id).first()
     if user:
@@ -66,20 +71,23 @@ def delete_user(id):
         return True
     return False
 
+
 def get_user(id) -> User | None:
     user = User.query.filter(User.id == id).first()
     return user
+
 
 def find_user_by_email(email):
     return User.query.filter(User.email == email).first()
 
 
 def find_user_by_active():
-   return User.query.filter(User.active == True).all()
+    return User.query.filter(User.active == True).all()
 
 
 def find_user_by_role(role_id):
     return User.query.filter(User.role_id == role_id).all()
+
 
 def has_permission(user_id: int, permission: str) -> bool:
     """
@@ -101,6 +109,7 @@ def has_permission(user_id: int, permission: str) -> bool:
             Role.permissions.any(Permission.name == permission)
         )
     )).scalar()
+
 
 def list_unassociated_users():
     return User.query.filter(~User.employee.any()).all()

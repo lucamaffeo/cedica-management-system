@@ -1,0 +1,103 @@
+{% extends "base_index2.html" %}
+
+{% block title %}
+    Reporte de Antigüedad de Empleados
+{% endblock %}
+
+{% block page_title %}
+    Antigüedad de Empleados
+{% endblock %}
+
+{% set show_search = true %}
+
+{% block filters %}
+    <div class="form-group">
+        <label for="search" class="form-label">Nombre o Apellido</label>
+        <input class="form-control" type="text" name="search" id="search" 
+            value="{{ request.args.get('search', '') }}" placeholder="Buscar por nombre o apellido">
+    </div>
+    <div class="form-group">
+        <label class="form-label" for="job_position">Puesto Laboral:</label>
+        <select id="job_position" name="job_position" class="form-control">
+            <option value="">Todos los puestos</option>
+            {% set job_positions = ['Administrativo/a', 'Terapeuta', 'Conductor', 'Auxiliar de pista', 'Herrero', 'Veterinario',
+            'Entrenador de Caballos', 'Domador', 'Profesor de Equitación', 'Docente de Capacitación', 'Auxiliar de mantenimiento', 'Otro'] %}
+            {% for position in job_positions %}
+            <option value="{{ position }}" {{ 'selected' if employee and employee.job_position==position else '' }}>
+                {{ position }}
+            </option>
+            {% endfor %}
+        </select>
+
+    </div>
+    <div class="form-group">
+        <label for="start_date" class="form-label">Fecha de Ingreso</label>
+        <input class="form-control" type="date" name="start_date" id="start_date" 
+               value="{{ request.args.get('start_date') }}">
+    </div>
+    <div class="form-group">
+        <label for="min_seniority" class="form-label">Antigüedad Mínima (Años)</label>
+        <input class="form-control" type="number" name="min_seniority" id="min_seniority" 
+               value="{{ request.args.get('min_seniority') }}">
+    </div>
+    <div class="form-group">
+        <label for="max_seniority" class="form-label">Antigüedad Máxima (Años)</label>
+        <input class="form-control" type="number" name="max_seniority" id="max_seniority" 
+               value="{{ request.args.get('max_seniority') }}">
+    </div>
+{% endblock %}
+
+{% set sorting_criteria = [("name", "Nombre"), ("job_position", "Cargo"), 
+                           ("start_date", "Fecha de Ingreso"), ("seniority", "Antigüedad (Años)")] %}
+{% set sortable_fields = ["name", "job_position", "start_date", "seniority"] %}
+
+{% block table_rows %}
+    {% for employee in employees %}
+    <tr>
+        <td>{{ employee.name }} {{ employee.surname }}</td>
+        <td>{{ employee.job_position }}</td>
+        <td>{{ employee.start_date.strftime('%d/%m/%Y') }}</td>
+        <td>{{ (now - employee.start_date).days // 365 }} años</td>
+    </tr>
+    {% else %}
+    <tr>
+        <td colspan="4" class="text-center">No se encontraron resultados</td>
+    </tr>
+    {% endfor %}
+{% endblock %}
+
+{% block pagination %}
+    <div class="pagination-container">
+        <ul class="pagination">
+            {% if employees.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('report.employee_seniority', page=employees.prev_num, sort_by=sort_by, direction=direction) }}">&laquo;</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">&laquo;</span>
+                </li>
+            {% endif %}
+
+            {% for page_num in employees.iter_pages() %}
+                {% if page_num %}
+                    <li class="page-item {% if page_num == employees.page %}active{% endif %}">
+                        <a class="page-link" href="{{ url_for('report.employee_seniority', page=page_num, sort_by=sort_by, direction=direction) }}">{{ page_num }}</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if employees.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('report.employee_seniority', page=employees.next_num, sort_by=sort_by, direction=direction) }}"> &raquo;</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link"> &raquo;</span>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+{% endblock %}

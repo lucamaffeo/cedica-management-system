@@ -26,9 +26,12 @@
     <p><strong>Tipo de Discapacidad:</strong> {% if rider.disability_type != 'None' %} {{ rider.disability_type }} {% else %} N/A {% endif %}</p>
     <p><strong>¿Percibe alguna asignación familiar?</strong> {% if rider.family_assignment == True %} Si {% else %} No {% endif %}</p>
     {% if rider.family_assignment == True %}
-        {% for asignacion in rider.assignments %}
-            <li>{{ asignacion.name }}</li>
-        {% endfor %}
+        <p><strong>Asignaciones:</strong></p>
+        <ul>
+            {% for assignment in rider.assignments %}
+                <li>{{ assignment.name }}</li>
+            {% endfor %}
+        </ul>
     {% endif %}
     <br>
     <p><strong>Pensión:</strong> {% if rider.pension %} {{ rider.pension }} {% else %} Ninguna {% endif %}</p>
@@ -46,20 +49,24 @@
     <p><strong>Teléfono de la Institución:</strong> {{ rider.institution_phone }}</p>
     <p><strong>Observaciones:</strong> {{ rider.institution_observations }}</p>
 
-    <h2>DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s</h2>
+    <h2>DATOS PERSONALES DE FAMILIAR/ES O TUTOR/ES RESPONSABLE/S</h2>
+    {% if tutors_with_relationship %}
     {% for tutor, relationship in tutors_with_relationship %}
-        <h3>Familiar o tutor responsable</h3>
-        <p><strong>Nombre:</strong> {{ tutor.name }}</p>
-        <p><strong>Apellido:</strong> {{ tutor.surname }}</p>
-        <p><strong>DNI:</strong> {{ tutor.dni }}</p>
-        <p><strong>Parentesco:</strong> {{ relationship }}</p>
-        <p><strong>Domicilio:</strong> {{ tutor.address }}</p>
-        <p><strong>Telefono:</strong> {{ tutor.cellphone }}</p>
-        <p><strong>Email:</strong> {{ tutor.email }}</p>
-        <p><strong>Nivel de escolaridad:</strong> {{ tutor.educational_level }}</p>
-        <p><strong>Actividad u ocupación:</strong> {{ tutor.occupation }}</p>
-        <br>
+    <h3>Familiar o tutor responsable</h3>
+    <p><strong>Nombre:</strong> {{ tutor.name }}</p>
+    <p><strong>Apellido:</strong> {{ tutor.surname }}</p>
+    <p><strong>DNI:</strong> {{ tutor.dni }}</p>
+    <p><strong>Parentesco:</strong> {{ relationship }}</p>
+    <p><strong>Domicilio:</strong> {{ tutor.address }}</p>
+    <p><strong>Teléfono:</strong> {{ tutor.cellphone }}</p>
+    <p><strong>Email:</strong> {{ tutor.email }}</p>
+    <p><strong>Nivel de escolaridad:</strong> {{ tutor.educational_level }}</p>
+    <p><strong>Actividad u ocupación:</strong> {{ tutor.occupation }}</p>
+    <br>
     {% endfor %}
+    {% else %}
+    <p>No se encontraron tutores asociados.</p>
+    {% endif %}
 
     <h2>TRABAJO EN NUESTRA INSTITUCIÓN</h2>
     <p><strong>Propuesta de Trabajo:</strong> {{ rider.work_proposal }}</p>

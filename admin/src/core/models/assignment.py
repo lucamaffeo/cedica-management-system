@@ -1,5 +1,6 @@
 from src.core.database import db
 
+
 class Assignment(db.Model):
     __tablename__ = 'assignments'
     id = db.Column(db.Integer, primary_key=True)

@@ -2,8 +2,10 @@ import decimal
 from typing import Optional, Any
 from src.core.validation.validator import ValidationRule
 
+
 class ValidAmount(ValidationRule):
     """Validates that an amount is a positive number with max 2 decimal places"""
+
     def validate(self, value: Any) -> Optional[str]:
         if not value:
             return None  # Let Required rule handle empty values
@@ -26,8 +28,10 @@ class ValidAmount(ValidationRule):
 
         return None
 
+
 class ValidPaymentType(ValidationRule):
     """Validates that payment type is one of the allowed values"""
+
     def validate(self, value: Any) -> Optional[str]:
         valid_types = ['Honorarios', 'Proveedor', 'Gastos varios']
         if value not in valid_types:

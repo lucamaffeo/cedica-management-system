@@ -6,16 +6,12 @@ import { storeToRefs } from 'pinia';
 import { RecaptchaV2 } from "vue3-recaptcha-v2";
 
 const handleWidgetId = (widgetId) => {
-  console.log("Widget ID: ", widgetId);
 };
 const handleErrorCallback = () => {
-  console.log("Error callback");
 };
 const handleExpiredCallback = () => {
-  console.log("Expired callback");
 };
 const handleLoadCallback = (response) => {
-  console.log("Load callback", response);
 };
 
 // Variables

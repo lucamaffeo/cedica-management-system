@@ -8,8 +8,10 @@ from src.core.models.document import Document
 from flask import current_app
 import uuid
 
+
 class StorageError(Exception):
     pass
+
 
 def _get_storage_client() -> Minio:
     """
@@ -32,7 +34,8 @@ def _get_storage_client() -> Minio:
     if not client:
         raise StorageError("Minio client not initialized")
 
-    return client 
+    return client
+
 
 def _upload_file(file: BinaryIO, file_path: str) -> str:
     """
@@ -70,6 +73,7 @@ def _upload_file(file: BinaryIO, file_path: str) -> str:
     except Exception as e:
         raise StorageError(f"Failed to upload file: {str(e)}")
 
+
 def download_file(file_path: str) -> tuple:
     """
     Downloads a file from Minio storage.
@@ -89,8 +93,9 @@ def download_file(file_path: str) -> tuple:
     except Exception as e:
         raise StorageError(f"Failed to download file: {str(e)}")
 
+
 def list_documents_by_id(type, id, search='', sort_by='title', direction='asc', page=1):
-    query =Document.query.filter_by(entity_type=type, entity_id=id)
+    query = Document.query.filter_by(entity_type=type, entity_id=id)
 
     if search:
         query = query.filter(
@@ -110,12 +115,13 @@ def list_documents_by_id(type, id, search='', sort_by='title', direction='asc', 
         else:
             query = query.order_by(getattr(Document, sort_by).desc())
 
-
-    pagination_documents = query.paginate(page=page, per_page=items_per_page, error_out=False)
+    pagination_documents = query.paginate(
+        page=page, per_page=items_per_page, error_out=False)
 
     return pagination_documents
 
-def create_document(file, entity_type, entity_id,document_type, **kwargs):
+
+def create_document(title, file, entity_type, entity_id, document_type):
     """
     Creates a document and stores it in Minio with a path structure: {module}/{entity_id}/{filename}
     Args:
@@ -124,64 +130,55 @@ def create_document(file, entity_type, entity_id,document_type, **kwargs):
         entity_id: the ID of the entity (e.g. employee_id, rider_id, horse_id)
     """
     try:
-        # Generar un UUID
-        unique_id = str(uuid.uuid4())
+        if not (isinstance(file, str) and file.startswith("http")):
+            # Generar un UUID
+            unique_id = str(uuid.uuid4())
 
-        # Crear un hash SHA-1 y tomar solo los primeros 8 caracteres
-        short_uid = hashlib.sha1(unique_id.encode()).hexdigest()[:8]
+            # Crear un hash SHA-1 y tomar solo los primeros 8 caracteres
+            short_uid = hashlib.sha1(unique_id.encode()).hexdigest()[:8]
 
-        # Generar el nombre del archivo con el hash corto y el nombre original
-        file_name = f"{short_uid}-{file.filename}"
+            # Generar el nombre del archivo con el hash corto y el nombre original
+            file_name = f"{short_uid}-{file.filename}"
 
-        # Construct the Minio path as {module}/{id}/{filename}
-        file_path = f"{entity_type}/{entity_id}/{document_type}/{file_name}"
-        # upload file
-        _upload_file(file, file_path)
+            # Construct the Minio path as {module}/{id}/{filename}
+            file_path = f"{entity_type}/{entity_id}/{document_type}/{file_name}"
+            # upload file
+            _upload_file(file, file_path)
 
-        # Add the file path to kwargs to store in the database
-        kwargs['file'] = file_path
-        kwargs['entity_type'] = entity_type
-        kwargs['entity_id'] = entity_id
-        kwargs['document_type'] = document_type
+            file = file_path
 
         # Create the document in the database
-        document = Document(**kwargs)
+        document = Document(title=title, file=file, entity_type=entity_type,
+                            entity_id=entity_id, document_type=document_type)
         db.session.add(document)
         db.session.commit()
-
         return document
 
     except Exception as e:
         db.session.rollback()
         raise StorageError(f"Failed to create document: {str(e)}")
 
+
 def get_document(id):
     document = Document.query.filter(Document.id == id).first()
     return document
 
+
 def delete_document(id):
     document = Document.query.filter(Document.id == id).first()
     if not document:
-        raise StorageError("Document not found")
+        return False
 
-    # Eliminar el archivo de Minio
-    storage_client = _get_storage_client()
-    bucket_name = "grupo10"
-    try:
-        storage_client.remove_object(bucket_name, document.file)
-    except Exception as e:
-        raise StorageError(f"Failed to delete file from Minio: {str(e)}")
+    if not (isinstance(document.file, str) and document.file.startswith("http")):
+        # Eliminar el archivo de Minio
+        storage_client = _get_storage_client()
+        bucket_name = "grupo10"
+        try:
+            storage_client.remove_object(bucket_name, document.file)
+        except Exception as e:
+            raise StorageError(f"Failed to delete file from Minio: {str(e)}")
 
     # Eliminar el documento de la base de datos
     db.session.delete(document)
     db.session.commit()
-
-def update_document(id, **kwargs):
-    document = Document.query.filter(Document.id == id).first()
-    if not document:
-        return None
-    for key, value in kwargs.items():
-        setattr(document, key, value)
-    db.session.commit()
-    return document
-
+    return True

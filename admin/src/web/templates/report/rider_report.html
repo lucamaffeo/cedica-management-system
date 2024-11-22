@@ -1,0 +1,84 @@
+{% extends "base_index2.html" %}
+
+{% block title %}
+    Reporte de Jinetes y Amazonas
+{% endblock %}
+
+{% block page_title %}
+    Jinetes y Amazonas por Edad
+{% endblock %}
+
+{% set show_search=true %}
+
+{% block filters %}
+    <div class="form-group">
+        <label for="name" class="form-label">Nombre</label>
+        <input class="form-control" type="text" name="name" id="name" value="{{ request.args.get('name', '') }}">
+    </div>
+    <div class="form-group">
+        <label for="surname" class="form-label">Apellido</label>
+        <input class="form-control" type="text" name="surname" id="surname" value="{{ request.args.get('surname', '') }}">
+    </div>
+    <div class="form-group">
+        <label for="dni" class="form-label">DNI</label>
+        <input class="form-control" type="text" name="dni" id="dni" value="{{ request.args.get('dni', '') }}">
+    </div>
+    <div class="form-group">
+        <label for="min_age" class="form-label">Edad Mínima</label>
+        <input class="form-control" type="number" name="min_age" id="min_age" value="{{ request.args.get('min_age') }}">
+    </div>
+    <div class="form-group">
+        <label for="max_age" class="form-label">Edad Máxima</label>
+        <input class="form-control" type="number" name="max_age" id="max_age" value="{{ request.args.get('max_age') }}">
+    </div>
+{% endblock %}
+
+{% set sorting_criteria = [("name", "Nombre"), ("surname", "Apellido"), ("dni", "DNI"), ("age", "Edad")] %}
+{% set sortable_fields = ["name", "surname", "dni", "age"] %}
+
+{% block table_rows %}
+    {% for rider in riders %}
+    <tr>
+        <td>{{ rider.name}}</td>
+        <td>{{ rider.surname}}</td>
+        <td>{{ rider.dni }}</td>
+        <td>{{ rider.age }}</td>
+    </tr>
+    {% endfor %}
+{% endblock %}
+
+{% block pagination %}
+    <div class="pagination-container">
+        <ul class="pagination">
+            {% if pagination.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('report.riders_by_age', page=pagination.prev_num, sort_by=sort_by, direction=direction) }}">&laquo;</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">&laquo;</span>
+                </li>
+            {% endif %}
+
+            {% for page_num in pagination.iter_pages() %}
+                {% if page_num %}
+                    <li class="page-item {% if page_num == pagination.page %}active{% endif %}">
+                        <a class="page-link" href="{{ url_for('report.riders_by_age', page=page_num, sort_by=sort_by, direction=direction) }}">{{ page_num }}</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if pagination.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('report.riders_by_age', page=pagination.next_num, sort_by=sort_by, direction=direction) }}"> &raquo;</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link"> &raquo;</span>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+{% endblock %}

@@ -6,6 +6,7 @@ from src.web.helpers.auth import has_permission
 
 bp = Blueprint("contacts", __name__, url_prefix="/contacts")
 
+
 @bp.post("/create")
 @has_permission("contact_create")
 def store():
@@ -26,6 +27,7 @@ def store():
     flash("Contacto creado con éxito.", "success")
     return redirect(url_for("contacts.index"))
 
+
 @bp.get("/<int:id>/update")
 @has_permission("contact_update")
 def edit(id):
@@ -34,6 +36,7 @@ def edit(id):
         flash("Contacto no encontrado.", "error")
         return redirect(url_for("contacts.index"))
     return render_template("contacts/form.html", is_update=True, title='Actualizar Contacto', contact=contact, statuses=contact_repo.list_statuses())
+
 
 @bp.route("/<int:id>/update", methods=["POST", "PATCH"])
 @has_permission("contact_update")
@@ -62,6 +65,7 @@ def update(id):
         flash("Contacto no encontrado o estado invalido.", "error")
         return redirect(url_for("contacts.index"))
 
+
 @bp.get("/<int:id>/show")
 @has_permission("contact_show")
 def show(id):
@@ -70,6 +74,7 @@ def show(id):
         flash("Contacto no encontrado.", "error")
         return redirect(url_for("contacts.index"))
     return render_template("contacts/show.html", contact=contact)
+
 
 @bp.get("/<int:id>/delete")
 @has_permission("contact_destroy")
@@ -80,6 +85,7 @@ def delete(id):
     else:
         flash("Contacto no encontrado.", "error")
         return redirect(url_for("contacts.index"))
+
 
 @bp.get("/")
 @has_permission("contact_index")

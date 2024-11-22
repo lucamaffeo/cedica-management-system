@@ -1,5 +1,6 @@
 from minio import Minio
 
+
 class Storage:
     def __init__(self, app=None):
         self._client = None
@@ -15,7 +16,8 @@ class Storage:
         if not all([minio_server, access_key, secret_key]):
             raise ValueError('Minio configuration missing.')
 
-        self._client = Minio(minio_server, access_key=access_key, secret_key=secret_key, secure=secure)
+        self._client = Minio(minio_server, access_key=access_key,
+                             secret_key=secret_key, secure=secure)
 
         app.storage = self
 
@@ -33,5 +35,6 @@ class Storage:
         if not self._client:
             raise ValueError("Minio client not initialized")
         self._client.remove_object(bucket_name, file_path)
+
 
 storage = Storage()

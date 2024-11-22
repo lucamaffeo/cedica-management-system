@@ -1,6 +1,7 @@
 import re
 from ..validator import ValidationRule
 
+
 class OnlyLetters(ValidationRule):
     def validate(self, value: str) -> str | None:
         if not value:

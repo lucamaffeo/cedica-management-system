@@ -71,16 +71,11 @@
 <br>
 
 <label class="form-label" for="assignments">Asignaciones:</label>
-{% set assignments = [
-('assignment_universal', 'Asignación Universal por hijo'),
-('assignment_disability', 'Asignación Universal por hijo con Discapacidad'),
-('assignment_school', 'Asignación por ayuda escolar anual')
-] %}
-{% for id, label in assignments %}
+{% for assignment in assignments %}
 <div class="form-check">
-  <input class="form-check-input" type="checkbox" id="{{ id }}" name="assignments" value="{{ label }}" {% if rider and has_assignment(rider, label) %}checked{% endif %}>
-  <label class="form-check-label" for="{{ id }}">
-	{{ label }}
+  <input class="form-check-input" type="checkbox" id="assignment_{{ assignment.id }}" name="assignments" value="{{ assignment.id }}" {% if rider and assignment in rider.assignments %}checked{% endif %}>
+  <label class="form-check-label" for="assignment_{{ assignment.id }}">
+    {{ assignment.name }}
   </label>
 </div>
 {% endfor %}
@@ -94,68 +89,109 @@
 
 <h2>SITUACIÓN PREVISIONAL</h2>
 <label class="form-label" for="health_insurance">Obra Social del Alumno:</label>
-<input type="text" id="health_insurance" name="health_insurance" class="form-control" value="{{ rider.health_insurance if rider else '' }}">
+<input type="text" id="health_insurance" name="health_insurance" class="form-control" value="{{ rider.health_insurance if rider else '' }}" required>
 
 <label class="form-label" for="affiliate_number">Nº afiliado:</label>
-<input type="text" id="affiliate_number" name="affiliate_number" class="form-control" value="{{ rider.affiliate_number if rider else '' }}">
+<input type="text" id="affiliate_number" name="affiliate_number" class="form-control" value="{{ rider.affiliate_number if rider else '' }}" required>
 
 <label class="form-label" for="guardianship">¿Posee curatela? (<strong>Si/No</strong>):</label>
 <input type="checkbox" id="guardianship" name="guardianship" class="form-check-input" {% if rider and rider.guardianship %}checked{% endif %}>
 <br>
 
 <label class="form-label" for="school_institution">INSTITUCIÓN ESCOLAR A LA QUE CONCURRE ACTUALMENTE:</label>
-<input type="text" id="school_institution" name="school_institution" class="form-control" value="{{ rider.school_institution if rider else '' }}">
+<input type="text" id="school_institution" name="school_institution" class="form-control" value="{{ rider.school_institution if rider else '' }}" required>
 
 <label class="form-label" for="institution_address">Dirección:</label>
-<input type="text" id="institution_address" name="institution_address" class="form-control" value="{{ rider.institution_address if rider else '' }}">
+<input type="text" id="institution_address" name="institution_address" class="form-control" value="{{ rider.institution_address if rider else '' }}" required>
 
 <label class="form-label" for="institution_phone">Teléfono:</label>
-<input type="tel" id="institution_phone" name="institution_phone" class="form-control" value="{{ rider.institution_phone if rider else '' }}">
+<input type="tel" id="institution_phone" name="institution_phone" class="form-control" value="{{ rider.institution_phone if rider else '' }}" required>
 
 <label class="form-label" for="grade">Grado / año actual:</label>
-<input type="text" id="grade" name="grade" class="form-control" value="{{ rider.grade if rider else '' }}">
+<input type="text" id="grade" name="grade" class="form-control" value="{{ rider.grade if rider else '' }}" required>
 
 <label class="form-label" for="institution_observations">Observaciones de la institución:</label>
 <textarea id="institution_observations" name="institution_observations" class="form-control">{{ rider.institution_observations if rider else '' }}</textarea>
 
 <h3>PROFESIONALES que lo ATIENDEN</h3>
-<input type="text" id="professionals" name="professionals" class="form-control" value="{{ rider.professionals if rider else '' }}">
+<input type="text" id="professionals" name="professionals" class="form-control" value="{{ rider.professionals if rider else '' }}" required>
 
-<h2>DATOS PERSONALES De FAMILIAR/es O TUTOR/es RESPONSABLE/s</h2>
-{% for i in range(2) %}
-<h3>Familiar o Tutor responsable {{ i + 1 }}</h3>
-<label class="form-label" for="tutor_relationship_{{ i }}">Parentesco:</label>
-<input type="text" id="tutor_relationship_{{ i }}" name="tutor_relationship_{{ i }}" class="form-control" value="{{ tutors[i][0].relationship if tutors and i < tutor_cant else '' }}">
+<h2>Datos Personales de Familiar/es o Tutor/es Responsable/s</h2>
 
-<label class="form-label" for="tutor_name_{{ i }}">Nombre:</label>
-<input type="text" id="tutor_name_{{ i }}" name="tutor_name_{{ i }}" class="form-control" value="{{ tutors[i][0].name if tutors and i < tutor_cant else '' }}">
+<div id="tutors-container">
+  {% for i in range(2) %}
+  
+  <div class="tutor" id="tutor-{{ i }}" style="display: {{ 'block' if tutors|length > i else 'none' }};">
+    <h3>Familiar o Tutor Responsable {{ i + 1 }}</h3>
+    
+  
+    <label for="tutor_relationship_{{ i }}">Parentesco:</label>
+    <input type="text" id="tutor_relationship_{{ i }}" name="tutors[{{ i }}][relationship]" class="form-control"
+      value="{{ tutors[i].relationship if tutors|length > i else '' }}">
 
-<label class="form-label" for="tutor_surname_{{ i }}">Apellido:</label>
-<input type="text" id="tutor_surname_{{ i }}" name="tutor_surname_{{ i }}" class="form-control" value="{{ tutors[i][0].surname if tutors and i < tutor_cant else '' }}">
+    <label for="tutor_name_{{ i }}">Nombre:</label>
+    <input type="text" id="tutor_name_{{ i }}" name="tutors[{{ i }}][name]" class="form-control"
+      value="{{ tutors[i][0].name if tutors|length > i else '' }}">
 
-<label class="form-label" for="tutor_dni_{{ i }}">DNI:</label>
-<input type="text" id="tutor_dni_{{ i }}" name="tutor_dni_{{ i }}" class="form-control" value="{{ tutors[i][0].dni if tutors and i < tutor_cant else '' }}">
+    <label for="tutor_surname_{{ i }}">Apellido:</label>
+    <input type="text" id="tutor_surname_{{ i }}" name="tutors[{{ i }}][surname]" class="form-control"
+      value="{{ tutors[i][0].surname if tutors|length > i else '' }}">
 
-<label class="form-label" for="tutor_address_{{ i }}">Domicilio actual (calle, nº, piso, depto., localidad, provincia):</label>
-<input type="text" id="tutor_address_{{ i }}" name="tutor_address_{{ i }}" class="form-control" value="{{ tutors[i][0].address if tutors and i < tutor_cant else '' }}">
+    <label for="tutor_dni_{{ i }}">DNI:</label>
+    <input type="text" id="tutor_dni_{{ i }}" name="tutors[{{ i }}][dni]" class="form-control"
+      value="{{ tutors[i][0].dni if tutors|length > i else '' }}">
 
-<label class="form-label" for="tutor_cellphone_{{ i }}">Celular actual:</label>
-<input type="tel" id="tutor_cellphone_{{ i }}" name="tutor_cellphone_{{ i }}" class="form-control" value="{{ tutors[i][0].cellphone if tutors and i < tutor_cant else '' }}">
+    <label for="tutor_address_{{ i }}">Domicilio actual:</label>
+    <input type="text" id="tutor_address_{{ i }}" name="tutors[{{ i }}][address]" class="form-control"
+      value="{{ tutors[i][0].address if tutors|length > i else '' }}">
 
-<label class="form-label" for="tutor_email_{{ i }}">Email:</label>
-<input type="email" id="tutor_email_{{ i }}" name="tutor_email_{{ i }}" class="form-control" value="{{ tutors[i][0].email if tutors and i < tutor_cant else '' }}">
+    <label for="tutor_cellphone_{{ i }}">Celular actual:</label>
+    <input type="tel" id="tutor_cellphone_{{ i }}" name="tutors[{{ i }}][cellphone]" class="form-control"
+      value="{{ tutors[i][0].cellphone if tutors|length > i else '' }}">
 
-<label class="form-label" for="tutor_educational_level_{{ i }}">Nivel de escolaridad:</label>
-<select id="tutor_educational_level_{{ i }}" name="tutor_educational_level_{{ i }}" class="form-control">
-  {% set education_levels = ['Primario', 'Secundario', 'Terciario', 'Universitario'] %}
-  {% for level in education_levels %}
-  <option value="{{ level }}" {% if tutors and i < tutor_cant and tutors[i][0].educational_level == level %}selected{% endif %}>{{ level }}</option>
+    <label for="tutor_email_{{ i }}">Email:</label>
+    <input type="email" id="tutor_email_{{ i }}" name="tutors[{{ i }}][email]" class="form-control"
+      value="{{ tutors[i][0].email if tutors|length > i else '' }}">
+
+    
+    <label for="tutor_educational_level_{{ i }}">Nivel de escolaridad:</label>
+    <select id="tutor_educational_level_{{ i }}" name="tutors[{{ i }}][educational_level]" class="form-control">
+      <option value="Primario" {{ 'selected' if tutors|length> i and tutors[i][0].educational_level == 'Primario' else ''
+        }}>Primario</option>
+      <option value="Secundario" {{ 'selected' if tutors|length> i and tutors[i][0].educational_level == 'Secundario' else
+        '' }}>Secundario</option>
+      <option value="Terciario" {{ 'selected' if tutors|length> i and tutors[i][0].educational_level == 'Terciario' else ''
+        }}>Terciario</option>
+      <option value="Universitario" {{ 'selected' if tutors|length> i and tutors[i][0].educational_level == 'Universitario'
+        else '' }}>Universitario</option>
+    </select>
+
+    <label for="tutor_occupation_{{ i }}">Actividad u ocupación:</label>
+    <input type="text" id="tutor_occupation_{{ i }}" name="tutors[{{ i }}][occupation]" class="form-control"
+      value="{{ tutors[i][0].occupation if tutors|length > i else '' }}">
+  </div>
   {% endfor %}
-</select>
+</div>
 
-<label class="form-label" for="tutor_occupation_{{ i }}">Actividad u ocupación:</label>
-<input type="text" id="tutor_occupation_{{ i }}" name="tutor_occupation_{{ i }}" class="form-control" value="{{ tutors[i][0].occupation if tutors and i < tutor_cant else '' }}">
-{% endfor %}
+<button type="button" id="add-tutor-btn" class="btn btn-primary">Agregar Tutor</button>
+
+<script>
+  document.getElementById('add-tutor-btn').addEventListener('click', function() {
+    var tutor2 = document.getElementById('tutor-1');
+    if (tutor2.style.display === 'none') {
+      tutor2.style.display = 'block';
+    }
+  });
+
+  var tutor2Fields = document.querySelectorAll('#tutor-1 input, #tutor-1 select');
+  tutor2Fields.forEach(function(field) {
+    field.addEventListener('input', function() {
+      tutor2Fields.forEach(function(f) {
+        f.required = true;
+      });
+    });
+  });
+</script>
 
 <h2>TRABAJO EN NUESTRA INSTITUCIÓN</h2>
 {% set select_fields = [
@@ -176,8 +212,9 @@
 <label class="form-label" for="days">DÍA:</label>
 {% for day in all_days %}
 <div class="form-check">
-  <input class="form-check-input" type="checkbox" id="{{ day.id }}" name="days" value="{{ day.id }}" {% if rider and day in rider.days %}checked{% endif %}>
-  <label class="form-check-label" for="{{ day.id }}">
+<input class="form-check-input" type="checkbox" id="{{ day.id }}" name="days" value="{{ day.id }}" {% if rider and day
+  in rider.days %}checked{% endif %}>
+    <label class="form-check-label" for="{{ day.id }}">
 	{{ day.name }}
   </label>
 </div>

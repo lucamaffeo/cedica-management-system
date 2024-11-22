@@ -1,12 +1,13 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from src.core.models.employee import Employee
 from src.core.repositories import payment
-from src.core.repositories import employee 
+from src.core.repositories import employee
 from src.core.validation.models.payment import PaymentValidator
 from src.web.helpers.auth import has_permission
 from src.web.helpers.flash import flash_validation_errors
 
 bp = Blueprint("payments", __name__, url_prefix="/payments")
+
 
 @bp.get("/")
 @has_permission("payment_index")
@@ -19,7 +20,8 @@ def index():
     direction = request.args.get('direction', 'asc')
     page = request.args.get('page', 1, type=int)
 
-    payments = payment.list_payments(start_date, end_date, payment_type, sort_by, direction, page)
+    payments = payment.list_payments(
+        start_date, end_date, payment_type, sort_by, direction, page)
 
     beneficiaries = Employee.query.all()
 
@@ -27,12 +29,14 @@ def index():
 
     return render_template("payments/index.html", pagination=payments, beneficiaries=beneficiaries, payment_types=payment_types)
 
+
 @bp.get("/create")
 @has_permission("payment_create")
 def register():
     employees = Employee.query.all()
     payment_types = payment.get_payment_types()
-    return render_template("payments/form.html", is_update=False, title="Registrar Pago",employees=employees, payment_types=payment_types)
+    return render_template("payments/form.html", is_update=False, title="Registrar Pago", employees=employees, payment_types=payment_types)
+
 
 @bp.post("/create")
 @has_permission("payment_create")
@@ -55,6 +59,7 @@ def create():
 
     return redirect(url_for('payments.index'))
 
+
 @bp.get("/<int:id>/show")
 @has_permission("payment_show")
 def show(id):
@@ -63,6 +68,7 @@ def show(id):
         flash("Pago no encontrado.", "error")
         return redirect(url_for("payments.index"))
     return render_template("payments/show.html", payment=p)
+
 
 @bp.get("/<int:id>/update")
 @has_permission("payment_update")
@@ -75,6 +81,7 @@ def edit(id):
     payment_types = payment.get_payment_types()
 
     return render_template("payments/form.html", is_update=True, title="Actualizar Pago", payment=p, employees=employees, payment_types=payment_types)
+
 
 @bp.route("/<int:id>/update", methods=["POST", "PATCH"])
 @has_permission("payment_update")
@@ -96,6 +103,7 @@ def update(id):
         return redirect(url_for("payments.edit", id=id))
 
     return redirect(url_for("payments.index"))
+
 
 @bp.get("/<int:id>/delete")
 @has_permission("payment_destroy")

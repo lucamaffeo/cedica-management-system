@@ -8,12 +8,16 @@ from src.web.helpers.flash import flash_validation_errors
 bp = Blueprint("users", __name__, url_prefix="/users")
 
 # Register
+
+
 @bp.get("/create")
 @has_permission("user_create")
 def register():
     return render_template("users/form.html", is_update=False, title='Crear Usuario', roles=role.list_roles())
 
 # Create user
+
+
 @bp.post("/create")
 @has_permission("user_create")
 def create():
@@ -36,6 +40,8 @@ def create():
     return redirect(url_for("users.index"))
 
 # Edit user
+
+
 @bp.get("/<int:id>/update")
 @has_permission("user_update")
 def edit(id):
@@ -45,6 +51,7 @@ def edit(id):
         return redirect(url_for("users.index"))
     return render_template("users/form.html", is_update=True, title='Actualizar Usuario', user=user, roles=role.list_roles())
 
+
 @bp.route("/<int:id>/update", methods=["POST", "PATCH"])
 def update(id):
     # Check if the current user has permission to update another user's profile
@@ -53,7 +60,6 @@ def update(id):
     if not is_update_own:
         has_permission("user_update")(lambda: None)()
 
-
     data = request.form.to_dict()
 
     # Validate password match if being updated
@@ -61,7 +67,8 @@ def update(id):
         if data.get("password") != data.get("new_password"):
             flash("Las contraseñas no coinciden.", "error")
             return redirect(url_for("users.update", id=id))
-        data['password'] = data.get("password")  # Use single password field for validator
+        # Use single password field for validator
+        data['password'] = data.get("password")
 
     # Initialize validator with appropriate settings
     validator = UserValidator(
@@ -94,6 +101,8 @@ def update(id):
         return redirect(url_for("users.index"))
 
 # Edit own profile
+
+
 @bp.get("/profile/update")
 def edit_profile():
     id = session["user_id"]
@@ -103,6 +112,7 @@ def edit_profile():
         return redirect(url_for("home"))
     return render_template("users/form.html", is_update_own=True, title='Actualizar Perfil', user=user)
 
+
 @bp.post("/profile/update")
 def update_profile():
     id = session["user_id"]
@@ -110,6 +120,8 @@ def update_profile():
     return redirect(url_for("users.profile"))
 
 # Show user
+
+
 @bp.get("/<int:id>/show")
 @has_permission("user_show")
 def show(id):
@@ -120,6 +132,8 @@ def show(id):
     return render_template("users/show.html", user=user)
 
 # Show profile
+
+
 @bp.get("/profile")
 def profile():
     user = auth.get_user(session["user_id"])
@@ -141,6 +155,8 @@ def delete(id):
         return redirect(url_for("users.index"))
 
 # List users
+
+
 @bp.get("/")
 @has_permission("user_index")
 def index():
@@ -151,9 +167,9 @@ def index():
     active = request.args.get('active', None)
     page = request.args.get('page', 1, type=int)
 
-    users = auth.list_users(search, role_filter, sort_by, direction, active, page)
+    users = auth.list_users(search, role_filter,
+                            sort_by, direction, active, page)
 
     if not users.items:
         flash("No se encontraron usuarios.", "info")
     return render_template("users/index.html", pagination=users, roles=role.list_roles())
-

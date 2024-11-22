@@ -3,6 +3,7 @@ from src.core.repositories import contact as contact_repo
 from ..validator import MinLength, MaxLength, ValidationError, ValidationRule, Validator, Required
 from src.core.validation.rules.email import EmailFormat
 
+
 class StatusTransitionRule(ValidationRule):
     def __init__(self, contact_id: int):
         self.contact_id = contact_id
@@ -44,7 +45,6 @@ class ContactValidator(Validator):
         """
         super().__init__()
         self.contact_id = contact_id
-
 
     def validate_for_create(self, data: dict) -> list[ValidationError]:
         """

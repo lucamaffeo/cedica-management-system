@@ -4,6 +4,7 @@ from src.core.repositories import user as user_repo, role as role_repo
 from ..validator import MinLength, MaxLength, ValidationError, ValidationRule, Validator, Required
 from src.core.validation.rules.email import EmailFormat
 
+
 class PasswordStrength(ValidationRule):
     def __init__(self, min_length: int = 8):
         self.min_length = min_length
@@ -14,15 +15,19 @@ class PasswordStrength(ValidationRule):
 
         errors = []
         if len(value) < self.min_length:
-            errors.append(f"La contraseña debe tener al menos {self.min_length} caracteres")
+            errors.append(
+                f"La contraseña debe tener al menos {self.min_length} caracteres")
         if not any(c.isupper() for c in value):
-            errors.append("La contraseña debe contener al menos una letra mayúscula")
+            errors.append(
+                "La contraseña debe contener al menos una letra mayúscula")
         if not any(c.islower() for c in value):
-            errors.append("La contraseña debe contener al menos una letra minúscula")
+            errors.append(
+                "La contraseña debe contener al menos una letra minúscula")
         if not any(c.isdigit() for c in value):
             errors.append("La contraseña debe contener al menos un número")
 
         return ", ".join(errors) if errors else None
+
 
 class UniqueEmail(ValidationRule):
     def __init__(self, user_model, exclude_id: int = None):
@@ -41,6 +46,7 @@ class UniqueEmail(ValidationRule):
         if user:
             return "Este correo electrónico ya está registrado"
         return None
+
 
 class ValidRole(ValidationRule):
     def __init__(self, role_model):

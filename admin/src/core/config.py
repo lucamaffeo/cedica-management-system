@@ -1,5 +1,6 @@
 from os import environ, path
 
+
 class Config(object):
     """ Base configuration. """
     SECRET_KEY = environ.get("SECRET_KEY", "my_precious")
@@ -7,7 +8,8 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Google
-    GOOGLE_CLIENT_SECRETS_FILE = path.join(path.dirname(__file__), 'client_secrets.json')
+    GOOGLE_CLIENT_SECRETS_FILE = path.join(
+        path.dirname(__file__), 'client_secrets.json')
     GOOGLE_OAUTH_SCOPES = [
         'https://www.googleapis.com/auth/userinfo.email',
         'https://www.googleapis.com/auth/userinfo.profile',
@@ -17,8 +19,9 @@ class Config(object):
     SESSION_COOKIE_SECURE = True
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = "Lax"
-    PERMANENT_SESSION_LIFETIME = 3600 # 1 hour
+    PERMANENT_SESSION_LIFETIME = 3600  # 1 hour
     ITEMS_PER_PAGE = 5
+
 
 class ProductionConfig(Config):
     MINIO_SERVER = environ.get("MINIO_SERVER")
@@ -40,8 +43,10 @@ class ProductionConfig(Config):
     DB_PASS = environ.get("DATABASE_PASSWORD")
     DB_HOST = environ.get("DATABASE_HOST")
     DB_PORT = environ.get("DATABASE_PORT")
-    GOOGLE_REDIRECT_URI = environ.get("GOOGLE_REDIRECT_URI", "https://admin-grupo10.proyecto2024.linti.unlp.edu.ar/auth/google/callback")
+    GOOGLE_REDIRECT_URI = environ.get(
+        "GOOGLE_REDIRECT_URI", "https://admin-grupo10.proyecto2024.linti.unlp.edu.ar/auth/google/callback")
     DEBUG = False
+
 
 class DevelopmentConfig(Config):
     """ Development environment specific configuration """
@@ -56,17 +61,18 @@ class DevelopmentConfig(Config):
     DB_PORT = "5432"
     DB_NAME = "grupo10"
     SQLALCHEMY_DATABASE_URI = (
-            f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+        f"postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     )
     GOOGLE_REDIRECT_URI = 'https://localhost:5000/auth/google/callback'
     DEBUG = True
+
 
 class TestingConfig(Config):
     TESTING = True
 
 
 config = {
-        "development": DevelopmentConfig,
-        "testing": TestingConfig,
-        "production": ProductionConfig,
-        }
+    "development": DevelopmentConfig,
+    "testing": TestingConfig,
+    "production": ProductionConfig,
+}

@@ -8,6 +8,8 @@ from .riders import bp as riders
 from .horses import bp as horses
 from .receipt import bp as receipt
 from .contents import bp as contents
+from .report import bp as report
+
 
 def register_blueprints(app):
     """Register all blueprints with the Flask app."""
@@ -21,3 +23,4 @@ def register_blueprints(app):
     app.register_blueprint(receipt)
     app.register_blueprint(contacts)
     app.register_blueprint(contents)
+    app.register_blueprint(report)
