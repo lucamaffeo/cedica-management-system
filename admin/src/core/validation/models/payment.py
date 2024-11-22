@@ -2,6 +2,7 @@ from typing import Dict, Any, List
 from src.core.validation.validator import ValidationError, Validator, Required, MaxLength
 from src.core.validation.rules.payment import ValidAmount, ValidPaymentType
 
+
 class PaymentValidator(Validator):
     def __init__(self):
         super().__init__()

@@ -1,5 +1,6 @@
 from src.core.database import db
 
+
 class Day(db.Model):
     __tablename__ = 'days'
     id = db.Column(db.Integer, primary_key=True)

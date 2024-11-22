@@ -1,11 +1,15 @@
 from flask import Blueprint, redirect, render_template, request, url_for, flash, send_file
+from src.core.validation.models.document import DocumentValidator
+from src.web.helpers.flash import flash_validation_errors
 from src.web.helpers.documentation import clean_entity_type
 from src.core.repositories import document as document_repository
 from src.web.helpers.auth import has_permission
 
 bp = Blueprint("documents", __name__, url_prefix="/documents")
 
-#list documents
+# list documents
+
+
 @bp.get("/<string:entity_type>/<int:entity_id>/")
 @clean_entity_type
 def index(entity_type, entity_id):
@@ -15,27 +19,29 @@ def index(entity_type, entity_id):
     page = int(request.args.get("page", 1))
 
     # Listar documentos por ID del jinete
-    documents = document_repository.list_documents_by_id(entity_type, entity_id, search, sort_by, direction, page)
+    documents = document_repository.list_documents_by_id(
+        entity_type, entity_id, search, sort_by, direction, page)
 
     if not documents.items:
         flash("No se encontraron Documentos.", "info")
     return render_template("documents/index.html", pagination=documents, entity_type=entity_type, entity_id=entity_id)
 
 # destroy document
+
+
 @bp.get("/<string:entity_type>/<int:entity_id>/<int:id>/delete")
 @clean_entity_type
 def delete(entity_type, entity_id, id):
-    document = document_repository.get_document(id)
-    if not document:
+    if document_repository.delete_document(id):
+        flash("Documento eliminado con éxito.", "info")
+        return redirect(url_for("documents.index", entity_type=entity_type, entity_id=entity_id))
+    else:
         flash("Documento no encontrado.", "error")
-        # redirect to last page
         return redirect(request.referrer)
 
-    document_repository.delete_document(id)
-    flash("Documento eliminado con éxito.", "info")
-    return redirect(url_for("documents.index", entity_type=document.entity_type, entity_id=document.entity_id))
-
 # download document
+
+
 @bp.get("/<string:entity_type>/<int:entity_id>/<int:id>/dl")
 def download(entity_type, entity_id, id):
     document = document_repository.get_document(id)
@@ -43,34 +49,52 @@ def download(entity_type, entity_id, id):
         flash("Documento no encontrado.", "error")
         return redirect(request.referrer)
     else:
-        file_stream, file_name = document_repository.download_file(document.file)
+        file_stream, file_name = document_repository.download_file(
+            document.file)
         return send_file(file_stream, as_attachment=True, download_name=file_name)
 
 # add document
+
+
 @bp.get("/<string:entity_type>/<int:entity_id>/create")
 @clean_entity_type
 def add(entity_type, entity_id):
-    return render_template("documents/form.html", entity_type=entity_type, entity_id=entity_id,title="Agregar documento")
+    return render_template("documents/form.html", entity_type=entity_type, entity_id=entity_id, title="Agregar documento")
 
 # Create document
+
+
 @bp.post("/<string:entity_type>/<int:entity_id>/create")
 @clean_entity_type
 def create(entity_type, entity_id):
-    print(f"type: {entity_type}, id: {entity_id}")  # Add this line to check what values are passed
-    params = request.form
-
-    required_fields = ['title', 'document_type']
-    for field in required_fields:
-        if field not in params:
-            flash(f"El campo {field} es requerido.", "error")
-            return redirect(url_for("documents.add", entity_type=entity_type, entity_id=entity_id))
+    params = request.form.to_dict()
+    # agregar entity_type y entity_id a los parámetros
+    params['entity_type'] = entity_type
+    params['entity_id'] = entity_id
 
     # Validar que solo uno de los campos (archivo o enlace) esté presente
-    file = request.files.get('file')
-    link = params.get('link')
+    if params.get('doc_enl') == 'file':
+        file = request.files.get('file')
 
-    if bool(file) == (bool(link) or (link and not link.strip())):  # Ambos presentes, ambos ausentes o enlace vacío
-        flash("Debe proporcionar un archivo o un enlace, pero no ambos.", "error")
+        if not file or file.filename.strip() == '':
+            flash("Debe cargar un archivo si selecciona 'Documento'.", "error")
+            return redirect(url_for("documents.add", entity_type=entity_type, entity_id=entity_id))
+        else:
+            params['link'] = ''
+            link = None
+            params['filename'] = file.filename
+    else:
+        link = params.get('link')
+        file = None
+        if not link or link.strip() == '':
+            flash("Debe proporcionar un enlace si selecciona 'Enlace'.", "error")
+            return redirect(url_for("documents.add", entity_type=entity_type, entity_id=entity_id))
+
+    # Llamada al validator
+    validator = DocumentValidator()
+    errors = validator.validate_create(params)
+    if errors:
+        flash_validation_errors(errors)
         return redirect(url_for("documents.add", entity_type=entity_type, entity_id=entity_id))
 
     # Crear el documento
@@ -78,7 +102,7 @@ def create(entity_type, entity_id):
         document = document_repository.create_document(
             title=params['title'],
             document_type=params['document_type'],
-            file=file,
+            file=file if file else link,
             entity_type=entity_type,
             entity_id=entity_id
         )

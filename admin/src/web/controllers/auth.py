@@ -13,6 +13,7 @@ bp = Blueprint("auth", __name__, url_prefix="/auth")
 def login():
     return render_template("auth/login.html")
 
+
 @bp.post("/authenticate")
 def authenticate():
     params = request.form
@@ -42,16 +43,17 @@ def logout():
     flash("La sesión se cerró correctamente.", "info")
     return redirect(url_for("home"))
 
+
 class GoogleOAuth:
     def __init__(self, client_secrets_file, oauth_scopes, redirect_uri):
         self.client_secrets_file = client_secrets_file
         self.oauth_scopes = oauth_scopes
         self.redirect_uri = redirect_uri
         self.flow = Flow.from_client_secrets_file(
-                self.client_secrets_file,
-                scopes=self.oauth_scopes,
-                redirect_uri=self.redirect_uri
-                )
+            self.client_secrets_file,
+            scopes=self.oauth_scopes,
+            redirect_uri=self.redirect_uri
+        )
 
     def get_authorization_url(self):
         return self.flow.authorization_url()
@@ -61,20 +63,23 @@ class GoogleOAuth:
 
     def verify_id_token(self):
         return verify_oauth2_token(
-                self.flow.credentials.id_token,
-                requests.Request(),
-                self.flow.client_config['client_id']
-                )
+            self.flow.credentials.id_token,
+            requests.Request(),
+            self.flow.client_config['client_id']
+        )
+
 
 @bp.get("/google/login")
 def google_login():
     """Initiate Google OAuth flow"""
     # Configuration for Google OAuth
-    GOOGLE_CLIENT_SECRETS_FILE = current_app.config.get("GOOGLE_CLIENT_SECRETS_FILE")
+    GOOGLE_CLIENT_SECRETS_FILE = current_app.config.get(
+        "GOOGLE_CLIENT_SECRETS_FILE")
     GOOGLE_OAUTH_SCOPES = current_app.config.get("GOOGLE_OAUTH_SCOPES")
     REDIRECT_URI = current_app.config.get("GOOGLE_REDIRECT_URI")
 
-    google_oauth = GoogleOAuth(GOOGLE_CLIENT_SECRETS_FILE, GOOGLE_OAUTH_SCOPES, REDIRECT_URI)
+    google_oauth = GoogleOAuth(
+        GOOGLE_CLIENT_SECRETS_FILE, GOOGLE_OAUTH_SCOPES, REDIRECT_URI)
 
     email = request.args.get('email')
     if not email:
@@ -95,6 +100,7 @@ def google_login():
     session["state"] = state
     return redirect(authorization_url)
 
+
 @bp.get("/google/callback")
 def google_callback():
     """Handle the OAuth 2.0 callback from Google"""
@@ -106,11 +112,13 @@ def google_callback():
             return redirect(url_for("auth.login"))
 
         # Configuration for Google OAuth
-        GOOGLE_CLIENT_SECRETS_FILE = current_app.config.get("GOOGLE_CLIENT_SECRETS_FILE")
+        GOOGLE_CLIENT_SECRETS_FILE = current_app.config.get(
+            "GOOGLE_CLIENT_SECRETS_FILE")
         GOOGLE_OAUTH_SCOPES = current_app.config.get("GOOGLE_OAUTH_SCOPES")
         REDIRECT_URI = current_app.config.get("GOOGLE_REDIRECT_URI")
 
-        google_oauth = GoogleOAuth(GOOGLE_CLIENT_SECRETS_FILE, GOOGLE_OAUTH_SCOPES, REDIRECT_URI)
+        google_oauth = GoogleOAuth(
+            GOOGLE_CLIENT_SECRETS_FILE, GOOGLE_OAUTH_SCOPES, REDIRECT_URI)
 
         # Get the authorization code from Google
         google_oauth.fetch_token(authorization_response=request.url)
@@ -123,7 +131,8 @@ def google_callback():
 
         # Verify emails match
         if google_email != expected_email:
-            flash("El correo electrónico de Google no coincide con el proporcionado.", "error")
+            flash(
+                "El correo electrónico de Google no coincide con el proporcionado.", "error")
             return redirect(url_for("auth.login"))
 
         # Get user from database

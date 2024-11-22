@@ -1,10 +1,9 @@
-from sqlalchemy import JSON
 from src.core.database import db
 
 
 class Employee(db.Model):
     __tablename__ = 'employees'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     surname = db.Column(db.String(100), nullable=False)
@@ -22,7 +21,8 @@ class Employee(db.Model):
     associate_number = db.Column(db.String(50), unique=True)
     condition = db.Column(db.String(50))  # Voluntario o Personal Rentado
     active = db.Column(db.Boolean, default=True, nullable=False)
-    documentation = db.Column(JSON)
+    documents = db.relationship(
+        'Document', primaryjoin='and_(foreign(Document.entity_id) == Employee.id, Document.entity_type == "employees")', lazy='dynamic')
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User', backref='employee', uselist=False)

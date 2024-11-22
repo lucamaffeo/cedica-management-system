@@ -78,6 +78,11 @@
 						<a class="nav-link" href="{{ url_for('contents.index') }}">Contenidos</a>
 					</li>
 					{% endif %}
+					{% if user_id and has_permission(user_id,'grafic_index') and has_permission(user_id,'report_index') %}
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('report.index') }}">Reportes</a>
+					</li>
+					{% endif %}
 				</ul>
 				<ul class="navbar-nav">
 					{% if not user_id %}

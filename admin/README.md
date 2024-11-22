@@ -18,4 +18,6 @@ ecuestre:
 mail: rol5@mail.com
 contraseña:123456
 
-ACLARACION: Nos falta completar lo de minio en los modulos: equipo, J&A y en ecuestre(tambien hace falta documentacion complementaria Ecuestre)
+editor:
+mail: rol6@mail.com
+contraseña:123456

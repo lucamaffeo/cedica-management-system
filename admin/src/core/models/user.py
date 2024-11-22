@@ -11,7 +11,8 @@ class User(db.Model):
     active = db.Column(db.Boolean, default=True)
     email = db.Column(db.String(255), nullable=False, unique=True)
     inserted_at = db.Column(db.DateTime, default=datetime.now)
-    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
+    updated_at = db.Column(
+        db.DateTime, default=datetime.now, onupdate=datetime.now)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)
     role = db.relationship('Role', backref='user_role', lazy=True)
 

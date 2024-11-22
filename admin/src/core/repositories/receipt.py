@@ -23,7 +23,8 @@ def list_receipts(start_date=None, end_date=None, payment_method=None, sort_by='
 
     if end_date:
         try:
-            end_date = datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1)
+            end_date = datetime.strptime(
+                end_date, '%Y-%m-%d') + timedelta(days=1)
             query = query.filter(Receipt.payment_date < end_date)
         except ValueError:
             flash("La fecha de fin es inválida.", "error")
@@ -40,9 +41,11 @@ def list_receipts(start_date=None, end_date=None, payment_method=None, sort_by='
 
     # Paginación
     items_per_page = current_app.config.get('ITEMS_PER_PAGE')
-    paginated_receipts = query.paginate(page=page, per_page=items_per_page, error_out=False)
+    paginated_receipts = query.paginate(
+        page=page, per_page=items_per_page, error_out=False)
 
     return paginated_receipts
+
 
 def create_receipt(**kwargs):
     receipt = Receipt(**kwargs)
@@ -50,15 +53,18 @@ def create_receipt(**kwargs):
     db.session.commit()
     return receipt
 
+
 def update_receipt(receipt: Receipt, **kwargs):
     for key, value in kwargs.items():
         setattr(receipt, key, value)
     db.session.commit()
     return receipt
 
+
 def delete_receipt(receipt: Receipt):
     db.session.delete(receipt)
     db.session.commit()
+
 
 def get_receipt(id) -> Receipt | None:
     receipt = Receipt.query.filter(Receipt.id == id).first()

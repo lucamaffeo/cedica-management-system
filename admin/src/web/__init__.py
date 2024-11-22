@@ -1,5 +1,5 @@
 from flask import Flask, session
-from flask import render_template 
+from flask import render_template
 from src.core.models.user import User
 from src.core.repositories.riders import has_assignment
 from src.core.repositories.user import has_permission
@@ -14,7 +14,8 @@ from flask_cors import CORS
 logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
-def create_app(env="development",static_folder="../../static"):
+
+def create_app(env="development", static_folder="../../static"):
     app = Flask(__name__, static_folder=static_folder)
 
     CORS(app, resources={r"/api/*": {"origins": "*"}})
@@ -32,7 +33,8 @@ def create_app(env="development",static_folder="../../static"):
 
     @app.context_processor
     def inject_user():
-        user_id = session.get('user_id')  # Retrieve the user dictionary from session
+        # Retrieve the user dictionary from session
+        user_id = session.get('user_id')
         if user_id:
             return {'user_id': user_id}
         return {}

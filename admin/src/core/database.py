@@ -2,12 +2,14 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+
 def init_app(app):
 
     db.init_app(app)
     config(app)
 
     return app
+
 
 def config(app):
 
@@ -16,6 +18,7 @@ def config(app):
         db.session.close()
 
     return app
+
 
 def reset():
     # Drop and create with prints

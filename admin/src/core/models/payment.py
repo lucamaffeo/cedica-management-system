@@ -1,14 +1,17 @@
 from datetime import datetime
 from src.core.database import db
 
+
 class Payment(db.Model):
     __tablename__ = 'payments'
 
     id = db.Column(db.Integer, primary_key=True)
-    beneficiary_id = db.Column(db.Integer, db.ForeignKey('employees.id', ondelete='CASCADE'), nullable=True)
+    beneficiary_id = db.Column(db.Integer, db.ForeignKey(
+        'employees.id', ondelete='CASCADE'), nullable=True)
     amount = db.Column(db.Numeric(10, 2), nullable=False)
     date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    type = db.Column(db.Enum('Honorarios', 'Proveedor', 'Gastos varios', name='payment_type'), nullable=False)
+    type = db.Column(db.Enum('Honorarios', 'Proveedor',
+                     'Gastos varios', name='payment_type'), nullable=False)
     description = db.Column(db.Text)
 
     @property
@@ -21,7 +24,9 @@ class Payment(db.Model):
     @staticmethod
     def validate_beneficiary_id(mapper, connection, target):
         if target.type == 'Honorarios' and target.beneficiary_id is None:
-            raise ValueError("Beneficiary ID is required for 'Honorarios' payment type")
+            raise ValueError(
+                "Beneficiary ID is required for 'Honorarios' payment type")
+
 
 db.event.listen(Payment, 'before_insert', Payment.validate_beneficiary_id)
 db.event.listen(Payment, 'before_update', Payment.validate_beneficiary_id)

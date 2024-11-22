@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main class="text-lg">
     <ContactForm />
   </main>
 </template>

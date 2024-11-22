@@ -1,10 +1,14 @@
 
-from src.core.validation.validator import Validator, Required, MaxLength
+from src.core.validation.validator import Validator, Required, MaxLength, In
 from src.core.validation.rules.letters import OnlyLetters
+
 
 class HorseValidator(Validator):
     def __init__(self):
         super().__init__()
+
+        assigned_activities_ja =['Hipoterapia', 'Monta Terapeutica', 'Deporte Ecuestre Adaptado',
+                                    'Actividades Recreativas', 'Equitación']
 
         self.add_rule('name', Required())
         self.add_rule('name', MaxLength(100))
@@ -33,6 +37,8 @@ class HorseValidator(Validator):
         self.add_rule('assigned_location', MaxLength(100))
 
         self.add_rule('assigned_activities_ja', Required())
+        self.add_rule('assigned_activities_ja', MaxLength(50))
+        self.add_rule('assigned_activities_ja', In(assigned_activities_ja))
 
     def validate_create(self, data):
         return self.validate(data)

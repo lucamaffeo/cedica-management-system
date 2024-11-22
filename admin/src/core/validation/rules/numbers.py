@@ -1,6 +1,7 @@
 import re
 from ..validator import ValidationRule
 
+
 class OnlyNumbers(ValidationRule):
     def validate(self, value: str) -> str | None:
         if not value:
