@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia'
-import axios from 'axios'
+import { defineStore } from 'pinia';
+import { useApiStore } from './apiStore'; // Importa el store de la API
 
 export const useNewsStore = defineStore('news', {
   state: () => ({
@@ -13,21 +13,27 @@ export const useNewsStore = defineStore('news', {
       try {
         this.loading = true;
         this.error = null;
-        const response = await axios.get('api/articles', {
+
+        // Obtén el cliente API desde el apiStore
+        const apiStore = useApiStore();
+        const response = await apiStore.apiClient.get('/api/articles', {
           params: {
             status: 2,
             page: page,
-            per_page: perPage
-          }
+            per_page: perPage,
+          },
         });
-        this.news = response.data.data; // News items for current page
-        this.total = response.data.total; // Total number of items
+
+        // Actualiza los datos en el estado
+        this.news = response.data.data; // Noticias para la página actual
+        this.total = response.data.total; // Total de artículos
       } catch (error) {
         this.error = 'Error al obtener las noticias';
         console.error(error);
       } finally {
         this.loading = false;
       }
-    }
+    },
   },
-})
+});
+
