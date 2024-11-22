@@ -7,6 +7,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 export default defineConfig(({ mode }) => {
   // Cargar variables de entorno según el modo (desarrollo o producción)
   const env = loadEnv(mode, process.cwd());
+  console.log(`VITE_API_BASE_URL: ${env.VITE_API_BASE_URL}`); // Verificar que la variable de entorno se carga correctamente
 
   return {
     plugins: [
