@@ -14,7 +14,7 @@ export const useContactStore = defineStore('contact', {
       this.success = null;
 
       try {
-        const response = await axios.post('/api/messages', message);
+        const response = await axios.post('api/messages', message);
 
         if (response.status === 201) {
           this.success = 'Mensaje enviado correctamente.';

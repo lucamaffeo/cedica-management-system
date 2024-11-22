@@ -13,7 +13,7 @@ export const useNewsStore = defineStore('news', {
       try {
         this.loading = true;
         this.error = null;
-        const response = await axios.get('/api/articles', {
+        const response = await axios.get('api/articles', {
           params: {
             status: 2,
             page: page,
