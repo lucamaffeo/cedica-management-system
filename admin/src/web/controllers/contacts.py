@@ -10,6 +10,9 @@ bp = Blueprint("contacts", __name__, url_prefix="/contacts")
 @bp.post("/create")
 @has_permission("contact_create")
 def store():
+    """
+    Crea un nuevo contacto basado en los datos del formulario.
+    """
     data = request.form.to_dict()
     validator = ContactValidator()
 
@@ -31,6 +34,11 @@ def store():
 @bp.get("/<int:id>/update")
 @has_permission("contact_update")
 def edit(id):
+    """
+    Renderiza el formulario para editar un contacto existente.
+    
+    :param id: ID del contacto a editar.
+    """
     contact = contact_repo.get_contact(id)
     if not contact:
         flash("Contacto no encontrado.", "error")
@@ -41,6 +49,11 @@ def edit(id):
 @bp.route("/<int:id>/update", methods=["POST", "PATCH"])
 @has_permission("contact_update")
 def update(id):
+    """
+    Actualiza un contacto existente basado en los datos del formulario.
+    
+    :param id: ID del contacto a actualizar.
+    """
     data = request.form.to_dict()
     # remove status if empty
     if data.get('status') == '':
@@ -69,6 +82,11 @@ def update(id):
 @bp.get("/<int:id>/show")
 @has_permission("contact_show")
 def show(id):
+    """
+    Muestra los detalles de un contacto específico.
+    
+    :param id: ID del contacto a mostrar.
+    """
     contact = contact_repo.get_contact(id)
     if not contact:
         flash("Contacto no encontrado.", "error")
@@ -79,6 +97,11 @@ def show(id):
 @bp.get("/<int:id>/delete")
 @has_permission("contact_destroy")
 def delete(id):
+    """
+    Elimina un contacto específico.
+    
+    :param id: ID del contacto a eliminar.
+    """
     if contact_repo.delete_contact(id):
         flash("Contacto eliminado con éxito.", "info")
         return redirect(url_for("contacts.index"))
@@ -90,6 +113,9 @@ def delete(id):
 @bp.get("/")
 @has_permission("contact_index")
 def index():
+    """
+    Renderiza la página de índice de contactos con paginación y filtros.
+    """
     sort_by = request.args.get('sort_by', 'title')
     direction = request.args.get('direction', 'asc')
     page = request.args.get('page', 1, type=int)

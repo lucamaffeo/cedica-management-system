@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask import Blueprint, flash, redirect, render_template, request, url_for
-from src.core.models.employee import Employee
+
 from src.core.repositories import receipt, employee as employee_repository, riders as riders_repository
 from src.web.helpers.auth import has_permission
 from src.core.validation.models.receipt import ReceiptValidator
@@ -11,6 +11,9 @@ bp = Blueprint("receipts", __name__, url_prefix="/receipts")
 @bp.get("/")
 @has_permission("receipt_index")
 def index():
+    """
+    Renderiza la página de índice de recibos con paginación y filtros.
+    """
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')
     payment_method = request.args.get('payment_method')
@@ -20,14 +23,17 @@ def index():
 
     receipts = receipt.list_receipts(
         start_date, end_date, payment_method, sort_by, direction, page)
-    received_by = Employee.query.all()
+    received_by = employee_repository.get_all()
     return render_template("receipts/index.html", pagination=receipts, received_by=received_by)
 
 
 @bp.get("/create")
 @has_permission("receipt_create")
 def register():
-    employees = employee_repository.list_employees()
+    """
+    Renderiza el formulario para crear un nuevo recibo.
+    """
+    employees = employee_repository.get_all()
     riders = riders_repository.list_riders()
     current_date = datetime.now().strftime('%Y-%m-%d')
     return render_template("receipts/form.html", is_update=False, title="Registrar Recibo", employees=employees, riders=riders, current_date=current_date)
@@ -36,6 +42,9 @@ def register():
 @bp.post("/create")
 @has_permission("receipt_create")
 def create():
+    """
+    Crea un nuevo recibo basado en los datos del formulario.
+    """
     params = request.form
     validator = ReceiptValidator()
     errors = validator.validate_create(params)
@@ -63,6 +72,11 @@ def create():
 @bp.get("/<int:id>/show")
 @has_permission("receipt_show")
 def show(id):
+    """
+    Muestra los detalles de un recibo específico.
+    
+    :param id: ID del recibo a mostrar.
+    """
     r = receipt.get_receipt(id)
     if not r:
         flash("Recibo no encontrado.", "error")
@@ -73,6 +87,11 @@ def show(id):
 @bp.get("/<int:id>/update")
 @has_permission("receipt_update")
 def edit(id):
+    """
+    Renderiza el formulario para editar un recibo existente.
+    
+    :param id: ID del recibo a editar.
+    """
     r = receipt.get_receipt(id)
     if not r:
         flash("Recibo no encontrado.", "error")
@@ -86,6 +105,11 @@ def edit(id):
 @bp.route("/<int:id>/update", methods=["POST", "PATCH"])
 @has_permission("receipt_update")
 def update(id):
+    """
+    Actualiza un recibo existente basado en los datos del formulario.
+    
+    :param id: ID del recibo a actualizar.
+    """
     params = request.form
     validator = ReceiptValidator()
     errors = validator.validate_update(params, id)
@@ -120,6 +144,11 @@ def update(id):
 @bp.get("/<int:id>/delete")
 @has_permission("receipt_destroy")
 def delete(id):
+    """
+    Elimina un recibo específico.
+    
+    :param id: ID del recibo a eliminar.
+    """
     # Obtener el recibo una sola vez
     receipt_obj = receipt.get_receipt(id)
     if not receipt_obj:

@@ -137,7 +137,6 @@ def _update_tutors(rider, data):
         relationship = tutor_data.pop('relationship', None)
         tutor = _process_tutor_data(tutor_data)
         if tutor:
-            print(relationship,"aaaaaa")
             if relationship:  # Asegurarnos de que la relación no sea vacía
                 tutors.append((tutor, relationship))
 

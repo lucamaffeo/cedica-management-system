@@ -104,3 +104,6 @@ def find_employee_by_associate_number(associate_number):
     employee = Employee.query.filter(
         Employee.associate_number == associate_number).first()
     return employee
+
+def get_all():
+    return Employee.query.all()

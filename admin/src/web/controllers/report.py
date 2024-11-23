@@ -17,12 +17,18 @@ bp = Blueprint('report', __name__, url_prefix='/report')
 @bp.route('/')
 @has_permission('report_index')
 def index():
+    """
+    Renderiza la página principal de reportes.
+    """
     return render_template('report/index.html')
 
 
 @bp.route('/ingresos')
 @has_permission('grafic_show')
 def ingresos():
+    """
+    Genera y envía un gráfico de barras de ingresos por mes.
+    """
     img = generar_grafico_barras_ingresos_por_mes()
     return send_file(img, mimetype='image/png')
 
@@ -30,6 +36,9 @@ def ingresos():
 @bp.route('/discapacidades')
 @has_permission('grafic_show')
 def discapacidades():
+    """
+    Genera y envía un gráfico de torta de discapacidades.
+    """
     img = generar_grafico_torta_discapacidades()
     return send_file(img, mimetype='image/png')
 
@@ -37,12 +46,18 @@ def discapacidades():
 @bp.route('/generate', methods=['GET'])
 @has_permission('report_index')
 def report_form():
+    """
+    Renderiza el formulario para generar reportes.
+    """
     return render_template('report/reports_form.html')
 
 
 @bp.route('/becados')
 @has_permission('grafic_show')
 def becados():
+    """
+    Genera y envía un gráfico de barras de becados.
+    """
     img = generar_grafico_barras_becados()
     return send_file(img, mimetype='image/png')
 
@@ -50,6 +65,9 @@ def becados():
 @bp.route('/ingresos_apilados')
 @has_permission('grafic_show')
 def ingresos_apilados():
+    """
+    Genera y envía un gráfico de barras apiladas de ingresos.
+    """
     img = generar_grafico_barras_apiladas_ingresos()
     return send_file(img, mimetype='image/png')
 
@@ -57,6 +75,9 @@ def ingresos_apilados():
 @bp.route('/antiguedad_empleados', methods=['GET'])
 @has_permission('report_show')
 def employee_seniority():
+    """
+    Genera un reporte de antigüedad de empleados con filtros y paginación.
+    """
     sort_by = request.args.get("sort_by", "start_date")
     direction = request.args.get("direction", "asc")
     search = request.args.get('search')
@@ -95,6 +116,9 @@ def employee_seniority():
 @bp.route("/receipt_payment_method_report", methods=['GET'])
 @has_permission('report_show')
 def receipt_payment_method_report():
+    """
+    Genera un reporte de recibos por método de pago con filtros y paginación.
+    """
     payment_method = request.args.get(
         'payment_method')  # Obtén el método de pago
     start_date = request.args.get('start_date')
@@ -135,6 +159,9 @@ def receipt_payment_method_report():
 @bp.route('/riders_by_age', methods=['GET'])
 @has_permission('report_show')
 def riders_by_age():
+    """
+    Genera un reporte de jinetes por edad con filtros y paginación.
+    """
     direction = request.args.get("direction", "asc")
     sort_by = request.args.get("sort_by", "age")
 
