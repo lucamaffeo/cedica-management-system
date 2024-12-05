@@ -23,8 +23,8 @@ def index():
     published_from = request.args.get('published_from')
     published_to = request.args.get('published_to')
     # Si no se envía el parámetro, se asigna el valor por defecto. Si se envía con valor '', también se asigna el valor por defecto.
-    page = int(request.args.get('page', '1') or '1')
-    per_page = int(request.args.get('per_page', '10') or '10')
+    page = request.args.get('page', 1, type=int)
+    per_page =  request.args.get('per_page', 10, type=int)
 
     articles = content.list_contents_api(
         author=author, published_from=published_from, published_to=published_to, page=page, per_page=per_page)
