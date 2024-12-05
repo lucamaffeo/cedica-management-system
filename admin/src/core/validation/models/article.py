@@ -13,11 +13,5 @@ class ArticleValidator(Validator):
         self.add_rule('published_from', dateFormat())
         self.add_rule('published_to', dateFormat())
 
-        # page validation
-        self.add_rule('page', OnlyNumbers())
-
-        # per_page validation
-        self.add_rule('per_page', OnlyNumbers())
-
     def validate_request(self, data):
         return self.validate(data)

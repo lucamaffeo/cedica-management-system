@@ -22,7 +22,7 @@ def index():
     job_position_filter = request.args.get("job_position", None)
     sort_by = request.args.get("sort_by", "name")
     direction = request.args.get("direction", "asc")
-    page = int(request.args.get("page", 1))
+    page = request.args.get('page', 1, type=int)
 
     employees = employee_repository.list_employees(
         search, job_position_filter, sort_by, direction, page)

@@ -23,7 +23,7 @@ def index(entity_type, entity_id):
     search = request.args.get("search", "")
     sort_by = request.args.get("sort_by", "title")
     direction = request.args.get("direction", "asc")
-    page = int(request.args.get("page", 1))
+    page = request.args.get('page', 1, type=int)
 
     # Listar documentos por ID del jinete
     documents = document_repository.list_documents_by_id(

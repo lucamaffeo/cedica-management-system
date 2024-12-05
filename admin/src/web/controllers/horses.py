@@ -23,7 +23,7 @@ def index():
     assigned_activities_ja = request.args.get("assigned_activities_ja", None)
     sort_by = request.args.get("sort_by", "name")
     direction = request.args.get("direction", "asc")
-    page = int(request.args.get("page", 1))
+    page = request.args.get('page', 1, type=int)
 
     horses = horse_repository.list_horses(
         search, assigned_activities_ja, sort_by, direction, page)

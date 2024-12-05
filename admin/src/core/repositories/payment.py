@@ -51,13 +51,9 @@ def get_payment_types():
 def create_payment(**kwargs):
     # Check the type and beneficiary_id for validation
     if kwargs.get('type') == 'Honorarios':
-        if not kwargs.get('beneficiary_id'):
-            raise ValueError(
-                'Beneficiary ID is required when the type is Honorarios.')
-        else:
-            beneficiary = employee.get_employee(kwargs.get('beneficiary_id'))
-            if not beneficiary:
-                raise ValueError('Beneficiary ID does not exist.')
+        beneficiary = employee.get_employee(kwargs.get('beneficiary_id'))
+        if not beneficiary:
+            raise ValueError('Beneficiary ID does not exist.')
     else:
         kwargs['beneficiary_id'] = None
 
@@ -75,13 +71,9 @@ def update_payment(id, **kwargs):
     # Check the type and beneficiary_id for validation
     new_type = kwargs.get('type')
     if new_type == 'Honorarios':
-        if not kwargs.get('beneficiary_id'):
-            raise ValueError(
-                'Beneficiary ID is required when the type is Honorarios.')
-        else:
-            beneficiary = employee.get_employee(kwargs.get('beneficiary_id'))
-            if not beneficiary:
-                raise ValueError('Beneficiary ID does not exist.')
+        beneficiary = employee.get_employee(kwargs.get('beneficiary_id'))
+        if not beneficiary:
+            raise ValueError('Beneficiary ID does not exist.')
     else:
         kwargs['beneficiary_id'] = None
 

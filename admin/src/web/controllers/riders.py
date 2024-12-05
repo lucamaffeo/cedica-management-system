@@ -22,7 +22,7 @@ def index():
     search = request.args.get("search", "")
     sort_by = request.args.get("sort_by", "name")
     direction = request.args.get("direction", "asc")
-    page = int(request.args.get("page", 1))
+    page = request.args.get('page', 1, type=int)
 
     riders = rider_repository.list_riders(search, sort_by, direction, page)
 
