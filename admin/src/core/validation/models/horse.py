@@ -1,6 +1,6 @@
-
 from src.core.validation.validator import Validator, Required, MaxLength, In
 from src.core.validation.rules.letters import OnlyLetters
+from src.core.validation.rules.date import dateFormat
 
 
 class HorseValidator(Validator):
@@ -15,6 +15,7 @@ class HorseValidator(Validator):
         self.add_rule('name', OnlyLetters())
 
         self.add_rule('birth_date', Required())
+        self.add_rule('birth_date', dateFormat())
 
         self.add_rule('gender', Required())
         self.add_rule('gender', MaxLength(50))
@@ -32,6 +33,7 @@ class HorseValidator(Validator):
         self.add_rule('purchase_donation', MaxLength(50))
 
         self.add_rule('entry_date', Required())
+        self.add_rule('entry_date', dateFormat())
 
         self.add_rule('assigned_location', Required())
         self.add_rule('assigned_location', MaxLength(100))

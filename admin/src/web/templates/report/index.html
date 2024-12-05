@@ -15,13 +15,13 @@ Reportes Estadísticos
 {% endblock %}
 
 {% block content %}
-<h2>Gráficos Generados</h2>
+<h1>Gráficos Generados:</h1>
 <ul>
     <li><a href="{{ url_for('report.ingresos') }}" target="_blank">Ingresos por mes</a></li>
     <li><a href="{{ url_for('report.discapacidades') }}" target="_blank">Distribución de Discapacidades</a></li>
     <li><a href="{{ url_for('report.becados') }}" target="_blank">Cantidad de Jinetes y Amazonas Becados</a></li>
 </ul>
-<h2>Reportes</h2>
+<h1>Reportes:</h1>
 <ul>
     <li><a href="{{ url_for('report.employee_seniority') }}" >Antigüedad de Empleados</a></li>
     <li><a href="{{ url_for('report.receipt_payment_method_report') }}" >Pagos por Método de Pago</a></li>

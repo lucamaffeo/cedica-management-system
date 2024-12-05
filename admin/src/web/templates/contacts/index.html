@@ -21,9 +21,9 @@
     </select>
 {% endblock %}
 
-{% set sorting_criteria = [("title", "Titulo"), ("email", "Email"), ("status", "Estado"), ("inserted_at", "Creación")] %}
+{% set sorting_criteria = [("title", "Titulo"), ("email", "Email"), ("status", "Estado"), ("created_at", "Creación")] %}
 
-{% set sortable_fields = ["inserted_at"] %}
+{% set sortable_fields = ["created_at"] %}
 
 {% block table_rows %}
     {% for contact in pagination.items %}
@@ -31,7 +31,7 @@
         <td>{{ contact.title }}</td>
         <td>{{ contact.email }}</td>
         <td>{{ contact.status.name }}</td>
-        <td>{{ contact.formatted_inserted_at }}</td>
+        <td>{{ contact.formatted_created_at }}</td>
         <td>
 		<a href="{{ url_for('contacts.show', id=contact.id) }}">Ver</a><br>
 		<a href="{{ url_for('contacts.update', id=contact.id) }}">Editar</a><br>

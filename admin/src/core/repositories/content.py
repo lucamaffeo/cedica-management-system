@@ -25,15 +25,15 @@ def list_contents_api(author=None, published_from=None, published_to=None, page=
         query = query.options(joinedload(Content.author))
         query = query.join(User).filter(User.alias.ilike(f'%{author}%'))
 
-    # Si no manda las dos, no se aplica el filtro !
-    if published_from and published_to:
-        published_from = datetime.fromisoformat(
-            published_from.replace("Z", "+00:00"))
-        # Convert str to date, so we can add timedelta (to make end_date include that day on results)
-        published_to = datetime.fromisoformat(
-            published_to.replace("Z", "+00:00"))
-        query = query.filter(Content.publication_date >= published_from,
-                             Content.publication_date < published_to + timedelta(days=1))
+    if published_from:
+        published_from = datetime.fromisoformat(published_from.replace("Z", "+00:00"))
+        query = query.filter(Content.publication_date >= published_from)
+
+    if published_to:
+        published_to = datetime.fromisoformat(published_to.replace("Z", "+00:00"))
+        # Add one day to include the entire end date
+        query = query.filter(Content.publication_date < published_to + timedelta(days=1))
+
 
     query = query.order_by(Content.publication_date.desc())
 

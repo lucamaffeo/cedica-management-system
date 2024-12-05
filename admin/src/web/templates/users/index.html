@@ -46,7 +46,7 @@ Buscar por email
         <td>
 		  <a href="{{ url_for('users.show', id=user.id) }}">Ver</a><br>
 		  <a href="{{ url_for('users.update', id=user.id) }}">Editar</a><br>
-			<a href="{{ url_for('users.delete', id=user.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
+		  <a href="{{ url_for('users.delete', id=user.id) }}" onclick="return confirm('¿Está seguro?')" {% if user_id == user.id %}style="display: none"{% endif %}>Eliminar</a>
         </td>
     </tr>
     {% else %}

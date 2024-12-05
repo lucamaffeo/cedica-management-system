@@ -89,8 +89,12 @@ def download_file(file_path: str) -> tuple:
 
     try:
         response = storage_client.get_object(bucket_name, file_path)
-        return response, file_path.split('/')[-1]
+        file_data = response.read()
+        response.close()
+        response.release_conn()
+        return file_data, file_path.split('/')[-1]
     except Exception as e:
+        logging.error(f"Failed to download file: {str(e)}")
         raise StorageError(f"Failed to download file: {str(e)}")
 
 

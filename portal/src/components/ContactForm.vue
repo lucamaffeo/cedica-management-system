@@ -1,6 +1,6 @@
 <script setup>
 /* global recaptcha */
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { useContactStore } from '@/stores/contact';
 import { storeToRefs } from 'pinia';
 import { RecaptchaV2 } from "vue3-recaptcha-v2";

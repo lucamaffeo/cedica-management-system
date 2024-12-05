@@ -147,11 +147,15 @@ def profile():
 @bp.get("/<int:id>/delete")
 @has_permission("user_destroy")
 def delete(id):
+    if id == session["user_id"]:
+        flash("No puedes eliminarte a ti mismo.", "error")
+        return redirect(url_for("users.index"))
+
     if auth.delete_user(id):
         flash("Usuario eliminado con éxito.", "info")
         return redirect(url_for("users.index"))
     else:
-        flash("Usuario no encontrado.", "error")
+        flash("Usuario no encontrado o no puede ser borrado.", "error")
         return redirect(url_for("users.index"))
 
 # List users

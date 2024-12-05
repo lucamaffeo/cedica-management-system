@@ -10,7 +10,7 @@ class MessageSchema(Schema):
     description = fields.Str(
         required=True, validate=validate.Length(min=2, max=255))
     status = fields.Nested(contact_status_schema, dump_only=True)
-    inserted_at = fields.Str(dump_only=True)
+    created_at = fields.Str(dump_only=True)
     updated_at = fields.Str(dump_only=True)
     # Otros campos: comment
 
