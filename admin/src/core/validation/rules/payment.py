@@ -11,7 +11,13 @@ class ValidAmount(ValidationRule):
             return None  # Let Required rule handle empty values
 
         try:
-            amount = decimal.Decimal(str(value))
+            # Check if value contains only numbers and commas
+            if not all(char.isdigit() or char == ',' for char in str(value)):
+                return "El monto debe contener solo números y comas"
+
+            # Remove commas from the value
+            value = str(value).replace(',', '')
+            amount = decimal.Decimal(value)
             if amount <= 0:
                 return "El monto debe ser mayor a 0"
 

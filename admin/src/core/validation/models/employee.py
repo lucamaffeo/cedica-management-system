@@ -5,6 +5,7 @@ from src.core.validation.rules.email import EmailFormat
 from src.core.validation.rules.phone import PhoneNumberFormat
 from src.core.validation.rules.letters import OnlyLetters
 from src.core.validation.rules.dni import DNIFormat
+from src.core.validation.rules.date import dateFormat
 
 
 class UniqueDni(ValidationRule):
@@ -137,6 +138,9 @@ class EmployeeValidator(Validator):
         self.add_rule('telephone', PhoneNumberFormat())
 
         self.add_rule('start_date', Required())
+        self.add_rule('start_date', dateFormat())
+
+        self.add_rule('termination_date', dateFormat())
 
         self.add_rule('emergency_contact_info', MaxLength(150))
 

@@ -1,6 +1,7 @@
 
 import datetime
 from typing import Dict, Any, List, Optional
+from src.core.validation.rules.date import dateFormat
 from src.core.validation.validator import ValidationError, ValidationRule, Validator, Required, MaxLength, In
 from src.core.validation.rules.payment import ValidAmount
 
@@ -36,6 +37,8 @@ class ReceiptValidator(Validator):
         # Payment date validation
         self.add_rule('payment_date', Required())
         self.add_rule('payment_date', DateNotInFuture())
+        self.add_rule('payment_date', dateFormat())
+
 
         # Amount validation
         self.add_rule('quantity', Required())

@@ -1,6 +1,45 @@
 <template>
   <div class="container mx-auto p-4 text-left">
     <h2 class="text-2xl font-bold mb-4">Lista de Noticias</h2>
+
+    <div class="mb-4 grid grid-cols-3 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Autor</label>
+          <input
+            type="text"
+            v-model="filters.author"
+            placeholder="Ingrese nombre del autor"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md"
+          />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Fecha desde</label>
+        <input
+          type="date"
+          v-model="filters.startDate"
+          :max="filters.endDate"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md"
+        />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Fecha hasta</label>
+        <input
+          type="date"
+          v-model="filters.endDate"
+          :min="filters.startDate"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md"
+        />
+      </div>
+      </div>
+      <div class="flex justify-end">
+        <button
+          @click="handleSearch"
+          class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+        >
+          Buscar
+        </button>
+      </div>
+
     <p v-if="loading" class="text-gray-500">Cargando...</p>
     <p v-if="error" class="text-red-500">{{ error }}</p>
     <table v-if="!loading && news.length" class="min-w-full bg-white border border-gray-200">
@@ -49,6 +88,16 @@ const perPage = ref(5);
 
 const store = useNewsStore();
 const { news, loading, error, total } = storeToRefs(store);
+const filters = ref({
+  author: '',
+  startDate: '',
+  endDate: ''
+});
+
+const handleSearch = () => {
+  currentPage.value = 1; // Reset to first page when searching
+  fetchNews();
+};
 
 const onPageChanged = (page) => {
   currentPage.value = page;
@@ -56,7 +105,11 @@ const onPageChanged = (page) => {
 };
 
 const fetchNews = async () => {
-  await store.fetchNews(currentPage.value, perPage.value);
+  await store.fetchNews(currentPage.value, perPage.value, {
+  author: filters.value.author,
+  published_from: filters.value.startDate,
+  published_to: filters.value.endDate
+  });
 };
 
 onMounted(() => {

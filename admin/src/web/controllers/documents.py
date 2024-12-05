@@ -1,3 +1,4 @@
+import io
 from flask import Blueprint, redirect, render_template, request, url_for, flash, send_file
 from src.core.validation.models.document import DocumentValidator
 from src.web.helpers.flash import flash_validation_errors
@@ -69,9 +70,12 @@ def download(entity_type, entity_id, id):
         flash("Documento no encontrado.", "error")
         return redirect(request.referrer)
     else:
-        file_stream, file_name = document_repository.download_file(
-            document.file)
-        return send_file(file_stream, as_attachment=True, download_name=file_name)
+        file_data, file_name = document_repository.download_file(document.file)
+        return send_file(
+            io.BytesIO(file_data),
+            as_attachment=True,
+            download_name=file_name
+        )
 
 # add document
 

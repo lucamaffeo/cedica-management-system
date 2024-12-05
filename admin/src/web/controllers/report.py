@@ -191,7 +191,6 @@ def riders_by_age():
         page=page
     )
 
-    now = datetime.now()
     return render_template("report/rider_report.html",
                            riders=riders.items,
                            pagination=riders,

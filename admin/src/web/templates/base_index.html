@@ -94,6 +94,7 @@
             {# Safely get and validate the current page number #}
             {% set current_page = request.args.get('page', '1') %}
             {% set page_num = current_page|int if current_page.isdigit() else 1 %}
+            {% set args = request.args.to_dict() %}
 
             {# Ensure page_num is within bounds #}
             {% if page_num < 1 %}
@@ -117,16 +118,17 @@
 
             {# Previous button #}
             <li class="page-item {{ 'disabled' if page_num == 1 }}">
+			  {% set args = args | merge({'page': page_num - 1}) %}
               {% if entity_type is defined and entity_id is defined %}
               <a class="page-link" 
-                href="{{ url_for(request.endpoint, entity_type=entity_type, entity_id=entity_id, page=page_num-1) if page_num > 1 else '#' }}"
+                href="{{ url_for(request.endpoint, entity_type=entity_type, entity_id=entity_id, **args) if page_num > 1 else '#' }}"
                 aria-label="Previous"
                 {{ 'tabindex="-1"' if page_num == 1 }}>
                 &laquo;
               </a>
               {% else %}    
               <a class="page-link" 
-                 href="{{ url_for(request.endpoint, page=page_num-1) if page_num > 1 else '#' }}"
+                 href="{{ url_for(request.endpoint, **args) if page_num > 1 else '#' }}"
                  aria-label="Previous"
                  {{ 'tabindex="-1"' if page_num == 1 }}>
                 &laquo;
@@ -137,13 +139,14 @@
             {# Page numbers #}
             {% for p in range(start_page, end_page + 1) %}
               <li class="page-item {{ 'active' if p == page_num }}">
+				{% set args = args | merge({'page': p}) %}
                 {% if entity_type is defined and entity_id is defined %}
                 <a class="page-link" 
-                  href="{{ url_for(request.endpoint, entity_type=entity_type, entity_id=entity_id, page=p) }}">                  {{ p }}
+                  href="{{ url_for(request.endpoint, entity_type=entity_type, entity_id=entity_id, **args) }}">                  {{ p }}
                 </a>
-                {% else %}    
+                {% else %}
                 <a class="page-link" 
-                  href="{{ url_for(request.endpoint, page=p) }}">                  {{ p }}
+                  href="{{ url_for(request.endpoint, **args) }}">                  {{ p }}
                 </a>
                 {% endif %}
               </li>
@@ -151,15 +154,16 @@
 
             {# Next button #}
             <li class="page-item {{ 'disabled' if page_num == pagination.pages }}">
+				{% set args = args | merge({'page': page_num + 1}) %}
               {% if entity_type is defined and entity_id is defined %}    
               <a class="page-link"
-                  href="{{ url_for(request.endpoint, entity_type=entity_type, entity_id=entity_id, page=page_num+1) if page_num < pagination.pages else '#' }}"                 aria-label="Next"
+                  href="{{ url_for(request.endpoint, entity_type=entity_type, entity_id=entity_id, **args) if page_num < pagination.pages else '#' }}"                 aria-label="Next"
                  {{ 'tabindex="-1"' if page_num == pagination.pages }}>
                 &raquo;
               </a>
               {% else %}    
               <a class="page-link"
-                  href="{{ url_for(request.endpoint, page=page_num+1) if page_num < pagination.pages else '#' }}"                 aria-label="Next"
+                  href="{{ url_for(request.endpoint, **args) if page_num < pagination.pages else '#' }}"                 aria-label="Next"
                  {{ 'tabindex="-1"' if page_num == pagination.pages }}>
                 &raquo;
               </a>
