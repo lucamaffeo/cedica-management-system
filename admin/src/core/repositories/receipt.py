@@ -6,6 +6,20 @@ from src.core.models.receipt import Receipt
 
 
 def list_receipts(start_date=None, end_date=None, payment_method=None, sort_by='id', direction='asc', page=1):
+    """
+    Listar recibos con filtros y paginación.
+
+    Args:
+        start_date (date): Fecha de inicio para filtrar.
+        end_date (date): Fecha de fin para filtrar.
+        payment_method (str): Método de pago para filtrar.
+        sort_by (str): Campo por el cual ordenar.
+        direction (str): Dirección de la ordenación ('asc' o 'desc').
+        page (int): Número de página para la paginación.
+
+    Returns:
+        Pagination: Objeto de paginación con los recibos.
+    """
     # Iniciar la consulta
     query = Receipt.query
 
@@ -48,6 +62,15 @@ def list_receipts(start_date=None, end_date=None, payment_method=None, sort_by='
 
 
 def create_receipt(**kwargs):
+    """
+    Crear un nuevo recibo.
+
+    Args:
+        **kwargs: Atributos del recibo.
+
+    Returns:
+        Receipt: El recibo creado.
+    """
     receipt = Receipt(**kwargs)
     db.session.add(receipt)
     db.session.commit()
@@ -55,6 +78,16 @@ def create_receipt(**kwargs):
 
 
 def update_receipt(receipt: Receipt, **kwargs):
+    """
+    Actualizar un recibo existente.
+
+    Args:
+        receipt (Receipt): El recibo a actualizar.
+        **kwargs: Atributos del recibo a actualizar.
+
+    Returns:
+        Receipt: El recibo actualizado.
+    """
     for key, value in kwargs.items():
         setattr(receipt, key, value)
     db.session.commit()
@@ -62,10 +95,25 @@ def update_receipt(receipt: Receipt, **kwargs):
 
 
 def delete_receipt(receipt: Receipt):
+    """
+    Eliminar un recibo.
+
+    Args:
+        receipt (Receipt): El recibo a eliminar.
+    """
     db.session.delete(receipt)
     db.session.commit()
 
 
 def get_receipt(id) -> Receipt | None:
+    """
+    Obtener un recibo por ID.
+
+    Args:
+        id (int): ID del recibo.
+
+    Returns:
+        Receipt | None: El recibo si se encuentra, None en caso contrario.
+    """
     receipt = Receipt.query.filter(Receipt.id == id).first()
     return receipt

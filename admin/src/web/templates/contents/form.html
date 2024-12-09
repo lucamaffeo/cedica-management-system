@@ -6,13 +6,13 @@
 
 {% block form_fields %}
 <label class="form-label" for="title">Título:</label>
-<input type="text" id="title" name="title" required class="form-control" value="{{ content.title if content else '' }}">
+<input type="text" id="title" name="title" required class="form-control" value="{{ content.title if content else '' }}" {% if content and content.status_id == 3 %}disabled{% endif %}>
 
 <label class="form-label" for="summary">Resumen:</label>
-<textarea id="summary" name="summary" required class="form-control">{{ content.summary if content else '' }}</textarea>
+<textarea id="summary" name="summary" required class="form-control" {% if content and content.status_id == 3 %}disabled{% endif %}>{{ content.summary if content else '' }}</textarea>
 
 <label class="form-label" for="content">Contenido:</label>
-<textarea id="content" name="content" required class="form-control">{{ content.content if content else '' }}</textarea>
+<textarea id="content" name="content" required class="form-control" {% if content and content.status_id == 3 %}disabled{% endif %}>{{ content.content if content else '' }}</textarea>
 
 {% if is_update %}
 <input type="hidden" name="updated_by" value="{{ user_id }}">
@@ -24,7 +24,6 @@
         <option value="">Mantener estado actual</option>
         <option value="{{ content.status_id + 1 }}">{{ statuses[content.status_id].name }}</option>
         </select>
-        <button type="submit" class="btn btn-primary">Actualizar estado</button>
         {% endif %}
 </div>
 {% endif %}

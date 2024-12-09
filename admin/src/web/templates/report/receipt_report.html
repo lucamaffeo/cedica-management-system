@@ -13,7 +13,8 @@
 {% block filters %}
     <div class="form-group">
         <label for="payment_method" class="form-label">Método de Pago</label>
-        <select class="form-control" id="payment_method" name="payment_method" required>
+        <select class="form-control" id="payment_method" name="payment_method">
+            <option value="">Todos los Medios de Pago </option>
             {% set payment_methods = ['Efectivo', 'Tarjeta de Crédito', 'Tarjeta de Débito', 'Transferencia', 'Otro'] %}
             {% for method in payment_methods %}
             <option value="{{ method }}" 
@@ -59,7 +60,7 @@
         <ul class="pagination">
             {% if pagination.has_prev %}
                 <li class="page-item">
-                    <a class="page-link" href="{{ url_for('report.receipt_payment_method_report', page=pagination.prev_num, sort_by=sort_by, direction=direction) }}">&laquo;</a>
+                    <a class="page-link" href="{{ url_for('report.receipt_payment_method_report', page=pagination.prev_num, sort_by=sort_by, direction=direction, payment_method=request.args.get('payment_method'), min_receipts=request.args.get('min_receipts'), max_receipts=request.args.get('max_receipts'), min_quantity=request.args.get('min_quantity'), max_quantity=request.args.get('max_quantity')) }}">&laquo;</a>
                 </li>
             {% else %}
                 <li class="page-item disabled">
@@ -70,7 +71,7 @@
             {% for page_num in pagination.iter_pages() %}
                 {% if page_num %}
                     <li class="page-item {% if page_num == pagination.page %}active{% endif %}">
-                        <a class="page-link" href="{{ url_for('report.receipt_payment_method_report', page=page_num, sort_by=sort_by, direction=direction) }}">{{ page_num }}</a>
+                        <a class="page-link" href="{{ url_for('report.receipt_payment_method_report', page=page_num, sort_by=sort_by, direction=direction, payment_method=request.args.get('payment_method'), min_receipts=request.args.get('min_receipts'), max_receipts=request.args.get('max_receipts'), min_quantity=request.args.get('min_quantity'), max_quantity=request.args.get('max_quantity')) }}">{{ page_num }}</a>
                     </li>
                 {% else %}
                     <li class="page-item disabled"><span class="page-link">...</span></li>
@@ -79,7 +80,7 @@
 
             {% if pagination.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="{{ url_for('report.receipt_payment_method_report', page=pagination.next_num, sort_by=sort_by, direction=direction) }}"> &raquo;</a>
+                    <a class="page-link" href="{{ url_for('report.receipt_payment_method_report', page=pagination.next_num, sort_by=sort_by, direction=direction, payment_method=request.args.get('payment_method'), min_receipts=request.args.get('min_receipts'), max_receipts=request.args.get('max_receipts'), min_quantity=request.args.get('min_quantity'), max_quantity=request.args.get('max_quantity')) }}"> &raquo;</a>
                 </li>
             {% else %}
                 <li class="page-item disabled">

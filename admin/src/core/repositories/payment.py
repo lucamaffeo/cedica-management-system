@@ -8,6 +8,17 @@ from datetime import datetime
 
 
 def list_payments(start_date=None, end_date=None, payment_type=None, sort_by='alias', direction='asc', page=1):
+    """
+    Lista los pagos con filtros opcionales por fecha, tipo de pago y ordenamiento.
+
+    :param start_date: Fecha de inicio para filtrar pagos.
+    :param end_date: Fecha de fin para filtrar pagos.
+    :param payment_type: Tipo de pago para filtrar.
+    :param sort_by: Campo por el cual ordenar los resultados.
+    :param direction: Dirección del ordenamiento ('asc' o 'desc').
+    :param page: Número de página para la paginación.
+    :return: Pagos paginados según los filtros aplicados.
+    """
 
     query = Payment.query
 
@@ -45,10 +56,21 @@ def list_payments(start_date=None, end_date=None, payment_type=None, sort_by='al
 
 
 def get_payment_types():
+    """
+    Obtiene los tipos de pago disponibles.
+
+    :return: Lista de tipos de pago.
+    """
     return Payment.type.property.columns[0].type.enums
 
 
 def create_payment(**kwargs):
+    """
+    Crea un nuevo pago en la base de datos.
+
+    :param kwargs: Argumentos para crear un nuevo pago.
+    :return: El pago creado.
+    """
     # Check the type and beneficiary_id for validation
     if kwargs.get('type') == 'Honorarios':
         beneficiary = employee.get_employee(kwargs.get('beneficiary_id'))
@@ -64,6 +86,13 @@ def create_payment(**kwargs):
 
 
 def update_payment(id, **kwargs):
+    """
+    Actualiza un pago existente en la base de datos.
+
+    :param id: ID del pago a actualizar.
+    :param kwargs: Argumentos para actualizar el pago.
+    :return: El pago actualizado.
+    """
     payment = Payment.query.filter(Payment.id == id).first()
     if not payment:
         raise ValueError('Payment not found.')
@@ -84,6 +113,12 @@ def update_payment(id, **kwargs):
 
 
 def delete_payment(id):
+    """
+    Elimina un pago de la base de datos.
+
+    :param id: ID del pago a eliminar.
+    :return: True si el pago fue eliminado, False si no se encontró.
+    """
     payment = Payment.query.filter(Payment.id == id).first()
     if payment:
         db.session.delete(payment)
@@ -93,5 +128,11 @@ def delete_payment(id):
 
 
 def get_payment(id) -> Payment | None:
+    """
+    Obtiene un pago por su ID.
+
+    :param id: ID del pago a obtener.
+    :return: El pago si se encuentra, None si no.
+    """
     payment = Payment.query.filter(Payment.id == id).first()
     return payment

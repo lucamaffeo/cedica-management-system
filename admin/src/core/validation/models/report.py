@@ -1,8 +1,9 @@
+from src.core.validation.rules.date import dateFormat
 from src.core.validation.rules.payment_method import ValidPaymentMethod
 from src.core.validation.rules.char_special import OnlyLettersWithSpecialChars
 from src.core.validation.rules.job_position import ValidJobPosition
 from src.core.validation.rules.dni import DNIFormat
-from src.core.validation.validator import Validator, ValidationRule, MaxLength, MinLength, Required, In
+from src.core.validation.validator import Validator, MaxLength
 from src.core.validation.rules.letters import OnlyLetters
 from src.core.validation.rules.numbers import OnlyNumbers
 
@@ -33,12 +34,14 @@ class ReportValidator(Validator):
         # Validar otros campos
         self.add_rule('min_seniority', OnlyNumbers())
         self.add_rule('max_seniority', OnlyNumbers())
+
+        self.add_rule('start_date', dateFormat())
         
         return self.validate(data)
 
     def validate_receipt_payment_method_report(self, data):
         payment_methods = [
-        'Efectivo', 'Tarjeta de Crédito', 'Tarjeta de Débito', 'Transferencia', 'Otro'
+        'Todos los Medios de Pago','Efectivo', 'Tarjeta de Crédito', 'Tarjeta de Débito', 'Transferencia', 'Otro'
         ]
 
         self.add_rule('payment_method', OnlyLettersWithSpecialChars()) 
