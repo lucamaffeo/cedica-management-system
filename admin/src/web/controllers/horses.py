@@ -69,6 +69,11 @@ def create():
         return redirect(url_for("horses.register"))
 
     trainer_ids = request.form.getlist('trainer_id')
+    errors = validator.validate_trainer_ids(trainer_ids)
+    if errors:
+        for error in errors:
+            flash(f"{error.field}: {error.message}", "error")
+        return redirect(url_for("horses.register"))
 
     horse = horse_repository.create_horse(
         name=params['name'],
@@ -149,6 +154,11 @@ def update(id):
 
     # Obtener los nuevos IDs de entrenadores seleccionados desde el formulario
     trainer_ids = request.form.getlist('trainer_id')
+    errors = validator.validate_trainer_ids(trainer_ids)
+    if errors:
+        for error in errors:
+            flash(f"{error.field}: {error.message}", "error")
+        return redirect(url_for("horses.edit", id=id))
 
     if horse_repository.update_horse(
         horse_id=id,

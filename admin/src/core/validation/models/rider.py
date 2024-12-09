@@ -9,6 +9,7 @@ from src.core.repositories import riders as rider_repository
 from src.core.validation.rules.date import dateFormat
 
 
+
 class UniqueDni(ValidationRule):
     def __init__(self, exclude_id=None):
         self.Rider = Rider
@@ -200,6 +201,7 @@ class RiderValidator(Validator):
 
         
         self.add_rule('days', Required())
+        self.add_rule('days', ValidDays())
         self.add_rule('tutors', Required())
         self.add_rule('tutors', AtLeastOneTutor())
 
@@ -221,4 +223,12 @@ class AtLeastOneTutor(ValidationRule):
             for tutor in value
         ):
             return "Debe haber al menos un tutor con todos los campos completos."
+        return None
+
+
+class ValidDays(ValidationRule):
+    def validate(self, value: list | None) -> str | None:
+        for day in value:
+            if not day.isdigit():
+                return "El ID del día debe ser un número."
         return None

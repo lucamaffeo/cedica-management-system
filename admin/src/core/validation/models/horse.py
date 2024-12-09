@@ -1,6 +1,7 @@
-from src.core.validation.validator import Validator, Required, MaxLength, In
+from src.core.validation.validator import ValidationError, Validator, Required, MaxLength, In
 from src.core.validation.rules.letters import OnlyLetters
 from src.core.validation.rules.date import dateFormat
+from src.core.repositories import employee as employee_repo
 
 
 class HorseValidator(Validator):
@@ -47,3 +48,16 @@ class HorseValidator(Validator):
 
     def validate_update(self, data, horse_id):
         return self.validate(data)
+
+    def validate_trainer_ids(self, trainer_ids):
+        errors = []
+        try:
+            trainer_ids = [int(trainer_id) for trainer_id in trainer_ids]
+        except ValueError:
+            errors.append(ValidationError(field="trainer_id", message="Todos los IDs de entrenadores deben ser enteros."))
+            return errors
+
+        for trainer_id in trainer_ids:
+            if not employee_repo.get_employee(trainer_id):
+                errors.append(ValidationError(field="trainer_id", message=f"ID de entrenador inválido: {trainer_id}"))
+        return errors
