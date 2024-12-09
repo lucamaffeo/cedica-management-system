@@ -71,7 +71,7 @@
         <ul class="pagination">
             {% if employees.has_prev %}
                 <li class="page-item">
-                    <a class="page-link" href="{{ url_for('report.employee_seniority', page=employees.prev_num, sort_by=sort_by, direction=direction) }}">&laquo;</a>
+                    <a class="page-link" href="{{ url_for('report.employee_seniority', page=employees.prev_num, sort_by=sort_by, direction=direction, search=request.args.get('search'), job_position=request.args.get('job_position'), start_date=request.args.get('start_date'), min_seniority=request.args.get('min_seniority'), max_seniority=request.args.get('max_seniority')) }}">&laquo;</a>
                 </li>
             {% else %}
                 <li class="page-item disabled">
@@ -82,7 +82,7 @@
             {% for page_num in employees.iter_pages() %}
                 {% if page_num %}
                     <li class="page-item {% if page_num == employees.page %}active{% endif %}">
-                        <a class="page-link" href="{{ url_for('report.employee_seniority', page=page_num, sort_by=sort_by, direction=direction) }}">{{ page_num }}</a>
+                        <a class="page-link" href="{{ url_for('report.employee_seniority', page=page_num, sort_by=sort_by, direction=direction, search=request.args.get('search'), job_position=request.args.get('job_position'), start_date=request.args.get('start_date'), min_seniority=request.args.get('min_seniority'), max_seniority=request.args.get('max_seniority')) }}">{{ page_num }}</a>
                     </li>
                 {% else %}
                     <li class="page-item disabled"><span class="page-link">...</span></li>
@@ -91,7 +91,7 @@
 
             {% if employees.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="{{ url_for('report.employee_seniority', page=employees.next_num, sort_by=sort_by, direction=direction) }}"> &raquo;</a>
+                    <a class="page-link" href="{{ url_for('report.employee_seniority', page=employees.next_num, sort_by=sort_by, direction=direction, search=request.args.get('search'), job_position=request.args.get('job_position'), start_date=request.args.get('start_date'), min_seniority=request.args.get('min_seniority'), max_seniority=request.args.get('max_seniority')) }}"> &raquo;</a>
                 </li>
             {% else %}
                 <li class="page-item disabled">

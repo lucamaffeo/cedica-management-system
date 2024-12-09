@@ -19,7 +19,6 @@ export const useNewsStore = defineStore('news', {
 
         // crear objeto de parámetros base
         const params = {
-          status: 2,
           page: page,
           per_page: perpage,
         };
