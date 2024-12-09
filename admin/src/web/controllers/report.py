@@ -6,7 +6,7 @@ from src.core.repositories.report import list_employees_by_seniority, list_recei
 from src.core.models import grafic
 from src.core.repositories.grafic import generar_grafico_barras_apiladas_ingresos, generar_grafico_barras_becados, generar_grafico_barras_ingresos_por_mes, generar_grafico_torta_discapacidades
 from src.core.database import db
-from flask import url_for, render_template, request, send_file, Blueprint, redirect
+from flask import url_for, render_template, request, send_file, Blueprint, redirect, flash
 from src.web.helpers.auth import has_permission
 
 
@@ -84,18 +84,15 @@ def employee_seniority():
     job_position = request.args.get('job_position')
     min_seniority = request.args.get('min_seniority', type=int)
     max_seniority = request.args.get('max_seniority', type=int)
-    start_date = request.args.get('start_date', type=str)
     page = request.args.get('page', 1, type=int)
-
-    # Convierte la fecha si está presente
-    if start_date:
-        start_date = datetime.strptime(start_date, "%Y-%m-%d")
+    start_date = request.args.get('start_date')
 
     validators = ReportValidator()
     errors = validators.validate_AntiguedadEmpleados(request.args)
     if errors:
         flash_validation_errors(errors)
         return redirect(url_for("report.employee_seniority"))
+
 
     # Obtener empleados con paginación
     employees_pagination = list_employees_by_seniority(
@@ -121,8 +118,6 @@ def receipt_payment_method_report():
     """
     payment_method = request.args.get(
         'payment_method')  # Obtén el método de pago
-    start_date = request.args.get('start_date')
-    end_date = request.args.get('end_date')
     sort_by = request.args.get('sort_by', 'payment_method')
     direction = request.args.get('direction', 'asc')
     min_receipts = request.args.get('min_receipts', type=int)
@@ -139,8 +134,6 @@ def receipt_payment_method_report():
 
     report_data = list_receipts_by_payment_method(
         payment_method=payment_method,
-        start_date=start_date,
-        end_date=end_date,
         sort_by=sort_by,
         direction=direction,
         min_receipts=min_receipts,

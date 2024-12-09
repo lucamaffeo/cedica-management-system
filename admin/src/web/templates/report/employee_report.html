@@ -57,7 +57,7 @@
         <td>{{ employee.name }} {{ employee.surname }}</td>
         <td>{{ employee.job_position }}</td>
         <td>{{ employee.start_date.strftime('%d/%m/%Y') }}</td>
-        <td>{{ (now - employee.start_date).days // 365 }} años</td>
+        <td>{{ (now - employee.start_date).days // 365 }} Años</td>
     </tr>
     {% else %}
     <tr>

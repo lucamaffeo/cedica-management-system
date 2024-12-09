@@ -135,7 +135,7 @@ def run():
     # EMPLEADOS
     luca2 = employee.create_employee(name="adf", surname="dah", dni="150", email="laa0@gmail.com",
                                      start_date="2021-01-01",  active=True, job_position="Entrenador de Caballos")
-    profesor = employee.create_employee(name="Carlos", surname="Gomez", dni="12345678", email="carlos@gmail.com", start_date="2021-01-01", active=True, job_position="Profesor", address="Calle Falsa 123",
+    profesor = employee.create_employee(name="Carlos", surname="Gomez", dni="12345678", email="carlos@gmail.com", start_date="2021-01-01", active=True, job_position="Profesor de Equitación", address="Calle Falsa 123",
                                         city="Ciudad", telephone="123456789", profession="Psicólogo/a", emergency_contact_info="Maria Gomez - 123456789", social_work="OSDE", associate_number="123456", condition="Personal Rentado")
     terapeuta = employee.create_employee(name="Ana", surname="Lopez", dni="87654321", email="ana@gmail.com", start_date="2021-02-01", active=True, job_position="Terapeuta", address="Calle Verdadera 456",
                                          city="Ciudad", telephone="987654321", profession="Médico/a", emergency_contact_info="Juan Lopez - 987654321", social_work="Swiss Medical", associate_number="654321", condition="Personal Rentado")
@@ -143,9 +143,9 @@ def run():
                                          city="Ciudad", telephone="1122334455", profession="Psicomotricista", emergency_contact_info="Pedro Martinez - 1122334455", social_work="Galeno", associate_number="112233", condition="Voluntario")
     auxiliar_pista = employee.create_employee(name="Pedro", surname="Fernandez", dni="55667788", email="pedro@gmail.com", start_date="2021-04-01", active=True, job_position="Auxiliar de pista", address="Calle Real 101",
                                               city="Ciudad", telephone="5566778899", profession="Docente", emergency_contact_info="Laura Fernandez - 5566778899", social_work="Medicus", associate_number="556677", condition="Voluntario")
-    entrenador = employee.create_employee(name="Jorge", surname="Perez", dni="99887766", email="jorge@gmail.com", start_date="2021-05-01", active=True, job_position="Entrenador", address="Calle Principal 202",
+    entrenador = employee.create_employee(name="Jorge", surname="Perez", dni="99887766", email="jorge@gmail.com", start_date="2021-05-01", active=True, job_position="Entrenador de Caballos", address="Calle Principal 202",
                                           city="Ciudad", telephone="9988776655", profession="Otro", emergency_contact_info="Sofia Perez - 9988776655", social_work="OSDE", associate_number="998877", condition="Personal Rentado")
-    entrenador2 = employee.create_employee(name="Jorge", surname="Peres", dni="99887767", email="jorge1@gmail.com", start_date="2019-05-01", active=True, job_position="Entrenador", address="Calle Principal 202",
+    entrenador2 = employee.create_employee(name="Jorge", surname="Peres", dni="99887767", email="jorge1@gmail.com", start_date="2019-05-01", active=True, job_position="Entrenador de Caballos", address="Calle Principal 202",
                                            city="Ciudad", telephone="9988776665", profession="Otro", emergency_contact_info="Sofia Perez - 9988776655", social_work="OSDE", associate_number="998878", condition="Personal Rentado")
 
     # PAGOS
