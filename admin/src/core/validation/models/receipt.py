@@ -1,9 +1,11 @@
-
 import datetime
 from typing import Dict, Any, List, Optional
 from src.core.validation.rules.date import dateFormat
 from src.core.validation.validator import ValidationError, ValidationRule, Validator, Required, MaxLength, In
 from src.core.validation.rules.payment import ValidAmount
+from src.core.validation.rules.numbers import OnlyNumbers
+from src.core.repositories.riders import get_rider
+from src.core.repositories.employee import get_employee
 
 
 class DateNotInFuture(ValidationRule):
@@ -20,6 +22,18 @@ class DateNotInFuture(ValidationRule):
         return None
 
 
+class EmployeeExists(ValidationRule):
+    def validate(self, value: str) -> str | None:
+        if not get_employee(int(value)):
+            return "El ID del empleado no existe"
+        return None
+
+class RiderExists(ValidationRule):
+    def validate(self, value: str) -> str | None:
+        if not get_rider(int(value)):
+            return "El ID del jinete no existe"
+        return None
+
 class ReceiptValidator(Validator):
     def __init__(self):
         super().__init__()
@@ -30,9 +44,13 @@ class ReceiptValidator(Validator):
 
         # Employee ID validation
         self.add_rule('employee_id', Required())
+        self.add_rule('employee_id', OnlyNumbers())
+        self.add_rule('employee_id', EmployeeExists())
 
         # JA ID validation
         self.add_rule('ja_id', Required())
+        self.add_rule('ja_id', OnlyNumbers())
+        self.add_rule('ja_id', RiderExists())
 
         # Payment date validation
         self.add_rule('payment_date', Required())
