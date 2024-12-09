@@ -39,7 +39,7 @@
 {% block table_rows %}
     {% for payment in pagination.items %}
     <tr>
-		<td>{{ payment.formatted_date }}</td>
+        <td>{{ payment.formatted_date }}</td>
         <td>{% set beneficiary = beneficiaries | selectattr("id", "==", payment.beneficiary_id) | first %}
         {% if beneficiary %}
         {{ beneficiary.name }} {{ beneficiary.surname }}
@@ -49,9 +49,9 @@
         <td>{{ payment.amount }}</td>
         <td>{{ payment.type }}</td>
         <td>
-		  <a href="{{ url_for('payments.show', id=payment.id) }}">Ver</a><br>
-		  <a href="{{ url_for('payments.update', id=payment.id) }}">Editar</a><br>
-			<a href="{{ url_for('payments.delete', id=payment.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
+            <a href="{{ url_for('payments.show', id=payment.id) }}">Ver</a><br>
+            <a href="{{ url_for('payments.update', id=payment.id) }}">Editar</a><br>
+            <a href="{{ url_for('payments.delete', id=payment.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
         </td>
     </tr>
     {% else %}
