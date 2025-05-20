@@ -1,3 +1,4 @@
+import io
 from flask import Blueprint, redirect, render_template, request, url_for, flash, send_file
 from src.core.validation.models.document import DocumentValidator
 from src.web.helpers.flash import flash_validation_errors
@@ -13,10 +14,16 @@ bp = Blueprint("documents", __name__, url_prefix="/documents")
 @bp.get("/<string:entity_type>/<int:entity_id>/")
 @clean_entity_type
 def index(entity_type, entity_id):
+    """
+    Renderiza la página de índice de documentos con paginación y filtros.
+    
+    :param entity_type: Tipo de entidad a la que pertenece el documento.
+    :param entity_id: ID de la entidad a la que pertenece el documento.
+    """
     search = request.args.get("search", "")
     sort_by = request.args.get("sort_by", "title")
     direction = request.args.get("direction", "asc")
-    page = int(request.args.get("page", 1))
+    page = request.args.get('page', 1, type=int)
 
     # Listar documentos por ID del jinete
     documents = document_repository.list_documents_by_id(
@@ -32,6 +39,13 @@ def index(entity_type, entity_id):
 @bp.get("/<string:entity_type>/<int:entity_id>/<int:id>/delete")
 @clean_entity_type
 def delete(entity_type, entity_id, id):
+    """
+    Elimina un documento específico.
+    
+    :param entity_type: Tipo de entidad a la que pertenece el documento.
+    :param entity_id: ID de la entidad a la que pertenece el documento.
+    :param id: ID del documento a eliminar.
+    """
     if document_repository.delete_document(id):
         flash("Documento eliminado con éxito.", "info")
         return redirect(url_for("documents.index", entity_type=entity_type, entity_id=entity_id))
@@ -44,14 +58,24 @@ def delete(entity_type, entity_id, id):
 
 @bp.get("/<string:entity_type>/<int:entity_id>/<int:id>/dl")
 def download(entity_type, entity_id, id):
+    """
+    Descarga un documento específico.
+    
+    :param entity_type: Tipo de entidad a la que pertenece el documento.
+    :param entity_id: ID de la entidad a la que pertenece el documento.
+    :param id: ID del documento a descargar.
+    """
     document = document_repository.get_document(id)
     if not document:
         flash("Documento no encontrado.", "error")
         return redirect(request.referrer)
     else:
-        file_stream, file_name = document_repository.download_file(
-            document.file)
-        return send_file(file_stream, as_attachment=True, download_name=file_name)
+        file_data, file_name = document_repository.download_file(document.file)
+        return send_file(
+            io.BytesIO(file_data),
+            as_attachment=True,
+            download_name=file_name
+        )
 
 # add document
 
@@ -59,6 +83,12 @@ def download(entity_type, entity_id, id):
 @bp.get("/<string:entity_type>/<int:entity_id>/create")
 @clean_entity_type
 def add(entity_type, entity_id):
+    """
+    Renderiza el formulario para agregar un nuevo documento.
+    
+    :param entity_type: Tipo de entidad a la que pertenece el documento.
+    :param entity_id: ID de la entidad a la que pertenece el documento.
+    """
     return render_template("documents/form.html", entity_type=entity_type, entity_id=entity_id, title="Agregar documento")
 
 # Create document
@@ -67,6 +97,12 @@ def add(entity_type, entity_id):
 @bp.post("/<string:entity_type>/<int:entity_id>/create")
 @clean_entity_type
 def create(entity_type, entity_id):
+    """
+    Crea un nuevo documento basado en los datos del formulario.
+    
+    :param entity_type: Tipo de entidad a la que pertenece el documento.
+    :param entity_id: ID de la entidad a la que pertenece el documento.
+    """
     params = request.form.to_dict()
     # agregar entity_type y entity_id a los parámetros
     params['entity_type'] = entity_type

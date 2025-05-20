@@ -13,6 +13,7 @@ class Payment(db.Model):
     type = db.Column(db.Enum('Honorarios', 'Proveedor',
                      'Gastos varios', name='payment_type'), nullable=False)
     description = db.Column(db.Text)
+    employee = db.relationship('Employee', foreign_keys=[beneficiary_id], backref=db.backref('payments', lazy=True))
 
     @property
     def formatted_date(self):

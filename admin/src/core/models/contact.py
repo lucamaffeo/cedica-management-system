@@ -17,7 +17,7 @@ class Contact(db.Model):
     email = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=False)
     comment = db.Column(db.Text, nullable=True)
-    inserted_at = db.Column(db.DateTime, default=datetime.now)
+    created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(
         db.DateTime, default=datetime.now, onupdate=datetime.now)
     updated_by = db.Column(
@@ -29,8 +29,8 @@ class Contact(db.Model):
         'ContactStatus', backref='contacts_status', lazy=True)
 
     @property
-    def formatted_inserted_at(self):
-        return self.inserted_at.strftime('%Y-%m-%d %H:%M')
+    def formatted_created_at(self):
+        return self.created_at.strftime('%Y-%m-%d %H:%M')
 
     @property
     def formated_updated_at(self):
@@ -46,6 +46,6 @@ class Contact(db.Model):
             "body": self.description,
             "status": self.status.name,
             "comment": self.comment,
-            "inserted_at": self.inserted_at,
+            "created_at": self.created_at,
             "updated_at": self.updated_at
         }

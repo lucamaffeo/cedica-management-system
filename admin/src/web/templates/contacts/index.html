@@ -15,15 +15,14 @@
     <select class="form-control" name="status" id="status">
         <option value="">Todos los estados</option>
         {% for status in statuses %}
-        <option value="{{ status.id }}" {% if request.args.get('status')|int==status.id %}selected{% endif %}>{{ status.name }}
-        </option>
+        <option value="{{ status.id }}" {% if request.args.get('status')|int==status.id %}selected{% endif %}>{{ status.name }}</option>
         {% endfor %}
     </select>
 {% endblock %}
 
-{% set sorting_criteria = [("title", "Titulo"), ("email", "Email"), ("status", "Estado"), ("inserted_at", "Creación")] %}
+{% set sorting_criteria = [("title", "Titulo"), ("email", "Email"), ("status", "Estado"), ("created_at", "Creación")] %}
 
-{% set sortable_fields = ["inserted_at"] %}
+{% set sortable_fields = ["created_at"] %}
 
 {% block table_rows %}
     {% for contact in pagination.items %}
@@ -31,11 +30,11 @@
         <td>{{ contact.title }}</td>
         <td>{{ contact.email }}</td>
         <td>{{ contact.status.name }}</td>
-        <td>{{ contact.formatted_inserted_at }}</td>
+        <td>{{ contact.formatted_created_at }}</td>
         <td>
-		<a href="{{ url_for('contacts.show', id=contact.id) }}">Ver</a><br>
-		<a href="{{ url_for('contacts.update', id=contact.id) }}">Editar</a><br>
-		<a href="{{ url_for('contacts.delete', id=contact.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
+            <a href="{{ url_for('contacts.show', id=contact.id) }}">Ver</a><br>
+            <a href="{{ url_for('contacts.update', id=contact.id) }}">Editar</a><br>
+            <a href="{{ url_for('contacts.delete', id=contact.id) }}" onclick="return confirm('¿Está seguro?')">Eliminar</a>
         </td>
     </tr>
     {% else %}
@@ -45,5 +44,5 @@
     {% endfor %}
 {% endblock %}
 
-  {% block add_new %}
-  {% endblock %}
+{% block add_new %}
+{% endblock %}

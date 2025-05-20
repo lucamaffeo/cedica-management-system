@@ -1,9 +1,7 @@
 {% extends "base_show.html" %}
 
-{% block title %}
-Perfil de {{ horse.name }}
-{% endblock %}
 {% block content %}
+<h1>Detalles de Caballo</h1>
 <p><strong>Fecha de Nacimiento:</strong> {{ horse.birth_date.strftime('%Y-%m-%d') if horse.birth_date else 'No
     especificado' }}</p>
 <p><strong>Sexo:</strong> {{ horse.gender or 'No especificado' }}</p>

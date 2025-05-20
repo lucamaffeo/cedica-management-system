@@ -1,24 +1,29 @@
 import { fileURLToPath, URL } from 'node:url'
-
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [
-    vue(),
-    vueDevTools(),
-  ],
-  server: {
-    proxy: {
-      '/api': 'https://admin-grupo10.proyecto2024.linti.unlp.edu.ar/',  // Proxy de las solicitudes API a Flask
+export default defineConfig(({ mode }) => {
+  // Cargar variables de entorno según el modo (desarrollo o producción)
+  const env = loadEnv(mode, process.cwd());
+  console.log(`VITE_API_BASE_URL: ${env.VITE_API_BASE_URL}`); // Verificar que la variable de entorno se carga correctamente
+
+  return {
+    plugins: [
+      vue(),
+      vueDevTools(),
+    ],
+    server: {
+      proxy: {
+        '/api': env.VITE_API_BASE_URL,  // Redirigir en desarrollo usando la variable de entorno
+      },
     },
-  },
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+      },
     },
-  },
-})
+  };
+});
 

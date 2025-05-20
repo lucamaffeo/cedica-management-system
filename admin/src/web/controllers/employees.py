@@ -3,9 +3,6 @@ from flask import Blueprint, redirect, render_template, request, url_for, flash
 from src.core.repositories import employee as employee_repository
 from src.core.repositories import user as user_repository
 from src.web.helpers.auth import has_permission
-from werkzeug.utils import secure_filename
-from os import fstat
-from flask import current_app
 from src.core.validation.models.employee import EmployeeValidator
 from src.web.helpers.flash import flash_validation_errors
 
@@ -18,11 +15,14 @@ bp = Blueprint("employees", __name__, url_prefix="/employees")
 @bp.get("/")
 @has_permission("employee_index")  # permiso para listar empleados
 def index():
+    """
+    Renderiza la página de índice de empleados con paginación y filtros.
+    """
     search = request.args.get("search", "")
     job_position_filter = request.args.get("job_position", None)
     sort_by = request.args.get("sort_by", "name")
     direction = request.args.get("direction", "asc")
-    page = int(request.args.get("page", 1))
+    page = request.args.get('page', 1, type=int)
 
     employees = employee_repository.list_employees(
         search, job_position_filter, sort_by, direction, page)
@@ -37,10 +37,12 @@ def index():
 @bp.get("/create")
 @has_permission("employee_create")
 def register():
+    """
+    Renderiza el formulario para crear un nuevo empleado.
+    """
     users = user_repository.list_unassociated_users()
     return render_template("employees/form.html", is_update=False, title='Crear Empleado', users=users)
-    users = user_repository.list_unassociated_users()
-    return render_template("employees/form.html", is_update=False, title='Crear Empleado', users=users)
+    
 
 # Create employee
 
@@ -48,6 +50,9 @@ def register():
 @bp.post("/create")
 @has_permission("employee_create")
 def create():
+    """
+    Crea un nuevo empleado basado en los datos del formulario.
+    """
     params = request.form.to_dict()
 
     validator = EmployeeValidator()
@@ -86,6 +91,11 @@ def create():
 @bp.get("/<int:id>/show")
 @has_permission("employee_show")
 def show(id):
+    """
+    Muestra los detalles de un empleado específico.
+    
+    :param id: ID del empleado a mostrar.
+    """
     employee = employee_repository.get_employee(id)
     if not employee:
         flash("Empleado no encontrado.", "error")
@@ -98,6 +108,11 @@ def show(id):
 @bp.get("/<int:id>/update")
 @has_permission("employee_update")
 def edit(id):
+    """
+    Renderiza el formulario para editar un empleado existente.
+    
+    :param id: ID del empleado a editar.
+    """
     employee = employee_repository.get_employee(id)
     if not employee:
         flash("Empleado no encontrado.", "error")
@@ -109,6 +124,11 @@ def edit(id):
 @bp.post("/<int:id>/update")
 @has_permission("employee_update")
 def update(id):
+    """
+    Actualiza un empleado existente basado en los datos del formulario.
+    
+    :param id: ID del empleado a actualizar.
+    """
     params = request.form.to_dict()
 
     validator = EmployeeValidator(id)
@@ -157,6 +177,11 @@ def update(id):
 @bp.get("/<int:id>/delete")
 @has_permission("employee_destroy")
 def delete(id):
+    """
+    Elimina un empleado específico.
+    
+    :param id: ID del empleado a eliminar.
+    """
     if employee_repository.delete_employee(id):
         flash("Empleado eliminado con éxito.", "info")
         return redirect(url_for("employees.index"))

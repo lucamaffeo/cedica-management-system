@@ -49,16 +49,14 @@ class UniqueEmail(ValidationRule):
 
 
 class ValidRole(ValidationRule):
-    def __init__(self, role_model):
-        self.Role = role_model
+    def __init__(self):
+        self.valid_roles = [
+            'system_admin', 'administracion', 'tecnica', 'voluntariado', 'ecuestre', 'editor'
+        ]
 
-    def validate(self, value: int) -> str | None:
-        if not value:
-            return None
-
-        role = role_repo.get_role_by_id(value)
-        if not role:
-            return "Rol seleccionado no válido"
+    def validate(self, value: str) -> str | None:
+        if value not in self.valid_roles:
+            return "El rol ingresado no es válido"
         return None
 
 
@@ -91,7 +89,7 @@ class UserValidator(Validator):
     # For own profile updates, remove role validation
         if not is_update_own:
             self.add_rule('role_id', Required())
-            self.add_rule('role_id', ValidRole(role_model))
+            self.add_rule('role_id', ValidRole())
 
         self.add_rule('alias', Required())
         self.add_rule('alias', MaxLength(255))

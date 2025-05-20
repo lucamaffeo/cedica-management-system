@@ -16,11 +16,14 @@ bp = Blueprint("horses", __name__, url_prefix="/horses")
 @bp.get("/")
 @has_permission("horse_index")  # permiso para listar caballos
 def index():
+    """
+    Renderiza la página de índice de caballos con paginación y filtros.
+    """
     search = request.args.get("search", "")
     assigned_activities_ja = request.args.get("assigned_activities_ja", None)
     sort_by = request.args.get("sort_by", "name")
     direction = request.args.get("direction", "asc")
-    page = int(request.args.get("page", 1))
+    page = request.args.get('page', 1, type=int)
 
     horses = horse_repository.list_horses(
         search, assigned_activities_ja, sort_by, direction, page)
@@ -37,6 +40,9 @@ def index():
 @bp.get("/create")
 @has_permission("horse_create")
 def register():
+    """
+    Renderiza el formulario para crear un nuevo caballo.
+    """
     job_positions = ["Conductor", "Entrenador de Caballos"]
     trainers = get_employees_by_job_positions(job_positions)
     activities = horse_repository.get_activities()
@@ -51,6 +57,9 @@ def register():
 @bp.post("/create")
 @has_permission("horse_create")
 def create():
+    """
+    Crea un nuevo caballo basado en los datos del formulario.
+    """
     params = request.form
     validator = HorseValidator()
     errors = validator.validate_create(params)
@@ -60,6 +69,11 @@ def create():
         return redirect(url_for("horses.register"))
 
     trainer_ids = request.form.getlist('trainer_id')
+    errors = validator.validate_trainer_ids(trainer_ids)
+    if errors:
+        for error in errors:
+            flash(f"{error.field}: {error.message}", "error")
+        return redirect(url_for("horses.register"))
 
     horse = horse_repository.create_horse(
         name=params['name'],
@@ -82,6 +96,11 @@ def create():
 @bp.get("/<int:id>/show")
 @has_permission("horse_show")
 def show(id):
+    """
+    Muestra los detalles de un caballo específico.
+    
+    :param id: ID del caballo a mostrar.
+    """
     horse = horse_repository.get_horse(id)
     if not horse:
         flash("Caballo no encontrado.", "error")
@@ -94,6 +113,11 @@ def show(id):
 @bp.get("/<int:id>/update")
 @has_permission("horse_update")
 def edit(id):
+    """
+    Renderiza el formulario para editar un caballo existente.
+    
+    :param id: ID del caballo a editar.
+    """
     horse = horse_repository.get_horse(id)
     job_positions = ["Conductor", "Entrenador de Caballos"]
     trainers = get_employees_by_job_positions(job_positions)
@@ -115,7 +139,11 @@ def edit(id):
 @bp.post("/<int:id>/update")
 @has_permission("horse_update")
 def update(id):
-
+    """
+    Actualiza un caballo existente basado en los datos del formulario.
+    
+    :param id: ID del caballo a actualizar.
+    """
     params = request.form
     validator = HorseValidator()
     errors = validator.validate_update(params, id)
@@ -126,6 +154,11 @@ def update(id):
 
     # Obtener los nuevos IDs de entrenadores seleccionados desde el formulario
     trainer_ids = request.form.getlist('trainer_id')
+    errors = validator.validate_trainer_ids(trainer_ids)
+    if errors:
+        for error in errors:
+            flash(f"{error.field}: {error.message}", "error")
+        return redirect(url_for("horses.edit", id=id))
 
     if horse_repository.update_horse(
         horse_id=id,
@@ -151,6 +184,11 @@ def update(id):
 @bp.get("/<int:id>/delete")
 @has_permission("horse_destroy")
 def delete(id):
+    """
+    Elimina un caballo específico.
+    
+    :param id: ID del caballo a eliminar.
+    """
     if horse_repository.delete_horse(id):
         flash("Caballo eliminado con éxito.", "info")
         return redirect(url_for("horses.index"))

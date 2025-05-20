@@ -10,6 +10,9 @@ bp = Blueprint("contents", __name__, url_prefix="/contents")
 @bp.get("/")
 @has_permission("content_index")
 def index():
+    """
+    Renderiza la página de índice de contenidos con paginación y filtros.
+    """
     search = request.args.get('search')
     status_id = request.args.get('status', None, type=int)
     sort_by = request.args.get('sort_by', 'title')
@@ -26,12 +29,18 @@ def index():
 @bp.get("/create")
 @has_permission("content_create")
 def register():
+    """
+    Renderiza el formulario para crear un nuevo contenido.
+    """
     return render_template("contents/form.html", is_update=False, title="Crear Contenido", statuses=content_repository.list_statuses())
 
 
 @bp.post("/create")
 @has_permission("content_create")
 def create():
+    """
+    Crea un nuevo contenido basado en los datos del formulario.
+    """
     params = request.form.to_dict()
     validator = ContentValidator()
     errors = validator.validate_for_create(params)
@@ -55,6 +64,11 @@ def create():
 @bp.get("/<int:id>/show")
 @has_permission("content_show")
 def show(id):
+    """
+    Muestra los detalles de un contenido específico.
+    
+    :param id: ID del contenido a mostrar.
+    """
     content = content_repository.get_content(id)
     if not content:
         flash("Contenido no encontrado.", "error")
@@ -66,6 +80,11 @@ def show(id):
 @bp.get("/<int:id>/update")
 @has_permission("content_update")
 def edit(id):
+    """
+    Renderiza el formulario para editar un contenido existente.
+    
+    :param id: ID del contenido a editar.
+    """
     content = content_repository.get_content(id)
     if not content:
         flash("Contenido no encontrado.", "error")
@@ -76,6 +95,11 @@ def edit(id):
 @bp.route("/<int:id>/update", methods=["POST", "PATCH"])
 @has_permission("content_update")
 def update(id):
+    """
+    Actualiza un contenido existente basado en los datos del formulario.
+    
+    :param id: ID del contenido a actualizar.
+    """
     params = request.form.to_dict()
     validator = ContentValidator(content_id=id)
     errors = validator.validate_for_update(params)
@@ -107,6 +131,11 @@ def update(id):
 @bp.get("/<int:id>/delete")
 @has_permission("content_destroy")
 def delete(id):
+    """
+    Elimina un contenido específico.
+    
+    :param id: ID del contenido a eliminar.
+    """
     if content_repository.delete_content(id):
         flash("Contenido eliminado con éxito.", "info")
     else:

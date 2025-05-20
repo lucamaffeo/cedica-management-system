@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia'
-import axios from 'axios'
+import { defineStore } from 'pinia';
+import { useApiStore } from './apiStore'; // Importa el store de la API
 
 export const useNewsStore = defineStore('news', {
   state: () => ({
@@ -9,25 +9,46 @@ export const useNewsStore = defineStore('news', {
     total: 0,
   }),
   actions: {
-    async fetchNews(page = 1, perPage = 10) {
+    async fetchNews(page = 1, perpage = 10, filters = {}) {
       try {
         this.loading = true;
         this.error = null;
-        const response = await axios.get('https://admin-grupo10.proyecto2024.linti.unlp.edu.ar/api/articles', {
-          params: {
-            status: 2,
-            page: page,
-            per_page: perPage
-          }
-        });
-        this.news = response.data.data; // News items for current page
-        this.total = response.data.total; // Total number of items
+
+        // obtén el cliente api desde el apistore
+        const apistore = useApiStore();
+
+        // crear objeto de parámetros base
+        const params = {
+          page: page,
+          per_page: perpage,
+        };
+
+        if (filters.published_from) {
+          params.published_from = filters.published_from;
+        }
+
+        if (filters.published_to) {
+          params.published_to = filters.published_to;
+        }
+
+        if (filters.author) {
+          params.author = filters.author;
+        }
+
+        const response = await apistore.apiClient.get('/api/articles', {
+          params: params
+        })
+
+        // Actualiza los datos en el estado
+        this.news = response.data.data; // Noticias para la página actual
+        this.total = response.data.total; // Total de artículos
       } catch (error) {
         this.error = 'Error al obtener las noticias';
         console.error(error);
       } finally {
         this.loading = false;
       }
-    }
+    },
   },
-})
+});
+

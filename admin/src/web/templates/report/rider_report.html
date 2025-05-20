@@ -52,7 +52,7 @@
         <ul class="pagination">
             {% if pagination.has_prev %}
                 <li class="page-item">
-                    <a class="page-link" href="{{ url_for('report.riders_by_age', page=pagination.prev_num, sort_by=sort_by, direction=direction) }}">&laquo;</a>
+                    <a class="page-link" href="{{ url_for('report.riders_by_age', page=pagination.prev_num, sort_by=sort_by, direction=direction, name=request.args.get('name'), surname=request.args.get('surname'), dni=request.args.get('dni'), min_age=request.args.get('min_age'), max_age=request.args.get('max_age')) }}">&laquo;</a>
                 </li>
             {% else %}
                 <li class="page-item disabled">
@@ -63,7 +63,7 @@
             {% for page_num in pagination.iter_pages() %}
                 {% if page_num %}
                     <li class="page-item {% if page_num == pagination.page %}active{% endif %}">
-                        <a class="page-link" href="{{ url_for('report.riders_by_age', page=page_num, sort_by=sort_by, direction=direction) }}">{{ page_num }}</a>
+                        <a class="page-link" href="{{ url_for('report.riders_by_age', page=page_num, sort_by=sort_by, direction=direction, name=request.args.get('name'), surname=request.args.get('surname'), dni=request.args.get('dni'), min_age=request.args.get('min_age'), max_age=request.args.get('max_age')) }}">{{ page_num }}</a>
                     </li>
                 {% else %}
                     <li class="page-item disabled"><span class="page-link">...</span></li>
@@ -72,7 +72,7 @@
 
             {% if pagination.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="{{ url_for('report.riders_by_age', page=pagination.next_num, sort_by=sort_by, direction=direction) }}"> &raquo;</a>
+                    <a class="page-link" href="{{ url_for('report.riders_by_age', page=pagination.next_num, sort_by=sort_by, direction=direction, name=request.args.get('name'), surname=request.args.get('surname'), dni=request.args.get('dni'), min_age=request.args.get('min_age'), max_age=request.args.get('max_age')) }}"> &raquo;</a>
                 </li>
             {% else %}
                 <li class="page-item disabled">

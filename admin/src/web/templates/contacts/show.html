@@ -6,10 +6,9 @@
 
 
 	{% block content %}
-	<h1>Consulta #{{ contact.id }} de {{ contact.name }}</h1>
+	<h1>Consulta #{{ contact.id }} de {{ contact.email }}</h1>
     <div>
         <p><strong>Título:</strong> {{ contact.title }}</p>
-        <p><strong>Nombre del usuario:</strong> {{ contact.name }}</p>
         <p><strong>Email:</strong> {{ contact.email }}</p>
         <p><strong>Mensaje:</strong> {{ contact.description }}</p>
         <p><strong>Estado:</strong> {{ contact.status.name }}</p>

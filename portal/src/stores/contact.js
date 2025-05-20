@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
-import axios from 'axios';
+import { useApiStore } from './apiStore'; // Importa el store global de la API
 
 export const useContactStore = defineStore('contact', {
   state: () => ({
     loading: false,
     error: null,
-    success: null, // Nueva propiedad para manejar mensajes de éxito
+    success: null, // Propiedad para manejar mensajes de éxito
   }),
   actions: {
     async sendMessage(message) {
@@ -14,7 +14,9 @@ export const useContactStore = defineStore('contact', {
       this.success = null;
 
       try {
-        const response = await axios.post('/api/messages', message);
+        // Obtén apiClient del apiStore
+        const apiStore = useApiStore();
+        const response = await apiStore.apiClient.post('/api/messages', message);
 
         if (response.status === 201) {
           this.success = 'Mensaje enviado correctamente.';

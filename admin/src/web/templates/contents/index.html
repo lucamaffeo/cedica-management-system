@@ -8,9 +8,17 @@ Administracion de contenidos
 Administracion de contenidos
 {% endblock %}
 
+{% set show_search = true %}
+
+{% block search_placeholder %}
+Buscar por Titulo o Resumen
+{% endblock %}
+
+
 <!-- Content table -->
 {% set sorting_criteria = [("title", "Título"), ("creation_date", "Fecha Creación"), ("publication_date", "Fecha Publicación"),("update_date", "Fecha Actualización"), ("status", "Estado"),("summary", "Resumen"), ("author", "Autor")] %}
 {% set sortable_fields = ["title", "update_date"] %}
+
 {% block table_rows %}
     {% for content in pagination.items %}
     <tr>

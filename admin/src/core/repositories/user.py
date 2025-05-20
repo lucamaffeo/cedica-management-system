@@ -66,6 +66,13 @@ def update_user(id, **kwargs):
 def delete_user(id):
     user = User.query.filter(User.id == id).first()
     if user:
+        # Check if user is sys_admin and ensure there's at least another sys_admin
+        if user.role.name == 'system_admin':
+            other_sys_admin = User.query.join(Role).filter(
+                and_(Role.name == 'system_admin', User.id != id, User.active == True)
+            ).first()
+            if not other_sys_admin:
+                return False
         db.session.delete(user)
         db.session.commit()
         return True

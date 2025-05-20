@@ -6,6 +6,8 @@ from src.core.validation.rules.phone import PhoneNumberFormat
 from src.core.validation.rules.letters import OnlyLetters
 from src.core.validation.rules.numbers import OnlyNumbers
 from src.core.repositories import riders as rider_repository
+from src.core.validation.rules.date import dateFormat
+
 
 
 class UniqueDni(ValidationRule):
@@ -119,6 +121,7 @@ class RiderValidator(Validator):
         self.add_rule('age', OnlyNumbers())
 
         self.add_rule('birthdate', Required())
+        self.add_rule('birthdate', dateFormat())
 
         self.add_rule('birth_place', Required())
         self.add_rule('birth_place', MaxLength(100))
@@ -198,6 +201,7 @@ class RiderValidator(Validator):
 
         
         self.add_rule('days', Required())
+        self.add_rule('days', ValidDays())
         self.add_rule('tutors', Required())
         self.add_rule('tutors', AtLeastOneTutor())
 
@@ -219,4 +223,12 @@ class AtLeastOneTutor(ValidationRule):
             for tutor in value
         ):
             return "Debe haber al menos un tutor con todos los campos completos."
+        return None
+
+
+class ValidDays(ValidationRule):
+    def validate(self, value: list | None) -> str | None:
+        for day in value:
+            if not day.isdigit():
+                return "El ID del día debe ser un número."
         return None
