@@ -31,3 +31,6 @@ coverage
 # .env.*.local
 
 *.tsbuildinfo
+
+
+admin/src/core/client_secrets.json

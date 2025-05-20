@@ -54,3 +54,6 @@ flake.nix
 flake.lock
 .envrc
 .direnv/
+
+
+admin/src/core/client_secrets.json
