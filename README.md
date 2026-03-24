@@ -24,3 +24,25 @@ Arquitectura MVC
 Validaciones cliente/servidor
 Seguridad web (XSS, CSRF, SQL Injection)
 Trabajo en equipo y versionado semántico
+
+
+⚙️ Instalación
+# Clonar repositorio
+git clone https://github.com/lucamaffeo/cedica-management-system.git
+
+# Backend
+cd .\cedica-management-system\admin\ 
+
+# Instalar dependencias con Poetry
+poetry install
+
+# Activar entorno
+poetry env activate
+
+# Ejecutar aplicación
+poetry run python app.py
+
+🔹 Frontend
+cd portal
+npm install
+npm run dev
