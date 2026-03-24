@@ -9,6 +9,7 @@ Base de datos: PostgreSQL
 ORM: SQLAlchemy
 Almacenamiento: MinIO
 Control de versiones: Git
+
 ⚙️ Funcionalidades principales
 Sistema de autenticación sin librerías externas
 Control de accesos mediante roles y permisos
@@ -17,6 +18,7 @@ Registro de cobros y reportes estadísticos
 Gestión de caballos y documentación asociada
 API REST para integración con frontend
 Portal público desarrollado en Vue.js
+
 🧠 Conceptos aplicados
 Arquitectura MVC
 Validaciones cliente/servidor
