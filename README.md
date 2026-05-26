@@ -128,6 +128,13 @@ Antes de empezar, asegúrate tener instalado:
 
 ## 🔧 Instalación y Configuración
 
+### Requisitos Previos ✓
+
+Asegúrate de tener instalado:
+- **PostgreSQL 12+** corriendo en `localhost:5432`
+- **Python 3.12+**
+- **Node.js 18+** y **npm 9+**
+
 ### 1. Clonar el Repositorio
 
 ```bash
@@ -141,55 +148,42 @@ cd cedica-management-system
 
 ```bash
 cd admin
-poetry install
+pip install flask psycopg2-binary flask-sqlalchemy minio marshmallow google-auth google-auth-oauthlib google-auth-httplib2 flask-cors matplotlib pytest
 ```
 
 #### 2.2 Configurar Variables de Entorno
 
-Crear un archivo `.env` en la carpeta `admin`:
+Crea un archivo `.env` en la carpeta `admin/`:
 
 ```env
-# Base de datos
-DATABASE_URL=postgresql://usuario:contraseña@localhost:5432/cedica
-SQLALCHEMY_ECHO=False
-
-# MinIO (Almacenamiento)
-MINIO_ENDPOINT=localhost:9000
-MINIO_ACCESS_KEY=minioadmin
-MINIO_SECRET_KEY=minioadmin
-MINIO_BUCKET=cedica
-
-# Flask
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/grupo10
+DATABASE_USERNAME=postgres
+DATABASE_PASSWORD=postgres
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
 FLASK_ENV=development
-SECRET_KEY=tu_clave_secreta_muy_segura
-FLASK_DEBUG=True
-
-# Google OAuth (opcional)
-GOOGLE_CLIENT_ID=tu_client_id
-GOOGLE_CLIENT_SECRET=tu_client_secret
-
-# reCAPTCHA (opcional)
-RECAPTCHA_SECRET_KEY=tu_secret_key
+SECRET_KEY=dev-secret-key
 ```
+
+**Nota:** Ajusta `postgres` y `grupo10` según tu configuración local.
 
 #### 2.3 Crear Base de Datos
 
-```bash
-# Acceder a PostgreSQL
-psql -U postgres
+Usa **MINGW64**, **Git Bash** o **PowerShell**:
 
-# Crear la base de datos
-CREATE DATABASE cedica;
+```bash
+psql -U postgres -c "CREATE DATABASE grupo10;"
 ```
 
 #### 2.4 Inicializar Base de Datos
 
 ```bash
-# Desde la carpeta admin
-poetry run python
->>> from src.core.database import init_db
->>> init_db()
+cd admin
+flask --app app.py reset-db
+flask --app app.py seeds-db
 ```
+
+Esto creará todas las tablas y cargará datos iniciales (roles, permisos, usuarios de prueba).
 
 ### 3. Configurar Frontend (Portal)
 
@@ -200,47 +194,59 @@ cd portal
 npm install
 ```
 
-#### 3.2 Configurar Variables de Entorno
+#### 3.2 Configurar Variables de Entorno (Opcional)
 
-Crear un archivo `.env.local` en la carpeta `portal`:
+Crea un archivo `.env.local` en la carpeta `portal/` si necesitas conectar a un endpoint específico:
 
 ```env
 VITE_API_URL=http://localhost:5000
-VITE_RECAPTCHA_SITE_KEY=tu_site_key
 ```
+
+Por defecto ya está configurado para conectar al backend en `localhost:5000`.
 
 ## 🚀 Ejecución
 
-### Ejecutar el Backend
+### Opción A: Ejecutar Ambas Partes (Recomendado)
 
+Abre **dos terminales** en la carpeta raíz del proyecto:
+
+**Terminal 1 - Backend:**
 ```bash
 cd admin
-poetry run python app.py
-```
-
-La API estará disponible en `http://localhost:5000`
-
-**O usando Poetry shell:**
-
-```bash
-cd admin
-poetry shell
 python app.py
 ```
 
-### Ejecutar el Frontend
+**Terminal 2 - Frontend:**
+```bash
+cd portal
+npm run dev
+```
 
-**Modo Desarrollo:**
+La aplicación estará disponible en:
+- **Frontend:** `http://localhost:5173`
+- **Backend API:** `http://localhost:5000`
+
+### Opción B: Ejecutar Solo el Backend
+
+```bash
+cd admin
+python app.py
+```
+
+API disponible en `http://localhost:5000`
+
+### Opción C: Ejecutar Solo el Frontend
 
 ```bash
 cd portal
 npm run dev
 ```
 
-El portal estará disponible en `http://localhost:5173`
+Frontend disponible en `http://localhost:5173`
 
-**Build para Producción:**
+### Build para Producción
 
+**Frontend:**
 ```bash
 cd portal
 npm run build
@@ -248,19 +254,46 @@ npm run build
 
 Los archivos compilados estarán en `portal/dist/`
 
-### Ejecutar Ambas Partes Simultáneamente
+## 📝 Credenciales de Prueba
 
-En dos terminales diferentes:
+Una vez iniciada la aplicación, puedes login con:
 
-```bash
-# Terminal 1 - Backend
-cd admin
-poetry run python app.py
-
-# Terminal 2 - Frontend
-cd portal
-npm run dev
 ```
+System Admin:
+  Email: admin@admin.com
+  Contraseña: admin
+
+Administración:
+  Email: rol2@mail.com
+  Contraseña: 123456
+
+Técnica:
+  Email: rol3@mail.com
+  Contraseña: 123456
+
+Voluntariado:
+  Email: rol4@mail.com
+  Contraseña: 123456
+
+Ecuestre:
+  Email: rol5@mail.com
+  Contraseña: 123456
+
+Editor:
+  Email: rol6@mail.com
+  Contraseña: 123456
+```
+
+## 🔗 Integración Frontend-Backend
+
+El frontend está configurado para conectar automáticamente al backend en `http://localhost:5000`. Para cambiar esto, edita el archivo `.env.local` en la carpeta `portal`.
+
+## ⚠️ Notas Importantes
+
+- **PostgreSQL debe estar corriendo** en `localhost:5432` antes de iniciar el backend
+- **Usa MINGW64 o Git Bash** en Windows si necesitas usar `psql` desde terminal
+- El archivo `flake.nix` es para usuarios Linux/macOS con Nix; en Windows no es necesario
+- Las variables de entorno en `.env` (backend) y `.env.local` (frontend) son opcionales si usas los valores por defecto
 
 ## 🧪 Testing
 
@@ -268,7 +301,7 @@ npm run dev
 
 ```bash
 cd admin
-poetry run pytest
+pytest
 ```
 
 ### Frontend (Linting)

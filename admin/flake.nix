@@ -65,6 +65,7 @@
           # Use this shell for developing your app.
           default = pkgs.mkShell {
             inputsFrom = [ pkgs.myapp ];
+            packages = [ pkgs.postgresql ];
           };
 
           # Shell for poetry.
